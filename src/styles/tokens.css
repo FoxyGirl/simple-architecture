@@ -1,0 +1,80 @@
+/**
+ * ScreenScout design tokens.
+ * Mirrors design/ScreenScout-design.pen -> Section "CSS VARIABLES".
+ * Every value maps 1:1 to a token in the .pen document.
+ */
+
+:root {
+  /* Color - base */
+  --bg: #0c0e15;
+  --bg-deep: #0a0c12;
+  --surface: #151824;
+  --surface-2: #1d2130;
+  --border: #262b3d;
+  --border-strong: #232839;
+  --accent: #8b5cff;
+  --accent-hover: #c4b0ff;
+  --accent-soft: #8b5cff26;
+  --accent-border: #8b5cff66;
+  --accent-glow: #8b5cff33;
+  --scrim: #0c0e15cc;
+  --white-soft: #ffffff0a;
+
+  /* Color - text */
+  --text-primary: #f3f4f8;
+  --text-secondary: #9aa1b5;
+  --text-tertiary: #c3c8d4;
+  --text-muted: #626a80;
+  --text-on-accent: #ffffff;
+
+  /* Color - status */
+  --running: #34d399;
+  --running-soft: #34d3991a;
+  --running-light: #6ee7b7;
+  --ended: #8b91a5;
+  --ended-soft: #8b91a51a;
+  --in-dev: #f59e0b;
+  --in-dev-soft: #f59e0b1a;
+  --tbd: #60a5fa;
+  --tbd-soft: #60a5fa1a;
+  --star: #fbbf24;
+  --star-soft: #fbbf241a;
+  --star-light: #fcd34d;
+
+  /* Typography */
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --leading-tight: 1.2;
+  --leading-base: 1.5;
+
+  /* Radius */
+  --radius-btn: 12px;
+  --radius-input: 16px;
+  --radius-card: 18px;
+  --radius-modal: 24px;
+  --radius-pill: 999px;
+
+  /* Spacing */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --gutter: 96px;
+
+  /* Elevation */
+  --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.4);
+  --glow-accent: 0 14px 40px rgba(139, 92, 255, 0.2);
+  --focus-ring: 0 0 0 3px rgba(139, 92, 255, 0.4);
+
+  /* Motion */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}

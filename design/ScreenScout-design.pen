@@ -7349,7 +7349,7 @@
                       "fill": "$text-muted",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "#9AA1B5 · Body copy",
+                      "content": "#A6ADBF · Body copy",
                       "fontFamily": "Inter",
                       "fontSize": 10.5,
                       "fontWeight": "normal"
@@ -7392,7 +7392,7 @@
                       "fill": "$text-muted",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "#626A80 · Captions",
+                      "content": "#8B93A7 · Captions",
                       "fontFamily": "Inter",
                       "fontSize": 10.5,
                       "fontWeight": "normal"
@@ -12809,7 +12809,7 @@
                           "fill": "$text-secondary",
                           "textGrowth": "fixed-width",
                           "width": "fill_container",
-                          "content": "--text-secondary: #9AA1B5;",
+                          "content": "--text-secondary: #A6ADBF;",
                           "fontFamily": "JetBrains Mono",
                           "fontSize": 11,
                           "fontWeight": "normal"
@@ -12833,7 +12833,7 @@
                           "fill": "$text-secondary",
                           "textGrowth": "fixed-width",
                           "width": "fill_container",
-                          "content": "--text-muted: #626A80;",
+                          "content": "--text-muted: #8B93A7;",
                           "fontFamily": "JetBrains Mono",
                           "fontSize": 11,
                           "fontWeight": "normal"
@@ -13545,11 +13545,11 @@
     },
     "text-secondary": {
       "type": "color",
-      "value": "#9AA1B5"
+      "value": "#A6ADBF"
     },
     "text-muted": {
       "type": "color",
-      "value": "#626A80"
+      "value": "#8B93A7"
     },
     "running": {
       "type": "color",

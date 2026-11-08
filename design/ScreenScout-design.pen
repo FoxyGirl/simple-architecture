@@ -99,7 +99,7 @@
                       "fill": "$text-primary",
                       "content": "Ended",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "600"
                     }
                   ]
@@ -134,7 +134,7 @@
                       "fill": "$text-primary",
                       "content": "6.8",
                       "fontFamily": "Inter",
-                      "fontSize": 12.5,
+                      "fontSize": 18,
                       "fontWeight": "700"
                     }
                   ]
@@ -168,7 +168,7 @@
               "content": "Banana",
               "lineHeight": 1.2,
               "fontFamily": "$font-display",
-              "fontSize": 19,
+              "fontSize": 27,
               "fontWeight": "600"
             },
             {
@@ -185,7 +185,7 @@
                   "fill": "$text-secondary",
                   "content": "2015",
                   "fontFamily": "Inter",
-                  "fontSize": 13,
+                  "fontSize": 18,
                   "fontWeight": "500"
                 },
                 {
@@ -203,7 +203,7 @@
                   "fill": "$text-muted",
                   "content": "E4",
                   "fontFamily": "Inter",
-                  "fontSize": 13,
+                  "fontSize": 18,
                   "fontWeight": "normal"
                 }
               ]
@@ -217,7 +217,7 @@
               "width": "fill_container",
               "content": "Drama · Romance",
               "fontFamily": "Inter",
-              "fontSize": 12.5,
+              "fontSize": 18,
               "fontWeight": "normal"
             }
           ]
@@ -248,7 +248,7 @@
           "fill": "$text-secondary",
           "content": "All genres",
           "fontFamily": "Inter",
-          "fontSize": 13,
+          "fontSize": 18,
           "fontWeight": "500"
         }
       ]
@@ -276,7 +276,7 @@
           "fill": "$text-secondary",
           "content": "1",
           "fontFamily": "Inter",
-          "fontSize": 14,
+          "fontSize": 20,
           "fontWeight": "600"
         }
       ]
@@ -360,7 +360,7 @@
                   "fill": "$text-primary",
                   "content": "ScreenScout",
                   "fontFamily": "$font-display",
-                  "fontSize": 18,
+                  "fontSize": 25,
                   "fontWeight": "700"
                 },
                 {
@@ -386,7 +386,7 @@
                       "fill": "$text-muted",
                       "content": "Find your next favorite show.",
                       "fontFamily": "Inter",
-                      "fontSize": 13,
+                      "fontSize": 18,
                       "fontWeight": "normal"
                     }
                   ]
@@ -407,7 +407,7 @@
                   "fill": "$text-secondary",
                   "content": "Browse",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "500"
                 },
                 {
@@ -417,7 +417,7 @@
                   "fill": "$text-secondary",
                   "content": "My List",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "500"
                 },
                 {
@@ -466,7 +466,7 @@
                       "fill": "#FFFFFF",
                       "content": "SS",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "700"
                     }
                   ]
@@ -631,7 +631,7 @@
                   "width": "fill_container",
                   "content": "Search for TV shows...",
                   "fontFamily": "Inter",
-                  "fontSize": 15,
+                  "fontSize": 21,
                   "fontWeight": "normal"
                 }
               ]
@@ -674,7 +674,7 @@
                       "fill": "$text-primary",
                       "content": "Popular right now",
                       "fontFamily": "$font-display",
-                      "fontSize": 26,
+                      "fontSize": 36,
                       "fontWeight": "600",
                       "letterSpacing": -0.5
                     },
@@ -685,7 +685,7 @@
                       "fill": "$text-muted",
                       "content": "A few crowd favorites to get you started",
                       "fontFamily": "Inter",
-                      "fontSize": 14,
+                      "fontSize": 20,
                       "fontWeight": "normal"
                     }
                   ]
@@ -710,7 +710,7 @@
                       "fill": "$accent",
                       "content": "Browse all shows",
                       "fontFamily": "Inter",
-                      "fontSize": 13.5,
+                      "fontSize": 19,
                       "fontWeight": "600"
                     },
                     {
@@ -803,19 +803,19 @@
                     },
                     "blNn8": {
                       "content": "Breaking Bad",
-                      "fontSize": 16
+                      "fontSize": 22
                     },
                     "d5Z1o6": {
                       "content": "2008",
-                      "fontSize": 12
+                      "fontSize": 17
                     },
                     "zD0Mr": {
                       "content": "AMC",
-                      "fontSize": 12
+                      "fontSize": 17
                     },
                     "AAs60": {
                       "content": "Drama · Crime · Thriller",
-                      "fontSize": 11.5
+                      "fontSize": 16
                     }
                   }
                 },
@@ -888,19 +888,19 @@
                     },
                     "blNn8": {
                       "content": "Game of Thrones",
-                      "fontSize": 16
+                      "fontSize": 22
                     },
                     "d5Z1o6": {
                       "content": "2011",
-                      "fontSize": 12
+                      "fontSize": 17
                     },
                     "zD0Mr": {
                       "content": "HBO",
-                      "fontSize": 12
+                      "fontSize": 17
                     },
                     "AAs60": {
                       "content": "Drama · Adventure · Fantasy",
-                      "fontSize": 11.5
+                      "fontSize": 16
                     }
                   }
                 },
@@ -973,19 +973,19 @@
                     },
                     "blNn8": {
                       "content": "Stranger Things",
-                      "fontSize": 16
+                      "fontSize": 22
                     },
                     "d5Z1o6": {
                       "content": "2016",
-                      "fontSize": 12
+                      "fontSize": 17
                     },
                     "zD0Mr": {
                       "content": "Netflix",
-                      "fontSize": 12
+                      "fontSize": 17
                     },
                     "AAs60": {
                       "content": "Drama · Horror · Science-Fiction",
-                      "fontSize": 11.5
+                      "fontSize": 16
                     }
                   }
                 },
@@ -1058,19 +1058,19 @@
                     },
                     "blNn8": {
                       "content": "The Last of Us",
-                      "fontSize": 16
+                      "fontSize": 22
                     },
                     "d5Z1o6": {
                       "content": "2023",
-                      "fontSize": 12
+                      "fontSize": 17
                     },
                     "zD0Mr": {
                       "content": "HBO",
-                      "fontSize": 12
+                      "fontSize": 17
                     },
                     "AAs60": {
                       "content": "Drama · Action · Horror",
-                      "fontSize": 11.5
+                      "fontSize": 16
                     }
                   }
                 },
@@ -1143,19 +1143,19 @@
                     },
                     "blNn8": {
                       "content": "Severance",
-                      "fontSize": 16
+                      "fontSize": 22
                     },
                     "d5Z1o6": {
                       "content": "2022",
-                      "fontSize": 12
+                      "fontSize": 17
                     },
                     "zD0Mr": {
                       "content": "Apple TV+",
-                      "fontSize": 12
+                      "fontSize": 17
                     },
                     "AAs60": {
                       "content": "Drama · Science-Fiction · Mystery",
-                      "fontSize": 11.5
+                      "fontSize": 16
                     }
                   }
                 }
@@ -1244,7 +1244,7 @@
                   "fill": "$text-primary",
                   "content": "ScreenScout",
                   "fontFamily": "$font-display",
-                  "fontSize": 18,
+                  "fontSize": 25,
                   "fontWeight": "700"
                 },
                 {
@@ -1270,7 +1270,7 @@
                       "fill": "$text-muted",
                       "content": "Find your next favorite show.",
                       "fontFamily": "Inter",
-                      "fontSize": 13,
+                      "fontSize": 18,
                       "fontWeight": "normal"
                     }
                   ]
@@ -1291,7 +1291,7 @@
                   "fill": "$text-secondary",
                   "content": "Browse",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "500"
                 },
                 {
@@ -1301,7 +1301,7 @@
                   "fill": "$text-secondary",
                   "content": "My List",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "500"
                 },
                 {
@@ -1350,7 +1350,7 @@
                       "fill": "#FFFFFF",
                       "content": "SS",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "700"
                     }
                   ]
@@ -1510,7 +1510,7 @@
                   "width": "fill_container",
                   "content": "banana",
                   "fontFamily": "Inter",
-                  "fontSize": 15,
+                  "fontSize": 21,
                   "fontWeight": "500"
                 },
                 {
@@ -1563,7 +1563,7 @@
                       "fill": "$text-primary",
                       "content": "Search Results",
                       "fontFamily": "$font-display",
-                      "fontSize": 26,
+                      "fontSize": 36,
                       "fontWeight": "600",
                       "letterSpacing": -0.5
                     },
@@ -1587,7 +1587,7 @@
                           "fill": "#C4B0FF",
                           "content": "10 shows found",
                           "fontFamily": "Inter",
-                          "fontSize": 12.5,
+                          "fontSize": 18,
                           "fontWeight": "600"
                         }
                       ]
@@ -1598,10 +1598,10 @@
                   "type": "text",
                   "id": "skV0l",
                   "name": "QueryEcho",
-                  "fill": "$text-muted",
+                  "fill": "$star-light",
                   "content": "for “banana”",
                   "fontFamily": "Inter",
-                  "fontSize": 13.5,
+                  "fontSize": 19,
                   "fontWeight": "normal"
                 }
               ]
@@ -1901,7 +1901,7 @@
                                   "fill": "$text-primary",
                                   "content": "Ended",
                                   "fontFamily": "Inter",
-                                  "fontSize": 11.5,
+                                  "fontSize": 16,
                                   "fontWeight": "600"
                                 }
                               ]
@@ -1936,7 +1936,7 @@
                                   "fill": "$text-primary",
                                   "content": "7.3",
                                   "fontFamily": "Inter",
-                                  "fontSize": 12.5,
+                                  "fontSize": 18,
                                   "fontWeight": "700"
                                 }
                               ]
@@ -1983,7 +1983,7 @@
                               "fill": "#FFFFFF",
                               "content": "View details",
                               "fontFamily": "Inter",
-                              "fontSize": 13.5,
+                              "fontSize": 19,
                               "fontWeight": "600"
                             }
                           ]
@@ -2014,7 +2014,7 @@
                           "content": "Banana Fish",
                           "lineHeight": 1.2,
                           "fontFamily": "$font-display",
-                          "fontSize": 19,
+                          "fontSize": 27,
                           "fontWeight": "600"
                         },
                         {
@@ -2031,7 +2031,7 @@
                               "fill": "$text-secondary",
                               "content": "2018",
                               "fontFamily": "Inter",
-                              "fontSize": 13,
+                              "fontSize": 18,
                               "fontWeight": "500"
                             },
                             {
@@ -2049,7 +2049,7 @@
                               "fill": "$text-muted",
                               "content": "Fuji TV",
                               "fontFamily": "Inter",
-                              "fontSize": 13,
+                              "fontSize": 18,
                               "fontWeight": "normal"
                             }
                           ]
@@ -2063,7 +2063,7 @@
                           "width": "fill_container",
                           "content": "Drama · Action · Adventure · Anime",
                           "fontFamily": "Inter",
-                          "fontSize": 12.5,
+                          "fontSize": 18,
                           "fontWeight": "normal"
                         }
                       ]
@@ -2253,7 +2253,7 @@
                   "fill": "$text-muted",
                   "content": "Page 1 of 4",
                   "fontFamily": "Inter",
-                  "fontSize": 13,
+                  "fontSize": 18,
                   "fontWeight": "normal"
                 }
               ]
@@ -2341,7 +2341,7 @@
                   "fill": "$text-primary",
                   "content": "ScreenScout",
                   "fontFamily": "$font-display",
-                  "fontSize": 18,
+                  "fontSize": 25,
                   "fontWeight": "700"
                 },
                 {
@@ -2367,7 +2367,7 @@
                       "fill": "$text-muted",
                       "content": "Find your next favorite show.",
                       "fontFamily": "Inter",
-                      "fontSize": 13,
+                      "fontSize": 18,
                       "fontWeight": "normal"
                     }
                   ]
@@ -2388,7 +2388,7 @@
                   "fill": "$text-secondary",
                   "content": "Browse",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "500"
                 },
                 {
@@ -2398,7 +2398,7 @@
                   "fill": "$text-secondary",
                   "content": "My List",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "500"
                 },
                 {
@@ -2447,7 +2447,7 @@
                       "fill": "#FFFFFF",
                       "content": "SS",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "700"
                     }
                   ]
@@ -2607,7 +2607,7 @@
                   "width": "fill_container",
                   "content": "banana",
                   "fontFamily": "Inter",
-                  "fontSize": 15,
+                  "fontSize": 21,
                   "fontWeight": "500"
                 },
                 {
@@ -2660,7 +2660,7 @@
                       "fill": "$text-primary",
                       "content": "Search Results",
                       "fontFamily": "$font-display",
-                      "fontSize": 26,
+                      "fontSize": 36,
                       "fontWeight": "600",
                       "letterSpacing": -0.5
                     },
@@ -2684,7 +2684,7 @@
                           "fill": "#C4B0FF",
                           "content": "5 shows found",
                           "fontFamily": "Inter",
-                          "fontSize": 12.5,
+                          "fontSize": 18,
                           "fontWeight": "600"
                         }
                       ]
@@ -2695,10 +2695,10 @@
                   "type": "text",
                   "id": "tj4TN",
                   "name": "QueryEcho",
-                  "fill": "$text-muted",
+                  "fill": "$star-light",
                   "content": "for “banana” · filtered by Comedy",
                   "fontFamily": "Inter",
-                  "fontSize": 13.5,
+                  "fontSize": 19,
                   "fontWeight": "normal"
                 }
               ]
@@ -3126,7 +3126,7 @@
                   "fill": "$text-muted",
                   "content": "Page 1 of 2",
                   "fontFamily": "Inter",
-                  "fontSize": 13,
+                  "fontSize": 18,
                   "fontWeight": "normal"
                 }
               ]
@@ -3241,7 +3241,7 @@
                   "fill": "$text-primary",
                   "content": "ScreenScout",
                   "fontFamily": "$font-display",
-                  "fontSize": 18,
+                  "fontSize": 25,
                   "fontWeight": "700"
                 },
                 {
@@ -3267,7 +3267,7 @@
                       "fill": "$text-muted",
                       "content": "Find your next favorite show.",
                       "fontFamily": "Inter",
-                      "fontSize": 13,
+                      "fontSize": 18,
                       "fontWeight": "normal"
                     }
                   ]
@@ -3288,7 +3288,7 @@
                   "fill": "$text-secondary",
                   "content": "Browse",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "500"
                 },
                 {
@@ -3298,7 +3298,7 @@
                   "fill": "$text-secondary",
                   "content": "My List",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "500"
                 },
                 {
@@ -3347,7 +3347,7 @@
                       "fill": "#FFFFFF",
                       "content": "SS",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "700"
                     }
                   ]
@@ -3373,7 +3373,7 @@
               "name": "DetailsModal",
               "clip": true,
               "width": 1000,
-              "height": 600,
+              "height": 700,
               "fill": "$surface",
               "cornerRadius": 24,
               "stroke": "$border",
@@ -3469,7 +3469,7 @@
                                   "fill": "#C4B0FF",
                                   "content": "Drama",
                                   "fontFamily": "Inter",
-                                  "fontSize": 11.5,
+                                  "fontSize": 16,
                                   "fontWeight": "600"
                                 }
                               ]
@@ -3494,7 +3494,7 @@
                                   "fill": "#C4B0FF",
                                   "content": "Romance",
                                   "fontFamily": "Inter",
-                                  "fontSize": 11.5,
+                                  "fontSize": 16,
                                   "fontWeight": "600"
                                 }
                               ]
@@ -3535,7 +3535,7 @@
                       "fill": "$text-primary",
                       "content": "Banana",
                       "fontFamily": "$font-display",
-                      "fontSize": 36,
+                      "fontSize": 50,
                       "fontWeight": "700",
                       "letterSpacing": -1
                     },
@@ -3576,7 +3576,7 @@
                               "fill": "#6EE7B7",
                               "content": "Ended",
                               "fontFamily": "Inter",
-                              "fontSize": 12,
+                              "fontSize": 17,
                               "fontWeight": "600"
                             }
                           ]
@@ -3613,7 +3613,7 @@
                               "fill": "#FCD34D",
                               "content": "6.8 / 10",
                               "fontFamily": "Inter",
-                              "fontSize": 12,
+                              "fontSize": 17,
                               "fontWeight": "700"
                             }
                           ]
@@ -3650,7 +3650,7 @@
                               "fill": "$text-secondary",
                               "content": "English",
                               "fontFamily": "Inter",
-                              "fontSize": 12,
+                              "fontSize": 17,
                               "fontWeight": "600"
                             }
                           ]
@@ -3694,7 +3694,7 @@
                                   "fill": "$text-muted",
                                   "content": "PREMIERED",
                                   "fontFamily": "Inter",
-                                  "fontSize": 11,
+                                  "fontSize": 15,
                                   "fontWeight": "600",
                                   "letterSpacing": 1.1
                                 },
@@ -3705,7 +3705,7 @@
                                   "fill": "$text-primary",
                                   "content": "Jan 22, 2015",
                                   "fontFamily": "Inter",
-                                  "fontSize": 14,
+                                  "fontSize": 20,
                                   "fontWeight": "500"
                                 }
                               ]
@@ -3724,7 +3724,7 @@
                                   "fill": "$text-muted",
                                   "content": "RUNTIME",
                                   "fontFamily": "Inter",
-                                  "fontSize": 11,
+                                  "fontSize": 15,
                                   "fontWeight": "600",
                                   "letterSpacing": 1.1
                                 },
@@ -3735,7 +3735,7 @@
                                   "fill": "$text-primary",
                                   "content": "30 min per episode",
                                   "fontFamily": "Inter",
-                                  "fontSize": 14,
+                                  "fontSize": 20,
                                   "fontWeight": "500"
                                 }
                               ]
@@ -3764,7 +3764,7 @@
                                   "fill": "$text-muted",
                                   "content": "ENDED",
                                   "fontFamily": "Inter",
-                                  "fontSize": 11,
+                                  "fontSize": 15,
                                   "fontWeight": "600",
                                   "letterSpacing": 1.1
                                 },
@@ -3775,7 +3775,7 @@
                                   "fill": "$text-primary",
                                   "content": "Mar 12, 2015",
                                   "fontFamily": "Inter",
-                                  "fontSize": 14,
+                                  "fontSize": 20,
                                   "fontWeight": "500"
                                 }
                               ]
@@ -3794,7 +3794,7 @@
                                   "fill": "$text-muted",
                                   "content": "NETWORK",
                                   "fontFamily": "Inter",
-                                  "fontSize": 11,
+                                  "fontSize": 15,
                                   "fontWeight": "600",
                                   "letterSpacing": 1.1
                                 },
@@ -3805,7 +3805,7 @@
                                   "fill": "$text-primary",
                                   "content": "E4 · United Kingdom",
                                   "fontFamily": "Inter",
-                                  "fontSize": 14,
+                                  "fontSize": 20,
                                   "fontWeight": "500"
                                 }
                               ]
@@ -3829,7 +3829,7 @@
                           "fill": "$text-primary",
                           "content": "About the show",
                           "fontFamily": "$font-display",
-                          "fontSize": 15,
+                          "fontSize": 21,
                           "fontWeight": "600"
                         },
                         {
@@ -3842,7 +3842,7 @@
                           "content": "Banana is a British television series created by Russell T. Davies. The series was the sister show to Channel 4's Cucumber, and 4oD's Tofu.",
                           "lineHeight": 1.65,
                           "fontFamily": "Inter",
-                          "fontSize": 13.5,
+                          "fontSize": 19,
                           "fontWeight": "normal"
                         },
                         {
@@ -3855,7 +3855,7 @@
                           "content": "An anthology series focusing on different topics involving the LGBT community.",
                           "lineHeight": 1.65,
                           "fontFamily": "Inter",
-                          "fontSize": 13.5,
+                          "fontSize": 19,
                           "fontWeight": "normal"
                         }
                       ]
@@ -3897,7 +3897,7 @@
                               "fill": "#FFFFFF",
                               "content": "Official website",
                               "fontFamily": "Inter",
-                              "fontSize": 13.5,
+                              "fontSize": 19,
                               "fontWeight": "600"
                             }
                           ]
@@ -3934,7 +3934,7 @@
                               "fill": "$text-primary",
                               "content": "Add to watchlist",
                               "fontFamily": "Inter",
-                              "fontSize": 13.5,
+                              "fontSize": 19,
                               "fontWeight": "600"
                             }
                           ]
@@ -3997,7 +3997,7 @@
                   "fill": "$text-muted",
                   "content": "STATE · LOADING",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.6
                 }
@@ -4438,7 +4438,7 @@
                       "fill": "$text-muted",
                       "content": "STATE · EMPTY",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "700",
                       "letterSpacing": 1.6
                     }
@@ -4474,7 +4474,7 @@
                   "fill": "$text-primary",
                   "content": "No shows found.",
                   "fontFamily": "$font-display",
-                  "fontSize": 24,
+                  "fontSize": 34,
                   "fontWeight": "600",
                   "letterSpacing": -0.4
                 },
@@ -4489,7 +4489,7 @@
                   "lineHeight": 1.6,
                   "textAlign": "center",
                   "fontFamily": "Inter",
-                  "fontSize": 14.5,
+                  "fontSize": 20,
                   "fontWeight": "normal"
                 },
                 {
@@ -4524,7 +4524,7 @@
                       "fill": "$text-primary",
                       "content": "Clear search",
                       "fontFamily": "Inter",
-                      "fontSize": 13.5,
+                      "fontSize": 19,
                       "fontWeight": "600"
                     }
                   ]
@@ -4570,7 +4570,7 @@
                       "fill": "$text-muted",
                       "content": "STATE · ERROR",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "700",
                       "letterSpacing": 1.6
                     }
@@ -4606,7 +4606,7 @@
                   "fill": "$text-primary",
                   "content": "Something went wrong.",
                   "fontFamily": "$font-display",
-                  "fontSize": 24,
+                  "fontSize": 34,
                   "fontWeight": "600",
                   "letterSpacing": -0.4
                 },
@@ -4621,7 +4621,7 @@
                   "lineHeight": 1.6,
                   "textAlign": "center",
                   "fontFamily": "Inter",
-                  "fontSize": 14.5,
+                  "fontSize": 20,
                   "fontWeight": "normal"
                 },
                 {
@@ -4654,7 +4654,7 @@
                       "fill": "#FFFFFF",
                       "content": "Retry request",
                       "fontFamily": "Inter",
-                      "fontSize": 13.5,
+                      "fontSize": 19,
                       "fontWeight": "600"
                     }
                   ]
@@ -4744,7 +4744,7 @@
                   "fill": "$text-primary",
                   "content": "ScreenScout",
                   "fontFamily": "$font-display",
-                  "fontSize": 16,
+                  "fontSize": 22,
                   "fontWeight": "700"
                 }
               ]
@@ -4785,7 +4785,7 @@
                   "fill": "#FFFFFF",
                   "content": "SS",
                   "fontFamily": "Inter",
-                  "fontSize": 11,
+                  "fontSize": 15,
                   "fontWeight": "700"
                 }
               ]
@@ -4900,7 +4900,7 @@
                   "width": "fill_container",
                   "content": "Search for TV shows...",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "normal"
                 }
               ]
@@ -4921,7 +4921,7 @@
                   "fill": "$text-muted",
                   "content": "Trending:",
                   "fontFamily": "Inter",
-                  "fontSize": 12,
+                  "fontSize": 17,
                   "fontWeight": "normal"
                 },
                 {
@@ -4944,7 +4944,7 @@
                       "fill": "$text-secondary",
                       "content": "The Last of Us",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "500"
                     }
                   ]
@@ -4969,7 +4969,7 @@
                       "fill": "$text-secondary",
                       "content": "Severance",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "500"
                     }
                   ]
@@ -4994,7 +4994,7 @@
                       "fill": "$text-secondary",
                       "content": "The Bear",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "500"
                     }
                   ]
@@ -5036,7 +5036,7 @@
                   "fill": "$text-primary",
                   "content": "Popular right now",
                   "fontFamily": "$font-display",
-                  "fontSize": 19,
+                  "fontSize": 27,
                   "fontWeight": "600"
                 },
                 {
@@ -5046,7 +5046,7 @@
                   "fill": "$accent",
                   "content": "Browse all",
                   "fontFamily": "Inter",
-                  "fontSize": 12.5,
+                  "fontSize": 18,
                   "fontWeight": "600"
                 }
               ]
@@ -5111,7 +5111,7 @@
                     },
                     "ybg43": {
                       "content": "Ended",
-                      "fontSize": 10
+                      "fontSize": 14
                     },
                     "wP0b5": {
                       "padding": [
@@ -5121,7 +5121,7 @@
                     },
                     "wdKni": {
                       "content": "9.2",
-                      "fontSize": 11
+                      "fontSize": 15
                     },
                     "jROz3": {
                       "padding": [
@@ -5134,19 +5134,19 @@
                     },
                     "blNn8": {
                       "content": "Breaking Bad",
-                      "fontSize": 13.5
+                      "fontSize": 19
                     },
                     "d5Z1o6": {
                       "content": "2008",
-                      "fontSize": 11
+                      "fontSize": 15
                     },
                     "zD0Mr": {
                       "content": "AMC",
-                      "fontSize": 11
+                      "fontSize": 15
                     },
                     "AAs60": {
                       "content": "Drama · Crime",
-                      "fontSize": 10.5
+                      "fontSize": 15
                     }
                   }
                 },
@@ -5198,7 +5198,7 @@
                     },
                     "ybg43": {
                       "content": "Ended",
-                      "fontSize": 10
+                      "fontSize": 14
                     },
                     "wP0b5": {
                       "padding": [
@@ -5208,7 +5208,7 @@
                     },
                     "wdKni": {
                       "content": "8.9",
-                      "fontSize": 11
+                      "fontSize": 15
                     },
                     "jROz3": {
                       "padding": [
@@ -5221,19 +5221,19 @@
                     },
                     "blNn8": {
                       "content": "Game of Thrones",
-                      "fontSize": 13.5
+                      "fontSize": 19
                     },
                     "d5Z1o6": {
                       "content": "2011",
-                      "fontSize": 11
+                      "fontSize": 15
                     },
                     "zD0Mr": {
                       "content": "HBO",
-                      "fontSize": 11
+                      "fontSize": 15
                     },
                     "AAs60": {
                       "content": "Drama · Fantasy",
-                      "fontSize": 10.5
+                      "fontSize": 15
                     }
                   }
                 },
@@ -5285,7 +5285,7 @@
                     },
                     "ybg43": {
                       "content": "Ended",
-                      "fontSize": 10
+                      "fontSize": 14
                     },
                     "wP0b5": {
                       "padding": [
@@ -5295,7 +5295,7 @@
                     },
                     "wdKni": {
                       "content": "8.4",
-                      "fontSize": 11
+                      "fontSize": 15
                     },
                     "jROz3": {
                       "padding": [
@@ -5308,19 +5308,19 @@
                     },
                     "blNn8": {
                       "content": "Stranger Things",
-                      "fontSize": 13.5
+                      "fontSize": 19
                     },
                     "d5Z1o6": {
                       "content": "2016",
-                      "fontSize": 11
+                      "fontSize": 15
                     },
                     "zD0Mr": {
                       "content": "Netflix",
-                      "fontSize": 11
+                      "fontSize": 15
                     },
                     "AAs60": {
                       "content": "Drama · Horror",
-                      "fontSize": 10.5
+                      "fontSize": 15
                     }
                   }
                 }
@@ -5409,7 +5409,7 @@
                   "fill": "$text-primary",
                   "content": "ScreenScout",
                   "fontFamily": "$font-display",
-                  "fontSize": 16,
+                  "fontSize": 22,
                   "fontWeight": "700"
                 }
               ]
@@ -5450,7 +5450,7 @@
                   "fill": "#FFFFFF",
                   "content": "SS",
                   "fontFamily": "Inter",
-                  "fontSize": 11,
+                  "fontSize": 15,
                   "fontWeight": "700"
                 }
               ]
@@ -5509,7 +5509,7 @@
                   "width": "fill_container",
                   "content": "banana",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "500"
                 }
               ]
@@ -5532,7 +5532,7 @@
                   "descendants": {
                     "IpsgF": {
                       "content": "All genres",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fill": "#FFFFFF",
                       "fontWeight": "600"
                     }
@@ -5546,7 +5546,7 @@
                   "descendants": {
                     "IpsgF": {
                       "content": "Drama",
-                      "fontSize": 12
+                      "fontSize": 17
                     }
                   }
                 },
@@ -5558,7 +5558,7 @@
                   "descendants": {
                     "IpsgF": {
                       "content": "Comedy",
-                      "fontSize": 12
+                      "fontSize": 17
                     }
                   }
                 },
@@ -5570,7 +5570,7 @@
                   "descendants": {
                     "IpsgF": {
                       "content": "Romance",
-                      "fontSize": 12
+                      "fontSize": 17
                     }
                   }
                 },
@@ -5582,7 +5582,7 @@
                   "descendants": {
                     "IpsgF": {
                       "content": "Children",
-                      "fontSize": 12
+                      "fontSize": 17
                     }
                   }
                 }
@@ -5603,7 +5603,7 @@
                   "fill": "$text-primary",
                   "content": "Search Results",
                   "fontFamily": "$font-display",
-                  "fontSize": 19,
+                  "fontSize": 27,
                   "fontWeight": "600"
                 },
                 {
@@ -5626,7 +5626,7 @@
                       "fill": "#C4B0FF",
                       "content": "10 shows",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "600"
                     }
                   ]
@@ -5695,7 +5695,7 @@
                       "width": "fill_container",
                       "content": "Banana",
                       "fontFamily": "$font-display",
-                      "fontSize": 15,
+                      "fontSize": 21,
                       "fontWeight": "600"
                     },
                     {
@@ -5705,7 +5705,7 @@
                       "fill": "$text-muted",
                       "content": "2015 · E4",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "normal"
                     },
                     {
@@ -5717,7 +5717,7 @@
                       "width": "fill_container",
                       "content": "Drama · Romance",
                       "fontFamily": "Inter",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -5751,7 +5751,7 @@
                               "fill": "$text-primary",
                               "content": "6.8",
                               "fontFamily": "Inter",
-                              "fontSize": 11.5,
+                              "fontSize": 16,
                               "fontWeight": "700"
                             }
                           ]
@@ -5778,7 +5778,7 @@
                               "fill": "$text-secondary",
                               "content": "Ended",
                               "fontFamily": "Inter",
-                              "fontSize": 11,
+                              "fontSize": 15,
                               "fontWeight": "600"
                             }
                           ]
@@ -5845,7 +5845,7 @@
                       "width": "fill_container",
                       "content": "Banana Fish",
                       "fontFamily": "$font-display",
-                      "fontSize": 15,
+                      "fontSize": 21,
                       "fontWeight": "600"
                     },
                     {
@@ -5855,7 +5855,7 @@
                       "fill": "$text-muted",
                       "content": "2018 · Fuji TV",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "normal"
                     },
                     {
@@ -5867,7 +5867,7 @@
                       "width": "fill_container",
                       "content": "Drama · Action · Anime",
                       "fontFamily": "Inter",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -5901,7 +5901,7 @@
                               "fill": "$text-primary",
                               "content": "7.3",
                               "fontFamily": "Inter",
-                              "fontSize": 11.5,
+                              "fontSize": 16,
                               "fontWeight": "700"
                             }
                           ]
@@ -5928,7 +5928,7 @@
                               "fill": "$text-secondary",
                               "content": "Ended",
                               "fontFamily": "Inter",
-                              "fontSize": 11,
+                              "fontSize": 15,
                               "fontWeight": "600"
                             }
                           ]
@@ -5995,7 +5995,7 @@
                       "width": "fill_container",
                       "content": "Banana Actually",
                       "fontFamily": "$font-display",
-                      "fontSize": 15,
+                      "fontSize": 21,
                       "fontWeight": "600"
                     },
                     {
@@ -6005,7 +6005,7 @@
                       "fill": "$text-muted",
                       "content": "2015 · Naver TV",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "normal"
                     },
                     {
@@ -6017,7 +6017,7 @@
                       "width": "fill_container",
                       "content": "Drama · Comedy",
                       "fontFamily": "Inter",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -6051,7 +6051,7 @@
                               "fill": "$text-primary",
                               "content": "NR",
                               "fontFamily": "Inter",
-                              "fontSize": 11.5,
+                              "fontSize": 16,
                               "fontWeight": "700"
                             }
                           ]
@@ -6078,7 +6078,7 @@
                               "fill": "$text-secondary",
                               "content": "Ended",
                               "fontFamily": "Inter",
-                              "fontSize": 11,
+                              "fontSize": 15,
                               "fontWeight": "600"
                             }
                           ]
@@ -6149,7 +6149,7 @@
               "fill": "$text-secondary",
               "content": "Page 1 of 4",
               "fontFamily": "Inter",
-              "fontSize": 13,
+              "fontSize": 18,
               "fontWeight": "600"
             },
             {
@@ -6292,7 +6292,7 @@
                       "fill": "#FFFFFF",
                       "content": "6.8",
                       "fontFamily": "Inter",
-                      "fontSize": 12.5,
+                      "fontSize": 18,
                       "fontWeight": "700"
                     }
                   ]
@@ -6327,7 +6327,7 @@
                   "fill": "#FFFFFF",
                   "content": "Ended",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "600"
                 }
               ]
@@ -6374,7 +6374,7 @@
                       "fill": "#C4B0FF",
                       "content": "Drama",
                       "fontFamily": "Inter",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "600"
                     }
                   ]
@@ -6399,7 +6399,7 @@
                       "fill": "#C4B0FF",
                       "content": "Romance",
                       "fontFamily": "Inter",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "600"
                     }
                   ]
@@ -6413,7 +6413,7 @@
               "fill": "$text-primary",
               "content": "Banana",
               "fontFamily": "$font-display",
-              "fontSize": 27,
+              "fontSize": 38,
               "fontWeight": "700",
               "letterSpacing": -0.7
             },
@@ -6458,7 +6458,7 @@
                       "fill": "$text-secondary",
                       "content": "English",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "600"
                     }
                   ]
@@ -6495,7 +6495,7 @@
                       "fill": "$text-secondary",
                       "content": "30 min",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "600"
                     }
                   ]
@@ -6532,7 +6532,7 @@
                       "fill": "$text-secondary",
                       "content": "E4",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "600"
                     }
                   ]
@@ -6576,7 +6576,7 @@
                           "fill": "$text-muted",
                           "content": "PREMIERED",
                           "fontFamily": "Inter",
-                          "fontSize": 10.5,
+                          "fontSize": 15,
                           "fontWeight": "600",
                           "letterSpacing": 1.1
                         },
@@ -6587,7 +6587,7 @@
                           "fill": "$text-primary",
                           "content": "Jan 22, 2015",
                           "fontFamily": "Inter",
-                          "fontSize": 13.5,
+                          "fontSize": 19,
                           "fontWeight": "500"
                         }
                       ]
@@ -6606,7 +6606,7 @@
                           "fill": "$text-muted",
                           "content": "RUNTIME",
                           "fontFamily": "Inter",
-                          "fontSize": 10.5,
+                          "fontSize": 15,
                           "fontWeight": "600",
                           "letterSpacing": 1.1
                         },
@@ -6617,7 +6617,7 @@
                           "fill": "$text-primary",
                           "content": "30 min",
                           "fontFamily": "Inter",
-                          "fontSize": 13.5,
+                          "fontSize": 19,
                           "fontWeight": "500"
                         }
                       ]
@@ -6646,7 +6646,7 @@
                           "fill": "$text-muted",
                           "content": "ENDED",
                           "fontFamily": "Inter",
-                          "fontSize": 10.5,
+                          "fontSize": 15,
                           "fontWeight": "600",
                           "letterSpacing": 1.1
                         },
@@ -6657,7 +6657,7 @@
                           "fill": "$text-primary",
                           "content": "Mar 12, 2015",
                           "fontFamily": "Inter",
-                          "fontSize": 13.5,
+                          "fontSize": 19,
                           "fontWeight": "500"
                         }
                       ]
@@ -6676,7 +6676,7 @@
                           "fill": "$text-muted",
                           "content": "NETWORK",
                           "fontFamily": "Inter",
-                          "fontSize": 10.5,
+                          "fontSize": 15,
                           "fontWeight": "600",
                           "letterSpacing": 1.1
                         },
@@ -6687,7 +6687,7 @@
                           "fill": "$text-primary",
                           "content": "E4",
                           "fontFamily": "Inter",
-                          "fontSize": 13.5,
+                          "fontSize": 19,
                           "fontWeight": "500"
                         }
                       ]
@@ -6711,7 +6711,7 @@
                   "fill": "$text-primary",
                   "content": "About the show",
                   "fontFamily": "$font-display",
-                  "fontSize": 15,
+                  "fontSize": 21,
                   "fontWeight": "600"
                 },
                 {
@@ -6724,7 +6724,7 @@
                   "content": "Banana is a British television series created by Russell T. Davies. The series was the sister show to Channel 4's Cucumber, and 4oD's Tofu. An anthology series focusing on different topics involving the LGBT community.",
                   "lineHeight": 1.65,
                   "fontFamily": "Inter",
-                  "fontSize": 13,
+                  "fontSize": 18,
                   "fontWeight": "normal"
                 }
               ]
@@ -6766,7 +6766,7 @@
                       "fill": "#FFFFFF",
                       "content": "Official website",
                       "fontFamily": "Inter",
-                      "fontSize": 13.5,
+                      "fontSize": 19,
                       "fontWeight": "600"
                     }
                   ]
@@ -6802,7 +6802,7 @@
                       "fill": "$text-primary",
                       "content": "Add to watchlist",
                       "fontFamily": "Inter",
-                      "fontSize": 13.5,
+                      "fontSize": 19,
                       "fontWeight": "600"
                     }
                   ]
@@ -6861,7 +6861,7 @@
                   "fill": "$text-muted",
                   "content": "SCREENSCOUT · UI KIT v1.0",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.6
                 }
@@ -6874,7 +6874,7 @@
               "fill": "$text-primary",
               "content": "Design System",
               "fontFamily": "$font-display",
-              "fontSize": 36,
+              "fontSize": 50,
               "fontWeight": "700",
               "letterSpacing": -1
             },
@@ -6888,7 +6888,7 @@
               "content": "Tokens and reusable components behind every ScreenScout screen. Reusable frames below (buttons, pills, inputs, cards) are instanced across the production screens — edit them here and the changes propagate.",
               "lineHeight": 1.6,
               "fontFamily": "Inter",
-              "fontSize": 14.5,
+              "fontSize": 20,
               "fontWeight": "normal"
             }
           ]
@@ -6916,7 +6916,7 @@
                   "fill": "$accent",
                   "content": "01",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -6927,7 +6927,7 @@
                   "fill": "$text-muted",
                   "content": "COLOR PALETTE",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -6980,7 +6980,7 @@
                       "fill": "$text-primary",
                       "content": "bg",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -6992,7 +6992,7 @@
                       "width": "fill_container",
                       "content": "#0C0E15 · App background",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7023,7 +7023,7 @@
                       "fill": "$text-primary",
                       "content": "surface",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7035,7 +7035,7 @@
                       "width": "fill_container",
                       "content": "#151824 · Cards, modal",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7066,7 +7066,7 @@
                       "fill": "$text-primary",
                       "content": "surface-2",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7078,7 +7078,7 @@
                       "width": "fill_container",
                       "content": "#1D2130 · Controls, chips",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7109,7 +7109,7 @@
                       "fill": "$text-primary",
                       "content": "border",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7121,7 +7121,7 @@
                       "width": "fill_container",
                       "content": "#262B3D · Hairlines",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7152,7 +7152,7 @@
                       "fill": "$text-primary",
                       "content": "accent",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7164,7 +7164,7 @@
                       "width": "fill_container",
                       "content": "#8B5CFF · Primary actions",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7195,7 +7195,7 @@
                       "fill": "$text-primary",
                       "content": "accent-soft",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7207,7 +7207,7 @@
                       "width": "fill_container",
                       "content": "#8B5CFF26 · Tints, focus",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7238,7 +7238,7 @@
                       "fill": "$text-primary",
                       "content": "star",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7250,7 +7250,7 @@
                       "width": "fill_container",
                       "content": "#FBBF24 · Ratings",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7296,7 +7296,7 @@
                       "fill": "$text-primary",
                       "content": "text-primary",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7308,7 +7308,7 @@
                       "width": "fill_container",
                       "content": "#F3F4F8 · Headlines",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7339,7 +7339,7 @@
                       "fill": "$text-primary",
                       "content": "text-secondary",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7351,7 +7351,7 @@
                       "width": "fill_container",
                       "content": "#A6ADBF · Body copy",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7382,7 +7382,7 @@
                       "fill": "$text-primary",
                       "content": "text-muted",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7394,7 +7394,7 @@
                       "width": "fill_container",
                       "content": "#8B93A7 · Captions",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7425,7 +7425,7 @@
                       "fill": "$text-primary",
                       "content": "running",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7437,7 +7437,7 @@
                       "width": "fill_container",
                       "content": "#34D399 · Status: running",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7468,7 +7468,7 @@
                       "fill": "$text-primary",
                       "content": "ended",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7480,7 +7480,7 @@
                       "width": "fill_container",
                       "content": "#8B91A5 · Status: ended",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7511,7 +7511,7 @@
                       "fill": "$text-primary",
                       "content": "in-dev",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7523,7 +7523,7 @@
                       "width": "fill_container",
                       "content": "#F59E0B · Status: in dev",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7554,7 +7554,7 @@
                       "fill": "$text-primary",
                       "content": "tbd",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7566,7 +7566,7 @@
                       "width": "fill_container",
                       "content": "#60A5FA · Status: TBD",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7612,7 +7612,7 @@
                       "fill": "$text-primary",
                       "content": "accent-hover",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7624,7 +7624,7 @@
                       "width": "fill_container",
                       "content": "#C4B0FF · Hover / pressed on accent",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7655,7 +7655,7 @@
                       "fill": "$text-primary",
                       "content": "accent-border",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7667,7 +7667,7 @@
                       "width": "fill_container",
                       "content": "#8B5CFF66 · Focus ring, outlined chips",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7698,7 +7698,7 @@
                       "fill": "$text-primary",
                       "content": "accent-glow",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7710,7 +7710,7 @@
                       "width": "fill_container",
                       "content": "#8B5CFF33 · Accent glow, shadow tint",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7741,7 +7741,7 @@
                       "fill": "$text-primary",
                       "content": "border-strong",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7753,7 +7753,7 @@
                       "width": "fill_container",
                       "content": "#232839 · Emphasised hairline",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7784,7 +7784,7 @@
                       "fill": "$text-primary",
                       "content": "text-on-accent",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7796,7 +7796,7 @@
                       "width": "fill_container",
                       "content": "#FFFFFF · Text on accent fill",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7827,7 +7827,7 @@
                       "fill": "$text-primary",
                       "content": "text-tertiary",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7839,7 +7839,7 @@
                       "width": "fill_container",
                       "content": "#C3C8D4 · Tertiary copy",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7870,7 +7870,7 @@
                       "fill": "$text-primary",
                       "content": "bg-deep",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7882,7 +7882,7 @@
                       "width": "fill_container",
                       "content": "#0A0C12 · Page underlay",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7913,7 +7913,7 @@
                       "fill": "$text-primary",
                       "content": "scrim",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7925,7 +7925,7 @@
                       "width": "fill_container",
                       "content": "#0C0E15CC · Modal backdrop",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -7971,7 +7971,7 @@
                       "fill": "$text-primary",
                       "content": "running-soft",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -7983,7 +7983,7 @@
                       "width": "fill_container",
                       "content": "#34D3991A · Running tint",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8014,7 +8014,7 @@
                       "fill": "$text-primary",
                       "content": "running-light",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -8026,7 +8026,7 @@
                       "width": "fill_container",
                       "content": "#6EE7B7 · Running label",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8057,7 +8057,7 @@
                       "fill": "$text-primary",
                       "content": "star-soft",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -8069,7 +8069,7 @@
                       "width": "fill_container",
                       "content": "#FBBF241A · Rating tint",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8100,7 +8100,7 @@
                       "fill": "$text-primary",
                       "content": "star-light",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -8112,7 +8112,7 @@
                       "width": "fill_container",
                       "content": "#FCD34D · Rating label",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8143,7 +8143,7 @@
                       "fill": "$text-primary",
                       "content": "in-dev-soft",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -8155,7 +8155,7 @@
                       "width": "fill_container",
                       "content": "#F59E0B1A · In-dev tint",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8186,7 +8186,7 @@
                       "fill": "$text-primary",
                       "content": "ended-soft",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -8198,7 +8198,7 @@
                       "width": "fill_container",
                       "content": "#8B91A51A · Ended tint",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8229,7 +8229,7 @@
                       "fill": "$text-primary",
                       "content": "tbd-soft",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -8241,7 +8241,7 @@
                       "width": "fill_container",
                       "content": "#60A5FA1A · TBD tint",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8272,7 +8272,7 @@
                       "fill": "$text-primary",
                       "content": "white-soft",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -8284,7 +8284,7 @@
                       "width": "fill_container",
                       "content": "#FFFFFF0A · Overlay tint",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8316,7 +8316,7 @@
                   "fill": "$accent",
                   "content": "02",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -8327,7 +8327,7 @@
                   "fill": "$text-muted",
                   "content": "TYPOGRAPHY",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -8353,7 +8353,7 @@
                   "type": "frame",
                   "id": "uLWYR",
                   "name": "Label",
-                  "width": 200,
+                  "width": 220,
                   "layout": "vertical",
                   "gap": 4,
                   "children": [
@@ -8364,7 +8364,7 @@
                       "fill": "$text-primary",
                       "content": "Display / Hero",
                       "fontFamily": "Inter",
-                      "fontSize": 12.5,
+                      "fontSize": 18,
                       "fontWeight": "600"
                     },
                     {
@@ -8374,7 +8374,7 @@
                       "fill": "$text-muted",
                       "content": "Sora 700 · 58 · lh 1.08 · ls -1.5",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8405,7 +8405,7 @@
                   "type": "frame",
                   "id": "NkJF3",
                   "name": "Label",
-                  "width": 200,
+                  "width": 220,
                   "layout": "vertical",
                   "gap": 4,
                   "children": [
@@ -8416,7 +8416,7 @@
                       "fill": "$text-primary",
                       "content": "Section / H2",
                       "fontFamily": "Inter",
-                      "fontSize": 12.5,
+                      "fontSize": 18,
                       "fontWeight": "600"
                     },
                     {
@@ -8426,7 +8426,7 @@
                       "fill": "$text-muted",
                       "content": "Sora 600 · 26 · ls -0.5",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8438,7 +8438,7 @@
                   "fill": "$text-primary",
                   "content": "Search Results",
                   "fontFamily": "$font-display",
-                  "fontSize": 26,
+                  "fontSize": 36,
                   "fontWeight": "600",
                   "letterSpacing": -0.5
                 }
@@ -8456,7 +8456,7 @@
                   "type": "frame",
                   "id": "s2fHLT",
                   "name": "Label",
-                  "width": 200,
+                  "width": 220,
                   "layout": "vertical",
                   "gap": 4,
                   "children": [
@@ -8467,7 +8467,7 @@
                       "fill": "$text-primary",
                       "content": "Card title / H3",
                       "fontFamily": "Inter",
-                      "fontSize": 12.5,
+                      "fontSize": 18,
                       "fontWeight": "600"
                     },
                     {
@@ -8477,7 +8477,7 @@
                       "fill": "$text-muted",
                       "content": "Sora 600 · 19 · lh 1.2",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8489,7 +8489,7 @@
                   "fill": "$text-primary",
                   "content": "Banana Fish",
                   "fontFamily": "$font-display",
-                  "fontSize": 19,
+                  "fontSize": 27,
                   "fontWeight": "600"
                 }
               ]
@@ -8506,7 +8506,7 @@
                   "type": "frame",
                   "id": "T0sQ3",
                   "name": "Label",
-                  "width": 200,
+                  "width": 220,
                   "layout": "vertical",
                   "gap": 4,
                   "children": [
@@ -8517,7 +8517,7 @@
                       "fill": "$text-primary",
                       "content": "Body / Large",
                       "fontFamily": "Inter",
-                      "fontSize": 12.5,
+                      "fontSize": 18,
                       "fontWeight": "600"
                     },
                     {
@@ -8527,7 +8527,7 @@
                       "fill": "$text-muted",
                       "content": "Inter 400 · 15 · lh 1.55",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8540,7 +8540,7 @@
                   "content": "Explore thousands of TV shows and find something worth watching.",
                   "lineHeight": 1.55,
                   "fontFamily": "Inter",
-                  "fontSize": 15,
+                  "fontSize": 21,
                   "fontWeight": "normal"
                 }
               ]
@@ -8557,7 +8557,7 @@
                   "type": "frame",
                   "id": "f4C8X",
                   "name": "Label",
-                  "width": 200,
+                  "width": 220,
                   "layout": "vertical",
                   "gap": 4,
                   "children": [
@@ -8568,7 +8568,7 @@
                       "fill": "$text-primary",
                       "content": "Body / Medium",
                       "fontFamily": "Inter",
-                      "fontSize": 12.5,
+                      "fontSize": 18,
                       "fontWeight": "600"
                     },
                     {
@@ -8578,7 +8578,7 @@
                       "fill": "$text-muted",
                       "content": "Inter 400 · 13.5 · lh 1.65",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8591,7 +8591,7 @@
                   "content": "Banana is a British television series created by Russell T. Davies.",
                   "lineHeight": 1.65,
                   "fontFamily": "Inter",
-                  "fontSize": 13.5,
+                  "fontSize": 19,
                   "fontWeight": "normal"
                 }
               ]
@@ -8608,7 +8608,7 @@
                   "type": "frame",
                   "id": "H6oma",
                   "name": "Label",
-                  "width": 200,
+                  "width": 220,
                   "layout": "vertical",
                   "gap": 4,
                   "children": [
@@ -8619,7 +8619,7 @@
                       "fill": "$text-primary",
                       "content": "Caption",
                       "fontFamily": "Inter",
-                      "fontSize": 12.5,
+                      "fontSize": 18,
                       "fontWeight": "600"
                     },
                     {
@@ -8629,7 +8629,7 @@
                       "fill": "$text-muted",
                       "content": "Inter 500 · 12",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8641,7 +8641,7 @@
                   "fill": "$text-muted",
                   "content": "2015 · Fuji TV · Drama",
                   "fontFamily": "Inter",
-                  "fontSize": 12,
+                  "fontSize": 17,
                   "fontWeight": "500"
                 }
               ]
@@ -8658,7 +8658,7 @@
                   "type": "frame",
                   "id": "fD9AY",
                   "name": "Label",
-                  "width": 200,
+                  "width": 220,
                   "layout": "vertical",
                   "gap": 4,
                   "children": [
@@ -8669,7 +8669,7 @@
                       "fill": "$text-primary",
                       "content": "Overline",
                       "fontFamily": "Inter",
-                      "fontSize": 12.5,
+                      "fontSize": 18,
                       "fontWeight": "600"
                     },
                     {
@@ -8679,7 +8679,7 @@
                       "fill": "$text-muted",
                       "content": "Inter 700 · 11.5 · ls 1.6",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8691,7 +8691,7 @@
                   "fill": "$text-muted",
                   "content": "STATE · LOADING",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.6
                 }
@@ -8722,7 +8722,7 @@
                   "fill": "$accent",
                   "content": "03",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -8733,7 +8733,7 @@
                   "fill": "$text-muted",
                   "content": "FONTS · WEBFONT LOADING",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -8774,7 +8774,7 @@
                       "fill": "$text-primary",
                       "content": "Sora",
                       "fontFamily": "$font-display",
-                      "fontSize": 34,
+                      "fontSize": 48,
                       "fontWeight": "700",
                       "letterSpacing": -0.5
                     },
@@ -8785,7 +8785,7 @@
                       "fill": "$accent",
                       "content": "DISPLAY · headings, titles, numerals",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "600"
                     },
                     {
@@ -8797,7 +8797,7 @@
                       "width": "fill_container",
                       "content": "Discover your next obsession.",
                       "fontFamily": "$font-display",
-                      "fontSize": 20,
+                      "fontSize": 28,
                       "fontWeight": "normal"
                     },
                     {
@@ -8821,7 +8821,7 @@
                               "fill": "$text-primary",
                               "content": "Aa",
                               "fontFamily": "$font-display",
-                              "fontSize": 26,
+                              "fontSize": 36,
                               "fontWeight": "normal"
                             },
                             {
@@ -8831,7 +8831,7 @@
                               "fill": "$text-muted",
                               "content": "400",
                               "fontFamily": "Inter",
-                              "fontSize": 10.5,
+                              "fontSize": 15,
                               "fontWeight": "normal"
                             }
                           ]
@@ -8851,7 +8851,7 @@
                               "fill": "$text-primary",
                               "content": "Aa",
                               "fontFamily": "$font-display",
-                              "fontSize": 26,
+                              "fontSize": 36,
                               "fontWeight": "500"
                             },
                             {
@@ -8861,7 +8861,7 @@
                               "fill": "$text-muted",
                               "content": "500",
                               "fontFamily": "Inter",
-                              "fontSize": 10.5,
+                              "fontSize": 15,
                               "fontWeight": "normal"
                             }
                           ]
@@ -8881,7 +8881,7 @@
                               "fill": "$text-primary",
                               "content": "Aa",
                               "fontFamily": "$font-display",
-                              "fontSize": 26,
+                              "fontSize": 36,
                               "fontWeight": "600"
                             },
                             {
@@ -8891,7 +8891,7 @@
                               "fill": "$text-muted",
                               "content": "600",
                               "fontFamily": "Inter",
-                              "fontSize": 10.5,
+                              "fontSize": 15,
                               "fontWeight": "normal"
                             }
                           ]
@@ -8911,7 +8911,7 @@
                               "fill": "$text-primary",
                               "content": "Aa",
                               "fontFamily": "$font-display",
-                              "fontSize": 26,
+                              "fontSize": 36,
                               "fontWeight": "700"
                             },
                             {
@@ -8921,7 +8921,7 @@
                               "fill": "$text-muted",
                               "content": "700",
                               "fontFamily": "Inter",
-                              "fontSize": 10.5,
+                              "fontSize": 15,
                               "fontWeight": "normal"
                             }
                           ]
@@ -8937,7 +8937,7 @@
                       "width": "fill_container",
                       "content": "--font-display: \"Sora\", system-ui, sans-serif;",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "normal"
                     },
                     {
@@ -8949,7 +8949,7 @@
                       "width": "fill_container",
                       "content": "fonts.google.com/specimen/Sora · 400 500 600 700",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -8974,7 +8974,7 @@
                       "fill": "$text-primary",
                       "content": "Inter",
                       "fontFamily": "Inter",
-                      "fontSize": 34,
+                      "fontSize": 48,
                       "fontWeight": "700",
                       "letterSpacing": -0.5
                     },
@@ -8985,7 +8985,7 @@
                       "fill": "$accent",
                       "content": "BODY · UI labels, copy, captions",
                       "fontFamily": "Inter",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "600"
                     },
                     {
@@ -8997,7 +8997,7 @@
                       "width": "fill_container",
                       "content": "Explore thousands of TV shows and find something worth watching.",
                       "fontFamily": "Inter",
-                      "fontSize": 15,
+                      "fontSize": 21,
                       "fontWeight": "normal"
                     },
                     {
@@ -9021,7 +9021,7 @@
                               "fill": "$text-primary",
                               "content": "Aa",
                               "fontFamily": "Inter",
-                              "fontSize": 26,
+                              "fontSize": 36,
                               "fontWeight": "normal"
                             },
                             {
@@ -9031,7 +9031,7 @@
                               "fill": "$text-muted",
                               "content": "400",
                               "fontFamily": "Inter",
-                              "fontSize": 10.5,
+                              "fontSize": 15,
                               "fontWeight": "normal"
                             }
                           ]
@@ -9051,7 +9051,7 @@
                               "fill": "$text-primary",
                               "content": "Aa",
                               "fontFamily": "Inter",
-                              "fontSize": 26,
+                              "fontSize": 36,
                               "fontWeight": "500"
                             },
                             {
@@ -9061,7 +9061,7 @@
                               "fill": "$text-muted",
                               "content": "500",
                               "fontFamily": "Inter",
-                              "fontSize": 10.5,
+                              "fontSize": 15,
                               "fontWeight": "normal"
                             }
                           ]
@@ -9081,7 +9081,7 @@
                               "fill": "$text-primary",
                               "content": "Aa",
                               "fontFamily": "Inter",
-                              "fontSize": 26,
+                              "fontSize": 36,
                               "fontWeight": "600"
                             },
                             {
@@ -9091,7 +9091,7 @@
                               "fill": "$text-muted",
                               "content": "600",
                               "fontFamily": "Inter",
-                              "fontSize": 10.5,
+                              "fontSize": 15,
                               "fontWeight": "normal"
                             }
                           ]
@@ -9111,7 +9111,7 @@
                               "fill": "$text-primary",
                               "content": "Aa",
                               "fontFamily": "Inter",
-                              "fontSize": 26,
+                              "fontSize": 36,
                               "fontWeight": "700"
                             },
                             {
@@ -9121,7 +9121,7 @@
                               "fill": "$text-muted",
                               "content": "700",
                               "fontFamily": "Inter",
-                              "fontSize": 10.5,
+                              "fontSize": 15,
                               "fontWeight": "normal"
                             }
                           ]
@@ -9137,7 +9137,7 @@
                       "width": "fill_container",
                       "content": "--font-body: \"Inter\", system-ui, sans-serif;",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11.5,
+                      "fontSize": 16,
                       "fontWeight": "normal"
                     },
                     {
@@ -9149,7 +9149,7 @@
                       "width": "fill_container",
                       "content": "fonts.google.com/specimen/Inter · 400 500 600 700",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -9183,7 +9183,7 @@
                       "fill": "$text-muted",
                       "content": "index.html",
                       "fontFamily": "Inter",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "600"
                     },
                     {
@@ -9195,7 +9195,7 @@
                       "width": "fill_container",
                       "content": "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9207,7 +9207,7 @@
                       "width": "fill_container",
                       "content": "<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9219,7 +9219,7 @@
                       "width": "fill_container",
                       "content": "<link rel=\"stylesheet\" href=\"",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9231,7 +9231,7 @@
                       "width": "fill_container",
                       "content": "  https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9243,7 +9243,7 @@
                       "width": "fill_container",
                       "content": "  &family=Inter:wght@400;500;600;700&display=swap\" />",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -9268,7 +9268,7 @@
                       "fill": "$text-muted",
                       "content": "src/styles/tokens.css",
                       "fontFamily": "Inter",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "600"
                     },
                     {
@@ -9280,7 +9280,7 @@
                       "width": "fill_container",
                       "content": ":root {",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9292,7 +9292,7 @@
                       "width": "fill_container",
                       "content": "  --font-display: \"Sora\", system-ui, sans-serif;",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9304,7 +9304,7 @@
                       "width": "fill_container",
                       "content": "  --font-body: \"Inter\", system-ui, sans-serif;",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9316,7 +9316,7 @@
                       "width": "fill_container",
                       "content": "  --weight-regular: 400;",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9328,7 +9328,7 @@
                       "width": "fill_container",
                       "content": "  --weight-medium: 500;",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9340,7 +9340,7 @@
                       "width": "fill_container",
                       "content": "  --weight-semibold: 600;",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9352,7 +9352,7 @@
                       "width": "fill_container",
                       "content": "  --weight-bold: 700;",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9364,7 +9364,7 @@
                       "width": "fill_container",
                       "content": "  --leading-tight: 1.2;",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9376,7 +9376,7 @@
                       "width": "fill_container",
                       "content": "  --leading-base: 1.5;",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     },
                     {
@@ -9388,7 +9388,7 @@
                       "width": "fill_container",
                       "content": "}",
                       "fontFamily": "JetBrains Mono",
-                      "fontSize": 11,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -9404,7 +9404,7 @@
               "width": "fill_container",
               "content": "Self-host for production: npm i @fontsource/sora @fontsource/inter — import only the weights you use (Sora 400/500/600/700, Inter 400/500/600/700). Fallback stacks above keep the UI readable if the webfont fails to load.",
               "fontFamily": "Inter",
-              "fontSize": 11,
+              "fontSize": 15,
               "fontWeight": "normal"
             }
           ]
@@ -9432,7 +9432,7 @@
                   "fill": "$accent",
                   "content": "04",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -9443,7 +9443,7 @@
                   "fill": "$text-muted",
                   "content": "BUTTONS & CONTROLS",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -9496,7 +9496,7 @@
                       "fill": "#FFFFFF",
                       "content": "Official website",
                       "fontFamily": "Inter",
-                      "fontSize": 13.5,
+                      "fontSize": 19,
                       "fontWeight": "600"
                     }
                   ]
@@ -9534,7 +9534,7 @@
                       "fill": "$text-primary",
                       "content": "Add to watchlist",
                       "fontFamily": "Inter",
-                      "fontSize": 13.5,
+                      "fontSize": 19,
                       "fontWeight": "600"
                     }
                   ]
@@ -9604,7 +9604,7 @@
                       "fill": "$text-muted",
                       "content": "primary / no icon",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -9638,7 +9638,7 @@
                       "fill": "$text-muted",
                       "content": "primary / icon",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -9673,7 +9673,7 @@
                       "fill": "$text-muted",
                       "content": "primary / disabled",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -9707,7 +9707,7 @@
                       "fill": "$text-muted",
                       "content": "secondary / icon",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -9741,7 +9741,7 @@
                       "fill": "$text-muted",
                       "content": "secondary / plain",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -9767,7 +9767,7 @@
                       "fill": "$text-muted",
                       "content": "icon / prev",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -9798,7 +9798,7 @@
                       "fill": "$text-muted",
                       "content": "icon / next",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -9830,7 +9830,7 @@
                   "fill": "$accent",
                   "content": "05",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -9841,7 +9841,7 @@
                   "fill": "$text-muted",
                   "content": "CHIPS, PILLS & BADGES",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -9894,7 +9894,7 @@
                       "fill": "#C3C8D4",
                       "content": "Ended",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     }
                   ]
@@ -9932,7 +9932,7 @@
                       "fill": "#FCD34D",
                       "content": "6.8 / 10",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "700"
                     }
                   ]
@@ -9958,7 +9958,7 @@
                       "fill": "#C4B0FF",
                       "content": "10 shows found",
                       "fontFamily": "Inter",
-                      "fontSize": 12.5,
+                      "fontSize": 18,
                       "fontWeight": "600"
                     }
                   ]
@@ -9999,7 +9999,7 @@
                       "fill": "$text-muted",
                       "content": "chip / default",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10034,7 +10034,7 @@
                       "fill": "$text-muted",
                       "content": "chip / selected",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10071,7 +10071,7 @@
                       "fill": "$text-muted",
                       "content": "status / running",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10097,7 +10097,7 @@
                       "fill": "$text-muted",
                       "content": "status / ended",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10134,7 +10134,7 @@
                       "fill": "$text-muted",
                       "content": "status / in development",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10171,7 +10171,7 @@
                       "fill": "$text-muted",
                       "content": "status / TBD",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10197,7 +10197,7 @@
                       "fill": "$text-muted",
                       "content": "rating",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10223,7 +10223,7 @@
                       "fill": "$text-muted",
                       "content": "result count",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10255,7 +10255,7 @@
                   "fill": "$accent",
                   "content": "06",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -10266,7 +10266,7 @@
                   "fill": "$text-muted",
                   "content": "INPUTS",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -10319,7 +10319,7 @@
                   "width": "fill_container",
                   "content": "Search for TV shows...",
                   "fontFamily": "Inter",
-                  "fontSize": 15,
+                  "fontSize": 21,
                   "fontWeight": "normal"
                 }
               ]
@@ -10352,7 +10352,7 @@
                       "fill": "$text-muted",
                       "content": "search / default",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10389,7 +10389,7 @@
                       "fill": "$text-muted",
                       "content": "search / active + query",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10421,7 +10421,7 @@
                   "fill": "$accent",
                   "content": "07",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -10432,7 +10432,7 @@
                   "fill": "$text-muted",
                   "content": "META FIELDS",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -10461,7 +10461,7 @@
                   "fill": "$text-muted",
                   "content": "PREMIERED",
                   "fontFamily": "Inter",
-                  "fontSize": 11,
+                  "fontSize": 15,
                   "fontWeight": "600",
                   "letterSpacing": 1.1
                 },
@@ -10472,7 +10472,7 @@
                   "fill": "$text-primary",
                   "content": "Jan 22, 2015",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 20,
                   "fontWeight": "500"
                 }
               ]
@@ -10581,7 +10581,7 @@
                   "fill": "$accent",
                   "content": "08",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -10592,7 +10592,7 @@
                   "fill": "$text-muted",
                   "content": "CARDS & MODULES",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -10749,7 +10749,7 @@
                           "width": "fill_container",
                           "content": "Banana",
                           "fontFamily": "$font-display",
-                          "fontSize": 15,
+                          "fontSize": 21,
                           "fontWeight": "600"
                         },
                         {
@@ -10759,7 +10759,7 @@
                           "fill": "$text-muted",
                           "content": "2015 · E4",
                           "fontFamily": "Inter",
-                          "fontSize": 11.5,
+                          "fontSize": 16,
                           "fontWeight": "normal"
                         },
                         {
@@ -10771,7 +10771,7 @@
                           "width": "fill_container",
                           "content": "Drama · Romance",
                           "fontFamily": "Inter",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -10805,7 +10805,7 @@
                                   "fill": "$text-primary",
                                   "content": "6.8",
                                   "fontFamily": "Inter",
-                                  "fontSize": 11.5,
+                                  "fontSize": 16,
                                   "fontWeight": "700"
                                 }
                               ]
@@ -10832,7 +10832,7 @@
                                   "fill": "$text-secondary",
                                   "content": "Ended",
                                   "fontFamily": "Inter",
-                                  "fontSize": 11,
+                                  "fontSize": 15,
                                   "fontWeight": "600"
                                 }
                               ]
@@ -10886,7 +10886,7 @@
                           ]
                         },
                         "ybg43": {
-                          "fontSize": 10
+                          "fontSize": 14
                         },
                         "wP0b5": {
                           "padding": [
@@ -10895,7 +10895,7 @@
                           ]
                         },
                         "wdKni": {
-                          "fontSize": 11
+                          "fontSize": 15
                         },
                         "jROz3": {
                           "padding": [
@@ -10907,16 +10907,16 @@
                           "gap": 6
                         },
                         "blNn8": {
-                          "fontSize": 15
+                          "fontSize": 21
                         },
                         "d5Z1o6": {
-                          "fontSize": 11
+                          "fontSize": 15
                         },
                         "zD0Mr": {
-                          "fontSize": 11
+                          "fontSize": 15
                         },
                         "AAs60": {
-                          "fontSize": 10.5
+                          "fontSize": 15
                         }
                       }
                     },
@@ -10927,7 +10927,7 @@
                       "fill": "$text-muted",
                       "content": "ShowCard / results grid (3 per page)",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10952,7 +10952,7 @@
                       "fill": "$text-muted",
                       "content": "ShowRowCard / mobile list",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -10977,7 +10977,7 @@
                       "fill": "$text-muted",
                       "content": "SkeletonCard / loading state",
                       "fontFamily": "Inter",
-                      "fontSize": 10.5,
+                      "fontSize": 15,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11009,7 +11009,7 @@
                   "fill": "$accent",
                   "content": "09",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -11020,7 +11020,7 @@
                   "fill": "$text-muted",
                   "content": "ICONOGRAPHY · LUCIDE",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -11075,7 +11075,7 @@
                       "fill": "$text-muted",
                       "content": "radar",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11114,7 +11114,7 @@
                       "fill": "$text-muted",
                       "content": "search",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11153,7 +11153,7 @@
                       "fill": "$text-muted",
                       "content": "star",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11192,7 +11192,7 @@
                       "fill": "$text-muted",
                       "content": "bell",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11231,7 +11231,7 @@
                       "fill": "$text-muted",
                       "content": "x",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11270,7 +11270,7 @@
                       "fill": "$text-muted",
                       "content": "chevron-left",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11309,7 +11309,7 @@
                       "fill": "$text-muted",
                       "content": "chevron-right",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11348,7 +11348,7 @@
                       "fill": "$text-muted",
                       "content": "eye",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11387,7 +11387,7 @@
                       "fill": "$text-muted",
                       "content": "external-link",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11426,7 +11426,7 @@
                       "fill": "$text-muted",
                       "content": "plus",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11474,7 +11474,7 @@
                       "fill": "$text-muted",
                       "content": "rotate-ccw",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11513,7 +11513,7 @@
                       "fill": "$text-muted",
                       "content": "search-x",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11552,7 +11552,7 @@
                       "fill": "$text-muted",
                       "content": "triangle-alert",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11591,7 +11591,7 @@
                       "fill": "$text-muted",
                       "content": "image-off",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11630,7 +11630,7 @@
                       "fill": "$text-muted",
                       "content": "timer",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11669,7 +11669,7 @@
                       "fill": "$text-muted",
                       "content": "globe",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11708,7 +11708,7 @@
                       "fill": "$text-muted",
                       "content": "eraser",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11747,7 +11747,7 @@
                       "fill": "$text-muted",
                       "content": "sparkles",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11786,7 +11786,7 @@
                       "fill": "$text-muted",
                       "content": "arrow-right",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11825,7 +11825,7 @@
                       "fill": "$text-muted",
                       "content": "building-2",
                       "fontFamily": "Inter",
-                      "fontSize": 10,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -11857,7 +11857,7 @@
                   "fill": "$accent",
                   "content": "10",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -11868,7 +11868,7 @@
                   "fill": "$text-muted",
                   "content": "RADIUS · SPACING · ELEVATION",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -11903,7 +11903,7 @@
                       "fill": "$text-primary",
                       "content": "Corner radius",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -11938,7 +11938,7 @@
                               "fill": "$text-muted",
                               "content": "radius-btn",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -11969,7 +11969,7 @@
                               "fill": "$text-muted",
                               "content": "radius-input",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12000,7 +12000,7 @@
                               "fill": "$text-muted",
                               "content": "radius-card",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12031,7 +12031,7 @@
                               "fill": "$text-muted",
                               "content": "radius-modal",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12062,7 +12062,7 @@
                               "fill": "$text-muted",
                               "content": "pill",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12085,7 +12085,7 @@
                       "fill": "$text-primary",
                       "content": "Spacing scale",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -12120,7 +12120,7 @@
                               "fill": "$text-muted",
                               "content": "4px",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12150,7 +12150,7 @@
                               "fill": "$text-muted",
                               "content": "8px",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12180,7 +12180,7 @@
                               "fill": "$text-muted",
                               "content": "12px",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12210,7 +12210,7 @@
                               "fill": "$text-muted",
                               "content": "16px",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12240,7 +12240,7 @@
                               "fill": "$text-muted",
                               "content": "24px",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12270,7 +12270,7 @@
                               "fill": "$text-muted",
                               "content": "40px",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12300,7 +12300,7 @@
                               "fill": "$text-muted",
                               "content": "96px",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12323,7 +12323,7 @@
                       "fill": "$text-primary",
                       "content": "Elevation",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
+                      "fontSize": 17,
                       "fontWeight": "600"
                     },
                     {
@@ -12368,7 +12368,7 @@
                               "fill": "$text-muted",
                               "content": "shadow-card · y10 b28 #000 40%",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12408,7 +12408,7 @@
                               "fill": "$text-muted",
                               "content": "glow-accent · y14 b40 accent 20%",
                               "fontFamily": "Inter",
-                              "fontSize": 10,
+                              "fontSize": 14,
                               "fontWeight": "normal"
                             }
                           ]
@@ -12444,7 +12444,7 @@
                   "fill": "$accent",
                   "content": "11",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -12455,7 +12455,7 @@
                   "fill": "$text-muted",
                   "content": "LAYOUT & BEHAVIOR RULES",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -12479,7 +12479,7 @@
               "content": "—  Desktop results grid: 3 cards per page, 40px gap, 96px page gutters. Tablet 2–3 per row, mobile 1–2 or ShowRowCard list.",
               "lineHeight": 1.7,
               "fontFamily": "Inter",
-              "fontSize": 13,
+              "fontSize": 18,
               "fontWeight": "normal"
             },
             {
@@ -12492,7 +12492,7 @@
               "content": "—  A new search resets genre to “All genres” and pagination to page 1; selecting a genre keeps the query and resets to page 1.",
               "lineHeight": 1.7,
               "fontFamily": "Inter",
-              "fontSize": 13,
+              "fontSize": 18,
               "fontWeight": "normal"
             },
             {
@@ -12505,7 +12505,7 @@
               "content": "—  Missing API fields fall back gracefully: rating → NR, year → TBA, poster → placeholder tile with image-off icon.",
               "lineHeight": 1.7,
               "fontFamily": "Inter",
-              "fontSize": 13,
+              "fontSize": 18,
               "fontWeight": "normal"
             },
             {
@@ -12518,7 +12518,7 @@
               "content": "—  Selected & focus states use $accent fill or stroke; disabled controls sit at 40% opacity; hover lifts cards with glow-accent and zooms posters to 108%.",
               "lineHeight": 1.7,
               "fontFamily": "Inter",
-              "fontSize": 13,
+              "fontSize": 18,
               "fontWeight": "normal"
             }
           ]
@@ -12546,7 +12546,7 @@
                   "fill": "$accent",
                   "content": "12",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -12557,7 +12557,7 @@
                   "fill": "$text-muted",
                   "content": "CSS VARIABLES · src/styles/tokens.css",
                   "fontFamily": "Inter",
-                  "fontSize": 11.5,
+                  "fontSize": 16,
                   "fontWeight": "700",
                   "letterSpacing": 1.4
                 },
@@ -12606,7 +12606,7 @@
                           "fill": "$text-muted",
                           "content": "COLOR · BASE",
                           "fontFamily": "Inter",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "600"
                         },
                         {
@@ -12618,7 +12618,7 @@
                           "width": "fill_container",
                           "content": "--bg: #0C0E15;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12630,7 +12630,7 @@
                           "width": "fill_container",
                           "content": "--bg-deep: #0A0C12;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12642,7 +12642,7 @@
                           "width": "fill_container",
                           "content": "--surface: #151824;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12654,7 +12654,7 @@
                           "width": "fill_container",
                           "content": "--surface-2: #1D2130;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12666,7 +12666,7 @@
                           "width": "fill_container",
                           "content": "--border: #262B3D;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12678,7 +12678,7 @@
                           "width": "fill_container",
                           "content": "--border-strong: #232839;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12690,7 +12690,7 @@
                           "width": "fill_container",
                           "content": "--accent: #8B5CFF;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12702,7 +12702,7 @@
                           "width": "fill_container",
                           "content": "--accent-hover: #C4B0FF;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12714,7 +12714,7 @@
                           "width": "fill_container",
                           "content": "--accent-soft: #8B5CFF26;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12726,7 +12726,7 @@
                           "width": "fill_container",
                           "content": "--accent-border: #8B5CFF66;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12738,7 +12738,7 @@
                           "width": "fill_container",
                           "content": "--accent-glow: #8B5CFF33;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12750,7 +12750,7 @@
                           "width": "fill_container",
                           "content": "--scrim: #0C0E15CC;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12762,7 +12762,7 @@
                           "width": "fill_container",
                           "content": "--white-soft: #FFFFFF0A;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         }
                       ]
@@ -12787,7 +12787,7 @@
                           "fill": "$text-muted",
                           "content": "COLOR · TEXT",
                           "fontFamily": "Inter",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "600"
                         },
                         {
@@ -12799,7 +12799,7 @@
                           "width": "fill_container",
                           "content": "--text-primary: #F3F4F8;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12811,7 +12811,7 @@
                           "width": "fill_container",
                           "content": "--text-secondary: #A6ADBF;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12823,7 +12823,7 @@
                           "width": "fill_container",
                           "content": "--text-tertiary: #C3C8D4;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12835,7 +12835,7 @@
                           "width": "fill_container",
                           "content": "--text-muted: #8B93A7;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12847,7 +12847,7 @@
                           "width": "fill_container",
                           "content": "--text-on-accent: #FFFFFF;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         }
                       ]
@@ -12882,7 +12882,7 @@
                           "fill": "$text-muted",
                           "content": "COLOR · STATUS",
                           "fontFamily": "Inter",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "600"
                         },
                         {
@@ -12894,7 +12894,7 @@
                           "width": "fill_container",
                           "content": "--running: #34D399;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12906,7 +12906,7 @@
                           "width": "fill_container",
                           "content": "--running-soft: #34D3991A;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12918,7 +12918,7 @@
                           "width": "fill_container",
                           "content": "--running-light: #6EE7B7;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12930,7 +12930,7 @@
                           "width": "fill_container",
                           "content": "--ended: #8B91A5;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12942,7 +12942,7 @@
                           "width": "fill_container",
                           "content": "--ended-soft: #8B91A51A;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12954,7 +12954,7 @@
                           "width": "fill_container",
                           "content": "--in-dev: #F59E0B;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12966,7 +12966,7 @@
                           "width": "fill_container",
                           "content": "--in-dev-soft: #F59E0B1A;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12978,7 +12978,7 @@
                           "width": "fill_container",
                           "content": "--tbd: #60A5FA;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -12990,7 +12990,7 @@
                           "width": "fill_container",
                           "content": "--tbd-soft: #60A5FA1A;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13002,7 +13002,7 @@
                           "width": "fill_container",
                           "content": "--star: #FBBF24;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13014,7 +13014,7 @@
                           "width": "fill_container",
                           "content": "--star-soft: #FBBF241A;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13026,7 +13026,7 @@
                           "width": "fill_container",
                           "content": "--star-light: #FCD34D;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         }
                       ]
@@ -13051,7 +13051,7 @@
                           "fill": "$text-muted",
                           "content": "TYPOGRAPHY",
                           "fontFamily": "Inter",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "600"
                         },
                         {
@@ -13063,7 +13063,7 @@
                           "width": "fill_container",
                           "content": "--font-display: \"Sora\", system-ui, sans-serif;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13075,7 +13075,7 @@
                           "width": "fill_container",
                           "content": "--font-body: \"Inter\", system-ui, sans-serif;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13087,7 +13087,7 @@
                           "width": "fill_container",
                           "content": "--weight-regular: 400;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13099,7 +13099,7 @@
                           "width": "fill_container",
                           "content": "--weight-medium: 500;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13111,7 +13111,7 @@
                           "width": "fill_container",
                           "content": "--weight-semibold: 600;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13123,7 +13123,7 @@
                           "width": "fill_container",
                           "content": "--weight-bold: 700;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13135,7 +13135,7 @@
                           "width": "fill_container",
                           "content": "--leading-tight: 1.2;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13147,7 +13147,7 @@
                           "width": "fill_container",
                           "content": "--leading-base: 1.5;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         }
                       ]
@@ -13182,7 +13182,7 @@
                           "fill": "$text-muted",
                           "content": "RADIUS & SPACING",
                           "fontFamily": "Inter",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "600"
                         },
                         {
@@ -13194,7 +13194,7 @@
                           "width": "fill_container",
                           "content": "--radius-btn: 12px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13206,7 +13206,7 @@
                           "width": "fill_container",
                           "content": "--radius-input: 16px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13218,7 +13218,7 @@
                           "width": "fill_container",
                           "content": "--radius-card: 18px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13230,7 +13230,7 @@
                           "width": "fill_container",
                           "content": "--radius-modal: 24px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13242,7 +13242,7 @@
                           "width": "fill_container",
                           "content": "--radius-pill: 999px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13254,7 +13254,7 @@
                           "width": "fill_container",
                           "content": "--space-2xs: 4px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13266,7 +13266,7 @@
                           "width": "fill_container",
                           "content": "--space-xs: 8px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13278,7 +13278,7 @@
                           "width": "fill_container",
                           "content": "--space-sm: 12px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13290,7 +13290,7 @@
                           "width": "fill_container",
                           "content": "--space-md: 16px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13302,7 +13302,7 @@
                           "width": "fill_container",
                           "content": "--space-lg: 24px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13314,7 +13314,7 @@
                           "width": "fill_container",
                           "content": "--space-xl: 40px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13326,7 +13326,7 @@
                           "width": "fill_container",
                           "content": "--gutter: 96px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         }
                       ]
@@ -13351,7 +13351,7 @@
                           "fill": "$text-muted",
                           "content": "ELEVATION & MOTION",
                           "fontFamily": "Inter",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "600"
                         },
                         {
@@ -13363,7 +13363,7 @@
                           "width": "fill_container",
                           "content": "--shadow-card: 0 10px 28px rgba(0,0,0,0.4);",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13375,7 +13375,7 @@
                           "width": "fill_container",
                           "content": "--glow-accent: 0 14px 40px rgba(139,92,255,0.2);",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13387,7 +13387,7 @@
                           "width": "fill_container",
                           "content": "--focus-ring: 0 0 0 3px rgba(139,92,255,0.4);",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13399,7 +13399,7 @@
                           "width": "fill_container",
                           "content": "--duration-fast: 120ms;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13411,7 +13411,7 @@
                           "width": "fill_container",
                           "content": "--duration-base: 200ms;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13423,7 +13423,7 @@
                           "width": "fill_container",
                           "content": "--duration-slow: 320ms;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13435,7 +13435,7 @@
                           "width": "fill_container",
                           "content": "--ease-out: cubic-bezier(0.22,1,0.36,1);",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         }
                       ]
@@ -13460,7 +13460,7 @@
                           "fill": "$text-muted",
                           "content": "LAYOUT",
                           "fontFamily": "Inter",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "600"
                         },
                         {
@@ -13472,7 +13472,7 @@
                           "width": "fill_container",
                           "content": "--card-poster-aspect: 389 / 400;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         },
                         {
@@ -13484,7 +13484,7 @@
                           "width": "fill_container",
                           "content": "--card-info-height: 117px;",
                           "fontFamily": "JetBrains Mono",
-                          "fontSize": 11,
+                          "fontSize": 15,
                           "fontWeight": "normal"
                         }
                       ]
@@ -13502,7 +13502,7 @@
               "width": "fill_container",
               "content": "Every value above maps 1:1 to a token in the .pen document. Copy the blocks into src/styles/tokens.css, import that file first in src/index.css, and reference the custom properties instead of hard-coded colors.",
               "fontFamily": "Inter",
-              "fontSize": 11,
+              "fontSize": 15,
               "fontWeight": "normal"
             }
           ]

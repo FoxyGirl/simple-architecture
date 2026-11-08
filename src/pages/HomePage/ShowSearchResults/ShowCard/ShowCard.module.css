@@ -65,13 +65,13 @@
   border-radius: var(--radius-pill);
   background: var(--scrim);
   color: var(--text-primary);
-  font-size: 11.5px;
+  font-size: 16px;
   font-weight: var(--weight-semibold);
 }
 
 .ratingBadge {
   gap: 5px;
-  font-size: 12.5px;
+  font-size: 18px;
   font-weight: var(--weight-bold);
 }
 
@@ -113,7 +113,7 @@
   margin: 0;
   color: var(--text-primary);
   font-family: var(--font-display);
-  font-size: 19px;
+  font-size: 27px;
   font-weight: var(--weight-semibold);
   line-height: 1.2;
 }
@@ -126,7 +126,7 @@
 
 .year {
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: 18px;
   font-weight: var(--weight-medium);
 }
 
@@ -139,11 +139,11 @@
 
 .network {
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 18px;
 }
 
 .genres {
   margin: 0;
   color: var(--text-muted);
-  font-size: 12.5px;
+  font-size: 18px;
 }

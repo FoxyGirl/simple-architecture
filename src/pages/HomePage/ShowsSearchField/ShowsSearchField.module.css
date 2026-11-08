@@ -27,7 +27,7 @@
   background: transparent;
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 20px;
   font-weight: var(--weight-medium);
 }
 
@@ -71,6 +71,6 @@
   }
 
   .query {
-    font-size: 15px;
+    font-size: 21px;
   }
 }

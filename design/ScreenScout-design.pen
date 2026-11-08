@@ -605,7 +605,7 @@
               "gap": 14,
               "padding": [
                 0,
-                8,
+                12,
                 0,
                 22
               ],
@@ -632,32 +632,6 @@
                   "fontFamily": "Inter",
                   "fontSize": 15,
                   "fontWeight": "normal"
-                },
-                {
-                  "type": "frame",
-                  "id": "Gjz3J",
-                  "name": "SearchButton",
-                  "height": 46,
-                  "fill": "$accent",
-                  "cornerRadius": 12,
-                  "gap": 8,
-                  "padding": [
-                    0,
-                    26
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "BXWA1",
-                      "name": "SearchLabel",
-                      "fill": "#FFFFFF",
-                      "content": "Search",
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    }
-                  ]
                 }
               ]
             }
@@ -1510,7 +1484,7 @@
               "gap": 14,
               "padding": [
                 0,
-                8,
+                12,
                 0,
                 22
               ],
@@ -1547,31 +1521,6 @@
                   "icon": "x",
                   "library": "lucide",
                   "fill": "$text-muted"
-                },
-                {
-                  "type": "frame",
-                  "id": "q5Cmkp",
-                  "name": "SearchButton",
-                  "height": 46,
-                  "fill": "$accent",
-                  "cornerRadius": 12,
-                  "padding": [
-                    0,
-                    26
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "NM7Ga",
-                      "name": "SearchLabel",
-                      "fill": "#FFFFFF",
-                      "content": "Search",
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    }
-                  ]
                 }
               ]
             }
@@ -2632,7 +2581,7 @@
               "gap": 14,
               "padding": [
                 0,
-                8,
+                12,
                 0,
                 22
               ],
@@ -2669,31 +2618,6 @@
                   "icon": "x",
                   "library": "lucide",
                   "fill": "$text-muted"
-                },
-                {
-                  "type": "frame",
-                  "id": "raP9M",
-                  "name": "SearchButton",
-                  "height": 46,
-                  "fill": "$accent",
-                  "cornerRadius": 12,
-                  "padding": [
-                    0,
-                    26
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "kyiEp",
-                      "name": "SearchLabel",
-                      "fill": "#FFFFFF",
-                      "content": "Search",
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    }
-                  ]
                 }
               ]
             }
@@ -4977,29 +4901,6 @@
                   "fontFamily": "Inter",
                   "fontSize": 14,
                   "fontWeight": "normal"
-                },
-                {
-                  "type": "frame",
-                  "id": "hqcSS",
-                  "name": "SearchButton",
-                  "width": 42,
-                  "height": 42,
-                  "fill": "$accent",
-                  "cornerRadius": 10,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "FrLP5",
-                      "name": "Arrow",
-                      "width": 17,
-                      "height": 17,
-                      "icon": "arrow-right",
-                      "library": "lucide",
-                      "fill": "#FFFFFF"
-                    }
-                  ]
                 }
               ]
             },
@@ -5609,29 +5510,6 @@
                   "fontFamily": "Inter",
                   "fontSize": 14,
                   "fontWeight": "500"
-                },
-                {
-                  "type": "frame",
-                  "id": "Lgy5g",
-                  "name": "SearchButton",
-                  "width": 42,
-                  "height": 42,
-                  "fill": "$accent",
-                  "cornerRadius": 10,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "Ly2H4",
-                      "name": "Arrow",
-                      "width": 17,
-                      "height": 17,
-                      "icon": "arrow-right",
-                      "library": "lucide",
-                      "fill": "#FFFFFF"
-                    }
-                  ]
                 }
               ]
             },
@@ -8918,7 +8796,8 @@
                       "width": "fill_container",
                       "content": "Discover your next obsession.",
                       "fontFamily": "$font-display",
-                      "fontSize": 20
+                      "fontSize": 20,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -8941,7 +8820,8 @@
                               "fill": "$text-primary",
                               "content": "Aa",
                               "fontFamily": "$font-display",
-                              "fontSize": 26
+                              "fontSize": 26,
+                              "fontWeight": "normal"
                             },
                             {
                               "type": "text",
@@ -9116,7 +8996,8 @@
                       "width": "fill_container",
                       "content": "Explore thousands of TV shows and find something worth watching.",
                       "fontFamily": "Inter",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -9139,7 +9020,8 @@
                               "fill": "$text-primary",
                               "content": "Aa",
                               "fontFamily": "Inter",
-                              "fontSize": 26
+                              "fontSize": 26,
+                              "fontWeight": "normal"
                             },
                             {
                               "type": "text",
@@ -10411,7 +10293,7 @@
               "gap": 14,
               "padding": [
                 0,
-                8,
+                12,
                 0,
                 22
               ],
@@ -10438,31 +10320,6 @@
                   "fontFamily": "Inter",
                   "fontSize": 15,
                   "fontWeight": "normal"
-                },
-                {
-                  "type": "frame",
-                  "id": "ZfVrv",
-                  "name": "Button",
-                  "height": 46,
-                  "fill": "$accent",
-                  "cornerRadius": "$radius-btn",
-                  "padding": [
-                    0,
-                    26
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "SokRa",
-                      "name": "Label",
-                      "fill": "#FFFFFF",
-                      "content": "Search",
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    }
-                  ]
                 }
               ]
             },

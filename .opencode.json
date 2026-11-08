@@ -12,6 +12,7 @@
       "git log *": "allow",
       "git push *": "ask",
       "git commit *": "ask",
+      "git add *": "ask",
       "Remove-Item *": "ask",
       "rm *": "ask",
       "del *": "ask"

@@ -24,6 +24,7 @@ export default defineConfig([
     },
     settings: {
       react: { version: 'detect' },
+      'import-x/extensions': ['.js', '.jsx', '.mjs', '.cjs'],
       'import-x/resolver': {
         node: { extensions: ['.js', '.jsx', '.css'] },
       },
@@ -54,6 +55,8 @@ export default defineConfig([
       'react/no-direct-mutation-state': 'error',
       'import-x/no-unresolved': 'error',
       'import-x/no-duplicates': 'warn',
+      'import-x/named': 'error',
+      'import-x/default': 'error',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

@@ -58,6 +58,10 @@
   --radius-modal: 24px;
   --radius-pill: 999px;
 
+  /* Layout */
+  --card-poster-aspect: 389 / 400;
+  --card-info-height: 117px;
+
   /* Spacing */
   --space-2xs: 4px;
   --space-xs: 8px;

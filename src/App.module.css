@@ -1,13 +1,18 @@
 .app {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: var(--space-xl);
+  min-height: 100vh;
+  padding-bottom: var(--space-xl);
 }
 
 .nav {
   display: flex;
   gap: var(--space-md);
-  margin-bottom: var(--space-xl);
+  padding: var(--space-xl) var(--space-lg) 0;
+}
+
+@media (min-width: 1024px) {
+  .nav {
+    padding-inline: var(--gutter);
+  }
 }
 
 .navLink {
@@ -22,5 +27,4 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
 }

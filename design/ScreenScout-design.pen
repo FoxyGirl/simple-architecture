@@ -148,6 +148,7 @@
           "id": "jROz3",
           "name": "Info",
           "width": "fill_container",
+          "height": 117,
           "layout": "vertical",
           "gap": 9,
           "padding": [
@@ -10660,13 +10661,14 @@
                       "id": "Yai0l",
                       "name": "InfoSk",
                       "width": "fill_container",
+                      "height": 117,
                       "layout": "vertical",
-                      "gap": 12,
+                      "gap": 20,
                       "padding": [
-                        16,
                         18,
-                        18,
-                        18
+                        20,
+                        20,
+                        20
                       ],
                       "children": [
                         {
@@ -13155,7 +13157,7 @@
                 {
                   "type": "frame",
                   "id": "CbDQI",
-                  "name": "Column Radius and Motion",
+                  "name": "Column Radius, Motion and Layout",
                   "width": "fill_container",
                   "layout": "vertical",
                   "gap": 12,
@@ -13437,6 +13439,55 @@
                           "fontWeight": "normal"
                         }
                       ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "H8VC6",
+                      "name": "Panel LAYOUT",
+                      "width": "fill_container",
+                      "fill": "$surface-2",
+                      "cornerRadius": "$radius-input",
+                      "stroke": "$border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 10,
+                      "padding": 20,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "KsjNI",
+                          "name": "Panel Title",
+                          "fill": "$text-muted",
+                          "content": "LAYOUT",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "q8yeK",
+                          "name": "Line 0",
+                          "fill": "$text-secondary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "--card-poster-aspect: 389 / 400;",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "oy4qU",
+                          "name": "Line 1",
+                          "fill": "$text-secondary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "--card-info-height: 117px;",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
                     }
                   ]
                 }
@@ -13679,6 +13730,14 @@
     "ease-out": {
       "type": "string",
       "value": "cubic-bezier(0.22, 1, 0.36, 1)"
+    },
+    "card-poster-aspect": {
+      "type": "string",
+      "value": "389 / 400"
+    },
+    "card-info-height": {
+      "type": "number",
+      "value": 117
     }
   },
   "fileToken": "7637aea0-b133-4ef3-b942-f55a1224f2db"

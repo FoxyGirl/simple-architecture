@@ -1,5 +1,5 @@
 import { Link, Route, Routes } from 'react-router-dom';
-import { Home } from './pages/Home.jsx';
+import { HomePage } from './pages/HomePage/HomePage';
 
 import styles from './App.module.css';
 
@@ -14,7 +14,7 @@ function App() {
 
       <main className={styles.content}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
       </main>
     </div>

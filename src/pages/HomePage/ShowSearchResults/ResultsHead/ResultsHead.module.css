@@ -1,0 +1,58 @@
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.headLeft {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.title {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 27px;
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+}
+
+.countPill {
+  padding: 4px 10px;
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+}
+
+.queryEcho {
+  margin: 0;
+  color: var(--star-light);
+  font-size: 19px;
+}
+
+@media (min-width: 1024px) {
+  .head {
+    flex-wrap: nowrap;
+    margin-bottom: 28px;
+  }
+
+  .title {
+    font-size: 36px;
+    letter-spacing: -0.5px;
+  }
+
+  .countPill {
+    padding: 5px 12px;
+    font-size: 18px;
+  }
+}

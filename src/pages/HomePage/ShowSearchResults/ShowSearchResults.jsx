@@ -4,7 +4,9 @@ import { useMediaQuery } from '../../../hooks/useMediaQuery.js';
 import { STATUS } from '../constants.js';
 import { RESULTS_PER_PAGE } from './constants.js';
 
+import { GenreFilter } from './GenreFilter/GenreFilter';
 import { Pagination } from './Pagination/Pagination';
+import { ResultsHead } from './ResultsHead/ResultsHead';
 import { ShowCard } from './ShowCard/ShowCard';
 import { ShowRowCard } from './ShowRowCard/ShowRowCard';
 import { SkeletonCard } from './SkeletonCard/SkeletonCard';
@@ -22,8 +24,20 @@ export const ShowSearchResults = ({
   onRetry,
   onClear,
 }) => {
-  const { shows, totalCount, page, pageCount, selectPage, goToPrev, goToNext } =
-    usePresenterShowSearchResults({ data });
+  const {
+    shows,
+    totalCount,
+    page,
+    pageCount,
+    genres,
+    activeGenre,
+    countLabel,
+    resultsEcho,
+    selectGenre,
+    selectPage,
+    goToPrev,
+    goToNext,
+  } = usePresenterShowSearchResults({ data, queryEcho });
 
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
@@ -68,16 +82,13 @@ export const ShowSearchResults = ({
 
       {status === STATUS.SUCCESS && totalCount > 0 && (
         <>
-          <div className={styles.head}>
-            <div className={styles.headLeft}>
-              <h2 className={styles.title}>Search Results</h2>
-              <span className={styles.countPill}>
-                {totalCount} {totalCount === 1 ? 'show' : 'shows'} found
-              </span>
-            </div>
+          <ResultsHead countLabel={countLabel} resultsEcho={resultsEcho} />
 
-            <p className={styles.queryEcho}>for “{queryEcho}”</p>
-          </div>
+          <GenreFilter
+            genres={genres}
+            activeGenre={activeGenre}
+            onSelectGenre={selectGenre}
+          />
 
           <div className={styles.list}>
             {shows.map((show) =>

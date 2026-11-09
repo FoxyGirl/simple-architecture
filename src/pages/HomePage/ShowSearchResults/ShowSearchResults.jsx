@@ -1,6 +1,7 @@
 import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
 import { useMediaQuery } from '../../../hooks/useMediaQuery.js';
+import { STATUS } from '../constants.js';
 import { ShowCard } from './ShowCard/ShowCard';
 import { ShowRowCard } from './ShowRowCard/ShowRowCard';
 import { SkeletonCard } from './SkeletonCard/SkeletonCard';
@@ -19,11 +20,11 @@ export const ShowSearchResults = ({
 }) => {
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
-  if (status === 'idle') return null;
+  if (status === STATUS.IDLE) return null;
 
   return (
     <section className={styles.results} aria-live="polite">
-      {status === 'loading' && (
+      {status === STATUS.LOADING && (
         <div className={styles.list}>
           {Array.from({ length: SKELETON_COUNT }, (_, index) => (
             <SkeletonCard key={index} />
@@ -31,7 +32,7 @@ export const ShowSearchResults = ({
         </div>
       )}
 
-      {status === 'error' && (
+      {status === STATUS.ERROR && (
         <StatusPanel
           overline="STATE · ERROR"
           icon={TriangleAlert}
@@ -47,7 +48,7 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {status === 'success' && data.length === 0 && (
+      {status === STATUS.SUCCESS && data.length === 0 && (
         <StatusPanel
           overline="STATE · EMPTY"
           icon={SearchX}
@@ -58,7 +59,7 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {status === 'success' && data.length > 0 && (
+      {status === STATUS.SUCCESS && data.length > 0 && (
         <>
           <div className={styles.head}>
             <div className={styles.headLeft}>

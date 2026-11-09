@@ -1,8 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
 
+import { STATUS } from './constants.js';
+
 export const usePresenterHomePage = () => {
   const [snapshot, setSnapshot] = useState({
-    status: 'idle',
+    status: STATUS.IDLE,
     data: [],
     queryEcho: '',
   });

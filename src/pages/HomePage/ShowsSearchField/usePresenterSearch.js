@@ -1,13 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { searchShows } from '../../../api/tvmaze.js';
+import { STATUS } from '../constants.js';
 
 const DEBOUNCE_MS = 300;
-
-const IDLE = 'idle';
-const LOADING = 'loading';
-const SUCCESS = 'success';
-const ERROR = 'error';
 
 export const usePresenterSearch = ({ onSearchChange, registerControls }) => {
   const [query, setQuery] = useState('');
@@ -21,16 +17,28 @@ export const usePresenterSearch = ({ onSearchChange, registerControls }) => {
       const controller = new AbortController();
       controllerRef.current = controller;
 
-      onSearchChange({ status: LOADING, data: [], queryEcho: nextQuery });
+      onSearchChange({
+        status: STATUS.LOADING,
+        data: [],
+        queryEcho: nextQuery,
+      });
 
       try {
         const shows = await searchShows(nextQuery, {
           signal: controller.signal,
         });
-        onSearchChange({ status: SUCCESS, data: shows, queryEcho: nextQuery });
+        onSearchChange({
+          status: STATUS.SUCCESS,
+          data: shows,
+          queryEcho: nextQuery,
+        });
       } catch (requestError) {
         if (requestError.name === 'AbortError') return;
-        onSearchChange({ status: ERROR, data: [], queryEcho: nextQuery });
+        onSearchChange({
+          status: STATUS.ERROR,
+          data: [],
+          queryEcho: nextQuery,
+        });
       }
     },
     [onSearchChange],
@@ -42,13 +50,13 @@ export const usePresenterSearch = ({ onSearchChange, registerControls }) => {
     const trimmed = query.trim();
 
     if (!trimmed) {
-      onSearchChange({ status: IDLE, data: [], queryEcho: '' });
+      onSearchChange({ status: STATUS.IDLE, data: [], queryEcho: '' });
       return undefined;
     }
 
     // The request is already inevitable, so report it right away: the view
     // shows skeletons while the debounce is still pending.
-    onSearchChange({ status: LOADING, data: [], queryEcho: trimmed });
+    onSearchChange({ status: STATUS.LOADING, data: [], queryEcho: trimmed });
 
     const timer = setTimeout(() => {
       runSearch(trimmed);

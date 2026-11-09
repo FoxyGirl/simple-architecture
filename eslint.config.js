@@ -63,5 +63,11 @@ export default defineConfig([
       ],
     },
   },
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    rules: {
+      'max-lines': ['warn', { max: 120 }],
+    },
+  },
   prettier,
 ]);

@@ -84,3 +84,7 @@ and ESLint flat config. Notable ESLint rules:
   dependencies.
 - `react-refresh/only-export-components` warns if a component file exports
   non-component values (constants are allowed).
+- `max-lines` warns when a code file grows past 120 lines — split it into
+  smaller modules. Every line counts, blank lines and comments included. It
+  measures code files only (`.js`, `.jsx`, `.ts`, `.tsx`); Markdown, JSON, CSS
+  and other non-code files are never measured.

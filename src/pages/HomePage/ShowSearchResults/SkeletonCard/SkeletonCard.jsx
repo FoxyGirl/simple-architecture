@@ -22,9 +22,16 @@ export const SkeletonCard = () => {
     <div className={styles.card} aria-hidden="true">
       <div className={styles.poster} />
       <div className={styles.info}>
-        <div className={`${styles.bar} ${styles.barTitle}`} />
-        <div className={`${styles.bar} ${styles.barMedium}`} />
-        <div className={`${styles.bar} ${styles.barShort}`} />
+        <div className={styles.titleBlock}>
+          <div className={`${styles.bar} ${styles.barTitle}`} />
+          <div className={`${styles.bar} ${styles.barTitleShort}`} />
+        </div>
+        <div className={styles.metaRow}>
+          <div className={`${styles.bar} ${styles.barMedium}`} />
+        </div>
+        <div className={styles.genresRow}>
+          <div className={`${styles.bar} ${styles.barShort}`} />
+        </div>
       </div>
     </div>
   );

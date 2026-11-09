@@ -148,7 +148,7 @@
           "id": "jROz3",
           "name": "Info",
           "width": "fill_container",
-          "height": 117,
+          "height": 175,
           "layout": "vertical",
           "gap": 9,
           "padding": [
@@ -163,8 +163,9 @@
               "id": "blNn8",
               "name": "Title",
               "fill": "$text-primary",
-              "textGrowth": "fixed-width",
+              "textGrowth": "fixed-width-height",
               "width": "fill_container",
+              "height": 65,
               "content": "Banana",
               "lineHeight": 1.2,
               "fontFamily": "$font-display",
@@ -184,6 +185,7 @@
                   "name": "Year",
                   "fill": "$text-secondary",
                   "content": "2015",
+                  "lineHeight": 1.5,
                   "fontFamily": "Inter",
                   "fontSize": 18,
                   "fontWeight": "500"
@@ -202,6 +204,7 @@
                   "name": "Network",
                   "fill": "$text-muted",
                   "content": "E4",
+                  "lineHeight": 1.5,
                   "fontFamily": "Inter",
                   "fontSize": 18,
                   "fontWeight": "normal"
@@ -216,6 +219,7 @@
               "textGrowth": "fixed-width",
               "width": "fill_container",
               "content": "Drama · Romance",
+              "lineHeight": 1.5,
               "fontFamily": "Inter",
               "fontSize": 18,
               "fontWeight": "normal"
@@ -2009,8 +2013,9 @@
                           "id": "WaSi6",
                           "name": "Title",
                           "fill": "$text-primary",
-                          "textGrowth": "fixed-width",
+                          "textGrowth": "fixed-width-height",
                           "width": "fill_container",
+                          "height": 65,
                           "content": "Banana Fish",
                           "lineHeight": 1.2,
                           "fontFamily": "$font-display",
@@ -2030,6 +2035,7 @@
                               "name": "Year",
                               "fill": "$text-secondary",
                               "content": "2018",
+                              "lineHeight": 1.5,
                               "fontFamily": "Inter",
                               "fontSize": 18,
                               "fontWeight": "500"
@@ -2048,6 +2054,7 @@
                               "name": "Network",
                               "fill": "$text-muted",
                               "content": "Fuji TV",
+                              "lineHeight": 1.5,
                               "fontFamily": "Inter",
                               "fontSize": 18,
                               "fontWeight": "normal"
@@ -2062,6 +2069,7 @@
                           "textGrowth": "fixed-width",
                           "width": "fill_container",
                           "content": "Drama · Action · Adventure · Anime",
+                          "lineHeight": 1.5,
                           "fontFamily": "Inter",
                           "fontSize": 18,
                           "fontWeight": "normal"
@@ -10661,9 +10669,9 @@
                       "id": "Yai0l",
                       "name": "InfoSk",
                       "width": "fill_container",
-                      "height": 117,
+                      "height": 175,
                       "layout": "vertical",
-                      "gap": 20,
+                      "gap": 9,
                       "padding": [
                         18,
                         20,
@@ -10673,30 +10681,72 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "mfuaZ",
-                          "name": "BarSk",
-                          "width": 150,
-                          "height": 14,
-                          "fill": "#232839",
-                          "cornerRadius": 6
+                          "id": "pzsLd",
+                          "name": "TitleSk",
+                          "width": "fill_container",
+                          "height": 65,
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "y8JUK",
+                              "name": "BarSk",
+                              "width": 150,
+                              "height": 14,
+                              "fill": "#232839",
+                              "cornerRadius": 6
+                            },
+                            {
+                              "type": "frame",
+                              "id": "JCObV",
+                              "name": "BarSk",
+                              "width": 104,
+                              "height": 14,
+                              "fill": "#232839",
+                              "cornerRadius": 6
+                            }
+                          ]
                         },
                         {
                           "type": "frame",
-                          "id": "k2dJhB",
-                          "name": "BarSk",
-                          "width": 100,
-                          "height": 10,
-                          "fill": "#232839",
-                          "cornerRadius": 6
+                          "id": "Ckkt8",
+                          "name": "MetaSk",
+                          "width": "fill_container",
+                          "height": 27,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "x6zhFP",
+                              "name": "BarSk",
+                              "width": 100,
+                              "height": 10,
+                              "fill": "#232839",
+                              "cornerRadius": 6
+                            }
+                          ]
                         },
                         {
                           "type": "frame",
-                          "id": "vPJpH",
-                          "name": "BarSk",
-                          "width": 120,
-                          "height": 10,
-                          "fill": "#232839",
-                          "cornerRadius": 6
+                          "id": "dFZeg",
+                          "name": "GenresSk",
+                          "width": "fill_container",
+                          "height": 27,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "J1H4Qd",
+                              "name": "BarSk",
+                              "width": 120,
+                              "height": 10,
+                              "fill": "#232839",
+                              "cornerRadius": 6
+                            }
+                          ]
                         }
                       ]
                     }
@@ -13482,7 +13532,19 @@
                           "fill": "$text-secondary",
                           "textGrowth": "fixed-width",
                           "width": "fill_container",
-                          "content": "--card-info-height: 117px;",
+                          "content": "--card-info-height: 175px;",
+                          "fontFamily": "JetBrains Mono",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "RFKpf",
+                          "name": "Line 2",
+                          "fill": "$text-secondary",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "--card-title-height: 65px;",
                           "fontFamily": "JetBrains Mono",
                           "fontSize": 15,
                           "fontWeight": "normal"
@@ -13737,7 +13799,11 @@
     },
     "card-info-height": {
       "type": "number",
-      "value": 117
+      "value": 175
+    },
+    "card-title-height": {
+      "type": "number",
+      "value": 65
     }
   },
   "fileToken": "7637aea0-b133-4ef3-b942-f55a1224f2db"

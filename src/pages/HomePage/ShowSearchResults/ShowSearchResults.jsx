@@ -2,14 +2,18 @@ import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
 import { useMediaQuery } from '../../../hooks/useMediaQuery.js';
 import { STATUS } from '../constants.js';
+import { RESULTS_PER_PAGE } from './constants.js';
+
+import { Pagination } from './Pagination/Pagination';
 import { ShowCard } from './ShowCard/ShowCard';
 import { ShowRowCard } from './ShowRowCard/ShowRowCard';
 import { SkeletonCard } from './SkeletonCard/SkeletonCard';
 import { StatusPanel } from './StatusPanel/StatusPanel';
+import { usePresenterShowSearchResults } from './usePresenterShowSearchResults.js';
 
 import styles from './ShowSearchResults.module.css';
 
-const SKELETON_COUNT = 6;
+const SKELETON_COUNT = RESULTS_PER_PAGE;
 
 export const ShowSearchResults = ({
   data,
@@ -18,6 +22,9 @@ export const ShowSearchResults = ({
   onRetry,
   onClear,
 }) => {
+  const { shows, totalCount, page, pageCount, selectPage, goToPrev, goToNext } =
+    usePresenterShowSearchResults({ data });
+
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
   if (status === STATUS.IDLE) return null;
@@ -48,7 +55,7 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {status === STATUS.SUCCESS && data.length === 0 && (
+      {status === STATUS.SUCCESS && totalCount === 0 && (
         <StatusPanel
           overline="STATE · EMPTY"
           icon={SearchX}
@@ -59,13 +66,13 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {status === STATUS.SUCCESS && data.length > 0 && (
+      {status === STATUS.SUCCESS && totalCount > 0 && (
         <>
           <div className={styles.head}>
             <div className={styles.headLeft}>
               <h2 className={styles.title}>Search Results</h2>
               <span className={styles.countPill}>
-                {data.length} {data.length === 1 ? 'show' : 'shows'} found
+                {totalCount} {totalCount === 1 ? 'show' : 'shows'} found
               </span>
             </div>
 
@@ -73,7 +80,7 @@ export const ShowSearchResults = ({
           </div>
 
           <div className={styles.list}>
-            {data.map((show) =>
+            {shows.map((show) =>
               isDesktop ? (
                 <ShowCard key={show.id} show={show} />
               ) : (
@@ -81,6 +88,14 @@ export const ShowSearchResults = ({
               ),
             )}
           </div>
+
+          <Pagination
+            page={page}
+            pageCount={pageCount}
+            onSelectPage={selectPage}
+            onPrev={goToPrev}
+            onNext={goToNext}
+          />
         </>
       )}
     </section>

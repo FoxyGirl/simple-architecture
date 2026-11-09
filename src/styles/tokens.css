@@ -60,7 +60,8 @@
 
   /* Layout */
   --card-poster-aspect: 389 / 400;
-  --card-info-height: 117px;
+  --card-info-height: 175px;
+  --card-title-height: 65px;
 
   /* Spacing */
   --space-2xs: 4px;

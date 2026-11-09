@@ -110,7 +110,13 @@
 }
 
 .title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   margin: 0;
+  /* Two lines are always reserved so the card keeps a constant height. */
+  min-height: var(--card-title-height);
   color: var(--text-primary);
   font-family: var(--font-display);
   font-size: 27px;

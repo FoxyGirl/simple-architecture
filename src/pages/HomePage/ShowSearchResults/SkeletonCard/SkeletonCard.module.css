@@ -18,9 +18,24 @@
 .info {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 9px;
   min-height: var(--card-info-height);
   padding: 18px 20px 20px;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: var(--card-title-height);
+}
+
+.metaRow,
+.genresRow {
+  display: flex;
+  align-items: center;
+  /* Matches the 18px / 1.5 line box of the card meta and genre rows. */
+  height: calc(18px * var(--leading-base));
 }
 
 .row {
@@ -61,6 +76,11 @@
 
 .barTitle {
   width: 150px;
+  height: 14px;
+}
+
+.barTitleShort {
+  width: 104px;
   height: 14px;
 }
 

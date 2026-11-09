@@ -52,7 +52,7 @@ export const ShowCard = ({ show }) => {
         <div className={styles.badges}>
           <span className={styles.statusBadge}>
             <span className={`${styles.dot} ${statusClass}`} />
-            {statusLabel}
+            <span className={statusClass}>{statusLabel}</span>
           </span>
 
           <span className={styles.ratingBadge}>

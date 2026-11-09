@@ -12971,6 +12971,16 @@
                         },
                         {
                           "type": "text",
+                          "id": "TA0cc",
+                          "name": "Line ended-light",
+                          "fill": "$text-secondary",
+                          "content": "--ended-light: #C3C8D4;",
+                          "fontFamily": "Inter",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
                           "id": "SjZ3e",
                           "name": "Line 5",
                           "fill": "$text-secondary",
@@ -12995,6 +13005,16 @@
                         },
                         {
                           "type": "text",
+                          "id": "v1s8x",
+                          "name": "Line in-dev-light",
+                          "fill": "$text-secondary",
+                          "content": "--in-dev-light: #FCD34D;",
+                          "fontFamily": "Inter",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
                           "id": "h1adY",
                           "name": "Line 7",
                           "fill": "$text-secondary",
@@ -13014,6 +13034,16 @@
                           "width": "fill_container",
                           "content": "--tbd-soft: #60A5FA1A;",
                           "fontFamily": "JetBrains Mono",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tEjVn",
+                          "name": "Line tbd-light",
+                          "fill": "$text-secondary",
+                          "content": "--tbd-light: #93C5FD;",
+                          "fontFamily": "Inter",
                           "fontSize": 15,
                           "fontWeight": "normal"
                         },
@@ -13762,6 +13792,18 @@
     "card-info-height": {
       "type": "number",
       "value": 117
+    },
+    "ended-light": {
+      "type": "color",
+      "value": "#C3C8D4"
+    },
+    "in-dev-light": {
+      "type": "color",
+      "value": "#FCD34D"
+    },
+    "tbd-light": {
+      "type": "color",
+      "value": "#93C5FD"
     }
   },
   "fileToken": "7637aea0-b133-4ef3-b942-f55a1224f2db"

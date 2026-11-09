@@ -79,22 +79,31 @@
   width: 7px;
   height: 7px;
   border-radius: var(--radius-pill);
+  background: var(--status-color, var(--text-muted));
 }
 
+/*
+ * A status class carries both tones of the badge: --status-color fills the
+ * dot, while the class colour paints the status label text.
+ */
 .running {
-  background: var(--running);
+  --status-color: var(--running);
+  color: var(--running-light);
 }
 
 .ended {
-  background: var(--ended);
+  --status-color: var(--ended);
+  color: var(--ended-light);
 }
 
 .inDev {
-  background: var(--in-dev);
+  --status-color: var(--in-dev);
+  color: var(--in-dev-light);
 }
 
 .tbd {
-  background: var(--tbd);
+  --status-color: var(--tbd);
+  color: var(--tbd-light);
 }
 
 .star {

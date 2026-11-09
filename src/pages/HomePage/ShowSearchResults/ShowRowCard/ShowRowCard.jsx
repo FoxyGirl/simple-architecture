@@ -65,7 +65,7 @@ export const ShowRowCard = ({ show }) => {
 
           <span className={styles.status}>
             <span className={`${styles.dot} ${statusClass}`} />
-            {statusLabel}
+            <span className={statusClass}>{statusLabel}</span>
           </span>
         </div>
       </div>

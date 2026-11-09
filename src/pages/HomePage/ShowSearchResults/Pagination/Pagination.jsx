@@ -3,27 +3,32 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { useMediaQuery } from '@hooks/useMediaQuery.js';
 
+import { usePresenterPagination } from './usePresenterPagination.js';
+
 import { ArrowButton } from './ArrowButton/ArrowButton';
 
 import styles from './Pagination.module.css';
 
-export const Pagination = ({
-  page,
-  pageCount,
-  onSelectPage,
-  onPrev,
-  onNext,
-}) => {
-  const { isDesktop } = useMediaQuery();
+export const Pagination = ({ data, selection, onSelectionChange }) => {
+  const {
+    page,
+    pageCount,
+    pages,
+    isFirstPage,
+    isLastPage,
+    selectPage,
+    goToPrev,
+    goToNext,
+  } = usePresenterPagination({ data, selection, onSelectionChange });
 
-  const pages = Array.from({ length: pageCount }, (_, index) => index + 1);
+  const { isDesktop } = useMediaQuery();
 
   const prevButton = (
     <ArrowButton
       label="Previous page"
       icon={ChevronLeft}
-      disabled={page === 1}
-      onClick={onPrev}
+      disabled={isFirstPage}
+      onClick={goToPrev}
     />
   );
 
@@ -31,8 +36,8 @@ export const Pagination = ({
     <ArrowButton
       label="Next page"
       icon={ChevronRight}
-      disabled={page === pageCount}
-      onClick={onNext}
+      disabled={isLastPage}
+      onClick={goToNext}
     />
   );
 
@@ -55,7 +60,7 @@ export const Pagination = ({
                 [styles.pageButtonActive]: pageNumber === page,
               })}
               type="button"
-              onClick={() => onSelectPage(pageNumber)}
+              onClick={() => selectPage(pageNumber)}
               aria-current={pageNumber === page ? 'page' : undefined}
             >
               {pageNumber}

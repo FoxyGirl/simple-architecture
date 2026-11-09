@@ -1,11 +1,11 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { ALL_GENRES, RESULTS_PER_PAGE } from './constants.js';
-import { collectGenres, filterShowsByGenre } from './genres.js';
+import { ALL_GENRES } from './constants.js';
+import { filterShowsByGenre } from './genres.js';
+import { clampPage, getPageCount, getPageShows } from './pagination.js';
+import { resolveSelection } from './selection.js';
 
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-
-export const usePresenterShowSearchResults = ({ data, queryEcho }) => {
+export const usePresenterShowSearchResults = ({ data }) => {
   // The selection belongs to the result set it was made for, so a new result
   // set always starts unfiltered and on its first page.
   const [selection, setSelection] = useState({
@@ -14,77 +14,14 @@ export const usePresenterShowSearchResults = ({ data, queryEcho }) => {
     page: 1,
   });
 
-  const isCurrent = selection.data === data;
-  const activeGenre = isCurrent ? selection.genre : ALL_GENRES;
+  const shows = useMemo(() => {
+    const { genre, page } = resolveSelection(selection, data);
+    const matching = filterShowsByGenre(data, genre);
+    return getPageShows(
+      matching,
+      clampPage(page, getPageCount(matching.length)),
+    );
+  }, [selection, data]);
 
-  const genres = useMemo(() => collectGenres(data), [data]);
-  const matching = useMemo(
-    () => filterShowsByGenre(data, activeGenre),
-    [data, activeGenre],
-  );
-
-  const totalCount = matching.length;
-  const pageCount = Math.max(1, Math.ceil(totalCount / RESULTS_PER_PAGE));
-  const page = clamp(isCurrent ? selection.page : 1, 1, pageCount);
-  const shows = matching.slice(
-    (page - 1) * RESULTS_PER_PAGE,
-    page * RESULTS_PER_PAGE,
-  );
-
-  const countLabel = `${totalCount} ${totalCount === 1 ? 'show' : 'shows'} found`;
-  const compactCountLabel = `${totalCount} ${totalCount === 1 ? 'show' : 'shows'}`;
-  const resultsEcho = {
-    query: `for “${queryEcho}”`,
-    filter: activeGenre === ALL_GENRES ? null : `filtered by ${activeGenre}`,
-  };
-
-  const selectGenre = useCallback(
-    (genre) => {
-      setSelection({ data, genre, page: 1 });
-    },
-    [data],
-  );
-
-  const selectPage = useCallback(
-    (nextPage) => {
-      setSelection({
-        data,
-        genre: activeGenre,
-        page: clamp(nextPage, 1, pageCount),
-      });
-    },
-    [data, activeGenre, pageCount],
-  );
-
-  const goToPrev = useCallback(() => {
-    setSelection({
-      data,
-      genre: activeGenre,
-      page: clamp(page - 1, 1, pageCount),
-    });
-  }, [data, activeGenre, page, pageCount]);
-
-  const goToNext = useCallback(() => {
-    setSelection({
-      data,
-      genre: activeGenre,
-      page: clamp(page + 1, 1, pageCount),
-    });
-  }, [data, activeGenre, page, pageCount]);
-
-  return {
-    shows,
-    totalCount,
-    page,
-    pageCount,
-    genres,
-    activeGenre,
-    countLabel,
-    compactCountLabel,
-    resultsEcho,
-    selectGenre,
-    selectPage,
-    goToPrev,
-    goToNext,
-  };
+  return { shows, selection, onSelectionChange: setSelection };
 };

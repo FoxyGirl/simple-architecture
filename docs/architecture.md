@@ -21,6 +21,10 @@ Components follow the View/Presenter pattern when presentation logic is encapsul
 
 - MUST be implemented as a React hook.
 - MUST have a descriptive name reflecting the component it serves: usePresenter<Component>.js.
+- MUST be imported only by its own View. A presenter MUST NOT import another
+  component's presenter: state and coordination shared by multiple components
+  belong to the common ancestor's presenter, while shared derivations belong
+  to pure utility functions.
 - MUST encapsulate the presentation logic required by its associated View.
 - MUST keep business logic, data fetching, and application state management.
 - MUST prepare and expose all data, derived values, event handlers and actions needed by the View.

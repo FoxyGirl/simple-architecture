@@ -24,21 +24,9 @@ export const ShowSearchResults = ({
   onRetry,
   onClear,
 }) => {
-  const {
-    shows,
-    totalCount,
-    page,
-    pageCount,
-    genres,
-    activeGenre,
-    countLabel,
-    compactCountLabel,
-    resultsEcho,
-    selectGenre,
-    selectPage,
-    goToPrev,
-    goToNext,
-  } = usePresenterShowSearchResults({ data, queryEcho });
+  const { shows, selection, onSelectionChange } = usePresenterShowSearchResults(
+    { data },
+  );
 
   const { isDesktop } = useMediaQuery();
 
@@ -70,7 +58,7 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {status === STATUS.SUCCESS && totalCount === 0 && (
+      {status === STATUS.SUCCESS && shows.length === 0 && (
         <StatusPanel
           overline="STATE · EMPTY"
           icon={SearchX}
@@ -81,18 +69,18 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {status === STATUS.SUCCESS && totalCount > 0 && (
+      {status === STATUS.SUCCESS && shows.length > 0 && (
         <>
           <ResultsHead
-            countLabel={countLabel}
-            compactCountLabel={compactCountLabel}
-            resultsEcho={resultsEcho}
+            data={data}
+            selection={selection}
+            queryEcho={queryEcho}
           />
 
           <GenreFilter
-            genres={genres}
-            activeGenre={activeGenre}
-            onSelectGenre={selectGenre}
+            data={data}
+            selection={selection}
+            onSelectionChange={onSelectionChange}
           />
 
           <div className={styles.list}>
@@ -106,11 +94,9 @@ export const ShowSearchResults = ({
           </div>
 
           <Pagination
-            page={page}
-            pageCount={pageCount}
-            onSelectPage={selectPage}
-            onPrev={goToPrev}
-            onNext={goToNext}
+            data={data}
+            selection={selection}
+            onSelectionChange={onSelectionChange}
           />
         </>
       )}

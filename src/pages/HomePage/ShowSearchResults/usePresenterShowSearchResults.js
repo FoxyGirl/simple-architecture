@@ -32,10 +32,11 @@ export const usePresenterShowSearchResults = ({ data, queryEcho }) => {
   );
 
   const countLabel = `${totalCount} ${totalCount === 1 ? 'show' : 'shows'} found`;
-  const resultsEcho =
-    activeGenre === ALL_GENRES
-      ? `for “${queryEcho}”`
-      : `for “${queryEcho}” · filtered by ${activeGenre}`;
+  const compactCountLabel = `${totalCount} ${totalCount === 1 ? 'show' : 'shows'}`;
+  const resultsEcho = {
+    query: `for “${queryEcho}”`,
+    filter: activeGenre === ALL_GENRES ? null : `filtered by ${activeGenre}`,
+  };
 
   const selectGenre = useCallback(
     (genre) => {
@@ -79,6 +80,7 @@ export const usePresenterShowSearchResults = ({ data, queryEcho }) => {
     genres,
     activeGenre,
     countLabel,
+    compactCountLabel,
     resultsEcho,
     selectGenre,
     selectPage,

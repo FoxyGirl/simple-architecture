@@ -1,9 +1,7 @@
 .head {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-md);
+  flex-direction: column;
+  gap: 14px;
   margin-bottom: var(--space-lg);
 }
 
@@ -11,6 +9,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   gap: 14px;
 }
 
@@ -42,8 +41,16 @@
 
 @media (min-width: 1024px) {
   .head {
-    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
     margin-bottom: 28px;
+  }
+
+  .headLeft {
+    justify-content: flex-start;
+    gap: 14px;
   }
 
   .title {

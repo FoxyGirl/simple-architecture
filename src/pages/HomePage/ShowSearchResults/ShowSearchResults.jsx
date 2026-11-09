@@ -32,6 +32,7 @@ export const ShowSearchResults = ({
     genres,
     activeGenre,
     countLabel,
+    compactCountLabel,
     resultsEcho,
     selectGenre,
     selectPage,
@@ -82,7 +83,11 @@ export const ShowSearchResults = ({
 
       {status === STATUS.SUCCESS && totalCount > 0 && (
         <>
-          <ResultsHead countLabel={countLabel} resultsEcho={resultsEcho} />
+          <ResultsHead
+            countLabel={countLabel}
+            compactCountLabel={compactCountLabel}
+            resultsEcho={resultsEcho}
+          />
 
           <GenreFilter
             genres={genres}

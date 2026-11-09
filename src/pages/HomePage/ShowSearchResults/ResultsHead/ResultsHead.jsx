@@ -1,12 +1,23 @@
+import { useMediaQuery } from '../../../../hooks/useMediaQuery.js';
+
 import styles from './ResultsHead.module.css';
 
-export const ResultsHead = ({ countLabel, resultsEcho }) => (
-  <div className={styles.head}>
-    <div className={styles.headLeft}>
-      <h2 className={styles.title}>Search Results</h2>
-      <span className={styles.countPill}>{countLabel}</span>
-    </div>
+export const ResultsHead = ({ countLabel, compactCountLabel, resultsEcho }) => {
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
 
-    <p className={styles.queryEcho}>{resultsEcho}</p>
-  </div>
-);
+  return (
+    <div className={styles.head}>
+      <div className={styles.headLeft}>
+        <h2 className={styles.title}>Search Results</h2>
+        <span className={styles.countPill}>
+          {isDesktop ? countLabel : compactCountLabel}
+        </span>
+      </div>
+
+      <p className={styles.queryEcho}>
+        {resultsEcho.query}
+        {resultsEcho.filter ? ` · ${resultsEcho.filter}` : ''}
+      </p>
+    </div>
+  );
+};

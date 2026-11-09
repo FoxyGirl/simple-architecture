@@ -148,7 +148,7 @@
           "id": "jROz3",
           "name": "Info",
           "width": "fill_container",
-          "height": 175,
+          "height": 117,
           "layout": "vertical",
           "gap": 9,
           "padding": [
@@ -163,9 +163,8 @@
               "id": "blNn8",
               "name": "Title",
               "fill": "$text-primary",
-              "textGrowth": "fixed-width-height",
+              "textGrowth": "fixed-width",
               "width": "fill_container",
-              "height": 65,
               "content": "Banana",
               "lineHeight": 1.2,
               "fontFamily": "$font-display",
@@ -185,7 +184,6 @@
                   "name": "Year",
                   "fill": "$text-secondary",
                   "content": "2015",
-                  "lineHeight": 1.5,
                   "fontFamily": "Inter",
                   "fontSize": 18,
                   "fontWeight": "500"
@@ -204,7 +202,6 @@
                   "name": "Network",
                   "fill": "$text-muted",
                   "content": "E4",
-                  "lineHeight": 1.5,
                   "fontFamily": "Inter",
                   "fontSize": 18,
                   "fontWeight": "normal"
@@ -219,7 +216,6 @@
               "textGrowth": "fixed-width",
               "width": "fill_container",
               "content": "Drama · Romance",
-              "lineHeight": 1.5,
               "fontFamily": "Inter",
               "fontSize": 18,
               "fontWeight": "normal"
@@ -2013,9 +2009,8 @@
                           "id": "WaSi6",
                           "name": "Title",
                           "fill": "$text-primary",
-                          "textGrowth": "fixed-width-height",
+                          "textGrowth": "fixed-width",
                           "width": "fill_container",
-                          "height": 65,
                           "content": "Banana Fish",
                           "lineHeight": 1.2,
                           "fontFamily": "$font-display",
@@ -2035,7 +2030,6 @@
                               "name": "Year",
                               "fill": "$text-secondary",
                               "content": "2018",
-                              "lineHeight": 1.5,
                               "fontFamily": "Inter",
                               "fontSize": 18,
                               "fontWeight": "500"
@@ -2054,7 +2048,6 @@
                               "name": "Network",
                               "fill": "$text-muted",
                               "content": "Fuji TV",
-                              "lineHeight": 1.5,
                               "fontFamily": "Inter",
                               "fontSize": 18,
                               "fontWeight": "normal"
@@ -2069,7 +2062,6 @@
                           "textGrowth": "fixed-width",
                           "width": "fill_container",
                           "content": "Drama · Action · Adventure · Anime",
-                          "lineHeight": 1.5,
                           "fontFamily": "Inter",
                           "fontSize": 18,
                           "fontWeight": "normal"
@@ -5471,7 +5463,7 @@
           "name": "SearchStrip",
           "width": "fill_container",
           "layout": "vertical",
-          "gap": 14,
+          "gap": 24,
           "padding": [
             16,
             20,
@@ -5524,118 +5516,142 @@
             },
             {
               "type": "frame",
-              "id": "P0CSW",
-              "name": "GenreChips",
-              "clip": true,
+              "id": "Z07d7",
+              "name": "ResultsSection",
               "width": "fill_container",
-              "gap": 8,
+              "layout": "vertical",
+              "gap": 12,
               "children": [
-                {
-                  "id": "SgL79",
-                  "type": "ref",
-                  "ref": "lveCa",
-                  "name": "Chip All genres",
-                  "fill": "$accent",
-                  "stroke": "$accent",
-                  "descendants": {
-                    "IpsgF": {
-                      "content": "All genres",
-                      "fontSize": 17,
-                      "fill": "#FFFFFF",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "w5kR4",
-                  "type": "ref",
-                  "ref": "lveCa",
-                  "name": "Chip Drama",
-                  "descendants": {
-                    "IpsgF": {
-                      "content": "Drama",
-                      "fontSize": 17
-                    }
-                  }
-                },
-                {
-                  "id": "g2AuFx",
-                  "type": "ref",
-                  "ref": "lveCa",
-                  "name": "Chip Comedy",
-                  "descendants": {
-                    "IpsgF": {
-                      "content": "Comedy",
-                      "fontSize": 17
-                    }
-                  }
-                },
-                {
-                  "id": "gWalh",
-                  "type": "ref",
-                  "ref": "lveCa",
-                  "name": "Chip Romance",
-                  "descendants": {
-                    "IpsgF": {
-                      "content": "Romance",
-                      "fontSize": 17
-                    }
-                  }
-                },
-                {
-                  "id": "FVquU",
-                  "type": "ref",
-                  "ref": "lveCa",
-                  "name": "Chip Children",
-                  "descendants": {
-                    "IpsgF": {
-                      "content": "Children",
-                      "fontSize": 17
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "mVHVn",
-              "name": "ResultsHead",
-              "width": "fill_container",
-              "justifyContent": "space_between",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "HYUQP",
-                  "name": "ResultsTitle",
-                  "fill": "$text-primary",
-                  "content": "Search Results",
-                  "fontFamily": "$font-display",
-                  "fontSize": 27,
-                  "fontWeight": "600"
-                },
                 {
                   "type": "frame",
-                  "id": "Zw4ES",
-                  "name": "CountPill",
-                  "fill": "$accent-soft",
-                  "cornerRadius": 999,
-                  "stroke": "#8B5CFF4D",
-                  "strokeWidth": 1,
-                  "padding": [
-                    4,
-                    10
-                  ],
+                  "id": "mVHVn",
+                  "name": "ResultsHead",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
                   "children": [
                     {
                       "type": "text",
-                      "id": "pzJeb",
-                      "name": "Count",
-                      "fill": "#C4B0FF",
-                      "content": "10 shows",
-                      "fontFamily": "Inter",
-                      "fontSize": 16,
+                      "id": "HYUQP",
+                      "name": "ResultsTitle",
+                      "fill": "$text-primary",
+                      "content": "Search Results",
+                      "fontFamily": "$font-display",
+                      "fontSize": 27,
                       "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Zw4ES",
+                      "name": "CountPill",
+                      "fill": "$accent-soft",
+                      "cornerRadius": 999,
+                      "stroke": "#8B5CFF4D",
+                      "strokeWidth": 1,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "pzJeb",
+                          "name": "Count",
+                          "fill": "#C4B0FF",
+                          "content": "8 shows",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "utsHk",
+                  "name": "QueryEcho",
+                  "fill": "$star-light",
+                  "content": "for “banana” · filtered by Drama",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "P0CSW",
+                  "name": "GenreChips",
+                  "clip": true,
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "id": "SgL79",
+                      "type": "ref",
+                      "ref": "lveCa",
+                      "name": "Chip All genres",
+                      "fill": "$surface-2",
+                      "stroke": "$border",
+                      "descendants": {
+                        "IpsgF": {
+                          "content": "All genres",
+                          "fontSize": 17,
+                          "fill": "$text-secondary",
+                          "fontWeight": "500"
+                        }
+                      }
+                    },
+                    {
+                      "id": "w5kR4",
+                      "type": "ref",
+                      "ref": "lveCa",
+                      "name": "Chip Drama",
+                      "fill": "$accent",
+                      "stroke": "$accent",
+                      "descendants": {
+                        "IpsgF": {
+                          "content": "Drama",
+                          "fontSize": 17,
+                          "fill": "#FFFFFF",
+                          "fontWeight": "600"
+                        }
+                      }
+                    },
+                    {
+                      "id": "g2AuFx",
+                      "type": "ref",
+                      "ref": "lveCa",
+                      "name": "Chip Comedy",
+                      "descendants": {
+                        "IpsgF": {
+                          "content": "Comedy",
+                          "fontSize": 17
+                        }
+                      }
+                    },
+                    {
+                      "id": "gWalh",
+                      "type": "ref",
+                      "ref": "lveCa",
+                      "name": "Chip Romance",
+                      "descendants": {
+                        "IpsgF": {
+                          "content": "Romance",
+                          "fontSize": 17
+                        }
+                      }
+                    },
+                    {
+                      "id": "FVquU",
+                      "type": "ref",
+                      "ref": "lveCa",
+                      "name": "Chip Children",
+                      "descendants": {
+                        "IpsgF": {
+                          "content": "Children",
+                          "fontSize": 17
+                        }
+                      }
                     }
                   ]
                 }
@@ -6155,7 +6171,7 @@
               "id": "TPflo",
               "name": "PageInfo",
               "fill": "$text-secondary",
-              "content": "Page 1 of 4",
+              "content": "Page 1 of 3",
               "fontFamily": "Inter",
               "fontSize": 18,
               "fontWeight": "600"
@@ -10669,9 +10685,9 @@
                       "id": "Yai0l",
                       "name": "InfoSk",
                       "width": "fill_container",
-                      "height": 175,
+                      "height": 117,
                       "layout": "vertical",
-                      "gap": 9,
+                      "gap": 20,
                       "padding": [
                         18,
                         20,
@@ -10681,72 +10697,30 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "pzsLd",
-                          "name": "TitleSk",
-                          "width": "fill_container",
-                          "height": 65,
-                          "layout": "vertical",
-                          "gap": 8,
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "y8JUK",
-                              "name": "BarSk",
-                              "width": 150,
-                              "height": 14,
-                              "fill": "#232839",
-                              "cornerRadius": 6
-                            },
-                            {
-                              "type": "frame",
-                              "id": "JCObV",
-                              "name": "BarSk",
-                              "width": 104,
-                              "height": 14,
-                              "fill": "#232839",
-                              "cornerRadius": 6
-                            }
-                          ]
+                          "id": "mfuaZ",
+                          "name": "BarSk",
+                          "width": 150,
+                          "height": 14,
+                          "fill": "#232839",
+                          "cornerRadius": 6
                         },
                         {
                           "type": "frame",
-                          "id": "Ckkt8",
-                          "name": "MetaSk",
-                          "width": "fill_container",
-                          "height": 27,
-                          "layout": "vertical",
-                          "justifyContent": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "x6zhFP",
-                              "name": "BarSk",
-                              "width": 100,
-                              "height": 10,
-                              "fill": "#232839",
-                              "cornerRadius": 6
-                            }
-                          ]
+                          "id": "k2dJhB",
+                          "name": "BarSk",
+                          "width": 100,
+                          "height": 10,
+                          "fill": "#232839",
+                          "cornerRadius": 6
                         },
                         {
                           "type": "frame",
-                          "id": "dFZeg",
-                          "name": "GenresSk",
-                          "width": "fill_container",
-                          "height": 27,
-                          "layout": "vertical",
-                          "justifyContent": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "J1H4Qd",
-                              "name": "BarSk",
-                              "width": 120,
-                              "height": 10,
-                              "fill": "#232839",
-                              "cornerRadius": 6
-                            }
-                          ]
+                          "id": "vPJpH",
+                          "name": "BarSk",
+                          "width": 120,
+                          "height": 10,
+                          "fill": "#232839",
+                          "cornerRadius": 6
                         }
                       ]
                     }
@@ -13532,19 +13506,7 @@
                           "fill": "$text-secondary",
                           "textGrowth": "fixed-width",
                           "width": "fill_container",
-                          "content": "--card-info-height: 175px;",
-                          "fontFamily": "JetBrains Mono",
-                          "fontSize": 15,
-                          "fontWeight": "normal"
-                        },
-                        {
-                          "type": "text",
-                          "id": "RFKpf",
-                          "name": "Line 2",
-                          "fill": "$text-secondary",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "--card-title-height: 65px;",
+                          "content": "--card-info-height: 117px;",
                           "fontFamily": "JetBrains Mono",
                           "fontSize": 15,
                           "fontWeight": "normal"
@@ -13799,11 +13761,7 @@
     },
     "card-info-height": {
       "type": "number",
-      "value": 175
-    },
-    "card-title-height": {
-      "type": "number",
-      "value": 65
+      "value": 117
     }
   },
   "fileToken": "7637aea0-b133-4ef3-b942-f55a1224f2db"

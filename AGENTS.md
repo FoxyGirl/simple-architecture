@@ -14,6 +14,8 @@ Stack:
 | Build   | Vite 7                                            |
 | UI      | React 19                                          |
 | Routing | React Router 7 (`react-router-dom`)               |
+| Icons   | lucide-react                                      |
+| API     | TVmaze REST (`https://api.tvmaze.com`) via fetch  |
 | Lint    | ESLint 9 (flat config) + `eslint-config-prettier` |
 | Format  | Prettier 3                                        |
 | Hooks   | husky 9 + lint-staged 17 (pre-commit)             |
@@ -37,109 +39,32 @@ npm run format:check # prettier --check .  (read-only)
 There is no test runner configured. If tests are needed, add Vitest — do not
 assume one exists.
 
-## Structure
+## Project Documentation
 
-```
-src/
-  main.jsx              # entry: StrictMode > BrowserRouter > App
-  App.jsx               # layout + <Routes>; every route lives here
-  App.module.css        # app-shell styles (nav, layout) — CSS Module
-  index.css             # global reset + @import './styles/tokens.css'
-  pages/Home.jsx        # route components, one file per page
-  pages/Home.module.css # that page's styles — CSS Module
-  styles/tokens.css     # ALL design tokens as CSS custom properties
-design/
-  ScreenScout-design.pen            # pen.dev canvas — encrypted, MCP only
-  ScreenScout-design-assets/*.jpg   # poster art used by the canvas
-```
+Project documentation defines the mandatory rules and conventions
+for implementing and modifying the application.
 
-## Conventions
+**Before making any changes, you MUST read and follow all relevant
+documentation.**
 
-### Components and routing
+- [Architecture](docs/architecture.md) — application architecture,
+  View/Presenter pattern, component responsibilities, and data flow.
+- [Component Organization](docs/component-organization.md) —
+  component directory structure, ownership, reuse rules.
+- [Coding Conventions](docs/coding-conventions.md) —
+  styling, design tokens, fonts, naming conventions, and implementation rules.
 
-- `.jsx` for components, plain `.js` for config/scripts. ESM imports only.
-- Function components, exported as **named exports**:
-  `export const Home = () => { … };`
-- Import them by name: `import { Home } from './pages/Home.jsx';`
-  ESLint's `import-x/named` / `import-x/default` rules verify that the import
-  matches the module's exports — if you rename an export, the lint fails
-  instead of the app failing at runtime.
-- Add new pages as `src/pages/<Name>.jsx` and register the route in
-  `src/App.jsx`. `BrowserRouter` is already mounted in `main.jsx` — do not add
-  another router.
-- Keep the existing import style: relative path with the file extension
-  included.
+### Compliance Rules
 
-### Styling — CSS Modules + design tokens
-
-**Every component styles itself with a CSS Module.** Vite handles `.module.css`
-out of the box — no config needed.
-
-- One `Component.module.css` per component, next to the component file
-  (`src/App.module.css`, `src/pages/Home.module.css`).
-- Import it as the default export and use it via `className`:
-
-  ```jsx
-  import styles from './Home.module.css';
-
-  export default function Home() {
-    return (
-      <section className={styles.hero}>
-        <h1 className={styles.title}>Home</h1>
-      </section>
-    );
-  }
-  ```
-
-- Name classes in **camelCase** (`heroTitle`, not `hero-title`) so they are
-  valid JS identifiers; access kebab-case names with `styles['hero-title']`.
-- Class names are hashed at build time — never reference a module class from a
-  global stylesheet or with a raw string (`className="hero"` will not match).
-  Global styles are for element defaults, not for styling components.
-- The only non-module CSS files are `src/index.css` (global reset) and
-  `src/styles/tokens.css` (custom properties). Both must stay global —
-  `:root` variables and element resets cannot be scoped to a module.
-
-**Never hard-code a colour, radius, spacing value or shadow.** Read it from
-`src/styles/tokens.css`:
-
-```css
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: var(--space-md);
-  box-shadow: var(--shadow-card);
-}
-```
-
-- Token groups: colours (`--bg`, `--surface`, `--accent`, `--text-*`,
-  `--running`, `--star`, …), typography (`--font-display`, `--font-body`,
-  `--weight-*`, `--leading-*`), radius, spacing, elevation, motion.
-- `src/index.css` imports `tokens.css` first — keep that import first, CSS
-  requires it.
-
-### Fonts
-
-Sora (display) and Inter (body) are loaded from Google Fonts in `index.html`.
-Use `var(--font-display)` for headings and `var(--font-body)` for everything
-else. For production, self-host with `@fontsource/sora` and `@fontsource/inter`.
-
-### Code style
-
-Prettier (`singleQuote`, 80 cols, 2 spaces, semicolons, trailing commas, LF)
-and ESLint flat config. Notable ESLint rules:
-
-- `no-unused-vars` is an error, but variables, arguments and caught errors
-  prefixed with `_` are ignored.
-- `import-x/no-unresolved` is an error — verify import paths.
-- `import-x/named` and `import-x/default` are errors — the imported module
-  must actually export what you import. They only work on files the plugin can
-  parse, which is why `settings['import-x/extensions']` lists `.jsx`; keep that
-  setting in sync when adding a new file type.
-- `react/jsx-key` is a warning — every list needs stable keys.
-- `react-refresh/only-export-components` warns if a component file exports
-  non-component values (constants are allowed).
+- Treat the documentation as the source of truth for implementation decisions.
+- Do not introduce patterns, structures, or conventions that contradict
+  the documented rules.
+- When modifying existing code, preserve consistency with the documented
+  architecture and conventions.
+- If a requirement is unclear, documentation is incomplete, or a proposed
+  change conflicts with existing rules, ask for clarification before proceeding.
+- Do not silently deviate from documented rules, even if an alternative
+  implementation seems more convenient.
 
 ## Design system workflow
 
@@ -189,12 +114,4 @@ Fixable problems are repaired and the commit continues; unfixable errors
   stores LF and every platform checks out LF. If you ever see CRLF creep back in,
   check that `.gitattributes` is present and that `core.autocrlf` is not
   overriding it — `git ls-files --eol` shows the index/worktree endings.
-- `opencode` permission rules for this repo live in `.opencode.json`.
-
-## Before you commit
-
-```bash
-npm run lint && npx prettier --check <changed files>
-```
-
-Then stage and commit — the hook runs the rest.
+- `opencode` permission rules for this repo live in `.opencode.json`

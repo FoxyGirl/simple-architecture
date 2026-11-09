@@ -1,4 +1,4 @@
-import { useMediaQuery } from '../../../../hooks/useMediaQuery.js';
+import { useMediaQuery } from '@hooks/useMediaQuery.js';
 
 import styles from './ResultsHead.module.css';
 

@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { useMediaQuery } from '../../../../hooks/useMediaQuery.js';
+import { useMediaQuery } from '@hooks/useMediaQuery.js';
 
 import { ArrowButton } from './ArrowButton/ArrowButton';
 

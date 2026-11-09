@@ -1,6 +1,6 @@
 import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
-import { useMediaQuery } from '../../../hooks/useMediaQuery.js';
+import { useMediaQuery } from '@hooks/useMediaQuery.js';
 import { STATUS } from '../constants.js';
 import { RESULTS_PER_PAGE } from './constants.js';
 

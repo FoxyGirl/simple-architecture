@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { searchShows } from '../../../api/tvmaze.js';
+import { searchShows } from '@api/tvmaze.js';
 import { STATUS } from '../constants.js';
 
 const DEBOUNCE_MS = 300;

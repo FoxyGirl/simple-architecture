@@ -66,6 +66,23 @@ Sora (display) and Inter (body) are loaded from Google Fonts in `index.html`.
 Use `var(--font-display)` for headings and `var(--font-body)` for everything
 else. For production, self-host with `@fontsource/sora` and `@fontsource/inter`.
 
+## Import aliases
+
+Imports that cross directory boundaries MUST use an alias instead of a deep relative path.
+
+| Alias    | Target      | Example                                                    |
+| -------- | ----------- | ---------------------------------------------------------- |
+| `@api`   | `src/api`   | `import { searchShows } from '@api/tvmaze.js';`            |
+| `@hooks` | `src/hooks` | `import { useMediaQuery } from '@hooks/useMediaQuery.js';` |
+
+- Relative imports remain the default for files in the same directory or in a
+  directly owned sibling component.
+- Aliases are declared in `vite.config.js` (`resolve.alias`) and MUST be
+  mirrored in `eslint.config.js` (alias resolver) and `jsconfig.json`
+  (`compilerOptions.paths`, editor support).
+- The three configurations MUST be kept in sync when an alias is added,
+  renamed or removed.
+
 ## Code style
 
 Prettier (`singleQuote`, 80 cols, 2 spaces, semicolons, trailing commas, LF)

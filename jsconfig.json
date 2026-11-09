@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@api/*": ["./src/api/*"],
+      "@hooks/*": ["./src/hooks/*"]
+    }
+  },
+  "include": ["src"]
+}

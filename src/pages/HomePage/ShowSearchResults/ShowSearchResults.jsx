@@ -40,7 +40,7 @@ export const ShowSearchResults = ({
     goToNext,
   } = usePresenterShowSearchResults({ data, queryEcho });
 
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const { isDesktop } = useMediaQuery();
 
   if (status === STATUS.IDLE) return null;
 

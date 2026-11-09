@@ -3,7 +3,7 @@ import { useMediaQuery } from '@hooks/useMediaQuery.js';
 import styles from './ResultsHead.module.css';
 
 export const ResultsHead = ({ countLabel, compactCountLabel, resultsEcho }) => {
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const { isDesktop } = useMediaQuery();
 
   return (
     <div className={styles.head}>

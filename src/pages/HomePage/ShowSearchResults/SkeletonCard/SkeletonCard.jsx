@@ -5,7 +5,7 @@ import { useMediaQuery } from '@hooks/useMediaQuery.js';
 import styles from './SkeletonCard.module.css';
 
 export const SkeletonCard = () => {
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const { isDesktop } = useMediaQuery();
 
   if (!isDesktop) {
     return (

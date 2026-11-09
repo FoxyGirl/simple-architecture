@@ -1,27 +1,35 @@
-import { useCallback, useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react';
+
+const DESKTOP_QUERY = '(min-width: 1024px)';
+
+const subscribe = (onChange) => {
+  const mediaQuery = window.matchMedia(DESKTOP_QUERY);
+
+  mediaQuery.addEventListener('change', onChange);
+
+  return () => mediaQuery.removeEventListener('change', onChange);
+};
+
+const getSnapshot = () => window.matchMedia(DESKTOP_QUERY).matches;
+
+const getServerSnapshot = () => false;
 
 /**
- * Tracks a CSS media query.
+ * Tracks the desktop breakpoint.
  *
  * Used to swap between the mobile list card and the desktop grid card, so
  * only the variant that is actually visible is mounted and its poster
  * images are fetched.
+ *
+ * @returns {{ isDesktop: boolean }} `isDesktop` is true on viewports of
+ * 1024px and wider.
  */
-export const useMediaQuery = (query) => {
-  const subscribe = useCallback(
-    (onChange) => {
-      const mediaQuery = window.matchMedia(query);
-      mediaQuery.addEventListener('change', onChange);
-
-      return () => mediaQuery.removeEventListener('change', onChange);
-    },
-    [query],
+export const useMediaQuery = () => {
+  const isDesktop = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
   );
 
-  const getSnapshot = useCallback(
-    () => window.matchMedia(query).matches,
-    [query],
-  );
-
-  return useSyncExternalStore(subscribe, getSnapshot, () => false);
+  return { isDesktop };
 };

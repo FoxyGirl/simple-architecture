@@ -14,7 +14,7 @@ export const Pagination = ({
   onPrev,
   onNext,
 }) => {
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const { isDesktop } = useMediaQuery();
 
   const pages = Array.from({ length: pageCount }, (_, index) => index + 1);
 

@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import styles from './StatusPanel.module.css';
 
 const VARIANT_CLASSES = {
@@ -20,7 +22,7 @@ export const StatusPanel = ({
       {overline}
     </div>
 
-    <div className={`${styles.iconDisc} ${VARIANT_CLASSES[variant] ?? ''}`}>
+    <div className={clsx(styles.iconDisc, VARIANT_CLASSES[variant])}>
       <Icon size={34} aria-hidden="true" />
     </div>
 
@@ -28,7 +30,7 @@ export const StatusPanel = ({
     <p className={styles.body}>{body}</p>
 
     <button
-      className={`${styles.action} ${actionAccent ? styles.actionAccent : ''}`}
+      className={clsx(styles.action, actionAccent && styles.actionAccent)}
       type="button"
       onClick={onClick}
     >

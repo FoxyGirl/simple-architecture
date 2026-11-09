@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { ChevronRight, Star } from 'lucide-react';
 
 import styles from './ShowRowCard.module.css';
@@ -64,7 +65,7 @@ export const ShowRowCard = ({ show }) => {
           </span>
 
           <span className={styles.status}>
-            <span className={`${styles.dot} ${statusClass}`} />
+            <span className={clsx(styles.dot, statusClass)} />
             <span className={statusClass}>{statusLabel}</span>
           </span>
         </div>

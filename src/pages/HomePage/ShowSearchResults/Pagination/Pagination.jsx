@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { useMediaQuery } from '@hooks/useMediaQuery.js';
@@ -50,11 +51,9 @@ export const Pagination = ({
           {pages.map((pageNumber) => (
             <button
               key={pageNumber}
-              className={
-                pageNumber === page
-                  ? `${styles.pageButton} ${styles.pageButtonActive}`
-                  : styles.pageButton
-              }
+              className={clsx(styles.pageButton, {
+                [styles.pageButtonActive]: pageNumber === page,
+              })}
               type="button"
               onClick={() => onSelectPage(pageNumber)}
               aria-current={pageNumber === page ? 'page' : undefined}

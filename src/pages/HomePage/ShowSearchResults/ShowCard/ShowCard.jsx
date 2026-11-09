@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { Star } from 'lucide-react';
 
 import styles from './ShowCard.module.css';
@@ -51,7 +52,7 @@ export const ShowCard = ({ show }) => {
 
         <div className={styles.badges}>
           <span className={styles.statusBadge}>
-            <span className={`${styles.dot} ${statusClass}`} />
+            <span className={clsx(styles.dot, statusClass)} />
             <span className={statusClass}>{statusLabel}</span>
           </span>
 

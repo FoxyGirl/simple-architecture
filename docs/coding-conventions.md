@@ -39,6 +39,30 @@ out of the box — no config needed.
   `src/styles/tokens.css` (custom properties). Both must stay global —
   `:root` variables and element resets cannot be scoped to a module.
 
+### Conditional class names — `clsx`
+
+Use `clsx` to combine class names. Never build them with template strings or
+string concatenation:
+
+```jsx
+import clsx from 'clsx';
+
+import styles from './ShowCard.module.css';
+
+<div className={clsx(styles.dot, statusClass)} />;
+<div
+  className={clsx(styles.pageButton, {
+    [styles.pageButtonActive]: pageNumber === page,
+  })}
+/>;
+```
+
+- A single static class stays as-is — `className={styles.card}`.
+- `clsx` skips `false`, `undefined` and `null` entries, so conditional
+  modifiers are passed as `condition && styles.modifier`.
+- Conditional and static classes are always passed as separate arguments, in
+  base-then-modifier order.
+
 **Always try to use CSS variables** from `src/styles/tokens.css`:
 
 ```css

@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import styles from './GenreFilter.module.css';
 
 export const GenreFilter = ({ genres, activeGenre, onSelectGenre }) => (
@@ -8,9 +10,7 @@ export const GenreFilter = ({ genres, activeGenre, onSelectGenre }) => (
       return (
         <button
           key={genre}
-          className={
-            isActive ? `${styles.chip} ${styles.chipActive}` : styles.chip
-          }
+          className={clsx(styles.chip, { [styles.chipActive]: isActive })}
           type="button"
           aria-pressed={isActive}
           onClick={() => onSelectGenre(genre)}

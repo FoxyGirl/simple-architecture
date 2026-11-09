@@ -15,6 +15,7 @@ Stack:
 | UI      | React 19                                          |
 | Routing | React Router 7 (`react-router-dom`)               |
 | Icons   | lucide-react                                      |
+| Classes | clsx                                              |
 | API     | TVmaze REST (`https://api.tvmaze.com`) via fetch  |
 | Lint    | ESLint 9 (flat config) + `eslint-config-prettier` |
 | Format  | Prettier 3                                        |

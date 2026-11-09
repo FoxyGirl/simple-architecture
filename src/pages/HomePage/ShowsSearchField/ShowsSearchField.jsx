@@ -1,30 +1,39 @@
 import { Search, X } from 'lucide-react';
 
+import { usePresenterSearch } from './usePresenterSearch.js';
+
 import styles from './ShowsSearchField.module.css';
 
-export const ShowsSearchField = ({ query, onChange, onClear }) => (
-  <div className={styles.searchBar} role="search">
-    <Search className={styles.searchIcon} size={20} aria-hidden="true" />
+export const ShowsSearchField = ({ onSearchChange, registerControls }) => {
+  const { query, handleSearch, clearQuery } = usePresenterSearch({
+    onSearchChange,
+    registerControls,
+  });
 
-    <input
-      className={styles.query}
-      type="text"
-      value={query}
-      onChange={onChange}
-      placeholder="Search for TV shows..."
-      aria-label="Search for TV shows"
-      autoComplete="off"
-    />
+  return (
+    <div className={styles.searchBar} role="search">
+      <Search className={styles.searchIcon} size={20} aria-hidden="true" />
 
-    {query && (
-      <button
-        className={styles.clearButton}
-        type="button"
-        onClick={onClear}
-        aria-label="Clear search"
-      >
-        <X size={16} aria-hidden="true" />
-      </button>
-    )}
-  </div>
-);
+      <input
+        className={styles.query}
+        type="text"
+        value={query}
+        onChange={handleSearch}
+        placeholder="Search for TV shows..."
+        aria-label="Search for TV shows"
+        autoComplete="off"
+      />
+
+      {query && (
+        <button
+          className={styles.clearButton}
+          type="button"
+          onClick={clearQuery}
+          aria-label="Clear search"
+        >
+          <X size={16} aria-hidden="true" />
+        </button>
+      )}
+    </div>
+  );
+};

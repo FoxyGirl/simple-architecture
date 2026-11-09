@@ -11,9 +11,9 @@ import styles from './ShowSearchResults.module.css';
 const SKELETON_COUNT = 6;
 
 export const ShowSearchResults = ({
-  results,
+  data,
   status,
-  query,
+  queryEcho,
   onRetry,
   onClear,
 }) => {
@@ -47,7 +47,7 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {status === 'success' && results.length === 0 && (
+      {status === 'success' && data.length === 0 && (
         <StatusPanel
           overline="STATE · EMPTY"
           icon={SearchX}
@@ -58,21 +58,21 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {status === 'success' && results.length > 0 && (
+      {status === 'success' && data.length > 0 && (
         <>
           <div className={styles.head}>
             <div className={styles.headLeft}>
               <h2 className={styles.title}>Search Results</h2>
               <span className={styles.countPill}>
-                {results.length} {results.length === 1 ? 'show' : 'shows'} found
+                {data.length} {data.length === 1 ? 'show' : 'shows'} found
               </span>
             </div>
 
-            <p className={styles.queryEcho}>for “{query}”</p>
+            <p className={styles.queryEcho}>for “{queryEcho}”</p>
           </div>
 
           <div className={styles.list}>
-            {results.map((show) =>
+            {data.map((show) =>
               isDesktop ? (
                 <ShowCard key={show.id} show={show} />
               ) : (

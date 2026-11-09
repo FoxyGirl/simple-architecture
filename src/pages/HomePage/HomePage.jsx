@@ -2,20 +2,20 @@ import { Sparkles } from 'lucide-react';
 
 import { ShowSearchResults } from './ShowSearchResults/ShowSearchResults';
 import { ShowsSearchField } from './ShowsSearchField/ShowsSearchField';
-import { usePresenterSearch } from './ShowsSearchField/usePresenterSearch.js';
+import { usePresenterHomePage } from './usePresenterHomePage.js';
 
 import styles from './HomePage.module.css';
 
 export const HomePage = () => {
   const {
-    query,
-    results,
+    data,
+    queryEcho,
     status,
-    handleSearch,
-    clearQuery,
-    clearSearch,
     retry,
-  } = usePresenterSearch();
+    clearSearch,
+    onSearchChange,
+    registerControls,
+  } = usePresenterHomePage();
 
   return (
     <>
@@ -36,16 +36,15 @@ export const HomePage = () => {
         </p>
 
         <ShowsSearchField
-          query={query}
-          onChange={handleSearch}
-          onClear={clearQuery}
+          onSearchChange={onSearchChange}
+          registerControls={registerControls}
         />
       </section>
 
       <ShowSearchResults
-        results={results}
+        data={data}
         status={status}
-        query={query}
+        queryEcho={queryEcho}
         onRetry={retry}
         onClear={clearSearch}
       />

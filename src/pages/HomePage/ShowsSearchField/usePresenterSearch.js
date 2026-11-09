@@ -9,39 +9,46 @@ const LOADING = 'loading';
 const SUCCESS = 'success';
 const ERROR = 'error';
 
-export const usePresenterSearch = () => {
+export const usePresenterSearch = ({ onSearchChange, registerControls }) => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
-  const [status, setStatus] = useState(IDLE);
-  const [searchedQuery, setSearchedQuery] = useState('');
 
   const controllerRef = useRef(null);
 
-  const runSearch = useCallback(async (nextQuery) => {
-    controllerRef.current?.abort();
+  const runSearch = useCallback(
+    async (nextQuery) => {
+      controllerRef.current?.abort();
 
-    const controller = new AbortController();
-    controllerRef.current = controller;
+      const controller = new AbortController();
+      controllerRef.current = controller;
 
-    setStatus(LOADING);
-    setSearchedQuery(nextQuery);
+      onSearchChange({ status: LOADING, data: [], queryEcho: nextQuery });
 
-    try {
-      const shows = await searchShows(nextQuery, { signal: controller.signal });
-      setResults(shows);
-      setStatus(SUCCESS);
-    } catch (requestError) {
-      if (requestError.name === 'AbortError') return;
-      setStatus(ERROR);
-    }
-  }, []);
+      try {
+        const shows = await searchShows(nextQuery, {
+          signal: controller.signal,
+        });
+        onSearchChange({ status: SUCCESS, data: shows, queryEcho: nextQuery });
+      } catch (requestError) {
+        if (requestError.name === 'AbortError') return;
+        onSearchChange({ status: ERROR, data: [], queryEcho: nextQuery });
+      }
+    },
+    [onSearchChange],
+  );
 
   // The request is driven by the debounced query: typing only schedules a
   // call, and the in-flight one is dropped as soon as the query changes.
   useEffect(() => {
     const trimmed = query.trim();
 
-    if (!trimmed) return undefined;
+    if (!trimmed) {
+      onSearchChange({ status: IDLE, data: [], queryEcho: '' });
+      return undefined;
+    }
+
+    // The request is already inevitable, so report it right away: the view
+    // shows skeletons while the debounce is still pending.
+    onSearchChange({ status: LOADING, data: [], queryEcho: trimmed });
 
     const timer = setTimeout(() => {
       runSearch(trimmed);
@@ -51,7 +58,7 @@ export const usePresenterSearch = () => {
       clearTimeout(timer);
       controllerRef.current?.abort();
     };
-  }, [query, runSearch]);
+  }, [query, runSearch, onSearchChange]);
 
   const handleSearch = useCallback((event) => {
     setQuery(event.target.value);
@@ -75,22 +82,16 @@ export const usePresenterSearch = () => {
     runSearch(trimmed);
   }, [query, runSearch]);
 
-  // An empty query means "no search", and results fetched for another query
-  // are stale, so both states are derived instead of being reset by hand.
-  const trimmedQuery = query.trim();
-  const isIdle = trimmedQuery.length === 0;
-  const isStale = !isIdle && searchedQuery !== trimmedQuery;
+  // Expose the search commands so the results view can trigger them.
+  useEffect(() => {
+    registerControls({ retry, clearSearch });
 
-  const currentStatus = isIdle ? IDLE : isStale ? LOADING : status;
+    return () => registerControls(null);
+  }, [registerControls, retry, clearSearch]);
 
   return {
     query,
-    results: isIdle ? [] : results,
-    status: currentStatus,
-    isLoading: currentStatus === LOADING,
     handleSearch,
     clearQuery,
-    clearSearch,
-    retry,
   };
 };

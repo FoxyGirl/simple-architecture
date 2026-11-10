@@ -22,6 +22,7 @@ export const ShowsSearchField = ({ onSearchChange, registerControls }) => {
         placeholder="Search for TV shows..."
         aria-label="Search for TV shows"
         autoComplete="off"
+        autoFocus
       />
 
       {query && (

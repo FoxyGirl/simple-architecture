@@ -507,11 +507,11 @@
             }
           ],
           "layout": "vertical",
-          "gap": 26,
+          "gap": 10,
           "padding": [
-            84,
+            28,
             96,
-            92,
+            24,
             96
           ],
           "alignItems": "center",
@@ -588,7 +588,7 @@
               "id": "Y9ALF",
               "name": "SearchBar",
               "width": 640,
-              "height": 62,
+              "height": 54,
               "fill": "$surface",
               "cornerRadius": 16,
               "stroke": "$border",
@@ -644,11 +644,11 @@
           "name": "PopularSection",
           "width": "fill_container",
           "layout": "vertical",
-          "gap": 30,
+          "gap": 16,
           "padding": [
-            8,
+            0,
             96,
-            96,
+            28,
             96
           ],
           "children": [
@@ -742,7 +742,7 @@
                   "width": "fill_container",
                   "descendants": {
                     "H8jZrq": {
-                      "height": 310,
+                      "height": 250,
                       "fill": [
                         {
                           "type": "image",
@@ -794,24 +794,25 @@
                     },
                     "jROz3": {
                       "padding": [
+                        12,
+                        16,
                         14,
-                        16,
-                        16,
                         16
                       ],
-                      "gap": 7
+                      "gap": 6,
+                      "height": "fit_content"
                     },
                     "blNn8": {
                       "content": "Breaking Bad",
-                      "fontSize": 16
+                      "fontSize": 17
                     },
                     "d5Z1o6": {
                       "content": "2008",
-                      "fontSize": 13
+                      "fontSize": 12
                     },
                     "zD0Mr": {
                       "content": "AMC",
-                      "fontSize": 13
+                      "fontSize": 12
                     },
                     "AAs60": {
                       "content": "Drama · Crime · Thriller",
@@ -827,7 +828,7 @@
                   "width": "fill_container",
                   "descendants": {
                     "H8jZrq": {
-                      "height": 310,
+                      "height": 250,
                       "fill": [
                         {
                           "type": "image",
@@ -879,24 +880,25 @@
                     },
                     "jROz3": {
                       "padding": [
+                        12,
+                        16,
                         14,
-                        16,
-                        16,
                         16
                       ],
-                      "gap": 7
+                      "gap": 6,
+                      "height": "fit_content"
                     },
                     "blNn8": {
                       "content": "Game of Thrones",
-                      "fontSize": 16
+                      "fontSize": 17
                     },
                     "d5Z1o6": {
                       "content": "2011",
-                      "fontSize": 13
+                      "fontSize": 12
                     },
                     "zD0Mr": {
                       "content": "HBO",
-                      "fontSize": 13
+                      "fontSize": 12
                     },
                     "AAs60": {
                       "content": "Drama · Adventure · Fantasy",
@@ -912,7 +914,7 @@
                   "width": "fill_container",
                   "descendants": {
                     "H8jZrq": {
-                      "height": 310,
+                      "height": 250,
                       "fill": [
                         {
                           "type": "image",
@@ -964,24 +966,25 @@
                     },
                     "jROz3": {
                       "padding": [
+                        12,
+                        16,
                         14,
-                        16,
-                        16,
                         16
                       ],
-                      "gap": 7
+                      "gap": 6,
+                      "height": "fit_content"
                     },
                     "blNn8": {
                       "content": "Stranger Things",
-                      "fontSize": 16
+                      "fontSize": 17
                     },
                     "d5Z1o6": {
                       "content": "2016",
-                      "fontSize": 13
+                      "fontSize": 12
                     },
                     "zD0Mr": {
                       "content": "Netflix",
-                      "fontSize": 13
+                      "fontSize": 12
                     },
                     "AAs60": {
                       "content": "Drama · Horror · Science-Fiction",
@@ -997,7 +1000,7 @@
                   "width": "fill_container",
                   "descendants": {
                     "H8jZrq": {
-                      "height": 310,
+                      "height": 250,
                       "fill": [
                         {
                           "type": "image",
@@ -1049,24 +1052,25 @@
                     },
                     "jROz3": {
                       "padding": [
+                        12,
+                        16,
                         14,
-                        16,
-                        16,
                         16
                       ],
-                      "gap": 7
+                      "gap": 6,
+                      "height": "fit_content"
                     },
                     "blNn8": {
                       "content": "The Last of Us",
-                      "fontSize": 16
+                      "fontSize": 17
                     },
                     "d5Z1o6": {
                       "content": "2023",
-                      "fontSize": 13
+                      "fontSize": 12
                     },
                     "zD0Mr": {
                       "content": "HBO",
-                      "fontSize": 13
+                      "fontSize": 12
                     },
                     "AAs60": {
                       "content": "Drama · Action · Horror",
@@ -1082,7 +1086,7 @@
                   "width": "fill_container",
                   "descendants": {
                     "H8jZrq": {
-                      "height": 310,
+                      "height": 250,
                       "fill": [
                         {
                           "type": "image",
@@ -1134,24 +1138,25 @@
                     },
                     "jROz3": {
                       "padding": [
+                        12,
+                        16,
                         14,
-                        16,
-                        16,
                         16
                       ],
-                      "gap": 7
+                      "gap": 6,
+                      "height": "fit_content"
                     },
                     "blNn8": {
                       "content": "Severance",
-                      "fontSize": 16
+                      "fontSize": 17
                     },
                     "d5Z1o6": {
                       "content": "2022",
-                      "fontSize": 13
+                      "fontSize": 12
                     },
                     "zD0Mr": {
                       "content": "Apple TV+",
-                      "fontSize": 13
+                      "fontSize": 12
                     },
                     "AAs60": {
                       "content": "Drama · Science-Fiction · Mystery",

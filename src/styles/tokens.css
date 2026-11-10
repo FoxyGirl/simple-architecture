@@ -12,6 +12,7 @@
   --surface-2: #1d2130;
   --border: #262b3d;
   --border-strong: #232839;
+  --border-light: #a6adbf;
   --accent: #8b5cff;
   --accent-hover: #c4b0ff;
   --accent-soft: #8b5cff26;
@@ -78,6 +79,7 @@
   /* Elevation */
   --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.4);
   --glow-accent: 0 14px 40px rgba(139, 92, 255, 0.2);
+  --glow-accent-soft: 0 14px 40px rgba(139, 92, 255, 0.12);
   --focus-ring: 0 0 0 3px rgba(139, 92, 255, 0.4);
 
   /* Motion */

@@ -1,0 +1,61 @@
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: var(--space-lg);
+}
+
+.headLeft {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.titleBar {
+  width: 120px;
+  height: calc(20px * var(--leading-tight));
+  border-radius: 6px;
+  background: var(--border-strong);
+}
+
+.countPill {
+  width: 76px;
+  height: calc(12px * var(--leading-tight) + 8px + 2px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+}
+
+.echoBar {
+  width: 92px;
+  height: calc(14px * var(--leading-tight));
+  border-radius: 6px;
+  background: var(--border-strong);
+}
+
+@media (min-width: 1024px) {
+  .head {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-bottom: 16px;
+  }
+
+  .headLeft {
+    justify-content: flex-start;
+    gap: 14px;
+  }
+
+  .titleBar {
+    width: 168px;
+    height: calc(27px * var(--leading-tight));
+  }
+
+  .countPill {
+    width: 100px;
+    height: calc(13px * var(--leading-tight) + 10px + 2px);
+  }
+}

@@ -3981,32 +3981,11 @@
           "gap": 26,
           "children": [
             {
-              "type": "frame",
-              "id": "coaw6",
-              "name": "Overline",
-              "gap": 10,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "ellipse",
-                  "id": "Oa1F6",
-                  "name": "DotMark",
-                  "fill": "$accent",
-                  "width": 6,
-                  "height": 6
-                },
-                {
-                  "type": "text",
-                  "id": "l7MJPh",
-                  "name": "OverlineText",
-                  "fill": "$text-muted",
-                  "content": "STATE · LOADING",
-                  "fontFamily": "Inter",
-                  "fontSize": 12,
-                  "fontWeight": "700",
-                  "letterSpacing": 1.6
-                }
-              ]
+              "id": "P501g",
+              "type": "ref",
+              "ref": "SsF2T",
+              "name": "SkeletonHead",
+              "width": "fill_container"
             },
             {
               "type": "frame",
@@ -4019,7 +3998,7 @@
                   "id": "VvaCR",
                   "name": "ChipSk",
                   "width": 96,
-                  "height": 34,
+                  "height": 35.6,
                   "fill": "$surface-2",
                   "cornerRadius": 999
                 },
@@ -4028,7 +4007,7 @@
                   "id": "Le97t",
                   "name": "ChipSk",
                   "width": 74,
-                  "height": 34,
+                  "height": 35.6,
                   "fill": "$surface-2",
                   "cornerRadius": 999
                 },
@@ -4037,7 +4016,7 @@
                   "id": "CLJUt",
                   "name": "ChipSk",
                   "width": 88,
-                  "height": 34,
+                  "height": 35.6,
                   "fill": "$surface-2",
                   "cornerRadius": 999
                 },
@@ -4046,7 +4025,7 @@
                   "id": "N6kMv",
                   "name": "ChipSk",
                   "width": 92,
-                  "height": 34,
+                  "height": 35.6,
                   "fill": "$surface-2",
                   "cornerRadius": 999
                 },
@@ -4055,7 +4034,7 @@
                   "id": "v7k970",
                   "name": "ChipSk",
                   "width": 84,
-                  "height": 34,
+                  "height": 35.6,
                   "fill": "$surface-2",
                   "cornerRadius": 999
                 },
@@ -4064,7 +4043,7 @@
                   "id": "EilMC",
                   "name": "ChipSk",
                   "width": 70,
-                  "height": 34,
+                  "height": 35.6,
                   "fill": "$surface-2",
                   "cornerRadius": 999
                 }
@@ -4392,6 +4371,15 @@
                   "height": 40,
                   "fill": "$surface-2",
                   "cornerRadius": 12
+                },
+                {
+                  "type": "frame",
+                  "id": "jm1vm",
+                  "name": "InfoSk",
+                  "width": 76,
+                  "height": 15.6,
+                  "fill": "$border-strong",
+                  "cornerRadius": 6
                 }
               ]
             }
@@ -13565,6 +13553,57 @@
               "fontWeight": "normal"
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "SsF2T",
+      "x": 440,
+      "y": 120,
+      "name": "SkeletonHead",
+      "reusable": true,
+      "width": 560,
+      "justifyContent": "space_between",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "fM1yj",
+          "name": "HeadLeftSk",
+          "gap": 14,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "tzZyn",
+              "name": "TitleSk",
+              "width": 168,
+              "height": 32.4,
+              "fill": "$border-strong",
+              "cornerRadius": 6
+            },
+            {
+              "type": "frame",
+              "id": "QDcGy",
+              "name": "CountPillSk",
+              "width": 100,
+              "height": 27.6,
+              "fill": "$surface-2",
+              "cornerRadius": "$radius-pill",
+              "stroke": "$border",
+              "strokeWidth": 1
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Z4QdD",
+          "name": "EchoSk",
+          "width": 92,
+          "height": 16.8,
+          "fill": "$border-strong",
+          "cornerRadius": 6
         }
       ]
     }

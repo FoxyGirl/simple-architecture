@@ -2,20 +2,17 @@ import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
 import { useMediaQuery } from '@hooks/useMediaQuery.js';
 import { STATUS } from '../constants.js';
-import { RESULTS_PER_PAGE } from './constants.js';
 
 import { GenreFilter } from './GenreFilter/GenreFilter';
 import { Pagination } from './Pagination/Pagination';
 import { ResultsHead } from './ResultsHead/ResultsHead';
 import { ShowCard } from './ShowCard/ShowCard';
 import { ShowRowCard } from './ShowRowCard/ShowRowCard';
-import { SkeletonCard } from './SkeletonCard/SkeletonCard';
+import { Skeleton } from './Skeleton/Skeleton';
 import { StatusPanel } from './StatusPanel/StatusPanel';
 import { usePresenterShowSearchResults } from './usePresenterShowSearchResults.js';
 
 import styles from './ShowSearchResults.module.css';
-
-const SKELETON_COUNT = RESULTS_PER_PAGE;
 
 export const ShowSearchResults = ({
   data,
@@ -30,17 +27,17 @@ export const ShowSearchResults = ({
 
   const { isDesktop } = useMediaQuery();
 
+  const isLoading = status === STATUS.LOADING;
+
   if (status === STATUS.IDLE) return null;
 
   return (
-    <section className={styles.results} aria-live="polite">
-      {status === STATUS.LOADING && (
-        <div className={styles.list}>
-          {Array.from({ length: SKELETON_COUNT }, (_, index) => (
-            <SkeletonCard key={index} />
-          ))}
-        </div>
-      )}
+    <section
+      className={styles.results}
+      aria-live="polite"
+      aria-busy={isLoading}
+    >
+      {isLoading && <Skeleton />}
 
       {status === STATUS.ERROR && (
         <StatusPanel

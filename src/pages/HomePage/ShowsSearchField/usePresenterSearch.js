@@ -9,6 +9,7 @@ export const usePresenterSearch = ({ onSearchChange, registerControls }) => {
   const [query, setQuery] = useState('');
 
   const controllerRef = useRef(null);
+  const inputRef = useRef(null);
 
   const runSearch = useCallback(
     async (nextQuery) => {
@@ -72,16 +73,22 @@ export const usePresenterSearch = ({ onSearchChange, registerControls }) => {
     setQuery(event.target.value);
   }, []);
 
+  const focusInput = useCallback(() => {
+    inputRef.current?.focus();
+  }, []);
+
   const clearQuery = useCallback(() => {
     setQuery('');
-  }, []);
+    focusInput();
+  }, [focusInput]);
 
   const clearSearch = useCallback(() => {
     controllerRef.current?.abort();
     controllerRef.current = null;
 
     setQuery('');
-  }, []);
+    focusInput();
+  }, [focusInput]);
 
   const retry = useCallback(() => {
     const trimmed = query.trim();
@@ -101,5 +108,6 @@ export const usePresenterSearch = ({ onSearchChange, registerControls }) => {
     query,
     handleSearch,
     clearQuery,
+    inputRef,
   };
 };

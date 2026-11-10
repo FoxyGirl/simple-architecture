@@ -5,7 +5,7 @@ import { usePresenterSearch } from './usePresenterSearch.js';
 import styles from './ShowsSearchField.module.css';
 
 export const ShowsSearchField = ({ onSearchChange, registerControls }) => {
-  const { query, handleSearch, clearQuery } = usePresenterSearch({
+  const { query, handleSearch, clearQuery, inputRef } = usePresenterSearch({
     onSearchChange,
     registerControls,
   });
@@ -15,6 +15,7 @@ export const ShowsSearchField = ({ onSearchChange, registerControls }) => {
       <Search className={styles.searchIcon} size={20} aria-hidden="true" />
 
       <input
+        ref={inputRef}
         className={styles.query}
         type="text"
         value={query}

@@ -1391,11 +1391,11 @@
             }
           ],
           "layout": "vertical",
-          "gap": 18,
+          "gap": 10,
           "padding": [
-            48,
+            28,
             96,
-            40,
+            24,
             96
           ],
           "alignItems": "center",
@@ -1449,9 +1449,9 @@
               "lineHeight": 1.08,
               "textAlign": "center",
               "fontFamily": "$font-display",
-              "fontSize": 43,
+              "fontSize": 32,
               "fontWeight": "700",
-              "letterSpacing": -1.5
+              "letterSpacing": -1
             },
             {
               "type": "text",
@@ -1472,7 +1472,7 @@
               "id": "VIu2S",
               "name": "SearchBarActive",
               "width": 640,
-              "height": 62,
+              "height": 54,
               "fill": "$surface",
               "cornerRadius": 16,
               "stroke": "$accent",
@@ -1533,11 +1533,11 @@
           "name": "ResultsBody",
           "width": "fill_container",
           "layout": "vertical",
-          "gap": 28,
+          "gap": 16,
           "padding": [
             0,
             96,
-            88,
+            28,
             96
           ],
           "children": [
@@ -1772,7 +1772,7 @@
                           ]
                         }
                       ],
-                      "height": 400
+                      "height": 330
                     },
                     "obifk": {
                       "fill": "$ended"
@@ -1825,7 +1825,7 @@
                       "name": "Poster",
                       "clip": true,
                       "width": "fill_container",
-                      "height": 400,
+                      "height": 330,
                       "fill": [
                         {
                           "type": "image",
@@ -2105,7 +2105,7 @@
                           ]
                         }
                       ],
-                      "height": 400
+                      "height": 330
                     },
                     "obifk": {
                       "fill": "$ended"
@@ -2488,11 +2488,11 @@
             }
           ],
           "layout": "vertical",
-          "gap": 14,
+          "gap": 10,
           "padding": [
-            36,
+            28,
             96,
-            32,
+            24,
             96
           ],
           "alignItems": "center",
@@ -2546,9 +2546,9 @@
               "lineHeight": 1.08,
               "textAlign": "center",
               "fontFamily": "$font-display",
-              "fontSize": 43,
+              "fontSize": 32,
               "fontWeight": "700",
-              "letterSpacing": -1.5
+              "letterSpacing": -1
             },
             {
               "type": "text",
@@ -2569,7 +2569,7 @@
               "id": "mAb1n",
               "name": "SearchBarActive",
               "width": 640,
-              "height": 62,
+              "height": 54,
               "fill": "$surface",
               "cornerRadius": 16,
               "stroke": "$accent",
@@ -2630,11 +2630,11 @@
           "name": "ResultsBody",
           "width": "fill_container",
           "layout": "vertical",
-          "gap": 28,
+          "gap": 16,
           "padding": [
             0,
             96,
-            88,
+            28,
             96
           ],
           "children": [
@@ -2877,7 +2877,7 @@
                           ]
                         }
                       ],
-                      "height": 400
+                      "height": 330
                     },
                     "obifk": {
                       "fill": "$ended"
@@ -2937,7 +2937,7 @@
                           ]
                         }
                       ],
-                      "height": 400
+                      "height": 330
                     },
                     "obifk": {
                       "fill": "$ended"
@@ -2997,7 +2997,7 @@
                           ]
                         }
                       ],
-                      "height": 400
+                      "height": 330
                     },
                     "obifk": {
                       "fill": "$ended"

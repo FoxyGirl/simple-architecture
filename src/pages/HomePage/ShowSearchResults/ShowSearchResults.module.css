@@ -8,7 +8,7 @@
 @media (min-width: 1024px) {
   .results {
     padding-inline: var(--gutter);
-    padding-bottom: 88px;
+    padding-bottom: 28px;
   }
 }
 

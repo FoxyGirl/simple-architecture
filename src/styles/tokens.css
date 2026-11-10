@@ -62,9 +62,9 @@
   --radius-pill: 999px;
 
   /* Layout */
-  --card-poster-aspect: 389 / 400;
-  --card-info-height: 175px;
-  --card-title-height: 65px;
+  --card-poster-aspect: 389 / 330;
+  --card-info-height: 135px;
+  --card-title-height: 48px;
 
   /* Spacing */
   --space-2xs: 4px;

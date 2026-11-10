@@ -30,6 +30,7 @@
   color: var(--accent-hover);
   font-size: 12px;
   font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
   white-space: nowrap;
 }
 
@@ -37,6 +38,7 @@
   margin: 0;
   color: var(--star-light);
   font-size: 14px;
+  line-height: var(--leading-tight);
 }
 
 @media (min-width: 1024px) {
@@ -45,7 +47,7 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--space-md);
-    margin-bottom: 28px;
+    margin-bottom: 16px;
   }
 
   .headLeft {

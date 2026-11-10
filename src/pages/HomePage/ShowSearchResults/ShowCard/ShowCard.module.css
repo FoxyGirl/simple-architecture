@@ -137,6 +137,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
+  line-height: var(--leading-tight);
 }
 
 .year {
@@ -161,4 +162,5 @@
   margin: 0;
   color: var(--text-muted);
   font-size: 13px;
+  line-height: var(--leading-tight);
 }

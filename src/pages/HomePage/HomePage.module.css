@@ -2,9 +2,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  padding-block: 36px 44px;
-  padding-inline: 20px;
+  gap: 14px;
+  padding: 30px 20px 20px 20px;
   text-align: center;
   background:
     radial-gradient(
@@ -56,14 +55,13 @@
 
 @media (min-width: 1024px) {
   .hero {
-    padding-block: 48px 40px;
-    padding-inline: var(--gutter);
+    gap: 10px;
   }
 
   .headline {
     max-width: 856px;
-    font-size: 43px;
-    letter-spacing: -1.5px;
+    font-size: 32px;
+    letter-spacing: -1px;
     line-height: 1.08;
   }
 

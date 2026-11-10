@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
-  margin-top: 28px;
+  margin-top: 16px;
 }
 
 .pageButton {
@@ -46,6 +46,7 @@
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
   white-space: nowrap;
 }
 
@@ -55,7 +56,7 @@
   }
 
   .pageInfo {
-    margin-left: 8px;
+    margin-left: 24px;
     color: var(--text-muted);
     font-weight: var(--weight-regular);
   }

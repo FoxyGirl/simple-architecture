@@ -34,8 +34,8 @@
 .genresRow {
   display: flex;
   align-items: center;
-  /* Matches the 18px / 1.5 line box of the card meta and genre rows. */
-  height: calc(18px * var(--leading-base));
+  /* Matches the 13px / 1.2 line box of the card meta and genre rows. */
+  height: calc(13px * var(--leading-tight));
 }
 
 .row {

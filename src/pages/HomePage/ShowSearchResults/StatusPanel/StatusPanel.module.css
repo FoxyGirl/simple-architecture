@@ -15,7 +15,7 @@
   align-items: center;
   gap: 10px;
   color: var(--text-muted);
-  font-size: 16px;
+  font-size: 12px;
   font-weight: var(--weight-bold);
   letter-spacing: 1.6px;
 }
@@ -50,7 +50,7 @@
   margin: 0;
   color: var(--text-primary);
   font-family: var(--font-display);
-  font-size: 34px;
+  font-size: 25px;
   font-weight: var(--weight-semibold);
   letter-spacing: -0.4px;
 }
@@ -59,7 +59,7 @@
   max-width: 380px;
   margin: 0;
   color: var(--text-secondary);
-  font-size: 20px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
@@ -73,7 +73,7 @@
   background: var(--surface-2);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 19px;
+  font-size: 14px;
   font-weight: var(--weight-semibold);
   cursor: pointer;
   transition: background-color var(--duration-fast) var(--ease-out);

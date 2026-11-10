@@ -18,7 +18,7 @@
   background: var(--surface-2);
   color: var(--text-secondary);
   font-family: var(--font-body);
-  font-size: 17px;
+  font-size: 13px;
   font-weight: var(--weight-medium);
   white-space: nowrap;
   cursor: pointer;
@@ -58,6 +58,6 @@
   }
 
   .chip {
-    font-size: 18px;
+    font-size: 13px;
   }
 }

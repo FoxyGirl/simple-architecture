@@ -51,20 +51,20 @@
   margin: 0;
   color: var(--text-primary);
   font-family: var(--font-display);
-  font-size: 21px;
+  font-size: 16px;
   font-weight: var(--weight-semibold);
 }
 
 .meta {
   margin: 0;
   color: var(--text-muted);
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .genres {
   margin: 0;
   color: var(--text-muted);
-  font-size: 15px;
+  font-size: 11px;
 }
 
 .ratingRow {
@@ -78,7 +78,7 @@
   align-items: center;
   gap: 4px;
   color: var(--text-primary);
-  font-size: 16px;
+  font-size: 12px;
   font-weight: var(--weight-bold);
 }
 
@@ -91,7 +91,7 @@
   align-items: center;
   gap: 5px;
   color: var(--text-secondary);
-  font-size: 15px;
+  font-size: 11px;
   font-weight: var(--weight-semibold);
 }
 

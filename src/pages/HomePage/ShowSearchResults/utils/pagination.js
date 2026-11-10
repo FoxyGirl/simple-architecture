@@ -1,4 +1,4 @@
-import { RESULTS_PER_PAGE } from './constants.js';
+import { RESULTS_PER_PAGE } from '../constants.js';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 

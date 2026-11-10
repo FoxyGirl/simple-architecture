@@ -1,34 +1,10 @@
 import clsx from 'clsx';
 import { ChevronRight, Star } from 'lucide-react';
 
+import { STATUS_CLASSES, STATUS_LABELS } from './constants.js';
+import { formatNetwork, formatRating, formatYear } from './utils.js';
+
 import styles from './ShowRowCard.module.css';
-
-const STATUS_LABELS = {
-  Running: 'Running',
-  Ended: 'Ended',
-  'In Development': 'In Development',
-  'To Be Determined': 'To Be Determined',
-  Scheduled: 'Scheduled',
-};
-
-const STATUS_CLASSES = {
-  Running: styles.running,
-  Ended: styles.ended,
-  'In Development': styles.inDev,
-  'To Be Determined': styles.tbd,
-  Scheduled: styles.tbd,
-};
-
-const formatRating = (average) =>
-  average === null || average === undefined ? 'NR' : average.toFixed(1);
-
-const formatYear = (show) => {
-  const date = show.premiered ?? show.ended;
-  return date ? date.slice(0, 4) : '—';
-};
-
-const formatNetwork = (show) =>
-  show.network?.name ?? show.webChannel?.name ?? '—';
 
 export const ShowRowCard = ({ show }) => {
   const statusLabel = STATUS_LABELS[show.status] ?? 'Unknown';

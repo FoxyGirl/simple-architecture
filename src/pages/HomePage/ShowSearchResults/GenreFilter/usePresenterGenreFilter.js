@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 
-import { collectGenres } from '../genres.js';
-import { resolveSelection } from '../selection.js';
+import { collectGenres } from '../utils/genres.js';
+import { resolveSelection } from '../utils/selection.js';
 
 export const usePresenterGenreFilter = ({
   data,

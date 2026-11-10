@@ -3,6 +3,8 @@ import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 import { useMediaQuery } from '@hooks/useMediaQuery.js';
 import { STATUS } from '../constants.js';
 
+import { usePresenterShowSearchResults } from './usePresenterShowSearchResults.js';
+
 import { GenreFilter } from './GenreFilter/GenreFilter';
 import { Pagination } from './Pagination/Pagination';
 import { ResultsHead } from './ResultsHead/ResultsHead';
@@ -10,7 +12,6 @@ import { ShowCard } from './ShowCard/ShowCard';
 import { ShowRowCard } from './ShowRowCard/ShowRowCard';
 import { Skeleton } from './Skeleton/Skeleton';
 import { StatusPanel } from './StatusPanel/StatusPanel';
-import { usePresenterShowSearchResults } from './usePresenterShowSearchResults.js';
 
 import styles from './ShowSearchResults.module.css';
 
@@ -28,6 +29,7 @@ export const ShowSearchResults = ({
   const { isDesktop } = useMediaQuery();
 
   const isLoading = status === STATUS.LOADING;
+  const isSuccess = status === STATUS.SUCCESS;
 
   if (status === STATUS.IDLE) return null;
 
@@ -55,7 +57,7 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {status === STATUS.SUCCESS && shows.length === 0 && (
+      {isSuccess && shows.length === 0 && (
         <StatusPanel
           overline="STATE · EMPTY"
           icon={SearchX}
@@ -66,7 +68,7 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {status === STATUS.SUCCESS && shows.length > 0 && (
+      {isSuccess && shows.length > 0 && (
         <>
           <ResultsHead
             data={data}

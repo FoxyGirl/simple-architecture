@@ -1,4 +1,4 @@
-import { ALL_GENRES } from './constants.js';
+import { ALL_GENRES } from '../constants.js';
 
 const collectPresentGenres = (shows) => {
   const present = new Set();

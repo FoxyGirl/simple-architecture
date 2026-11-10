@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react';
 
-import { filterShowsByGenre } from '../genres.js';
-import { clampPage, getPageCount } from '../pagination.js';
-import { resolveSelection } from '../selection.js';
+import { filterShowsByGenre } from '../utils/genres.js';
+import { clampPage, getPageCount } from '../utils/pagination.js';
+import { resolveSelection } from '../utils/selection.js';
 
 export const usePresenterPagination = ({
   data,

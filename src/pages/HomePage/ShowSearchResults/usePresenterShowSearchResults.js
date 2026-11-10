@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 
 import { ALL_GENRES } from './constants.js';
-import { filterShowsByGenre } from './genres.js';
-import { clampPage, getPageCount, getPageShows } from './pagination.js';
-import { resolveSelection } from './selection.js';
+import { filterShowsByGenre } from './utils/genres.js';
+import { clampPage, getPageCount, getPageShows } from './utils/pagination.js';
+import { resolveSelection } from './utils/selection.js';
 
 export const usePresenterShowSearchResults = ({ data }) => {
   // The selection belongs to the result set it was made for, so a new result

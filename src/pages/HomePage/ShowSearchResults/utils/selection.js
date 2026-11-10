@@ -1,4 +1,4 @@
-import { ALL_GENRES } from './constants.js';
+import { ALL_GENRES } from '../constants.js';
 
 /**
  * Resolve the stored selection against the current result set. The selection

@@ -1,8 +1,9 @@
 import { Sparkles } from 'lucide-react';
 
+import { usePresenterHomePage } from './usePresenterHomePage.js';
+
 import { ShowSearchResults } from './ShowSearchResults/ShowSearchResults';
 import { ShowsSearchField } from './ShowsSearchField/ShowsSearchField';
-import { usePresenterHomePage } from './usePresenterHomePage.js';
 
 import styles from './HomePage.module.css';
 

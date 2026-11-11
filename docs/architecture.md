@@ -5,22 +5,22 @@ Keep it in sync with the code.
 
 ## View/Presenter pattern
 
-Components follow the View/Presenter pattern when presentation logic is encapsulated in the custom hook usePresenter (use<Component>.js).
+Components follow the View/Presenter pattern when presentation logic is encapsulated in the custom hook usePresenter (`use<Component>.js`).
 
 ### View
 
 - MUST be responsible for rendering JSX.
 - MUST NOT contain business logic, manage application state, perform side effects, fetch data, validate input, transform data, etc.
-- MUST receive prepared data, derived values, handlers and actions from the corresponding hook usePresenter (use<Component>.js) when it's needed.
+- MUST receive prepared data, derived values, handlers and actions from the corresponding hook usePresenter (`use<Component>.js`) when it's needed.
 - MUST NOT perform business-level data processing, including filtering, sorting, aggregating, mapping API responses.
 - MAY import child components, UI primitives from ui-kit, shared constants, utils, api and hooks.
 - MAY use .map() to render prepared data, as well as conditional rendering and early returns to control the UI.
-- MAY be purely presentational and does not require a usePresenter(use<Component>.js) hook when no behavior or data preparation is needed.
+- MAY be purely presentational and does not require a usePresenter(`use<Component>.js`) hook when no behavior or data preparation is needed.
 
 ### Presenter
 
 - MUST be implemented as a React hook.
-- MUST have a descriptive name reflecting the component it serves: use<Component>.js.
+- MUST have a descriptive name reflecting the component it serves: `use<Component>.js`.
 - MUST be imported only by its own View. A presenter MUST NOT import another
   component's presenter: state and coordination shared by multiple components
   belong to the common ancestor's presenter, while shared derivations belong

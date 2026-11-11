@@ -13,7 +13,7 @@ The directory structure MUST reflect the UI component hierarchy and component ow
 
 ## Component Reuse and Placement
 
-The `components/` directory at each level is reserved for reusable application components. Component placement MUST reflect its actual reuse scope.
+The `components/` directory at each level is reserved for reusable application components on the current level. Component placement MUST reflect its actual reuse scope.
 
 - Components used exclusively by a single parent MUST reside directly in that parent's directory.
 - Components shared within a UI subtree SHOULD reside in the `components/` directory of their nearest common ancestor.
@@ -21,6 +21,16 @@ The `components/` directory at each level is reserved for reusable application c
 - Components MUST be placed at the lowest level of the directory hierarchy that satisfies their reuse requirements.
 - MUST NOT introduce shared abstractions or broaden component scope without a concrete reuse requirement.
 - Reusable application components MUST follow the same View/Presenter principles as other components.
+
+## Component File Structure
+
+Every component outside `src/ui-kit/` — a page, a feature component or a subcomponent — MUST follow the same predictable file layout, mirroring the layout documented for `src/ui-kit/`.
+
+- MUST reside in its own directory, named after the component.
+- MUST expose the component through `index.jsx`.
+- MUST keep its styles in `<Component>.module.css` next to the component (CSS Module).
+- MUST include usePresenter (`use<Component>.js`) only when the component needs behavior or data preparation; a purely presentational component MUST NOT have one.
+- MAY colocate additional component-specific files (`constants.js`, `utils.js`, assets) in the same directory.
 
 ### `src/ui-kit/` — shared UI components
 
@@ -31,6 +41,14 @@ The global `src/ui-kit/` directory is reserved for common UI components that are
 - MUST NOT be used as a place to park code without an owner; a component moves to `src/ui-kit/` only when it has a concrete cross-project reuse requirement.
 - MUST follow the same View/Presenter principles as any other component: its own directory with `<Component>.jsx` + `<Component>.module.css`, and a `use<Component>.js` only when it needs behavior or data preparation.
 - MUST stay presentational: no business rules and no knowledge of a specific page or feature — content, state and handlers come in through props.
+
+### Nested components
+
+Every additional component needed by a component MUST live inside that component's own directory, each one in its own directory named after it.
+
+- MUST NOT group component-owned children into a `components/` folder.
+- MUST NOT place a single-owner child in a `components/` folder — it belongs directly in its owner's directory.
+- The `components/` folder is reserved for components reused by multiple descendants of the current folder.
 
 ## Component Exports — `index.js`
 
@@ -52,6 +70,8 @@ barrel file. The barrel is the public surface of the directory.
 - A barrel MUST contain re-exports only — it MUST NOT hold logic.
 - A parent barrel MUST export the parent's component only. Siblings are still
   imported through their own barrels, never through the parent's.
+
+### File Structure Example
 
 ```
 <Page>/

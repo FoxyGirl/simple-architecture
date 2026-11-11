@@ -3,15 +3,15 @@ import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 import { useMediaQuery } from '@hooks/useMediaQuery.js';
 import { STATUS } from '../constants.js';
 
-import { usePresenterShowSearchResults } from './usePresenterShowSearchResults.js';
+import { useShowSearchResults } from './useShowSearchResults.js';
 
-import { GenreFilter } from './GenreFilter/GenreFilter';
-import { Pagination } from './Pagination/Pagination';
-import { ResultsHead } from './ResultsHead/ResultsHead';
-import { ShowCard } from './ShowCard/ShowCard';
-import { ShowRowCard } from './ShowRowCard/ShowRowCard';
-import { Skeleton } from './Skeleton/Skeleton';
-import { StatusPanel } from './StatusPanel/StatusPanel';
+import { GenreFilter } from './GenreFilter';
+import { Pagination } from './Pagination';
+import { ResultsHead } from './ResultsHead';
+import { ShowCard } from './ShowCard';
+import { ShowRowCard } from './ShowRowCard';
+import { Skeleton } from './Skeleton';
+import { StatusPanel } from './StatusPanel';
 
 import styles from './ShowSearchResults.module.css';
 
@@ -22,9 +22,9 @@ export const ShowSearchResults = ({
   onRetry,
   onClear,
 }) => {
-  const { shows, selection, onSelectionChange } = usePresenterShowSearchResults(
-    { data },
-  );
+  const { shows, selection, onSelectionChange } = useShowSearchResults({
+    data,
+  });
 
   const { isDesktop } = useMediaQuery();
 

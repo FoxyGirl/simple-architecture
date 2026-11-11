@@ -1,14 +1,13 @@
 import { useCallback, useMemo } from 'react';
 
-import { filterShowsByGenre } from '../utils/genres.js';
-import { clampPage, getPageCount } from '../utils/pagination.js';
-import { resolveSelection } from '../utils/selection.js';
+import {
+  clampPage,
+  filterShowsByGenre,
+  getPageCount,
+  resolveSelection,
+} from '../utils';
 
-export const usePresenterPagination = ({
-  data,
-  selection,
-  onSelectionChange,
-}) => {
+export const usePagination = ({ data, selection, onSelectionChange }) => {
   const { genre, page, pageCount } = useMemo(() => {
     const resolved = resolveSelection(selection, data);
     const matching = filterShowsByGenre(data, resolved.genre);

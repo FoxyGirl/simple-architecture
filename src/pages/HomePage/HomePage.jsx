@@ -1,9 +1,9 @@
 import { Sparkles } from 'lucide-react';
 
-import { usePresenterHomePage } from './usePresenterHomePage.js';
+import { useHomePage } from './useHomePage.js';
 
-import { ShowSearchResults } from './ShowSearchResults/ShowSearchResults';
-import { ShowsSearchField } from './ShowsSearchField/ShowsSearchField';
+import { ShowSearchResults } from './ShowSearchResults';
+import { ShowsSearchField } from './ShowsSearchField';
 
 import styles from './HomePage.module.css';
 
@@ -16,7 +16,7 @@ export const HomePage = () => {
     clearSearch,
     onSearchChange,
     registerControls,
-  } = usePresenterHomePage();
+  } = useHomePage();
 
   return (
     <>

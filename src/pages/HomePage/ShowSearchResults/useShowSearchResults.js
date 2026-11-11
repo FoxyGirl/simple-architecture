@@ -1,11 +1,15 @@
 import { useMemo, useState } from 'react';
 
 import { ALL_GENRES } from './constants.js';
-import { filterShowsByGenre } from './utils/genres.js';
-import { clampPage, getPageCount, getPageShows } from './utils/pagination.js';
-import { resolveSelection } from './utils/selection.js';
+import {
+  clampPage,
+  filterShowsByGenre,
+  getPageCount,
+  getPageShows,
+  resolveSelection,
+} from './utils';
 
-export const usePresenterShowSearchResults = ({ data }) => {
+export const useShowSearchResults = ({ data }) => {
   // The selection belongs to the result set it was made for, so a new result
   // set always starts unfiltered and on its first page.
   const [selection, setSelection] = useState({

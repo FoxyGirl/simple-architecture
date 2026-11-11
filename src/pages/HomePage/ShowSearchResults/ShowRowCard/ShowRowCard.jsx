@@ -1,8 +1,10 @@
 import clsx from 'clsx';
 import { ChevronRight, Star } from 'lucide-react';
 
-import { STATUS_CLASSES, STATUS_LABELS } from './constants.js';
-import { formatNetwork, formatRating, formatYear } from './utils.js';
+import { STATUS_LABELS } from '../constants.js';
+import { formatNetwork, formatRating, formatYear } from '../utils';
+
+import { STATUS_CLASSES } from './constants.js';
 
 import styles from './ShowRowCard.module.css';
 

@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 
 import { STATUS } from './constants.js';
 
-export const usePresenterHomePage = () => {
+export const useHomePage = () => {
   const [snapshot, setSnapshot] = useState({
     status: STATUS.IDLE,
     data: [],

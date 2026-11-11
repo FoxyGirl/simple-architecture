@@ -5,7 +5,7 @@ import { STATUS } from '../constants.js';
 
 const DEBOUNCE_MS = 300;
 
-export const usePresenterSearch = ({ onSearchChange, registerControls }) => {
+export const useShowsSearchField = ({ onSearchChange, registerControls }) => {
   const [query, setQuery] = useState('');
 
   const controllerRef = useRef(null);

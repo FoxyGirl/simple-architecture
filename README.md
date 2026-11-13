@@ -41,9 +41,38 @@ via the `prepare` script, so `npm install` wires up the hooks automatically.
 src/
   main.jsx        # Entry point, mounts <App /> inside BrowserRouter
   App.jsx         # Layout + route definitions
-  App.css         # Component styles
-  index.css       # Global styles
+  App.module.css  # App shell styles (CSS Module)
+  index.css       # Global reset + token import
   pages/
-    Home.jsx      # "/" route
-    About.jsx     # "/about" route
+    Home.jsx        # "/" route
+    Home.module.css # Page styles (CSS Module)
+  styles/
+    tokens.css    # Design tokens as CSS custom properties
 ```
+
+## Styling
+
+Styles use **CSS Modules** — one `Component.module.css` per component, imported
+as the default export:
+
+```jsx
+import styles from './Home.module.css';
+
+<section className={styles.hero}>…</section>;
+```
+
+Only `src/index.css` (reset) and `src/styles/tokens.css` (design tokens as
+`:root` custom properties) are global. Always style with tokens — never
+hard-code a colour, radius, spacing value or shadow:
+
+```css
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-card);
+}
+```
+
+See `AGENTS.md` for the full conventions.

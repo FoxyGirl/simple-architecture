@@ -12,6 +12,11 @@
       "git log *": "allow",
       "git push *": "ask",
       "git commit *": "ask",
+      "git add *": "ask",
+      "gh pr create *": "allow",
+      "gh pr list *": "allow",
+      "gh pr view *": "allow",
+      "gh auth status": "allow",
       "Remove-Item *": "ask",
       "rm *": "ask",
       "del *": "ask"

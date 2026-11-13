@@ -1,0 +1,31 @@
+.app {
+  min-height: 100vh;
+  padding-bottom: var(--space-xl);
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-lg) 0;
+}
+
+@media (min-width: 1024px) {
+  .nav {
+    padding-inline: var(--gutter);
+  }
+}
+
+.navLink {
+  font-size: 15px;
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}

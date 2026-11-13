@@ -1,0 +1,93 @@
+.card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.poster {
+  aspect-ratio: var(--card-poster-aspect);
+  background: linear-gradient(
+    115deg,
+    var(--surface-2) 0%,
+    var(--border-strong) 50%,
+    var(--surface-2) 100%
+  );
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-height: var(--card-info-height);
+  padding: 18px 20px 20px;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: var(--card-title-height);
+}
+
+.metaRow,
+.genresRow {
+  display: flex;
+  align-items: center;
+  /* Matches the 13px / 1.2 line box of the card meta and genre rows. */
+  height: calc(13px * var(--leading-tight));
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.rowPoster {
+  flex: none;
+  width: 88px;
+  height: 124px;
+  border-radius: 10px;
+  background: linear-gradient(
+    115deg,
+    var(--surface-2) 0%,
+    var(--border-strong) 50%,
+    var(--surface-2) 100%
+  );
+}
+
+.rowInfo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bar {
+  height: 10px;
+  border-radius: 6px;
+  background: var(--border-strong);
+}
+
+.barTitle {
+  width: 150px;
+  height: 14px;
+}
+
+.barTitleShort {
+  width: 104px;
+  height: 14px;
+}
+
+.barMedium {
+  width: 100px;
+}
+
+.barShort {
+  width: 120px;
+}

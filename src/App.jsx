@@ -1,19 +1,20 @@
 import { Link, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home.jsx';
+import { HomePage } from './pages/HomePage';
 
-import './App.css';
+import styles from './App.module.css';
 
 function App() {
   return (
-    <div className="app">
-      <nav className="nav">
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
+    <div className={styles.app}>
+      <nav className={styles.nav}>
+        <Link className={styles.navLink} to="/">
+          Home
+        </Link>
       </nav>
 
-      <main className="content">
+      <main className={styles.content}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
       </main>
     </div>

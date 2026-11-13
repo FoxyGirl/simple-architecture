@@ -10303,7 +10303,7 @@
               "name": "SearchBar",
               "reusable": true,
               "width": 640,
-              "height": 62,
+              "height": 54,
               "fill": "$surface",
               "cornerRadius": "$radius-input",
               "stroke": "$border",

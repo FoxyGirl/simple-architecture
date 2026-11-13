@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
 
 import { ALL_GENRES } from '../constants.js';
-import { filterShowsByGenre } from '../utils/genres.js';
-import { resolveSelection } from '../utils/selection.js';
+import { filterShowsByGenre, resolveSelection } from '../utils';
 
-export const usePresenterResultsHead = ({ data, selection, queryEcho }) => {
+export const useResultsHead = ({ data, selection, queryEcho }) => {
   const { genre, totalCount } = useMemo(() => {
     const resolved = resolveSelection(selection, data);
 

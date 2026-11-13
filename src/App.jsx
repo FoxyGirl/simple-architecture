@@ -1,5 +1,5 @@
 import { Link, Route, Routes } from 'react-router-dom';
-import { HomePage } from './pages/HomePage/HomePage';
+import { HomePage } from './pages/HomePage';
 
 import styles from './App.module.css';
 

@@ -1,11 +1,11 @@
 import { Search, X } from 'lucide-react';
 
-import { usePresenterSearch } from './usePresenterSearch.js';
+import { useShowsSearchField } from './useShowsSearchField.js';
 
 import styles from './ShowsSearchField.module.css';
 
 export const ShowsSearchField = ({ onSearchChange, registerControls }) => {
-  const { query, handleSearch, clearQuery, inputRef } = usePresenterSearch({
+  const { query, handleSearch, clearQuery, inputRef } = useShowsSearchField({
     onSearchChange,
     registerControls,
   });

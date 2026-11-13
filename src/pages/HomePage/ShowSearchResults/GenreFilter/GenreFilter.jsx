@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 
-import { usePresenterGenreFilter } from './usePresenterGenreFilter.js';
+import { useGenreFilter } from './useGenreFilter.js';
 
 import styles from './GenreFilter.module.css';
 
 export const GenreFilter = ({ data, selection, onSelectionChange }) => {
-  const { genres, activeGenre, selectGenre } = usePresenterGenreFilter({
+  const { genres, activeGenre, selectGenre } = useGenreFilter({
     data,
     selection,
     onSelectionChange,

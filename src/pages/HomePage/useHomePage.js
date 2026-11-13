@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 
 import { STATUS } from './constants.js';
 
-export const usePresenterHomePage = () => {
+export const useHomePage = () => {
   const [snapshot, setSnapshot] = useState({
     status: STATUS.IDLE,
     data: [],
@@ -12,7 +12,7 @@ export const usePresenterHomePage = () => {
   const controlsRef = useRef(null);
 
   const handleSearchChange = useCallback((nextSnapshot) => {
-    setSnapshot(nextSnapshot);
+    setSnapshot((prevSnapshot) => ({ ...prevSnapshot, ...nextSnapshot }));
   }, []);
 
   const registerControls = useCallback((controls) => {

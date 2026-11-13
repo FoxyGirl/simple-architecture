@@ -1,13 +1,8 @@
 import { useCallback, useMemo } from 'react';
 
-import { collectGenres } from '../utils/genres.js';
-import { resolveSelection } from '../utils/selection.js';
+import { collectGenres, resolveSelection } from '../utils';
 
-export const usePresenterGenreFilter = ({
-  data,
-  selection,
-  onSelectionChange,
-}) => {
+export const useGenreFilter = ({ data, selection, onSelectionChange }) => {
   const { genre: activeGenre } = resolveSelection(selection, data);
 
   const genres = useMemo(() => collectGenres(data), [data]);

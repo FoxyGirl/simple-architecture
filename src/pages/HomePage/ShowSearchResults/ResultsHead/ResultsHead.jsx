@@ -1,16 +1,15 @@
 import { useMediaQuery } from '@hooks/useMediaQuery.js';
 
-import { usePresenterResultsHead } from './usePresenterResultsHead.js';
+import { useResultsHead } from './useResultsHead.js';
 
 import styles from './ResultsHead.module.css';
 
 export const ResultsHead = ({ data, selection, queryEcho }) => {
-  const { countLabel, compactCountLabel, resultsEcho } =
-    usePresenterResultsHead({
-      data,
-      selection,
-      queryEcho,
-    });
+  const { countLabel, compactCountLabel, resultsEcho } = useResultsHead({
+    data,
+    selection,
+    queryEcho,
+  });
 
   const { isDesktop } = useMediaQuery();
 

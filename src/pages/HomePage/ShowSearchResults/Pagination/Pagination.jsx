@@ -3,9 +3,9 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { useMediaQuery } from '@hooks/useMediaQuery.js';
 
-import { usePresenterPagination } from './usePresenterPagination.js';
+import { usePagination } from './usePagination.js';
 
-import { ArrowButton } from './ArrowButton/ArrowButton';
+import { ArrowButton } from './ArrowButton';
 
 import styles from './Pagination.module.css';
 
@@ -19,7 +19,7 @@ export const Pagination = ({ data, selection, onSelectionChange }) => {
     selectPage,
     goToPrev,
     goToNext,
-  } = usePresenterPagination({ data, selection, onSelectionChange });
+  } = usePagination({ data, selection, onSelectionChange });
 
   const { isDesktop } = useMediaQuery();
 

@@ -1,9 +1,9 @@
 import { RESULTS_PER_PAGE } from '../constants.js';
 
-import { SkeletonCard } from './SkeletonCard/SkeletonCard';
-import { SkeletonFilter } from './SkeletonFilter/SkeletonFilter';
-import { SkeletonHead } from './SkeletonHead/SkeletonHead';
-import { SkeletonPagination } from './SkeletonPagination/SkeletonPagination';
+import { SkeletonCard } from './SkeletonCard';
+import { SkeletonFilter } from './SkeletonFilter';
+import { SkeletonHead } from './SkeletonHead';
+import { SkeletonPagination } from './SkeletonPagination';
 
 import styles from './Skeleton.module.css';
 

@@ -7,18 +7,19 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import prettier from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
-// Keep in sync with `resolve.alias` in vite.config.js
+// Keep in sync with `resolve.alias` in vite.config.ts
 const aliases = {
   '@api': path.join(rootDir, 'src', 'api'),
   '@hooks': path.join(rootDir, 'src', 'hooks'),
 };
 
 const nodeResolver = createNodeResolver({
-  extensions: ['.js', '.jsx', '.css'],
+  extensions: ['.js', '.jsx', '.ts', '.tsx', '.css'],
 });
 
 const aliasResolver = {
@@ -34,12 +35,35 @@ const aliasResolver = {
   },
 };
 
+const unusedVars = [
+  'error',
+  {
+    varsIgnorePattern: '^_',
+    argsIgnorePattern: '^_',
+    caughtErrorsIgnorePattern: '^_',
+  },
+];
+
 export default defineConfig([
   globalIgnores(['dist', 'coverage']),
   {
+    // Plain JavaScript — only the ESLint config itself lives here.
     files: ['**/*.{js,jsx}'],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      globals: globals.node,
+      sourceType: 'module',
+    },
+    rules: {
+      'no-unused-vars': unusedVars,
+    },
+  },
+  {
+    files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
+      tseslint.configs.recommended,
       reactHooks.configs.flat['recommended-latest'],
       react.configs.flat['jsx-runtime'],
     ],
@@ -51,7 +75,7 @@ export default defineConfig([
     },
     settings: {
       react: { version: 'detect' },
-      'import-x/extensions': ['.js', '.jsx', '.mjs', '.cjs'],
+      'import-x/extensions': ['.js', '.jsx', '.mjs', '.cjs', '.ts', '.tsx'],
       'import-x/resolver-next': [aliasResolver, nodeResolver],
     },
     languageOptions: {
@@ -63,14 +87,7 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': [
-        'error',
-        {
-          varsIgnorePattern: '^_',
-          argsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_',
-        },
-      ],
+      '@typescript-eslint/no-unused-vars': unusedVars,
       'react/jsx-uses-vars': 'error',
       'react/jsx-no-undef': 'error',
       'react/jsx-key': 'warn',

@@ -10,7 +10,7 @@
       "git status": "allow",
       "git diff *": "allow",
       "git log *": "allow",
-      "git push *": "allow",
+      "git push *": "ask",
       "git commit *": "ask",
       "git add *": "ask",
       "gh pr create *": "allow",

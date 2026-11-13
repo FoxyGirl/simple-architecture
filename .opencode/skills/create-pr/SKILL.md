@@ -43,11 +43,13 @@ Do not fetch or modify the repository during the analysis.
 
 ## Publishing
 
-The Pull Request is opened automatically — the user is never asked for approval.
+The Pull Request is opened automatically — no confirmation is requested for the PR itself.
 
 1. Check that GitHub CLI (`gh`) is installed and authenticated. If it is unavailable or authentication fails, explain the issue and stop.
 2. Check whether an open Pull Request already exists for the current branch and the target base branch. If it does, report its URL and stop — never create a duplicate.
-3. Push the current branch when it is missing on the remote.
+3. Push the current branch when it has unpushed commits:
+   - When the branch is missing on the remote, ask the user to confirm the push and wait for the answer.
+   - When the branch already exists on the remote, push the unpushed commits without asking.
 4. Create the Pull Request:
 
    `gh pr create --base <target-branch> --head <current-branch> --title "<title>" --body "<description>"`

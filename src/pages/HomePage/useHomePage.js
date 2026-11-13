@@ -12,7 +12,7 @@ export const useHomePage = () => {
   const controlsRef = useRef(null);
 
   const handleSearchChange = useCallback((nextSnapshot) => {
-    setSnapshot(nextSnapshot);
+    setSnapshot((prevSnapshot) => ({ ...prevSnapshot, ...nextSnapshot }));
   }, []);
 
   const registerControls = useCallback((controls) => {

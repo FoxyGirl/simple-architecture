@@ -1,49 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { searchShows } from '@api/tvmaze.js';
 import { STATUS } from '../constants.js';
+import { useShowsDataFetching } from './useShowsDataFetching.js';
 
-const DEBOUNCE_MS = 300;
+const DEBOUNCE_MS = 800;
 
 export const useShowsSearchField = ({ onSearchChange, registerControls }) => {
   const [query, setQuery] = useState('');
 
-  const controllerRef = useRef(null);
   const inputRef = useRef(null);
 
-  const runSearch = useCallback(
-    async (nextQuery) => {
-      controllerRef.current?.abort();
-
-      const controller = new AbortController();
-      controllerRef.current = controller;
-
-      onSearchChange({
-        status: STATUS.LOADING,
-        data: [],
-        queryEcho: nextQuery,
-      });
-
-      try {
-        const shows = await searchShows(nextQuery, {
-          signal: controller.signal,
-        });
-        onSearchChange({
-          status: STATUS.SUCCESS,
-          data: shows,
-          queryEcho: nextQuery,
-        });
-      } catch (requestError) {
-        if (requestError.name === 'AbortError') return;
-        onSearchChange({
-          status: STATUS.ERROR,
-          data: [],
-          queryEcho: nextQuery,
-        });
-      }
-    },
-    [onSearchChange],
-  );
+  const { runSearch, abortSearch, lastQueryRef } =
+    useShowsDataFetching(onSearchChange);
 
   // The request is driven by the debounced query: typing only schedules a
   // call, and the in-flight one is dropped as soon as the query changes.
@@ -51,13 +19,18 @@ export const useShowsSearchField = ({ onSearchChange, registerControls }) => {
     const trimmed = query.trim();
 
     if (!trimmed) {
-      onSearchChange({ status: STATUS.IDLE, data: [], queryEcho: '' });
-      return undefined;
+      onSearchChange({ status: STATUS.IDLE, queryEcho: '' });
+      return;
+    }
+
+    if (trimmed === lastQueryRef.current) {
+      onSearchChange({ status: STATUS.SUCCESS, queryEcho: trimmed });
+      return;
     }
 
     // The request is already inevitable, so report it right away: the view
     // shows skeletons while the debounce is still pending.
-    onSearchChange({ status: STATUS.LOADING, data: [], queryEcho: trimmed });
+    onSearchChange({ status: STATUS.LOADING, queryEcho: trimmed });
 
     const timer = setTimeout(() => {
       runSearch(trimmed);
@@ -65,30 +38,19 @@ export const useShowsSearchField = ({ onSearchChange, registerControls }) => {
 
     return () => {
       clearTimeout(timer);
-      controllerRef.current?.abort();
+      abortSearch();
     };
-  }, [query, runSearch, onSearchChange]);
+  }, [query, runSearch, abortSearch, onSearchChange, lastQueryRef]);
 
   const handleSearch = useCallback((event) => {
     setQuery(event.target.value);
   }, []);
 
-  const focusInput = useCallback(() => {
-    inputRef.current?.focus();
-  }, []);
-
-  const clearQuery = useCallback(() => {
-    setQuery('');
-    focusInput();
-  }, [focusInput]);
-
   const clearSearch = useCallback(() => {
-    controllerRef.current?.abort();
-    controllerRef.current = null;
-
+    abortSearch();
     setQuery('');
-    focusInput();
-  }, [focusInput]);
+    inputRef.current?.focus();
+  }, [abortSearch]);
 
   const retry = useCallback(() => {
     const trimmed = query.trim();
@@ -107,7 +69,7 @@ export const useShowsSearchField = ({ onSearchChange, registerControls }) => {
   return {
     query,
     handleSearch,
-    clearQuery,
+    clearQuery: clearSearch,
     inputRef,
   };
 };

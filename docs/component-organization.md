@@ -27,10 +27,10 @@ The `components/` directory at each level is reserved for reusable application c
 Every component outside `src/ui-kit/` — a page, a feature component or a subcomponent — MUST follow the same predictable file layout, mirroring the layout documented for `src/ui-kit/`.
 
 - MUST reside in its own directory, named after the component.
-- MUST expose the component through `index.jsx`.
+- MUST expose the component through `index.ts`.
 - MUST keep its styles in `<Component>.module.css` next to the component (CSS Module).
-- MUST include usePresenter (`use<Component>.js`) only when the component needs behavior or data preparation; a purely presentational component MUST NOT have one.
-- MAY colocate additional component-specific files (`constants.js`, `utils.js`, assets) in the same directory.
+- MUST include usePresenter (`use<Component>.ts`) only when the component needs behavior or data preparation; a purely presentational component MUST NOT have one.
+- MAY colocate additional component-specific files (`constants.ts`, `types.ts`, `utils.ts`, assets) in the same directory.
 
 ### `src/ui-kit/` — shared UI components
 
@@ -39,7 +39,7 @@ The global `src/ui-kit/` directory is reserved for common UI components that are
 - MUST contain only such project-wide reusable UI components.
 - MUST NOT contain application-specific components — those stay with the page or feature that owns them.
 - MUST NOT be used as a place to park code without an owner; a component moves to `src/ui-kit/` only when it has a concrete cross-project reuse requirement.
-- MUST follow the same View/Presenter principles as any other component: its own directory with `<Component>.jsx` + `<Component>.module.css`, and a `use<Component>.js` only when it needs behavior or data preparation.
+- MUST follow the same View/Presenter principles as any other component: its own directory with `<Component>.tsx` + `<Component>.module.css`, and a `use<Component>.ts` only when it needs behavior or data preparation.
 - MUST stay presentational: no business rules and no knowledge of a specific page or feature — content, state and handlers come in through props.
 
 ### Nested components
@@ -50,22 +50,22 @@ Every additional component needed by a component MUST live inside that component
 - MUST NOT place a single-owner child in a `components/` folder — it belongs directly in its owner's directory.
 - The `components/` folder is reserved for components reused by multiple descendants of the current folder.
 
-## Component Exports — `index.js`
+## Component Exports — `index.ts`
 
-Every component directory MUST publish its component through an `index.js`
+Every component directory MUST publish its component through an `index.ts`
 barrel file. The barrel is the public surface of the directory.
 
-- Every component directory MUST contain an `index.js` that re-exports the
-  component: `export { ShowCard } from './ShowCard.jsx';`.
-- Every helper directory (for example `utils/`) MUST contain an `index.js` that
+- Every component directory MUST contain an `index.ts` that re-exports the
+  component: `export { ShowCard } from './ShowCard.tsx';`.
+- Every helper directory (for example `utils/`) MUST contain an `index.ts` that
   re-exports its public helpers: `export { filterShowsByGenre } from
-'./genres.js';`.
-- The barrel file MUST be named `index.js` — not `index.jsx`.
+'./genres.ts';`.
+- The barrel file MUST be named `index.ts` — not `index.tsx`.
 - Consumers MUST import from a directory (`import { ShowCard } from
 './ShowCard';`, `import { resolveSelection } from '../utils';`) and MUST NOT
-  reach into the files inside it (`./ShowCard/ShowCard`, `../utils/selection.js`).
+  reach into the files inside it (`./ShowCard/ShowCard`, `../utils/selection.ts`).
 - The barrel of a component directory MUST export the component only.
-  Presenters (`use<Component>.js`), styles, constants and helper modules stay
+  Presenters (`use<Component>.ts`), styles, constants and helper modules stay
   private to their directory.
 - A barrel MUST contain re-exports only — it MUST NOT hold logic.
 - A parent barrel MUST export the parent's component only. Siblings are still
@@ -75,44 +75,45 @@ barrel file. The barrel is the public surface of the directory.
 
 ```
 <Page>/
-├── <Page>.jsx                          # page component (View)
-├── use<Page>.js                        # page presenter (Presenter)
+├── <Page>.tsx                          # page component (View)
+├── use<Page>.ts                        # page presenter (Presenter)
 ├── <Page>.module.css                   # page styles — CSS Module
-├── constants.js                        # states/constants shared by this folder
+├── constants.ts                        # states/constants shared by this folder
+├── types.ts                            # types shared by this folder
 ├── utils/                              # shared pure helpers for this subtree
-│   ├── index.js                        # public export — the helpers
+│   ├── index.ts                        # public export — the helpers
 │   └── ...
-├── index.js                            # public export — the page component
+├── index.ts                            # public export — the page component
 ├── components/
 │   └── <SharedComponent>/              # Shared by multiple descendants (<Component1> and <Component2>)
 |   ...
 ├── <Component1>/
-│   ├── <Component1>.jsx                # component 1 (View)
-│   ├── use<Component1>.js              # component 1 presenter (Presenter)
+│   ├── <Component1>.tsx                # component 1 (View)
+│   ├── use<Component1>.ts              # component 1 presenter (Presenter)
 │   ├── <Component1>.module.css         # component 1 styles — CSS Module
-│   ├── index.js                        # public export — the component
+│   ├── index.ts                        # public export — the component
 |   └── components/
 │       └── <SharedComponent>/          # Shared by multiple descendants (<SubComponent1> and <SubComponent2>)
 |       ...
 │   └── <SubComponent1>/                # subcomponent 1 owned by Component1
-│       └── SubComponent1.jsx           # subcomponent 1 (View)
+│       └── SubComponent1.tsx           # subcomponent 1 (View)
 │       ├── <SubComponent1>.module.css  # subcomponent 1 styles — CSS Module
-│       ├── index.js                    # public export — the subcomponent
+│       ├── index.ts                    # public export — the subcomponent
 |       ...
 │   └── <SubComponent2>/                # subcomponent 2 owned by Component1
-│       └── SubComponent2.jsx           # subcomponent 2 (View)
+│       └── SubComponent2.tsx           # subcomponent 2 (View)
 │       ├── <SubComponent2>.module.css  # subcomponent 2 styles — CSS Module
-│       ├── index.js                    # public export — the subcomponent
+│       ├── index.ts                    # public export — the subcomponent
 |       ...
 ├── <Component2>/
-│   ├── <Component2>.jsx                # component 2 (View)
-│   ├── use<Component2>.js              # component 2 presenter (Presenter)
+│   ├── <Component2>.tsx                # component 2 (View)
+│   ├── use<Component2>.ts              # component 2 presenter (Presenter)
 │   ├── <Component2>.module.css         # component 2 styles — CSS Module
-│   ├── index.js                        # public export — the component
+│   ├── index.ts                        # public export — the component
 │   └── <SubComponent>/                 # subcomponent owned by Component2
-│       └── SubComponent.jsx            # subcomponent (View)
+│       └── SubComponent.tsx            # subcomponent (View)
 │       ├── <SubComponent>.module.css   # subcomponent styles — CSS Module
-│       ├── index.js                    # public export — the subcomponent
+│       ├── index.ts                    # public export — the subcomponent
 |       ...
 
 ```

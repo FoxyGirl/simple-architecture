@@ -9,18 +9,19 @@ genre, paginate results, and view show details.
 
 Stack:
 
-| Concern | Choice                                            |
-| ------- | ------------------------------------------------- |
-| Build   | Vite 7                                            |
-| UI      | React 19                                          |
-| Routing | React Router 7 (`react-router-dom`)               |
-| Icons   | lucide-react                                      |
-| Classes | clsx                                              |
-| API     | TVmaze REST (`https://api.tvmaze.com`) via fetch  |
-| Lint    | ESLint 9 (flat config) + `eslint-config-prettier` |
-| Format  | Prettier 3                                        |
-| Hooks   | husky 9 + lint-staged 17 (pre-commit)             |
-| Design  | pen.dev canvas — `design/ScreenScout-design.pen`  |
+| Concern  | Choice                                                                |
+| -------- | --------------------------------------------------------------------- |
+| Build    | Vite 7                                                                |
+| UI       | React 19                                                              |
+| Language | TypeScript 6 (`strict`, `noUncheckedIndexedAccess`)                   |
+| Routing  | React Router 7 (`react-router-dom`)                                   |
+| Icons    | lucide-react                                                          |
+| Classes  | clsx                                                                  |
+| API      | TVmaze REST (`https://api.tvmaze.com`) via fetch                      |
+| Lint     | ESLint 9 (flat config) + typescript-eslint + `eslint-config-prettier` |
+| Format   | Prettier 3                                                            |
+| Hooks    | husky 9 + lint-staged 17 (pre-commit)                                 |
+| Design   | pen.dev canvas — `design/ScreenScout-design.pen`                      |
 
 Node 24 / npm 11. Vite 7 requires Node 20.19+ or 22.12+.
 
@@ -29,8 +30,9 @@ Node 24 / npm 11. Vite 7 requires Node 20.19+ or 22.12+.
 ```bash
 npm install          # installs deps and wires up husky via the "prepare" script
 npm run dev          # dev server on http://localhost:5173
-npm run build        # production build to dist/
+npm run build        # tsc -b && vite build -> dist/
 npm run preview      # serve the production build
+npm run typecheck    # tsc -b --noEmit    (fails on type errors)
 npm run lint         # eslint .            (fails on errors)
 npm run lint:fix     # eslint . --fix
 npm run format       # prettier --write .  (rewrites every file)
@@ -94,7 +96,7 @@ for the visual design.
 - Conventional Commits: `feat:`, `fix:`, `chore:`, `init:`, `refactor:`, `docs:`.
   Keep the subject short and imperative.
 - The pre-commit hook runs `lint-staged` against **staged files only**:
-  - `*.{js,jsx}` → `eslint --fix` + `prettier --write`
+  - `*.{js,jsx,ts,tsx}` → `eslint --fix` + `prettier --write`
   - `*.{json,jsonc,css,md,html,yml,yaml}` → `prettier --write`
   - `package-lock.json` is excluded
 - If husky is not installed (fresh clone, hooks skipped), run `npm run prepare`.
@@ -102,15 +104,34 @@ for the visual design.
 Fixable problems are repaired and the commit continues; unfixable errors
 (e.g. `no-undef`) abort the commit.
 
+## TypeScript
+
+- The app is written in TypeScript. `tsconfig.json` is a solution file that
+  references `tsconfig.app.json` (the app) and `tsconfig.node.json`
+  (the Vite config).
+- The compiler runs in `strict` mode with `noUncheckedIndexedAccess`,
+  `verbatimModuleSyntax` and `erasableSyntaxOnly`.
+- Types live in a `types.ts` file next to the code that owns them —
+  `src/api/types.ts` for the TVmaze shapes, a page's `types.ts` for the types
+  shared inside that page.
+- Import specifiers carry no file extension. The ESLint import resolver cannot
+  map a `.js` specifier onto a `.ts` file.
+- Run `npm run typecheck` before committing — `npm run build` runs the same
+  check as its first step.
+
 ## Gotchas
 
-- Do not commit `node_modules/`, `dist/`, or `.vite/` — all gitignored.
+- Do not commit `node_modules/`, `dist/`, `.vite/` or `*.tsbuildinfo` — all
+  gitignored.
 - `.vite/` at the repo root is a stray Vite cache. Vite normally caches in
   `node_modules/.vite`; the root folder only appears when Vite runs while no
   `package.json` is visible at the root (e.g. on the `master` branch). It is
   gitignored — delete it, don't commit it.
 - `npm run format` rewrites the whole repo, including files you did not touch.
   Prefer `npx prettier --write <files>` for scoped changes.
+- A CSS Module class is typed as `string | undefined` (index signature plus
+  `noUncheckedIndexedAccess`), so it cannot be used as a computed property
+  name — use `clsx(base, condition && styles.modifier)`.
 - Line endings are normalised by `.gitattributes` (`* text=auto eol=lf`): the repo
   stores LF and every platform checks out LF. If you ever see CRLF creep back in,
   check that `.gitattributes` is present and that `core.autocrlf` is not

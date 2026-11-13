@@ -1,5 +1,72 @@
 # Coding Conventions
 
+## TypeScript
+
+The app is written in TypeScript. `tsc` runs in `strict` mode with
+`noUncheckedIndexedAccess`, and the compiler options live in `tsconfig.app.json`
+(the app) and `tsconfig.node.json` (the Vite config).
+
+### Where types live
+
+- MUST declare types in a `types.ts` file next to the code that owns them.
+  `src/api/types.ts` holds the TVmaze API shapes, a page's `types.ts` holds
+  the types shared inside that page's directory.
+- MUST NOT duplicate a type in several places — import it from its owner.
+- Component prop types are declared locally in the component file and are not
+  exported; a component file exports the component only.
+- Runtime constants stay in `constants.ts`. A union derived from a constant
+  MUST be derived from the constant, never re-declared by hand:
+
+  ```ts
+  export const STATUS = Object.freeze({
+    IDLE: 'idle',
+    LOADING: 'loading',
+    SUCCESS: 'success',
+    ERROR: 'error',
+  } as const);
+
+  export type SearchStatus = (typeof STATUS)[keyof typeof STATUS];
+  ```
+
+### Imports
+
+- MUST use `import type` for type-only imports — `verbatimModuleSyntax` is on
+  and the compiler enforces it.
+- MUST NOT write file extensions in import specifiers. The bundler resolution
+  mode resolves them, and the ESLint import resolver cannot map a `.js`
+  specifier onto a `.ts` file:
+
+  ```ts
+  import { searchShows } from '@api/tvmaze';
+  import { useMediaQuery } from '@hooks/useMediaQuery';
+  import { STATUS } from './constants';
+  ```
+
+### Syntax
+
+- `erasableSyntaxOnly` is on: MUST NOT use `enum` or `namespace`. Use a frozen
+  object with `as const` and derive the union type from it.
+- MUST narrow `unknown` values explicitly — a caught error is `unknown`:
+
+  ```ts
+  const isAbortError = (error: unknown): boolean =>
+    typeof error === 'object' &&
+    error !== null &&
+    'name' in error &&
+    error.name === 'AbortError';
+  ```
+
+### CSS Modules
+
+`src/vite-env.d.ts` references `vite/client`, so a CSS Module import is typed
+as a record of class names. Because `noUncheckedIndexedAccess` is on, that
+lookup yields `string | undefined` — which MUST NOT be used as a computed
+property name. Express conditional classes with `clsx` instead:
+
+```jsx
+className={clsx(styles.chip, isActive && styles.chipActive)}
+```
+
 ## File Size and Modularity
 
 - Application source files MUST NOT exceed 120 lines of code.
@@ -51,9 +118,10 @@ import styles from './ShowCard.module.css';
 
 <div className={clsx(styles.dot, statusClass)} />;
 <div
-  className={clsx(styles.pageButton, {
-    [styles.pageButtonActive]: pageNumber === page,
-  })}
+  className={clsx(
+    styles.pageButton,
+    pageNumber === page && styles.pageButtonActive,
+  )}
 />;
 ```
 
@@ -62,6 +130,8 @@ import styles from './ShowCard.module.css';
   modifiers are passed as `condition && styles.modifier`.
 - Conditional and static classes are always passed as separate arguments, in
   base-then-modifier order.
+- MUST NOT use a CSS Module class as a computed property name — see
+  [TypeScript](#typescript).
 
 **Always try to use CSS variables** from `src/styles/tokens.css`:
 
@@ -94,15 +164,15 @@ else. For production, self-host with `@fontsource/sora` and `@fontsource/inter`.
 
 Imports that cross directory boundaries MUST use an alias instead of a deep relative path.
 
-| Alias    | Target      | Example                                                    |
-| -------- | ----------- | ---------------------------------------------------------- |
-| `@api`   | `src/api`   | `import { searchShows } from '@api/tvmaze.js';`            |
-| `@hooks` | `src/hooks` | `import { useMediaQuery } from '@hooks/useMediaQuery.js';` |
+| Alias    | Target      | Example                                                 |
+| -------- | ----------- | ------------------------------------------------------- |
+| `@api`   | `src/api`   | `import { searchShows } from '@api/tvmaze';`            |
+| `@hooks` | `src/hooks` | `import { useMediaQuery } from '@hooks/useMediaQuery';` |
 
 - Relative imports remain the default for files in the same directory or in a
   directly owned sibling component.
-- Aliases are declared in `vite.config.js` (`resolve.alias`) and MUST be
-  mirrored in `eslint.config.js` (alias resolver) and `jsconfig.json`
+- Aliases are declared in `vite.config.ts` (`resolve.alias`) and MUST be
+  mirrored in `eslint.config.js` (alias resolver) and `tsconfig.app.json`
   (`compilerOptions.paths`, editor support).
 - The three configurations MUST be kept in sync when an alias is added,
   renamed or removed.
@@ -113,12 +183,13 @@ Prettier (`singleQuote`, 80 cols, 2 spaces, semicolons, trailing commas, LF)
 and ESLint flat config. Notable ESLint rules:
 
 - `no-unused-vars` is an error, but variables, arguments and caught errors
-  prefixed with `_` are ignored.
+  prefixed with `_` are ignored. In TypeScript files the rule is
+  `@typescript-eslint/no-unused-vars`, with the same ignore patterns.
 - `import-x/no-unresolved` is an error — verify import paths.
 - `import-x/named` and `import-x/default` are errors — the imported module
   must actually export what you import. They only work on files the plugin can
-  parse, which is why `settings['import-x/extensions']` lists `.jsx`; keep that
-  setting in sync when adding a new file type.
+  parse, which is why `settings['import-x/extensions']` lists `.ts` and
+  `.tsx`; keep that setting in sync when adding a new file type.
 - `react/jsx-key` is a warning — every list needs stable keys.
 - `react-hooks` recommended rules are errors — keep hook deps honest, and wrap
   callbacks in `useCallback` when they are passed to children or used in effect

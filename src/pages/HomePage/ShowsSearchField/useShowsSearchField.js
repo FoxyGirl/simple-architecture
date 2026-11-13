@@ -42,9 +42,9 @@ export const useShowsSearchField = ({ onSearchChange, registerControls }) => {
     };
   }, [query, runSearch, abortSearch, onSearchChange, lastQueryRef]);
 
-  const handleSearch = useCallback((event) => {
+  const handleSearch = (event) => {
     setQuery(event.target.value);
-  }, []);
+  };
 
   const clearSearch = useCallback(() => {
     abortSearch();

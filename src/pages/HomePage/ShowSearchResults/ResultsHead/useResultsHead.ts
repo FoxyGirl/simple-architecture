@@ -7,11 +7,11 @@ import type { Selection } from '../types';
 import { ALL_GENRES } from '../constants';
 import { filterShowsByGenre, resolveSelection } from '../utils';
 
-interface UseResultsHeadParams {
+type UseResultsHeadParams = {
   data: Show[];
   selection: Selection;
   queryEcho: string;
-}
+};
 
 export const useResultsHead = ({
   data,

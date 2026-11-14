@@ -13,9 +13,9 @@ import {
   resolveSelection,
 } from './utils';
 
-interface UseShowSearchResultsParams {
+type UseShowSearchResultsParams = {
   data: Show[];
-}
+};
 
 export const useShowSearchResults = ({ data }: UseShowSearchResultsParams) => {
   // The selection belongs to the result set it was made for, so a new result

@@ -12,11 +12,11 @@ import { ArrowButton } from './ArrowButton';
 
 import styles from './Pagination.module.css';
 
-interface PaginationProps {
+type PaginationProps = {
   data: Show[];
   selection: Selection;
   onSelectionChange: (change: SelectionChange) => void;
-}
+};
 
 export const Pagination = ({
   data,

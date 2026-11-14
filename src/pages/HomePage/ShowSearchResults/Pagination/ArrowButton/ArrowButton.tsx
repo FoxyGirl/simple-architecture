@@ -2,12 +2,12 @@ import type { LucideIcon } from 'lucide-react';
 
 import styles from './ArrowButton.module.css';
 
-interface ArrowButtonProps {
+type ArrowButtonProps = {
   label: string;
   icon: LucideIcon;
   disabled?: boolean;
   onClick: () => void;
-}
+};
 
 export const ArrowButton = ({
   label,

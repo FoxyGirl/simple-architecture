@@ -8,11 +8,11 @@ import { useGenreFilter } from './useGenreFilter';
 
 import styles from './GenreFilter.module.css';
 
-interface GenreFilterProps {
+type GenreFilterProps = {
   data: Show[];
   selection: Selection;
   onSelectionChange: (change: SelectionChange) => void;
-}
+};
 
 export const GenreFilter = ({
   data,

@@ -6,10 +6,10 @@ import { useShowsSearchField } from './useShowsSearchField';
 
 import styles from './ShowsSearchField.module.css';
 
-interface ShowsSearchFieldProps {
+type ShowsSearchFieldProps = {
   onSearchChange: (change: SearchChange) => void;
   registerControls: (controls: SearchControls | null) => void;
-}
+};
 
 export const ShowsSearchField = ({
   onSearchChange,

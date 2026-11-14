@@ -8,34 +8,34 @@
 export type ShowStatus =
   'Running' | 'Ended' | 'In Development' | 'To Be Determined' | 'Scheduled';
 
-export interface ShowImage {
+export type ShowImage = {
   medium: string;
   original: string;
-}
+};
 
-export interface ShowRating {
+export type ShowRating = {
   average: number | null;
-}
+};
 
-export interface ShowNetwork {
+export type ShowNetwork = {
   id: number;
   name: string;
   country: { name: string; code: string } | null;
   officialSite: string | null;
-}
+};
 
-export interface ShowSchedule {
+export type ShowSchedule = {
   time: string;
   days: string[];
-}
+};
 
-export interface ShowExternals {
+export type ShowExternals = {
   tvrage?: number | null;
   thetvdb?: number | null;
   imdb?: string | null;
-}
+};
 
-export interface Show {
+export type Show = {
   id: number;
   name: string;
   type: string;
@@ -54,13 +54,13 @@ export interface Show {
   image: ShowImage | null;
   summary: string | null;
   updated: number;
-}
+};
 
-export interface ShowSearchResult {
+export type ShowSearchResult = {
   score: number;
   show: Show;
-}
+};
 
-export interface SearchShowsOptions {
+export type SearchShowsOptions = {
   signal?: AbortSignal;
-}
+};

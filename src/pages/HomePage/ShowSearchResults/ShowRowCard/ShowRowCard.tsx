@@ -10,9 +10,9 @@ import { STATUS_CLASSES } from './constants';
 
 import styles from './ShowRowCard.module.css';
 
-interface ShowRowCardProps {
+type ShowRowCardProps = {
   show: Show;
-}
+};
 
 export const ShowRowCard = ({ show }: ShowRowCardProps) => {
   const statusLabel = STATUS_LABELS[show.status] ?? 'Unknown';

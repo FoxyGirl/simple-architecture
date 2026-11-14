@@ -17,13 +17,13 @@ import { StatusPanel } from './StatusPanel';
 
 import styles from './ShowSearchResults.module.css';
 
-interface ShowSearchResultsProps {
+type ShowSearchResultsProps = {
   data: Show[];
   status: SearchStatus;
   queryEcho: string;
   onRetry: () => void;
   onClear: () => void;
-}
+};
 
 export const ShowSearchResults = ({
   data,

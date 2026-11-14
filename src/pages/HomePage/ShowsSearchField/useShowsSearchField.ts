@@ -8,10 +8,10 @@ import { useShowsDataFetching } from './useShowsDataFetching';
 
 const DEBOUNCE_MS = 800;
 
-interface UseShowsSearchFieldParams {
+type UseShowsSearchFieldParams = {
   onSearchChange: (change: SearchChange) => void;
   registerControls: (controls: SearchControls | null) => void;
-}
+};
 
 export const useShowsSearchField = ({
   onSearchChange,

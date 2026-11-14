@@ -10,13 +10,13 @@ const VARIANT_CLASSES = {
 
 type StatusPanelVariant = keyof typeof VARIANT_CLASSES;
 
-interface StatusPanelAction {
+type StatusPanelAction = {
   icon: LucideIcon;
   label: string;
   onClick: () => void;
-}
+};
 
-interface StatusPanelProps {
+type StatusPanelProps = {
   overline: string;
   icon: LucideIcon;
   variant?: StatusPanelVariant;
@@ -24,7 +24,7 @@ interface StatusPanelProps {
   body: string;
   action: StatusPanelAction;
   actionAccent?: boolean;
-}
+};
 
 export const StatusPanel = ({
   overline,

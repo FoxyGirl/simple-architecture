@@ -7,11 +7,11 @@ import { useResultsHead } from './useResultsHead';
 
 import styles from './ResultsHead.module.css';
 
-interface ResultsHeadProps {
+type ResultsHeadProps = {
   data: Show[];
   selection: Selection;
   queryEcho: string;
-}
+};
 
 export const ResultsHead = ({
   data,

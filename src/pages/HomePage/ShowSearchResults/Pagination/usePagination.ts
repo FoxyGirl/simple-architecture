@@ -11,11 +11,11 @@ import {
   resolveSelection,
 } from '../utils';
 
-interface UsePaginationParams {
+type UsePaginationParams = {
   data: Show[];
   selection: Selection;
   onSelectionChange: (change: SelectionChange) => void;
-}
+};
 
 export const usePagination = ({
   data,

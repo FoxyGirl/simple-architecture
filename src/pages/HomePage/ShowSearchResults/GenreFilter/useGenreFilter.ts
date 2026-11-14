@@ -6,11 +6,11 @@ import type { Selection, SelectionChange } from '../types';
 
 import { collectGenres, resolveSelection } from '../utils';
 
-interface UseGenreFilterParams {
+type UseGenreFilterParams = {
   data: Show[];
   selection: Selection;
   onSelectionChange: (change: SelectionChange) => void;
-}
+};
 
 export const useGenreFilter = ({
   data,

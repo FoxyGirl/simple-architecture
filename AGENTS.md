@@ -114,6 +114,7 @@ Fixable problems are repaired and the commit continues; unfixable errors
 - Types live in a `types.ts` file next to the code that owns them —
   `src/api/types.ts` for the TVmaze shapes, a page's `types.ts` for the types
   shared inside that page.
+- Object shapes are declared as `type` aliases, never as `interface`.
 - Import specifiers carry no file extension. The ESLint import resolver cannot
   map a `.js` specifier onto a `.ts` file.
 - Run `npm run typecheck` before committing — `npm run build` runs the same

@@ -14,6 +14,15 @@ The app is written in TypeScript. `tsc` runs in `strict` mode with
 - MUST NOT duplicate a type in several places — import it from its owner.
 - Component prop types are declared locally in the component file and are not
   exported; a component file exports the component only.
+- MUST declare every object shape as a `type` alias, never as an `interface`:
+
+  ```ts
+  export type Show = {
+    id: number;
+    name: string;
+  };
+  ```
+
 - Runtime constants stay in `constants.ts`. A union derived from a constant
   MUST be derived from the constant, never re-declared by hand:
 

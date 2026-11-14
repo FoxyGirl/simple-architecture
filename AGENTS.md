@@ -89,6 +89,10 @@ for the visual design.
 
 ## Git workflow
 
+- **NEVER create a commit.** The user makes every commit themselves.
+  Agents MUST NOT run `git commit` (or `git commit --amend`, `git rebase`,
+  `git merge`, `git cherry-pick`, `git add`) unless the user explicitly asks for it in
+  that same request. Leave the work staged or unstaged for them to commit.
 - `dev` is the integration branch; `master` is the default branch on `origin`.
 - Branch for work: `feat/<short-slug>` (e.g. `feat/base-Home-page`), `fix/…`,
   `chore/…`. Branch from `dev`, open a PR into `dev`; `dev` merges into

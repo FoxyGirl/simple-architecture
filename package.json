@@ -5,17 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm run css-types",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "pretypecheck": "npm run css-types",
+    "typecheck": "tsc -b --noEmit",
+    "css-types": "node scripts/generate-css-types.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc -b --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.{js,jsx,mjs,cjs,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],

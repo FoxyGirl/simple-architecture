@@ -48,7 +48,7 @@ export default defineConfig([
   globalIgnores(['dist', 'coverage']),
   {
     // Plain JavaScript — only the ESLint config itself lives here.
-    files: ['**/*.{js,jsx}'],
+    files: ['**/*.{js,jsx,mjs,cjs}'],
     extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: 'latest',
@@ -106,7 +106,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     rules: {
       'max-lines': ['warn', { max: 120 }],
     },

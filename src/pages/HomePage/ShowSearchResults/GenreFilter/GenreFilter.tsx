@@ -33,7 +33,7 @@ export const GenreFilter = ({
         return (
           <button
             key={genre}
-            className={clsx(styles.chip, isActive && styles.chipActive)}
+            className={clsx(styles.chip, { [styles.chipActive]: isActive })}
             type="button"
             aria-pressed={isActive}
             onClick={() => selectGenre(genre)}

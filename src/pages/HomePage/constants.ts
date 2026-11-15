@@ -1,8 +1,8 @@
-export const STATUS = Object.freeze({
+export const STATUS = {
   IDLE: 'idle',
   LOADING: 'loading',
   SUCCESS: 'success',
   ERROR: 'error',
-} as const);
+} as const;
 
 export type SearchStatus = (typeof STATUS)[keyof typeof STATUS];

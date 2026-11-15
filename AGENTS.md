@@ -33,6 +33,7 @@ npm run dev          # dev server on http://localhost:5173
 npm run build        # tsc -b && vite build -> dist/
 npm run preview      # serve the production build
 npm run typecheck    # tsc -b --noEmit    (fails on type errors)
+npm run css-types    # regenerate the CSS Module type declarations
 npm run lint         # eslint .            (fails on errors)
 npm run lint:fix     # eslint . --fix
 npm run format       # prettier --write .  (rewrites every file)
@@ -119,6 +120,12 @@ Fixable problems are repaired and the commit continues; unfixable errors
   `src/api/types.ts` for the TVmaze shapes, a page's `types.ts` for the types
   shared inside that page.
 - Object shapes are declared as `type` aliases, never as `interface`.
+- Every CSS Module has a generated `<Component>.module.css.d.ts` giving each
+  class a literal type — that is what makes
+  `clsx(base, { [styles.modifier]: condition })` compile, and it turns a
+  class-name typo into a compile error. The dev server regenerates them on
+  every CSS change; `npm run typecheck` and `npm run build` do it before the
+  compiler runs. `npm run css-types` runs it on demand.
 - Import specifiers carry no file extension. The ESLint import resolver cannot
   map a `.js` specifier onto a `.ts` file.
 - Run `npm run typecheck` before committing — `npm run build` runs the same
@@ -134,9 +141,6 @@ Fixable problems are repaired and the commit continues; unfixable errors
   gitignored — delete it, don't commit it.
 - `npm run format` rewrites the whole repo, including files you did not touch.
   Prefer `npx prettier --write <files>` for scoped changes.
-- A CSS Module class is typed as `string | undefined` (index signature plus
-  `noUncheckedIndexedAccess`), so it cannot be used as a computed property
-  name — use `clsx(base, condition && styles.modifier)`.
 - Line endings are normalised by `.gitattributes` (`* text=auto eol=lf`): the repo
   stores LF and every platform checks out LF. If you ever see CRLF creep back in,
   check that `.gitattributes` is present and that `core.autocrlf` is not

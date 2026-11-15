@@ -17,6 +17,7 @@ A simple React app built with:
 | `npm run build`        | Typecheck, then build into `dist/`   |
 | `npm run preview`      | Serve the production build           |
 | `npm run typecheck`    | Typecheck with `tsc -b --noEmit`     |
+| `npm run css-types`    | Regenerate CSS Module type files     |
 | `npm run lint`         | Check with ESLint                    |
 | `npm run lint:fix`     | Auto-fix ESLint issues               |
 | `npm run format`       | Format files with Prettier           |
@@ -40,6 +41,22 @@ Import specifiers carry no file extension:
 import { searchShows } from '@api/tvmaze';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 ```
+
+### CSS Module types
+
+`vite/client` types `*.module.css` as an index signature, which widens a class
+lookup to `string | undefined` and breaks the `clsx` object form. Each CSS
+Module therefore gets a generated `<Component>.module.css.d.ts` that gives
+every class a literal type:
+
+```jsx
+className={clsx(styles.chip, { [styles.chipActive]: isActive })}
+```
+
+Run `npm run css-types` after editing a CSS file — `npm run typecheck` and
+`npm run build` regenerate the declarations first, and the dev server
+regenerates them on every CSS change. As a bonus, a typo in a class name
+becomes a compile error.
 
 ## Git hooks
 

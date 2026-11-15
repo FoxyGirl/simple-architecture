@@ -2,9 +2,9 @@
 
 ## TypeScript
 
-The app is written in TypeScript. `tsc` runs in `strict` mode with
-`noUncheckedIndexedAccess`, and the compiler options live in `tsconfig.app.json`
-(the app) and `tsconfig.node.json` (the Vite config).
+The app is written in TypeScript. `tsc` runs in `strict` mode, and the
+compiler options live in `tsconfig.app.json` (the app) and `tsconfig.node.json`
+(the Vite config).
 
 ### Where types live
 
@@ -27,12 +27,12 @@ The app is written in TypeScript. `tsc` runs in `strict` mode with
   MUST be derived from the constant, never re-declared by hand:
 
   ```ts
-  export const STATUS = Object.freeze({
+  export const STATUS = {
     IDLE: 'idle',
     LOADING: 'loading',
     SUCCESS: 'success',
     ERROR: 'error',
-  } as const);
+  } as const;
 
   export type SearchStatus = (typeof STATUS)[keyof typeof STATUS];
   ```
@@ -53,7 +53,7 @@ The app is written in TypeScript. `tsc` runs in `strict` mode with
 
 ### Syntax
 
-- `erasableSyntaxOnly` is on: MUST NOT use `enum` or `namespace`. Use a frozen
+- `erasableSyntaxOnly` is on: MUST NOT use `enum` or `namespace`. Use a plain
   object with `as const` and derive the union type from it.
 - MUST narrow `unknown` values explicitly — a caught error is `unknown`:
 
@@ -67,13 +67,30 @@ The app is written in TypeScript. `tsc` runs in `strict` mode with
 
 ### CSS Modules
 
-`src/vite-env.d.ts` references `vite/client`, so a CSS Module import is typed
-as a record of class names. Because `noUncheckedIndexedAccess` is on, that
-lookup yields `string | undefined` — which MUST NOT be used as a computed
-property name. Express conditional classes with `clsx` instead:
+`vite/client` types `*.module.css` as a string index signature, so a class
+lookup would widen to `string | undefined` under `noUncheckedIndexedAccess` —
+and TypeScript forbids `undefined` as a computed property name, which is what
+the `clsx` object form needs.
+
+Every CSS Module therefore has a generated declaration next to it
+(`<Component>.module.css.d.ts`) that gives each class a literal type. The
+declaration wins over the `vite/client` wildcard, so:
+
+- a class lookup is a literal type, usable as a computed property key;
+- a typo in a class name is a compile error.
+
+Run `npm run css-types` after changing a CSS Module. The declarations are also
+regenerated automatically:
+
+| When                          | What happens                               |
+| ----------------------------- | ------------------------------------------ |
+| `npm run dev`                 | on every CSS change, while the server runs |
+| `npm run typecheck` / `build` | before the compiler runs                   |
+
+The generated files are committed — do not edit them by hand.
 
 ```jsx
-className={clsx(styles.chip, isActive && styles.chipActive)}
+className={clsx(styles.chip, { [styles.chipActive]: isActive })}
 ```
 
 ## File Size and Modularity
@@ -127,20 +144,20 @@ import styles from './ShowCard.module.css';
 
 <div className={clsx(styles.dot, statusClass)} />;
 <div
-  className={clsx(
-    styles.pageButton,
-    pageNumber === page && styles.pageButtonActive,
-  )}
+  className={clsx(styles.pageButton, {
+    [styles.pageButtonActive]: pageNumber === page,
+  })}
 />;
 ```
 
 - A single static class stays as-is — `className={styles.card}`.
-- `clsx` skips `false`, `undefined` and `null` entries, so conditional
-  modifiers are passed as `condition && styles.modifier`.
+- A conditional class MUST use the object form, where the class name is the
+  computed key: `{ [styles.chipActive]: isActive }`.
+- A class name that is not a literal CSS Module reference — one held in a
+  variable or looked up in a map — is passed as a plain argument:
+  `clsx(styles.dot, statusClass)`.
 - Conditional and static classes are always passed as separate arguments, in
   base-then-modifier order.
-- MUST NOT use a CSS Module class as a computed property name — see
-  [TypeScript](#typescript).
 
 **Always try to use CSS variables** from `src/styles/tokens.css`:
 

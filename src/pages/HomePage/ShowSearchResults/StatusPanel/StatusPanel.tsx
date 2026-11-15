@@ -49,7 +49,7 @@ export const StatusPanel = ({
     <p className={styles.body}>{body}</p>
 
     <button
-      className={clsx(styles.action, actionAccent && styles.actionAccent)}
+      className={clsx(styles.action, { [styles.actionAccent]: actionAccent })}
       type="button"
       onClick={onClick}
     >

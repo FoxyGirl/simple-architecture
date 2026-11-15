@@ -69,10 +69,9 @@ export const Pagination = ({
           {pages.map((pageNumber) => (
             <button
               key={pageNumber}
-              className={clsx(
-                styles.pageButton,
-                pageNumber === page && styles.pageButtonActive,
-              )}
+              className={clsx(styles.pageButton, {
+                [styles.pageButtonActive]: pageNumber === page,
+              })}
               type="button"
               onClick={() => selectPage(pageNumber)}
               aria-current={pageNumber === page ? 'page' : undefined}

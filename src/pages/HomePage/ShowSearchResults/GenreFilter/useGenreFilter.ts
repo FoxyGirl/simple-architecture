@@ -1,5 +1,3 @@
-import { useCallback, useMemo } from 'react';
-
 import type { Show } from '@api/types';
 
 import type { Selection, SelectionChange } from '../types';
@@ -19,15 +17,12 @@ export const useGenreFilter = ({
 }: UseGenreFilterParams) => {
   const { genre: activeGenre } = resolveSelection(selection, data);
 
-  const genres = useMemo(() => collectGenres(data), [data]);
+  const genres = collectGenres(data);
 
-  const selectGenre = useCallback(
-    (genre: string) => {
-      // Changing the filter invalidates the current page.
-      onSelectionChange({ data, genre, page: 1 });
-    },
-    [data, onSelectionChange],
-  );
+  const selectGenre = (genre: string) => {
+    // Changing the filter invalidates the current page.
+    onSelectionChange({ data: data, genre, page: 1 });
+  };
 
   return { genres, activeGenre, selectGenre };
 };

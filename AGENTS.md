@@ -70,6 +70,11 @@ documentation.**
 - Do not silently deviate from documented rules, even if an alternative
   implementation seems more convenient.
 
+## React Memoization
+
+When working with React components and hooks, follow
+the rules defined in `rules/react-memoization.md`.
+
 ## Design system workflow
 
 `design/ScreenScout-design.pen` is a **pen.dev canvas** and the source of truth

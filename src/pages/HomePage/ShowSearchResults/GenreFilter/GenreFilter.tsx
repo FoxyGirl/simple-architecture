@@ -14,16 +14,8 @@ type GenreFilterProps = {
   onSelectionChange: (change: SelectionChange) => void;
 };
 
-export const GenreFilter = ({
-  data,
-  selection,
-  onSelectionChange,
-}: GenreFilterProps) => {
-  const { genres, activeGenre, selectGenre } = useGenreFilter({
-    data,
-    selection,
-    onSelectionChange,
-  });
+export const GenreFilter = (props: GenreFilterProps) => {
+  const { genres, activeGenre, selectGenre } = useGenreFilter(props);
 
   return (
     <div className={styles.filter} role="group" aria-label="Filter by genre">

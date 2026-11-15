@@ -21,13 +21,13 @@ export const useHomePage = () => {
     controlsRef.current = controls;
   }, []);
 
-  const retry = useCallback(() => {
+  const retry = () => {
     controlsRef.current?.retry();
-  }, []);
+  };
 
-  const clearSearch = useCallback(() => {
+  const clearSearch = () => {
     controlsRef.current?.clearSearch();
-  }, []);
+  };
 
   return {
     data: snapshot.data,

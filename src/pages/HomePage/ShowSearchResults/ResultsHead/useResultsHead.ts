@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import type { Show } from '@api/types';
 
 import type { Selection } from '../types';
@@ -18,14 +16,9 @@ export const useResultsHead = ({
   selection,
   queryEcho,
 }: UseResultsHeadParams) => {
-  const { genre, totalCount } = useMemo(() => {
-    const resolved = resolveSelection(selection, data);
-
-    return {
-      genre: resolved.genre,
-      totalCount: filterShowsByGenre(data, resolved.genre).length,
-    };
-  }, [selection, data]);
+  const resolved = resolveSelection(selection, data);
+  const genre = resolved.genre;
+  const totalCount = filterShowsByGenre(data, genre).length;
 
   const countLabel = `${totalCount} ${totalCount === 1 ? 'show' : 'shows'} found`;
   const compactCountLabel = `${totalCount} ${totalCount === 1 ? 'show' : 'shows'}`;

@@ -13,16 +13,8 @@ type ResultsHeadProps = {
   queryEcho: string;
 };
 
-export const ResultsHead = ({
-  data,
-  selection,
-  queryEcho,
-}: ResultsHeadProps) => {
-  const { countLabel, compactCountLabel, resultsEcho } = useResultsHead({
-    data,
-    selection,
-    queryEcho,
-  });
+export const ResultsHead = (props: ResultsHeadProps) => {
+  const { countLabel, compactCountLabel, resultsEcho } = useResultsHead(props);
 
   const { isDesktop } = useMediaQuery();
 

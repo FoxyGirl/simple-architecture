@@ -11,14 +11,9 @@ type ShowsSearchFieldProps = {
   registerControls: (controls: SearchControls | null) => void;
 };
 
-export const ShowsSearchField = ({
-  onSearchChange,
-  registerControls,
-}: ShowsSearchFieldProps) => {
-  const { query, handleSearch, clearQuery, inputRef } = useShowsSearchField({
-    onSearchChange,
-    registerControls,
-  });
+export const ShowsSearchField = (props: ShowsSearchFieldProps) => {
+  const { query, handleSearch, clearQuery, inputRef } =
+    useShowsSearchField(props);
 
   return (
     <div className={styles.searchBar} role="search">

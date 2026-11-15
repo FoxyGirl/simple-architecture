@@ -32,9 +32,7 @@ export const ShowSearchResults = ({
   onRetry,
   onClear,
 }: ShowSearchResultsProps) => {
-  const { shows, selection, onSelectionChange } = useShowSearchResults({
-    data,
-  });
+  const { shows, selection, onSelectionChange } = useShowSearchResults(data);
 
   const { isDesktop } = useMediaQuery();
 

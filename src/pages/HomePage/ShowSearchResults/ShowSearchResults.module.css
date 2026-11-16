@@ -1,0 +1,31 @@
+.results {
+  width: 100%;
+  max-width: 1248px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg) var(--space-xl);
+}
+
+@media (min-width: 1024px) {
+  .results {
+    padding-inline: var(--gutter);
+    padding-bottom: 28px;
+  }
+}
+
+/*
+ * Kept in step with the skeleton grid in Skeleton/Skeleton.module.css, so the
+ * cards keep the same columns while the results are loading.
+ */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 1024px) {
+  .list {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

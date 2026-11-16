@@ -1,0 +1,49 @@
+.arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.arrow:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.arrow:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.arrow:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.arrowIcon {
+  width: 18px;
+  height: 18px;
+}
+
+@media (min-width: 1024px) {
+  .arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .arrowIcon {
+    width: 17px;
+    height: 17px;
+  }
+}

@@ -1,7 +1,12 @@
+@import './styles/tokens.css';
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  color-scheme: light dark;
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-base);
+  color-scheme: dark;
+  color: var(--text-primary);
+  background-color: var(--bg);
 }
 
 * {
@@ -13,6 +18,17 @@ body {
   min-height: 100vh;
 }
 
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: var(--leading-tight);
+}
+
 a {
-  color: #646cff;
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--accent-hover);
 }

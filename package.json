@@ -5,8 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "prebuild": "npm run css-types",
+    "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "pretypecheck": "npm run css-types",
+    "typecheck": "tsc -b --noEmit",
+    "css-types": "node scripts/generate-css-types.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -14,7 +18,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
+    "*.{js,jsx,mjs,cjs,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],
@@ -24,13 +28,17 @@
     "!package-lock.json": []
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.70.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
-    "@typescript-eslint/utils": "^8.72.1",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^5.0.4",
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
@@ -42,6 +50,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "prettier": "^3.6.2",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.2",
     "vite": "^7.1.9"
   }
 }

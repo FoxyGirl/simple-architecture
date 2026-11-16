@@ -1,0 +1,55 @@
+/*
+ * Mirrors GenreFilter.module.css. The chips keep the box of the real chip,
+ * so the filter row reserves the same height while the genres are unknown.
+ */
+
+.filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: var(--space-lg);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filter::-webkit-scrollbar {
+  display: none;
+}
+
+/* Matches the chip box: a 13px / 1.2 line box + 9px padding + a 1px border. */
+.chip {
+  flex: none;
+  height: calc(13px * var(--leading-tight) + 18px + 2px);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+}
+
+.chip:nth-child(1) {
+  width: 96px;
+}
+
+.chip:nth-child(2) {
+  width: 74px;
+}
+
+.chip:nth-child(3) {
+  width: 88px;
+}
+
+.chip:nth-child(4) {
+  width: 92px;
+}
+
+.chip:nth-child(5) {
+  width: 84px;
+}
+
+.chip:nth-child(6) {
+  width: 70px;
+}
+
+@media (min-width: 1024px) {
+  .filter {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+}

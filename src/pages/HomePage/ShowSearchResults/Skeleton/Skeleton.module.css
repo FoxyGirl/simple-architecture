@@ -1,0 +1,19 @@
+/*
+ * Mirrors the results grid of ShowSearchResults.module.css. Both grids have to
+ * stay in step, otherwise the skeleton cards do not line up with the real
+ * ones.
+ */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 1024px) {
+  .list {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

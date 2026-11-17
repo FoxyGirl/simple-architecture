@@ -14,8 +14,8 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
 // Keep in sync with `resolve.alias` in web/vite.config.ts
 const aliases = {
-  '@api': path.join(rootDir, 'web', 'src', 'api'),
-  '@hooks': path.join(rootDir, 'web', 'src', 'hooks'),
+  '@api': path.join(rootDir, 'web/src/api'),
+  '@hooks': path.join(rootDir, 'web/src/hooks'),
 };
 
 const nodeResolver = createNodeResolver({
@@ -28,9 +28,8 @@ const aliasResolver = {
   resolve(modulePath, sourceFile) {
     const [alias, ...segments] = modulePath.split('/');
     const target = aliases[alias];
-    if (!target) {
-      return { found: false };
-    }
+    // Unknown aliases fall through to the plain Node resolver.
+    if (!target) return { found: false };
     return nodeResolver.resolve(path.join(target, ...segments), sourceFile);
   },
 };
@@ -59,6 +58,7 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': unusedVars,
+      'max-lines': ['warn', { max: 120 }],
     },
   },
   {
@@ -90,6 +90,7 @@ export default defineConfig([
     },
     rules: {
       '@typescript-eslint/no-unused-vars': unusedVars,
+      'max-lines': ['warn', { max: 120 }],
       'react/jsx-uses-vars': 'error',
       'react/jsx-no-undef': 'error',
       'react/jsx-key': 'warn',
@@ -108,10 +109,10 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
-    rules: {
-      'max-lines': ['warn', { max: 120 }],
-    },
+    // The backend workspace is plain Node: same TS rules, server globals
+    // instead of the browser ones assumed by the block above.
+    files: ['server/**/*.ts'],
+    languageOptions: { globals: globals.node },
   },
   prettier,
 ]);

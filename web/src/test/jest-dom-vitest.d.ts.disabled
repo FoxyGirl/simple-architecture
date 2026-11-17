@@ -1,0 +1,16 @@
+import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
+
+// Runtime registration happens in src/test/setup.ts via expect.extend; this
+// declaration only makes the matchers visible to tsc. Vitest 5 declares its
+// Assertion interface in a hashed dist chunk that augments 'vitest', so the
+// upstream augmentation of 'vitest' by jest-dom does not merge with it —
+// augmenting the chunk module itself does. The relative path resolves through
+// node_modules and pulls the chunk into the program, where its own
+// `declare module "vitest"` block then merges the matchers in.
+declare module '../../../node_modules/vitest/dist/chunks/config.d.B3YV4t0O.js' {
+  interface Matchers<R extends void | Promise<void>, T>
+    extends TestingLibraryMatchers<T, R> {}
+
+  interface Assertion<R extends void | Promise<void> = void, T = unknown>
+    extends TestingLibraryMatchers<T, R> {}
+}

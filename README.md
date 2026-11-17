@@ -6,31 +6,38 @@ A simple React app built with:
 - [TypeScript 6](https://www.typescriptlang.org/) (`strict`)
 - [Vite 7](https://vite.dev/)
 - [React Router 7](https://reactrouter.com/)
+- [Vitest](https://vitest.dev/) + [supertest](https://github.com/ladjs/supertest)
+  (unit/integration) and [Playwright](https://playwright.dev/) (E2E)
 - [ESLint 9](https://eslint.org/) (flat config)
 - [Prettier](https://prettier.io/)
 
 ## Scripts
 
-| Command                | Description                                   |
-| ---------------------- | --------------------------------------------- |
-| `npm run dev`          | Start the frontend dev server (port 5173)     |
-| `npm run server`       | Start the backend Express process (port 3001) |
-| `npm run build`        | Typecheck, then build into `web/dist/`        |
-| `npm run preview`      | Serve the production build                    |
-| `npm run typecheck`    | Typecheck with `tsc -b --noEmit`              |
-| `npm run css-types`    | Regenerate CSS Module type files              |
-| `npm run lint`         | Check with ESLint                             |
-| `npm run lint:fix`     | Auto-fix ESLint issues                        |
-| `npm run format`       | Format files with Prettier                    |
-| `npm run format:check` | Check formatting with Prettier                |
-| `npm run prepare`      | Install husky git hooks (on install)          |
+| Command                | Description                                      |
+| ---------------------- | ------------------------------------------------ |
+| `npm run dev`          | Start the frontend dev server (port 5173)        |
+| `npm run server`       | Start the backend Express process (port 3001)    |
+| `npm run build`        | Typecheck, then build into `web/dist/`           |
+| `npm run preview`      | Serve the production build                       |
+| `npm run typecheck`    | Typecheck both workspaces (no emit)              |
+| `npm run css-types`    | Regenerate CSS Module type files                 |
+| `npm run test`         | Vitest suites of both workspaces                 |
+| `npm run test:e2e`     | Playwright E2E (boots stub + backend + frontend) |
+| `npm run lint`         | Check with ESLint                                |
+| `npm run lint:fix`     | Auto-fix ESLint issues                           |
+| `npm run format`       | Format files with Prettier                       |
+| `npm run format:check` | Check formatting with Prettier                   |
+| `npm run prepare`      | Install husky git hooks (on install)             |
 
 ## TypeScript
 
 `web/tsconfig.json` is a solution file that references two projects:
 
-- `web/tsconfig.app.json` — the application code in `web/src/`
-- `web/tsconfig.node.json` — the Vite config
+- `web/tsconfig.app.json` — the application code in `web/src/` (incl. tests)
+- `web/tsconfig.node.json` — the Vite and Vitest configs
+
+`server/tsconfig.json` is a single project covering the backend workspace
+under the same strict rules.
 
 The compiler runs in `strict` mode with `noUncheckedIndexedAccess`,
 `verbatimModuleSyntax` and `erasableSyntaxOnly`. Types live in a `types.ts`
@@ -101,17 +108,41 @@ web/                  # frontend workspace (Vite + React)
     ui-kit/           # Shared, project-wide UI components
   index.html          # SPA shell
   vite.config.ts      # Vite config (plugins, aliases)
+  vitest.config.ts    # Vitest config (jsdom, testing-library)
   scripts/
     generate-css-types.mjs  # CSS Module type declaration generator
   vercel.json         # SPA rewrites (set Vercel "Root Directory" to `web/`)
 
-server/               # backend workspace (Express, plain JS ESM)
-  index.js            # starts the Express app on port 3001 (no routes yet)
+server/               # backend workspace (Express, TypeScript ESM via tsx)
+  app.ts              # the exported Express app (no port bound — testable)
+  index.ts            # entry: starts the app on port 3001 (no routes yet)
+  tsconfig.json       # same strict compiler rules as the web workspace
+  vitest.config.ts    # Vitest config (node environment)
+
+e2e/                  # Playwright specs + local TVmaze stub
+  smoke.spec.js       # E2E smoke test
+  stub/
+    tvmaze.js         # fixture-backed search/shows stub with hit counter
+    fixtures.json     # canned TVmaze responses
+playwright.config.js  # E2E harness (stub + backend + frontend webServers)
 ```
 
 ESLint, Prettier and husky/lint-staged stay at the repo root; the root scripts
 forward to the workspaces (`npm run dev` -> `web`, `npm run server` ->
 `server`).
+
+## Testing
+
+- `npm run test` runs the Vitest suites of both workspaces: `web/` uses jsdom
+  with Testing Library, `server/` drives the exported Express app with
+  supertest (no port is bound).
+- `npm run test:e2e` runs the Playwright suite in `e2e/`. The config boots
+  three servers first: the local TVmaze stub on port 3002, the backend with
+  `TVMAZE_BASE_URL=http://localhost:3002` (so it talks to the stub instead of
+  the real API) and the frontend dev server. The stub counts upstream hits
+  per query (`GET /__hits`) so cache behavior is assertable.
+- First-time setup: `npx playwright install chromium` downloads the browser
+  binary (Playwright does not install it via npm).
 
 ## Styling
 

@@ -1,0 +1,22 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vitest/config';
+
+const rootDir = path.dirname(fileURLToPath(import.meta.url));
+
+// Keep aliases in sync with `resolve.alias` in vite.config.ts
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@api': path.join(rootDir, 'src', 'api'),
+      '@hooks': path.join(rootDir, 'src', 'hooks'),
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    include: ['src/**/*.test.{ts,tsx}'],
+  },
+});

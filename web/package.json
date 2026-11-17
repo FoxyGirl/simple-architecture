@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "pretypecheck": "npm run css-types",
     "typecheck": "tsc -b --noEmit",
-    "css-types": "node scripts/generate-css-types.mjs"
+    "css-types": "node scripts/generate-css-types.mjs",
+    "test": "vitest run"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -20,11 +21,16 @@
     "react-router-dom": "^7.9.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.12",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^5.0.4",
+    "jsdom": "^31.0.1",
     "typescript": "^6.0.3",
-    "vite": "^7.1.9"
+    "vite": "^7.1.9",
+    "vitest": "^5.1.0"
   }
 }

@@ -1,0 +1,111 @@
+{
+  "office": [
+    {
+      "id": 1,
+      "url": "http://localhost:3002/shows/1",
+      "name": "The Office (US)",
+      "type": "Scripted",
+      "language": "English",
+      "genres": ["Comedy"],
+      "status": "Ended",
+      "runtime": 30,
+      "averageRuntime": null,
+      "premiered": "2005-03-24",
+      "ended": "2013-09-25",
+      "officialSite": null,
+      "schedule": { "time": "21:00", "days": ["Thursday"] },
+      "rating": { "average": 8.6 },
+      "weight": null,
+      "network": {
+        "id": 14,
+        "name": "NBC",
+        "country": { "name": "United States" },
+        "officialSite": null
+      },
+      "webChannel": null,
+      "discographyType": "",
+      "externals": { "tvrage": null, "thetvdb": null, "imdb": null },
+      "image": null,
+      "summary": "<p>Dummy fixture.</p>",
+      "updated": 1700000000,
+      "_links": {
+        "self": { "href": "http://localhost:3002/shows/1" },
+        "previous_episodes": {
+          "href": "http://localhost:3002/shows/1/episodes"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "url": "http://localhost:3002/shows/2",
+      "name": "Office Romance",
+      "type": "Scripted",
+      "language": "English",
+      "genres": ["Romance", "Comedy"],
+      "status": "Ended",
+      "runtime": 25,
+      "averageRuntime": null,
+      "premiered": "2019-01-01",
+      "ended": null,
+      "officialSite": null,
+      "schedule": { "time": "20:00", "days": ["Monday"] },
+      "rating": { "average": 7.1 },
+      "weight": null,
+      "network": null,
+      "webChannel": {
+        "id": 5,
+        "name": "StreamCo",
+        "country": { "name": "United States" },
+        "officialSite": null
+      },
+      "discographyType": "",
+      "externals": { "tvrage": null, "thetvdb": null, "imdb": null },
+      "image": null,
+      "summary": "<p>Dummy fixture.</p>",
+      "updated": 1700000000,
+      "_links": {
+        "self": { "href": "http://localhost:3002/shows/2" },
+        "previous_episodes": {
+          "href": "http://localhost:3002/shows/2/episodes"
+        }
+      }
+    }
+  ],
+  "default": [
+    {
+      "id": 100,
+      "url": "http://localhost:3002/shows/100",
+      "name": "Mystery Machine",
+      "type": "Scripted",
+      "language": "English",
+      "genres": ["Mystery"],
+      "status": "Running",
+      "runtime": 45,
+      "averageRuntime": null,
+      "premiered": "2024-05-01",
+      "ended": null,
+      "officialSite": null,
+      "schedule": { "time": "22:00", "days": ["Friday"] },
+      "rating": { "average": 6.4 },
+      "weight": null,
+      "network": {
+        "id": 9,
+        "name": "CableOne",
+        "country": { "name": "United States" },
+        "officialSite": null
+      },
+      "webChannel": null,
+      "discographyType": "",
+      "externals": { "tvrage": null, "thetvdb": null, "imdb": null },
+      "image": null,
+      "summary": "<p>Dummy fixture.</p>",
+      "updated": 1700000000,
+      "_links": {
+        "self": { "href": "http://localhost:3002/shows/100" },
+        "previous_episodes": {
+          "href": "http://localhost:3002/shows/100/episodes"
+        }
+      }
+    }
+  ]
+}

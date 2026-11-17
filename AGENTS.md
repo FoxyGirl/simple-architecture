@@ -23,7 +23,8 @@ Stack:
 | Icons    | lucide-react                                                          |
 | Classes  | clsx                                                                  |
 | API      | TVmaze REST (`https://api.tvmaze.com`) via fetch                      |
-| Backend  | Express 5 (`server/`, plain JS ESM, port 3001)                        |
+| Backend  | Express 5 (`server/`, TypeScript ESM run with tsx, port 3001)         |
+| Tests    | Vitest (both workspaces), supertest, Playwright (E2E)                 |
 | Lint     | ESLint 9 (flat config) + typescript-eslint + `eslint-config-prettier` |
 | Format   | Prettier 3                                                            |
 | Hooks    | husky 9 + lint-staged 17 (pre-commit)                                 |
@@ -39,16 +40,25 @@ npm run dev          # frontend dev server on http://localhost:5173 (web workspa
 npm run server       # backend Express process on http://localhost:3001 (server workspace)
 npm run build        # tsc -b && vite build -> web/dist/
 npm run preview      # serve the production build
-npm run typecheck    # tsc -b --noEmit    (fails on type errors)
+npm run typecheck    # tsc, no emit, in both workspaces (fails on type errors)
 npm run css-types    # regenerate the CSS Module type declarations
+npm run test         # Vitest suites of both workspaces (unit/integration)
+npm run test:e2e     # Playwright E2E (boots stub + backend + frontend servers)
 npm run lint         # eslint .            (fails on errors)
 npm run lint:fix     # eslint . --fix
 npm run format       # prettier --write .  (rewrites every file)
 npm run format:check # prettier --check .  (read-only)
 ```
 
-There is no test runner configured. If tests are needed, add Vitest — do not
-assume one exists.
+Tests live next to the code they cover: `*.test.ts(x)` in `web/src/` (jsdom +
+Testing Library) and in `server/` (supertest against the exported Express
+app). E2E specs and the local TVmaze stub (fixture-backed `search/shows`
+with a per-query hit counter, `GET /__hits`) live in `e2e/`; the backend
+reads its upstream base URL from `TVMAZE_BASE_URL` (default
+`https://api.tvmaze.com`), which is how E2E points it at the stub. Playwright
+does not download browsers via npm — run `npx playwright install chromium`
+once on a fresh machine. Write tests before implementing a phase (red ->
+green); all later phases of the caching feature rely on this harness.
 
 ## Project Documentation
 
@@ -125,8 +135,10 @@ Fixable problems are repaired and the commit continues; unfixable errors
 ## TypeScript
 
 - The app is written in TypeScript. In `web/`, `tsconfig.json` is a solution
-  file that references `web/tsconfig.app.json` (the app) and
-  `web/tsconfig.node.json` (the Vite config).
+  file that references `web/tsconfig.app.json` (the app + its tests) and
+  `web/tsconfig.node.json` (the Vite and Vitest configs). `server/` has
+  its own `server/tsconfig.json` with the same strict rules and the
+  `bundler` module resolution, so extensionless specifiers work there too.
 - The compiler runs in `strict` mode with `noUncheckedIndexedAccess`,
   `verbatimModuleSyntax` and `erasableSyntaxOnly`.
 - Types live in a `types.ts` file next to the code that owns them —

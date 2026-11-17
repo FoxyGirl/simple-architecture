@@ -43,6 +43,30 @@
 > `shows.ts`, `*.test.ts`) are TypeScript; the e2e stub and the Playwright
 > specs stay plain JS (test-harness code, outside the backend workspace).
 >
+> **Revision 6 (2026-11-17, recorded during Phase 2 execution):** deviations
+> from the plan text, all verified against the actual project state:
+> (1) the web workspace additionally needed `@testing-library/jest-dom` as a
+> devDependency and a `web/src/test/setup.ts` (registers the DOM matchers via
+> `expect.extend` and stubs `window.matchMedia`, which jsdom does not
+> implement and `useMediaQuery` needs); (2) with Vitest 5 the jest-dom 7.0.1
+> type augmentation of `Assertion<T>` no longer merges (upstream issue
+> testing-library/jest-dom#738, fix PR #742 pending), so every matcher vanishes
+> from `tsc` while the runtime stays fine — `web/src/test/jest-dom-vitest.d.ts`
+> restores the types by augmenting Vitest 5's documented `Matchers<R, T>`
+> extension point, and can be deleted once jest-dom ships the fix; (3) the
+> backend `webServer` entry uses `port: 3001` instead of
+> `url: http://localhost:3001`: Playwright's url readiness check only accepts
+> 2xx/3xx (with one `/index.html` fallback), so the route-less Express app's
+> 404 made the check time out — the stub (`GET /__hits` -> 200) and Vite
+> (`/` -> index.html) entries keep their `url`s; (4) the stub's fixture data
+> lives in a separate `e2e/stub/fixtures.json` to stay inside the 120-line
+> `max-lines` budget; (5) the root `max-lines` rule block was folded into the
+> JS and TS rule blocks (identical coverage) to keep `eslint.config.js` itself
+> under `max-lines`; (6) no separate `web/tsconfig.test.json`: `tsconfig.app.json`
+> already typechecks `web/src` including tests and setup, and `vitest.config.ts`
+> joined `tsconfig.node.json`'s include (next to `vite.config.ts`), so the
+> existing `tsc -b` solution covers everything.
+>
 > Target layout:
 >
 > ```
@@ -193,13 +217,14 @@ stub exists — so every later phase can write failing tests first.
 
 **Tasks:**
 
-- [ ] Add `web/` testing devDependencies (vitest, jsdom,
-      @testing-library/react, @testing-library/user-event), create
-      `web/vitest.config.ts` (jsdom environment, reuses
+- [x] Add `web/` testing devDependencies (vitest, jsdom,
+      @testing-library/react, @testing-library/user-event — plus
+      @testing-library/jest-dom for the DOM matchers, see Revision 6),
+      create `web/vitest.config.ts` (jsdom environment, reuses
       @vitejs/plugin-react, same `@api`/`@hooks` aliases as vite.config.ts)
       and the `"test": "vitest run"` script; write one smoke test (HomePage
       renders the search input).
-- [ ] Convert `server/` to TypeScript (Revision 5) and restructure it for
+- [x] Convert `server/` to TypeScript (Revision 5) and restructure it for
       testability: add devDependencies (vitest, supertest, tsx, typescript,
       @types/node, @types/express — express 5.3.0 ships no bundled types —
       @types/supertest); create `server/tsconfig.json` mirroring the web
@@ -213,17 +238,20 @@ stub exists — so every later phase can write failing tests first.
       `server/app.ts` and keep `server/index.ts` as the listen-on-`PORT`
       entry; supertest smoke test `server/app.test.ts` (unknown route
       returns Express's 404).
-- [ ] Add `@playwright/test` at the root, install the chromium browser, and
+- [x] Add `@playwright/test` at the root, install the chromium browser, and
       create `playwright.config.js` with three `webServer` entries: the stub
       (`node e2e/stub/tvmaze.js`, port 3002), the backend (`npm run server`,
       env `TVMAZE_BASE_URL=http://localhost:3002`) and the frontend
       (`npm run dev`, port 5173); `testDir: 'e2e'`, baseURL
-      `http://localhost:5173`.
-- [ ] Create the E2E TVmaze stub `e2e/stub/tvmaze.js`: a plain Node HTTP
+      `http://localhost:5173`. (Deviation: the backend entry uses
+      `port: 3001` for readiness — see Revision 6, point 3.)
+- [x] Create the E2E TVmaze stub `e2e/stub/tvmaze.js`: a plain Node HTTP
       server serving `search/shows?q=` from fixture data, counting upstream
       hits per query and exposing the counter via `GET /__hits`; write one
-      Playwright smoke spec (app loads, search input visible).
-- [ ] Add the root scripts `"test": "npm run test --workspaces --if-present"`
+      Playwright smoke spec (app loads, search input visible). (Fixtures
+      split into `e2e/stub/fixtures.json` for the 120-line budget — see
+      Revision 6, point 4.)
+- [x] Add the root scripts `"test": "npm run test --workspaces --if-present"`
       and `"test:e2e": "playwright test"`, extend the root typecheck to
       `"typecheck": "npm run typecheck --workspaces"`, and add an ESLint
       override block for `server/**/*.ts` with Node globals (the shared TS
@@ -234,16 +262,16 @@ stub exists — so every later phase can write failing tests first.
 
 **Tests:**
 
-- [ ] `npm run test` passes from the root: both workspace smoke tests are
+- [x] `npm run test` passes from the root: both workspace smoke tests are
       green.
-- [ ] `npm run test:e2e` passes: Playwright boots stub + backend + frontend,
+- [x] `npm run test:e2e` passes: Playwright boots stub + backend + frontend,
       and the smoke spec sees the app with its search input.
-- [ ] The stub counter works: `curl http://localhost:3002/__hits` before and
+- [x] The stub counter works: `curl http://localhost:3002/__hits` before and
       after a `search/shows?q=` call shows the per-query count incrementing
       (the basis for all later cache assertions).
-- [ ] `npm run typecheck` passes for both workspaces — the new server
+- [x] `npm run typecheck` passes for both workspaces — the new server
       TypeScript code compiles under the same strict rules as web.
-- [ ] `npm run lint` and `npm run format:check` pass with the new files.
+- [x] `npm run lint` and `npm run format:check` pass with the new files.
 
 **When ready:**
 
@@ -254,13 +282,13 @@ test-first development.
 
 **Acceptance Criteria:**
 
-- [ ] Vitest suites exist and pass in both workspaces (`npm run test`).
-- [ ] A Playwright E2E harness exists and passes (`npm run test:e2e`),
+- [x] Vitest suites exist and pass in both workspaces (`npm run test`).
+- [x] A Playwright E2E harness exists and passes (`npm run test:e2e`),
       booting the backend, the frontend and a local TVmaze stub with a
       per-query hit counter.
-- [ ] The backend exports its Express app separately from listening, so
+- [x] The backend exports its Express app separately from listening, so
       supertest can drive it without binding a port.
-- [ ] The test commands are documented in AGENTS.md/README.
+- [x] The test commands are documented in AGENTS.md/README.
 
 ### Phase 3: TVmaze search proxy endpoint
 

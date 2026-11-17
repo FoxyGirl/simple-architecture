@@ -12,10 +12,10 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
-// Keep in sync with `resolve.alias` in vite.config.ts
+// Keep in sync with `resolve.alias` in web/vite.config.ts
 const aliases = {
-  '@api': path.join(rootDir, 'src', 'api'),
-  '@hooks': path.join(rootDir, 'src', 'hooks'),
+  '@api': path.join(rootDir, 'web', 'src', 'api'),
+  '@hooks': path.join(rootDir, 'web', 'src', 'hooks'),
 };
 
 const nodeResolver = createNodeResolver({
@@ -45,9 +45,11 @@ const unusedVars = [
 ];
 
 export default defineConfig([
-  globalIgnores(['dist', 'coverage']),
+  // ESLint patterns are minimatch (not gitignore-style), so `**/` prefixes are
+  // required to match the nested `web/dist` build output as well as `dist`.
+  globalIgnores(['**/dist', '**/coverage']),
   {
-    // Plain JavaScript — only the ESLint config itself lives here.
+    // Plain JavaScript — this config, the backend and plain-JS tooling.
     files: ['**/*.{js,jsx,mjs,cjs}'],
     extends: [js.configs.recommended],
     languageOptions: {

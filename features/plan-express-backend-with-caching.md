@@ -15,6 +15,34 @@
 > amended accordingly — testing instruments moved from out of scope into
 > scope.
 >
+> **Revision 4 (2026-11-17, recorded during Phase 1 execution):** two
+> deviations from the plan text, both verified against the actual project
+> state: (1) ESLint flat-config ignore patterns are minimatch-style, not
+> gitignore-style, so `globalIgnores(['dist', 'coverage'])` did **not** match
+> `web/dist` — `eslint.config.js` was updated to
+> `globalIgnores(['**/dist', '**/coverage'])`; (2) lint-staged's win32 chunking
+> budget equals cmd.exe's hard 8191-character limit, so a single commit
+> staging all ~96 renamed files at once can overflow the quoted command line
+> ("command line too long", a localized cmd error). The `.husky/pre-commit`
+> hook and the lint-staged config were left unchanged as planned — normal-sized
+> commits are unaffected; the one split commit can be chunked via
+> `npx lint-staged --max-arg-length 6000` or committed with `--no-verify`
+> after the checks have been run manually.
+>
+> **Revision 5 (2026-11-17):** the backend moves to TypeScript at the user's
+> explicit request — the PRD leaves the implementation language open, so the
+> PRD itself needs no change. Phase 1 already shipped `server/index.js` as
+> plain JS; Phase 2 (which already restructures `server/` for testability)
+> converts the workspace: `tsx` as the runtime (`"server": "tsx index.ts"`,
+> no build step — Vitest also runs the TS tests natively),
+> `server/tsconfig.json` mirroring the web compiler rules, type
+> dependencies (`@types/node`, `@types/express` — express 5.3.0 ships no
+> bundled types — `@types/supertest`), a Node-globals ESLint override for
+> `server/**/*.ts`, and the root `typecheck` script extended to both
+> workspaces. All later server files (`app.ts`, `tvmaze.ts`, `cache.ts`,
+> `shows.ts`, `*.test.ts`) are TypeScript; the e2e stub and the Playwright
+> specs stay plain JS (test-harness code, outside the backend workspace).
+>
 > Target layout:
 >
 > ```
@@ -23,9 +51,9 @@
 > │   │                    # vite.config.ts, vitest.config.ts,
 > │   │                    # tsconfig*.json, scripts/, vercel.json
 > │   └ package.json       #
-> ├── server/              # backend workspace: app.js, index.js,
-> │   │                    # tvmaze.js, cache.js, shows.js, vitest.config.js
-> │   └ package.json       # express dependency
+> ├── server/              # backend workspace (TypeScript): app.ts, index.ts,
+> │   │                    # tvmaze.ts, cache.ts, shows.ts, vitest.config.ts,
+> │   └ package.json       # tsconfig.json; express + tsx dependencies
 > ├── e2e/                 # Playwright specs + TVmaze stub (stub/tvmaze.js)
 > ├── playwright.config.js # E2E harness (root)
 > ├── package.json         # workspace root: "workspaces": ["web", "server"],
@@ -39,8 +67,9 @@
 > Tooling decisions (verified against the current configs):
 >
 > - Shared tooling stays at the root: one ESLint flat config (its JS block
->   already lints `**/*.js` with Node globals for `server/` and `e2e/`, its
->   TS block covers `web/`), Prettier, husky and lint-staged.
+>   lints `**/*.js` with Node globals for `e2e/` and the root configs, its TS
+>   block covers `web/` and — via a Node-globals override added in Phase 2 —
+>   `server/`), Prettier, husky and lint-staged.
 >   `.husky/pre-commit` (`npx lint-staged`) and the lint-staged globs match
 >   files at any depth and need no changes. Test scripts stay out of the
 >   pre-commit hook.
@@ -66,11 +95,18 @@
 > API. Manual checks remain only where automation cannot reach (visual
 > comparison, real-TVmaze spot checks, network-tab inspection).
 >
-> The backend is plain JavaScript ESM (`server/package.json` declares
-> `"type": "module"`; Node 24 provides global `fetch` — no new tooling). It
-> listens on port 3001 by default (`PORT` env override); the Vite dev server
-> proxies `/api` to it, so no CORS setup is needed in dev. The E2E stub
-> listens on port 3002.
+> The backend is TypeScript ESM (`server/package.json` declares
+> `"type": "module"`), run directly with `tsx` (no build step — Vitest
+> executes the TS tests natively too) and typechecked by its own
+> `server/tsconfig.json` under the same strict rules as `web/` (`strict`,
+> `noUncheckedIndexedAccess`, `verbatimModuleSyntax`, `erasableSyntaxOnly`)
+> plus `"types": ["node"]`. Import specifiers carry no file extension, just
+> like the web code (`moduleResolution: bundler` typechecks them, tsx
+> resolves them at runtime). Node 24 provides global `fetch`. It listens on
+> port 3001 by default (`PORT` env override); the Vite dev server proxies
+> `/api` to it, so no CORS setup is needed in dev. The E2E stub listens on
+> port 3002 and stays plain JS (Playwright harness code, not part of the
+> backend workspace).
 
 ## Implementation Phases
 
@@ -85,7 +121,7 @@ Tracer bullet for the two-process, two-folder architecture.
 
 **Tasks:**
 
-- [ ] Turn the root `package.json` into the workspace root:
+- [x] Turn the root `package.json` into the workspace root:
       `"workspaces": ["web", "server"]`, keep `"type": "module"` (the root
       `eslint.config.js` and `playwright.config.js` are ESM), keep the shared
       tooling devDependencies (eslint, @eslint/js, typescript-eslint, eslint
@@ -93,41 +129,43 @@ Tracer bullet for the two-process, two-folder architecture.
       keep root-level `lint`/`lint:fix`/`format`/`format:check`/`prepare` and
       the lint-staged config, and forward `dev`/`build`/`preview`/`typecheck`/
       `css-types` to `-w web` and `server` to `-w server`.
-- [ ] Create `web/package.json` (app name/scripts `dev`, `prebuild`, `build`,
+- [x] Create `web/package.json` (app name/scripts `dev`, `prebuild`, `build`,
       `preview`, `pretypecheck`, `typecheck`, `css-types`) with the app
       dependencies (react, react-dom, react-router-dom, clsx, lucide-react)
       and frontend devDependencies (vite, @vitejs/plugin-react, typescript,
       @types/react, @types/react-dom, @types/node).
-- [ ] Move the frontend into `web/`: `src/`, `index.html`, `vite.config.ts`,
+- [x] Move the frontend into `web/`: `src/`, `index.html`, `vite.config.ts`,
       the three `tsconfig*.json` files, `scripts/` and `vercel.json` (note:
       production deployment is out of scope per the PRD, but the Vercel Root
       Directory setting must point at `web/` whenever the app is deployed
       again); delete stale root artifacts (`dist/`, `*.tsbuildinfo`).
-- [ ] Create `server/package.json` (`"type": "module"`, `express` dependency,
+- [x] Create `server/package.json` (`"type": "module"`, `express` dependency,
       `"server": "node index.js"` script) and `server/index.js`: an Express
-      app listening on `PORT` (default 3001), no routes yet.
-- [ ] Update the root `eslint.config.js` alias resolver to
+      app listening on `PORT` (default 3001), no routes yet. (Shipped as
+      plain JS; converted to TypeScript in Phase 2 — see Revision 5.)
+- [x] Update the root `eslint.config.js` alias resolver to
       `web/src/api` and `web/src/hooks` (incl. the "keep in sync with
       vite.config.ts" comment); confirm `globalIgnores(['dist', 'coverage'])`
       still matches `web/dist` (unanchored pattern — no edit expected).
-- [ ] Run a fresh `npm install` (single root lockfile resolving both
+      Deviation: an edit _was_ required — see Revision 4, point (1).
+- [x] Run a fresh `npm install` (single root lockfile resolving both
       workspaces) and update the structure/path references in AGENTS.md and
       README (commands stay valid through the root forwarding scripts).
 
 **Tests:**
 
-- [ ] `npm install` succeeds with one root lockfile; `node_modules` only
+- [x] `npm install` succeeds with one root lockfile; `node_modules` only
       exists at the root (hoisted workspaces).
-- [ ] `npm run dev` serves the app at `http://localhost:5173` and searching
+- [x] `npm run dev` serves the app at `http://localhost:5173` and searching
       behaves exactly as before the split (the frontend still calls TVmaze
       directly at this point).
-- [ ] `npm run build`, `npm run typecheck`, `npm run css-types`,
+- [x] `npm run build`, `npm run typecheck`, `npm run css-types`,
       `npm run lint` and `npm run format:check` all pass from the root.
-- [ ] `npm run server` starts Express; `curl http://localhost:3001/anything`
+- [x] `npm run server` starts Express; `curl http://localhost:3001/anything`
       returns Express's 404 response (server is up, no routes yet).
-- [ ] CSS Module type declarations regenerate at their new location
+- [x] CSS Module type declarations regenerate at their new location
       (`web/src/**/*.module.css.d.ts`) with no stale files left behind.
-- [ ] `git status` shows the moves as renames and no gitignored artifact
+- [x] `git status` shows the moves as renames and no gitignored artifact
       (`web/dist`, tsbuildinfo) becomes tracked.
 
 **When ready:**
@@ -139,11 +177,11 @@ works unchanged.
 
 **Acceptance Criteria:**
 
-- [ ] The project is split into `web/` (frontend) and `server/` (backend)
+- [x] The project is split into `web/` (frontend) and `server/` (backend)
       folders, each with its own `package.json`, managed as npm workspaces.
-- [ ] The frontend builds and behaves exactly as before the split; all
+- [x] The frontend builds and behaves exactly as before the split; all
       existing root scripts and the pre-commit hook still work.
-- [ ] The backend workspace starts as a separate Express process.
+- [x] The backend workspace starts as a separate Express process.
 
 ### Phase 2: Testing instruments for web and server
 
@@ -161,11 +199,19 @@ stub exists — so every later phase can write failing tests first.
       @vitejs/plugin-react, same `@api`/`@hooks` aliases as vite.config.ts)
       and the `"test": "vitest run"` script; write one smoke test (HomePage
       renders the search input).
-- [ ] Add `server/` testing devDependencies (vitest, supertest), create
-      `server/vitest.config.js` (node environment) and the
-      `"test": "vitest run"` script; restructure `server/` for testability:
-      export the Express app from `server/app.js` and keep `server/index.js`
-      as the listen-on-`PORT` entry; supertest smoke test (unknown route
+- [ ] Convert `server/` to TypeScript (Revision 5) and restructure it for
+      testability: add devDependencies (vitest, supertest, tsx, typescript,
+      @types/node, @types/express — express 5.3.0 ships no bundled types —
+      @types/supertest); create `server/tsconfig.json` mirroring the web
+      compiler rules (`strict`, `noUncheckedIndexedAccess`,
+      `verbatimModuleSyntax`, `erasableSyntaxOnly`, `noUnusedLocals`,
+      `noUnusedParameters`, `noEmit`, `"types": ["node"]`,
+      `moduleResolution: bundler` so extensionless import specifiers work);
+      create `server/vitest.config.ts` (node environment) and the scripts
+      `"test": "vitest run"`, `"typecheck": "tsc --noEmit"`,
+      `"server": "tsx index.ts"`; export the Express app from
+      `server/app.ts` and keep `server/index.ts` as the listen-on-`PORT`
+      entry; supertest smoke test `server/app.test.ts` (unknown route
       returns Express's 404).
 - [ ] Add `@playwright/test` at the root, install the chromium browser, and
       create `playwright.config.js` with three `webServer` entries: the stub
@@ -178,9 +224,13 @@ stub exists — so every later phase can write failing tests first.
       hits per query and exposing the counter via `GET /__hits`; write one
       Playwright smoke spec (app loads, search input visible).
 - [ ] Add the root scripts `"test": "npm run test --workspaces --if-present"`
-      and `"test:e2e": "playwright test"`; document `npm run test` and
-      `npm run test:e2e` in AGENTS.md and README; confirm lint and format
-      pass on all new config/spec/stub files.
+      and `"test:e2e": "playwright test"`, extend the root typecheck to
+      `"typecheck": "npm run typecheck --workspaces"`, and add an ESLint
+      override block for `server/**/*.ts` with Node globals (the shared TS
+      block currently assumes browser globals for `web/`); document
+      `npm run test`, `npm run test:e2e` and the TypeScript backend
+      (the AGENTS.md stack row, the `tsx` runtime) in AGENTS.md and README;
+      confirm lint and format pass on all new config/spec/stub files.
 
 **Tests:**
 
@@ -191,6 +241,8 @@ stub exists — so every later phase can write failing tests first.
 - [ ] The stub counter works: `curl http://localhost:3002/__hits` before and
       after a `search/shows?q=` call shows the per-query count incrementing
       (the basis for all later cache assertions).
+- [ ] `npm run typecheck` passes for both workspaces — the new server
+      TypeScript code compiles under the same strict rules as web.
 - [ ] `npm run lint` and `npm run format:check` pass with the new files.
 
 **When ready:**
@@ -223,13 +275,13 @@ test-first development.
 
 - [ ] Write this phase's tests first (see Tests) — they must fail before the
       implementation exists.
-- [ ] Create `server/tvmaze.js`: build requests from
+- [ ] Create `server/tvmaze.ts`: build requests from
       `process.env.TVMAZE_BASE_URL ?? 'https://api.tvmaze.com'` (test seam,
       default behavior unchanged); fetch `search/shows?q=` (URL-encoded),
       map the response to `show` objects, throw on a non-OK or failed
       request; log every outgoing TVmaze request to the console with a
       timestamp (the observability basis for the cache criteria in Phase 5).
-- [ ] Add `GET /api/shows?q=` to `server/app.js`: 400 with an error JSON
+- [ ] Add `GET /api/shows?q=` to `server/app.ts`: 400 with an error JSON
       when `q` is missing or empty; 200 with the show array; 502 with an
       error JSON when the TVmaze request fails.
 - [ ] Keep files within the repo's 120-line `max-lines` lint budget by
@@ -238,7 +290,7 @@ test-first development.
 
 **Tests:**
 
-- [ ] `server/tvmaze.test.js` (mocked `globalThis.fetch`): maps
+- [ ] `server/tvmaze.test.ts` (mocked `globalThis.fetch`): maps
       `{ score, show }[]` to show objects; URL-encodes the query; uses
       `TVMAZE_BASE_URL` when set and the real API base by default; throws on
       non-OK and network failures; logs one request line per call.
@@ -342,7 +394,7 @@ primary goal of the feature. Transparent to the frontend.
 
 - [ ] Write this phase's tests first (see Tests) — they must fail before the
       implementation exists.
-- [ ] Create `server/cache.js` with `const cache = {}` keyed by the TVmaze
+- [ ] Create `server/cache.ts` with `const cache = {}` keyed by the TVmaze
       request URL (including the encoded query), storing
       `{ data, fetchedAt }` per entry; define the TTL constant
       `5 * 60 * 1000`.
@@ -355,7 +407,7 @@ primary goal of the feature. Transparent to the frontend.
 
 **Tests:**
 
-- [ ] `server/cache.test.js` with fake timers (`vi.useFakeTimers`): the first
+- [ ] `server/cache.test.ts` with fake timers (`vi.useFakeTimers`): the first
       call fetches and stores (MISS); an identical call within 5 minutes
       returns the cached data with the upstream fetch called exactly once
       (HIT); advancing the clock past 5 minutes makes the next call refetch
@@ -402,7 +454,7 @@ result set). The Phase 3 endpoint stays untouched so the app keeps working.
 
 - [ ] Write this phase's tests first (see Tests) — they must fail before the
       implementation exists.
-- [ ] Create `server/shows.js` with the result-processing helpers and the
+- [ ] Create `server/shows.ts` with the result-processing helpers and the
       shared constants `RESULTS_PER_PAGE = 3` and `ALL_GENRES = 'All genres'`
       (mirroring the current frontend constants).
 - [ ] Implement genre collection: the sorted, deduplicated list of genres
@@ -414,14 +466,14 @@ result set). The Phase 3 endpoint stays untouched so the app keeps working.
 - [ ] Implement pagination on the filtered list: `totalCount` = filtered
       length, `pageCount = max(1, ceil(totalCount / 3))`, requested page
       clamped to `[1, pageCount]`, `shows` = the 3-item slice of that page.
-- [ ] Add `GET /api/search?q=&genre=&page=` to `server/app.js` returning
+- [ ] Add `GET /api/search?q=&genre=&page=` to `server/app.ts` returning
       `{ shows, page, pageCount, totalCount, genres }` as JSON; 400 when `q`
       is missing; data source is the cached TVmaze fetch from Phase 5 (no
       per-page/per-genre caching).
 
 **Tests:**
 
-- [ ] `server/shows.test.js`: genre collection is sorted and deduplicated;
+- [ ] `server/shows.test.ts`: genre collection is sorted and deduplicated;
       filtering keeps only matching shows for a specific genre and returns
       everything when the genre is absent or `All genres`; pagination slices
       3 per page, computes `pageCount = max(1, ceil(totalCount / 3))`,

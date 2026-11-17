@@ -7,6 +7,11 @@ Guidance for AI agents (and humans) working in this repository.
 **ScreenScout** — a React single-page app for browsing TV shows: search, filter by
 genre, paginate results, and view show details.
 
+The repository is an npm-workspaces monorepo with two packages: `web/`
+(the React frontend) and `server/` (an Express backend that currently runs
+standalone with no routes). Shared tooling (ESLint, Prettier, husky) lives at
+the root; root scripts forward to the workspaces.
+
 Stack:
 
 | Concern  | Choice                                                                |
@@ -18,6 +23,7 @@ Stack:
 | Icons    | lucide-react                                                          |
 | Classes  | clsx                                                                  |
 | API      | TVmaze REST (`https://api.tvmaze.com`) via fetch                      |
+| Backend  | Express 5 (`server/`, plain JS ESM, port 3001)                        |
 | Lint     | ESLint 9 (flat config) + typescript-eslint + `eslint-config-prettier` |
 | Format   | Prettier 3                                                            |
 | Hooks    | husky 9 + lint-staged 17 (pre-commit)                                 |
@@ -29,8 +35,9 @@ Node 24 / npm 11. Vite 7 requires Node 20.19+ or 22.12+.
 
 ```bash
 npm install          # installs deps and wires up husky via the "prepare" script
-npm run dev          # dev server on http://localhost:5173
-npm run build        # tsc -b && vite build -> dist/
+npm run dev          # frontend dev server on http://localhost:5173 (web workspace)
+npm run server       # backend Express process on http://localhost:3001 (server workspace)
+npm run build        # tsc -b && vite build -> web/dist/
 npm run preview      # serve the production build
 npm run typecheck    # tsc -b --noEmit    (fails on type errors)
 npm run css-types    # regenerate the CSS Module type declarations
@@ -84,10 +91,11 @@ for the visual design.
   MCP tools (`execute`, `save`, `get_app_state`, `read_skill`) to change it.
 - The canvas holds design tokens as variables and documents them in the
   `Design System` frame (`CSS VARIABLES` section). It mirrors
-  `src/styles/tokens.css`.
+  `web/src/styles/tokens.css`.
 - When you add or change a token, update **both** the canvas variable and
-  `src/styles/tokens.css`, and keep the names and values identical. The canvas
-  section is the human-readable reference; the CSS file is what the app reads.
+  `web/src/styles/tokens.css`, and keep the names and values identical. The
+  canvas section is the human-readable reference; the CSS file is what the app
+  reads.
 - Read `pen.dev` skill docs (`read_skill`) before non-trivial canvas edits:
   `pen-schema.md`, `execute.md`, `design-system.md`, `code-website.md`.
 - Keep the canvas document root clean: only screens, reusable component frames
@@ -116,14 +124,14 @@ Fixable problems are repaired and the commit continues; unfixable errors
 
 ## TypeScript
 
-- The app is written in TypeScript. `tsconfig.json` is a solution file that
-  references `tsconfig.app.json` (the app) and `tsconfig.node.json`
-  (the Vite config).
+- The app is written in TypeScript. In `web/`, `tsconfig.json` is a solution
+  file that references `web/tsconfig.app.json` (the app) and
+  `web/tsconfig.node.json` (the Vite config).
 - The compiler runs in `strict` mode with `noUncheckedIndexedAccess`,
   `verbatimModuleSyntax` and `erasableSyntaxOnly`.
 - Types live in a `types.ts` file next to the code that owns them —
-  `src/api/types.ts` for the TVmaze shapes, a page's `types.ts` for the types
-  shared inside that page.
+  `web/src/api/types.ts` for the TVmaze shapes, a page's `types.ts` for the
+  types shared inside that page.
 - Object shapes are declared as `type` aliases, never as `interface`.
 - Every CSS Module has a generated `<Component>.module.css.d.ts` giving each
   class a literal type — that is what makes

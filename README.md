@@ -11,25 +11,26 @@ A simple React app built with:
 
 ## Scripts
 
-| Command                | Description                          |
-| ---------------------- | ------------------------------------ |
-| `npm run dev`          | Start the dev server (port 5173)     |
-| `npm run build`        | Typecheck, then build into `dist/`   |
-| `npm run preview`      | Serve the production build           |
-| `npm run typecheck`    | Typecheck with `tsc -b --noEmit`     |
-| `npm run css-types`    | Regenerate CSS Module type files     |
-| `npm run lint`         | Check with ESLint                    |
-| `npm run lint:fix`     | Auto-fix ESLint issues               |
-| `npm run format`       | Format files with Prettier           |
-| `npm run format:check` | Check formatting with Prettier       |
-| `npm run prepare`      | Install husky git hooks (on install) |
+| Command                | Description                                   |
+| ---------------------- | --------------------------------------------- |
+| `npm run dev`          | Start the frontend dev server (port 5173)     |
+| `npm run server`       | Start the backend Express process (port 3001) |
+| `npm run build`        | Typecheck, then build into `web/dist/`        |
+| `npm run preview`      | Serve the production build                    |
+| `npm run typecheck`    | Typecheck with `tsc -b --noEmit`              |
+| `npm run css-types`    | Regenerate CSS Module type files              |
+| `npm run lint`         | Check with ESLint                             |
+| `npm run lint:fix`     | Auto-fix ESLint issues                        |
+| `npm run format`       | Format files with Prettier                    |
+| `npm run format:check` | Check formatting with Prettier                |
+| `npm run prepare`      | Install husky git hooks (on install)          |
 
 ## TypeScript
 
-`tsconfig.json` is a solution file that references two projects:
+`web/tsconfig.json` is a solution file that references two projects:
 
-- `tsconfig.app.json` — the application code in `src/`
-- `tsconfig.node.json` — the Vite config
+- `web/tsconfig.app.json` — the application code in `web/src/`
+- `web/tsconfig.node.json` — the Vite config
 
 The compiler runs in `strict` mode with `noUncheckedIndexedAccess`,
 `verbatimModuleSyntax` and `erasableSyntaxOnly`. Types live in a `types.ts`
@@ -74,28 +75,43 @@ via the `prepare` script, so `npm install` wires up the hooks automatically.
 
 ## Structure
 
+The repository is an npm-workspaces monorepo with a shared tooling root:
+
 ```
-src/
-  main.tsx        # Entry point, mounts <App /> inside BrowserRouter
-  App.tsx         # Layout + route definitions
-  App.module.css  # App shell styles (CSS Module)
-  index.css       # Global reset + token import
-  vite-env.d.ts   # Vite client types (CSS Modules, import.meta.env)
-  api/
-    tvmaze.ts     # TVmaze REST client
-    types.ts      # TVmaze API shapes
-  hooks/
-    useMediaQuery.ts
-  pages/
-    HomePage/
-      HomePage.tsx        # "/" route
-      useHomePage.ts      # page presenter
-      HomePage.module.css # Page styles (CSS Module)
-      index.ts            # public export
-  styles/
-    tokens.css    # Design tokens as CSS custom properties
-  ui-kit/         # Shared, project-wide UI components
+web/                  # frontend workspace (Vite + React)
+  src/
+    main.tsx          # Entry point, mounts <App /> inside BrowserRouter
+    App.tsx           # Layout + route definitions
+    App.module.css    # App shell styles (CSS Module)
+    index.css         # Global reset + token import
+    vite-env.d.ts     # Vite client types (CSS Modules, import.meta.env)
+    api/
+      tvmaze.ts       # TVmaze REST client
+      types.ts        # TVmaze API shapes
+    hooks/
+      useMediaQuery.ts
+    pages/
+      HomePage/
+        HomePage.tsx        # "/" route
+        useHomePage.ts      # page presenter
+        HomePage.module.css # Page styles (CSS Module)
+        index.ts            # public export
+    styles/
+      tokens.css      # Design tokens as CSS custom properties
+    ui-kit/           # Shared, project-wide UI components
+  index.html          # SPA shell
+  vite.config.ts      # Vite config (plugins, aliases)
+  scripts/
+    generate-css-types.mjs  # CSS Module type declaration generator
+  vercel.json         # SPA rewrites (set Vercel "Root Directory" to `web/`)
+
+server/               # backend workspace (Express, plain JS ESM)
+  index.js            # starts the Express app on port 3001 (no routes yet)
 ```
+
+ESLint, Prettier and husky/lint-staged stay at the repo root; the root scripts
+forward to the workspaces (`npm run dev` -> `web`, `npm run server` ->
+`server`).
 
 ## Styling
 
@@ -108,8 +124,8 @@ import styles from './HomePage.module.css';
 <section className={styles.hero}>…</section>;
 ```
 
-Only `src/index.css` (reset) and `src/styles/tokens.css` (design tokens as
-`:root` custom properties) are global. Always style with tokens — never
+Only `web/src/index.css` (reset) and `web/src/styles/tokens.css` (design tokens
+as `:root` custom properties) are global. Always style with tokens — never
 hard-code a colour, radius, spacing value or shadow:
 
 ```css

@@ -67,6 +67,20 @@
 > joined `tsconfig.node.json`'s include (next to `vite.config.ts`), so the
 > existing `tsc -b` solution covers everything.
 >
+> **Revision 7 (2026-11-17, recorded during Phase 3 execution):** small
+> deviations from the plan text, all verified against the actual project
+> state: (1) `server/types.ts` mirrors the web TVmaze shapes — the target
+> layout did not list it, but the AGENTS.md rule "types live in a `types.ts`
+> file next to the code that owns them" applies and the workspaces stay
+> independent (no cross-workspace import); (2) `TVMAZE_BASE_URL` is read per
+> request inside `searchShows`, not once at module load, so tests can point
+> the seam with `vi.stubEnv` without re-importing (default behavior
+> unchanged); (3) under the server's Node typings `response.json()` is
+> `Promise<unknown>` (the web DOM lib types it as `any`), so the parsed
+> `search/shows` payload needs an explicit cast to `ShowSearchResult[]`;
+> (4) the 502 branch additionally logs the upstream failure via
+> `console.error` (the plan only mandates logging outgoing requests).
+>
 > Target layout:
 >
 > ```
@@ -301,34 +315,45 @@ test-first development.
 
 **Tasks:**
 
-- [ ] Write this phase's tests first (see Tests) — they must fail before the
-      implementation exists.
-- [ ] Create `server/tvmaze.ts`: build requests from
+- [x] Write this phase's tests first (see Tests) — they must fail before the
+      implementation exists. (Verified red: 5 supertest failures + a
+      collection error for the missing `./tvmaze` module before any
+      implementation was written.)
+- [x] Create `server/tvmaze.ts`: build requests from
       `process.env.TVMAZE_BASE_URL ?? 'https://api.tvmaze.com'` (test seam,
       default behavior unchanged); fetch `search/shows?q=` (URL-encoded),
       map the response to `show` objects, throw on a non-OK or failed
       request; log every outgoing TVmaze request to the console with a
       timestamp (the observability basis for the cache criteria in Phase 5).
-- [ ] Add `GET /api/shows?q=` to `server/app.ts`: 400 with an error JSON
+- [x] Add `GET /api/shows?q=` to `server/app.ts`: 400 with an error JSON
       when `q` is missing or empty; 200 with the show array; 502 with an
       error JSON when the TVmaze request fails.
-- [ ] Keep files within the repo's 120-line `max-lines` lint budget by
+- [x] Keep files within the repo's 120-line `max-lines` lint budget by
       splitting routing from the TVmaze module as needed; confirm lint,
-      format and the full suite pass.
+      format and the full suite pass. (No split needed: app.ts 26 lines,
+      tvmaze.ts 28, types.ts 63, tvmaze.test.ts 113, app.test.ts 95.)
 
 **Tests:**
 
-- [ ] `server/tvmaze.test.ts` (mocked `globalThis.fetch`): maps
+- [x] `server/tvmaze.test.ts` (mocked `globalThis.fetch`): maps
       `{ score, show }[]` to show objects; URL-encodes the query; uses
       `TVMAZE_BASE_URL` when set and the real API base by default; throws on
-      non-OK and network failures; logs one request line per call.
-- [ ] supertest against the exported app: `GET /api/shows?q=office` returns
+      non-OK and network failures; logs one request line per call. (7 unit
+      tests, green.)
+- [x] supertest against the exported app: `GET /api/shows?q=office` returns
       200 with the fixture show array; missing and empty `q` return 400 with
       an error JSON; a failing upstream returns 502 with an error JSON and
-      the app stays responsive.
-- [ ] The full Phase 2 suite still passes.
-- [ ] Manual (real-API spot check): `npm run server` without the env seam +
-      `curl ".../api/shows?q=office"` returns real TVmaze data.
+      the app stays responsive. (5 integration tests plus the Phase 2 404
+      smoke, green.)
+- [x] The full Phase 2 suite still passes. (`npm run test`: web 1/1,
+      server 13/13; `npm run test:e2e`: 1 passed; typecheck, lint and
+      format:check green.)
+- [x] Manual (real-API spot check): `npm run server` without the env seam +
+      `curl ".../api/shows?q=office"` returns real TVmaze data. (Verified:
+      200 with 10 real results — first "The Office" id 526; `?q=friends`
+      id 431; 400 JSON for missing `q`; 404 for unknown routes; stdout
+      shows one `[ISO-timestamp] TVmaze request: https://api.tvmaze.com/...`
+      line per call.)
 
 **When ready:**
 
@@ -340,13 +365,15 @@ before.
 
 **Acceptance Criteria:**
 
-- [ ] An Express.js backend server exists in `server/` and runs as a separate
-      process from the Vite dev server.
-- [ ] The backend returns TVmaze search results as JSON and responds with
+- [x] An Express.js backend server exists in `server/` and runs as a separate
+      process from the Vite dev server. (Verified this phase: `npm run server`
+      boots tsx on port 3001 independently of `npm run dev`.)
+- [x] The backend returns TVmaze search results as JSON and responds with
       error statuses (400/502) on bad input or TVmaze failure — verified by
       automated tests with a mocked upstream.
-- [ ] The `TVMAZE_BASE_URL` seam defaults to `https://api.tvmaze.com`, so
-      real-API behavior is unchanged.
+- [x] The `TVMAZE_BASE_URL` seam defaults to `https://api.tvmaze.com`, so
+      real-API behavior is unchanged. (Default-base unit test + the live
+      real-API curl above.)
 
 ### Phase 4: Frontend fetches from the backend instead of TVmaze
 

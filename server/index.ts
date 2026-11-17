@@ -2,7 +2,7 @@ import { createApp } from './app';
 
 const port = process.env.PORT ?? 3001;
 
-// Phase 2 scaffold: no routes yet. Later phases add the TVmaze proxy.
+// The backend routes live in app.ts; this entry only binds the port.
 createApp().listen(port, () => {
   console.log(`ScreenScout backend listening on http://localhost:${port}`);
 });

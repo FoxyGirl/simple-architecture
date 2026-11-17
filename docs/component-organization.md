@@ -75,45 +75,102 @@ barrel file. The barrel is the public surface of the directory.
 
 ```
 <Page>/
-├── <Page>.tsx                          # page component (View)
-├── use<Page>.ts                        # page presenter (Presenter)
-├── <Page>.module.css                   # page styles — CSS Module
-├── constants.ts                        # states/constants shared by this folder
-├── types.ts                            # types shared by this folder
-├── utils/                              # shared pure helpers for this subtree
-│   ├── index.ts                        # public export — the helpers
-│   └── ...
-├── index.ts                            # public export — the page component
-├── components/
-│   └── <SharedComponent>/              # Shared by multiple descendants (<Component1> and <Component2>)
-|   ...
+├── <Page>.tsx                   # Page View
+├── <Page>.module.css            # Page styles
+├── constants.ts                 # Page-specific constants
+├── types.ts                     # Page-specific types
+├── index.ts                     # Public entry point; exports the Page View only
+│
+├── logic/
+│   ├── use<Page>.ts             # Page Presenter; prepares data and handlers for the Page View
+│   │
+│   └── tasks/                   # Tasks shared by multiple components within this Page
+│       ├── taskA.ts
+│       └── taskB.ts
+│
+├── utils/
+│   ├── helperA.ts               # Pure utility functions shared within the Page
+│   ├── helperB.ts
+│   └── index.ts                 # Public entry point for shared utilities
+│
+├── components/                  # Components shared by multiple components within the Page
+│   │
+│   └── <SharedComponent>/       # Shared by multiple descendants (<Component1> and <Component2>)
+│       ├── <SharedComponent>.tsx
+│       ├── <SharedComponent>.module.css
+│       └── index.ts             # Exports the component View only
+│
 ├── <Component1>/
-│   ├── <Component1>.tsx                # component 1 (View)
-│   ├── use<Component1>.ts              # component 1 presenter (Presenter)
-│   ├── <Component1>.module.css         # component 1 styles — CSS Module
-│   ├── index.ts                        # public export — the component
-|   └── components/
-│       └── <SharedComponent>/          # Shared by multiple descendants (<SubComponent1> and <SubComponent2>)
-|       ...
-│   └── <SubComponent1>/                # subcomponent 1 owned by Component1
-│       └── SubComponent1.tsx           # subcomponent 1 (View)
-│       ├── <SubComponent1>.module.css  # subcomponent 1 styles — CSS Module
-│       ├── index.ts                    # public export — the subcomponent
-|       ...
-│   └── <SubComponent2>/                # subcomponent 2 owned by Component1
-│       └── SubComponent2.tsx           # subcomponent 2 (View)
-│       ├── <SubComponent2>.module.css  # subcomponent 2 styles — CSS Module
-│       ├── index.ts                    # public export — the subcomponent
-|       ...
-├── <Component2>/
-│   ├── <Component2>.tsx                # component 2 (View)
-│   ├── use<Component2>.ts              # component 2 presenter (Presenter)
-│   ├── <Component2>.module.css         # component 2 styles — CSS Module
-│   ├── index.ts                        # public export — the component
-│   └── <SubComponent>/                 # subcomponent owned by Component2
-│       └── SubComponent.tsx            # subcomponent (View)
-│       ├── <SubComponent>.module.css   # subcomponent styles — CSS Module
-│       ├── index.ts                    # public export — the subcomponent
-|       ...
+│   ├── <Component1>.tsx         # Component1 View
+│   ├── <Component1>.module.css  # Component1 styles
+│   ├── constants.ts             # Component1-specific constants
+│   ├── types.ts                 # Component1-specific types
+│   ├── index.ts                 # Public entry point; exports the Component1 View only
+│   │
+│   ├── logic/
+│   │   ├── use<Component1>.ts   # Component1 Presenter
+│   │   │
+│   │   └── tasks/               # Tasks used exclusively by Component1
+│   │       ├── taskA.ts
+│   │       └── taskB.ts
+│   │
+│   ├── components/              # Components used exclusively by Component1
+│   │   │
+│   │   ├── <SharedComponent>/
+│   │   │   ├── <SharedComponent>.tsx
+│   │   │   ├── <SharedComponent>.module.css
+│   │   │   └── index.ts         # Presentational component; no Presenter required
+│   │   │
+│   │   ├── <SubComponent1>/
+│   │   │   ├── <SubComponent1>.tsx
+│   │   │   ├── <SubComponent1>.module.css
+│   │   │   └── index.ts         # Presentational component; receives data and handlers through props
+│   │   │
+│   │   └── <SubComponent2>/
+│   │       ├── <SubComponent2>.tsx
+│   │       ├── <SubComponent2>.module.css
+│   │       ├── index.ts
+│   │       │
+│   │       └── logic/
+│   │           └── use<SubComponent2>.ts
+│   │                            # SubComponent2 Presenter; added because this component has its own presentation logic
+│   │
+│   └── utils/                   # Pure utility functions used exclusively by Component1
+│       ├── helperA.ts
+│       └── index.ts
+│
+└── <Component2>/
+    ├── <Component2>.tsx         # Component2 View
+    ├── <Component2>.module.css  # Component2 styles
+    ├── constants.ts
+    ├── types.ts
+    ├── index.ts                 # Public entry point; exports the Component2 View only
+    │
+    ├── logic/
+    │   ├── use<Component2>.ts   # Component2 Presenter
+    │   │
+    │   └── tasks/               # Tasks used exclusively by Component2
+    │       └── taskA.ts
+    │
+    └── components/              # Components used exclusively by Component2
+        │
+        └── <SubComponent>/
+            ├── <SubComponent>.tsx
+            ├── <SubComponent>.module.css
+            └── index.ts         # Presentational component; no Presenter required
+```
+
+### Structure rules
+
+- A component MUST have a `logic/` folder only if it requires its own Presenter or component-specific Tasks.
+- A Presenter MUST be located in the `logic/` folder of its associated component.
+- Tasks used exclusively by a component MUST be placed in its `logic/tasks/` folder.
+- Tasks shared by multiple components MUST be placed in the `tasks/` folder at their nearest common ancestor level.
+- Purely presentational components MUST NOT have an unnecessary `logic/` folder.
+- Components without a Presenter MUST receive all required data, values, and handlers through props.
+- A component's `index.ts` MUST export its View only. Internal implementation details MUST remain private.
+- Shared pure utility functions MUST be placed in the nearest appropriate `utils/` folder and exported through its `index.ts`.
+
+```
 
 ```

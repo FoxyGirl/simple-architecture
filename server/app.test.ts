@@ -10,6 +10,7 @@ import {
 } from 'vitest';
 
 import { createApp } from './app';
+import { cache } from './cache';
 
 const jsonResponse = (body: unknown, status = 200): Response =>
   new Response(JSON.stringify(body), {
@@ -35,6 +36,7 @@ describe('server app', () => {
     let mockedFetch: Mock;
 
     beforeEach(() => {
+      for (const key of Object.keys(cache)) delete cache[key];
       mockedFetch = vi.fn();
       vi.stubGlobal('fetch', mockedFetch);
       vi.spyOn(console, 'log').mockImplementation(() => undefined);
@@ -53,6 +55,20 @@ describe('server app', () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual([usOffice, ukOffice]);
+    });
+
+    it('serves an identical repeat request from the cache', async () => {
+      const app = createApp();
+      mockedFetch.mockResolvedValue(jsonResponse(officeResults));
+
+      const first = await request(app).get('/api/shows?q=office');
+      mockedFetch.mockResolvedValue(jsonResponse([]));
+      const second = await request(app).get('/api/shows?q=office');
+
+      expect(first.status).toBe(200);
+      expect(second.status).toBe(200);
+      expect(second.body).toEqual(first.body);
+      expect(mockedFetch).toHaveBeenCalledTimes(1);
     });
 
     it('returns 400 with an error JSON when q is missing', async () => {

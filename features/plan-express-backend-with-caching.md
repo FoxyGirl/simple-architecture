@@ -101,6 +101,50 @@
 > recorded: only `/api/shows`, zero `api.tvmaze.com`) — same observations,
 > scripted for determinism.
 >
+> **Revision 9 (2026-11-17, recorded during Phase 5 execution):** deviations
+> from the plan text, all verified against the actual project state:
+> (1) `server/cache.ts` exports the plain-object `cache` (plus the
+> `CACHE_TTL_MS` constant) so the test suites can reset it between cases —
+> a test seam only; no invalidation endpoint or control is added to the
+> application surface, preserving the PRD's out-of-scope rule for manual
+> invalidation; (2) the cached fetch is `getCachedShows(query)` in
+> `cache.ts`; `tvmaze.ts` keeps its raw `searchShows` (so the Phase 3 unit
+> tests remain unchanged) and additionally exports `searchShowsUrl`, since
+> the cache key is the full TVmaze request URL built from the
+> `TVMAZE_BASE_URL` seam; `app.ts` routes `GET /api/shows` through
+> `getCachedShows`, and the `HIT`/`MISS` lines use the Phase 3 timestamp
+> format; (3) `app.test.ts` clears the cache in `beforeEach` — the
+> module-level cache outlives supertest cases, so an `office` entry from
+> one test would otherwise leak into the next (breaking the 502 test, for
+> example); (4) the E2E cache spec (`e2e/cache.spec.js`) uses its own
+> queries (`breaking`, `lost` — served from the default fixtures) because
+> specs share one counting stub across parallel workers and `office` and
+> `mystery` belong to `search.spec.js`, and it issues the second identical
+> search after a page reload (the frontend deduplicates a re-entered query
+> client-side via `lastQueryRef`, so typing it again on the same page
+> would produce no backend request at all). Verified alongside: Playwright
+> tears down its webServers after every run, so each run starts with a
+> cold backend cache — the Phase 4 specs pass unchanged (`office` stays a
+> deterministic +1; a failed upstream is never cached, so the retry in the
+> fail-next spec still reaches the stub).
+>
+> **Revision 10 (2026-11-17, after Phase 5 verification):** at the user's
+> explicit request the cache key changed from the full TVmaze request URL
+> to the plain search query, superseding Revision 9 point 2:
+> `server/tvmaze.ts` is back to its Phase 3 shape (no `searchShowsUrl`
+> export), `getCachedShows` keys the `cache` entries by query, and the
+> `HIT`/`MISS` lines log the query (real fetches still log the full URL
+> via the request line). `TVMAZE_BASE_URL` is constant for a running
+> process, so the query uniquely identifies its TVmaze request and the
+> PRD's "keyed by the TVmaze request" stays satisfied; the equivalence
+> only breaks if one process ever serves two bases, a test scenario only.
+> Re-verified after the switch: unit 7/7 + 19/19, E2E 4/4, typecheck,
+> lint, format:check and build green, live-API manual spot checks green.
+> (Re-running E2E also surfaced that `reuseExistingServer` silently
+> reuses manually started dev-loop servers on 3001 — a real-API backend
+> then breaks the fixture specs; those processes were stopped, with user
+> consent, before the green run.)
+>
 > Target layout:
 >
 > ```
@@ -350,8 +394,7 @@ test-first development.
       error JSON when the TVmaze request fails.
 - [x] Keep files within the repo's 120-line `max-lines` lint budget by
       splitting routing from the TVmaze module as needed; confirm lint,
-      format and the full suite pass. (No split needed: app.ts 26 lines,
-      tvmaze.ts 28, types.ts 63, tvmaze.test.ts 113, app.test.ts 95.)
+      format and the full suite pass. (No split needed.)
 
 **Tests:**
 
@@ -491,36 +534,55 @@ primary goal of the feature. Transparent to the frontend.
 
 **Tasks:**
 
-- [ ] Write this phase's tests first (see Tests) — they must fail before the
-      implementation exists.
-- [ ] Create `server/cache.ts` with `const cache = {}` keyed by the TVmaze
+- [x] Write this phase's tests first (see Tests) — they must fail before the
+      implementation exists. (Verified red: `cache.test.ts` and
+      `app.test.ts` failed to collect on the missing `./cache` module; the
+      E2E cache spec failed with 2 upstream hits instead of 1.)
+- [x] Create `server/cache.ts` with `const cache = {}` keyed by the TVmaze
       request URL (including the encoded query), storing
       `{ data, fetchedAt }` per entry; define the TTL constant
-      `5 * 60 * 1000`.
-- [ ] Implement the cached fetch: if an entry exists and is younger than
+      `5 * 60 * 1000`. (Keyed by the plain search query — Revision 10
+      supersedes the request-URL key; exported `cache` + `CACHE_TTL_MS` —
+      Revision 9, point 1.)
+- [x] Implement the cached fetch: if an entry exists and is younger than
       5 minutes, return its data without calling TVmaze; if the cache is
       empty or the entry is outdated, fetch TVmaze and store/overwrite the
       entry. Failed TVmaze requests must not create or refresh cache entries.
-- [ ] Route the Phase 3 endpoint's TVmaze access through the cached fetch and
-      log `HIT`/`MISS` (with the cache key) for every request.
+      (`getCachedShows(query)` in cache.ts — Revision 10; the store happens
+      only after the awaited fetch resolves, so a rejection leaves the
+      cache untouched, unit-asserted.)
+- [x] Route the Phase 3 endpoint's TVmaze access through the cached fetch and
+      log `HIT`/`MISS` (with the cache key) for every request. (`app.ts`
+      imports `getCachedShows`; the `HIT`/`MISS` lines log the query key —
+      Revision 10 — and real fetches still log the full URL.)
 
 **Tests:**
 
-- [ ] `server/cache.test.ts` with fake timers (`vi.useFakeTimers`): the first
+- [x] `server/cache.test.ts` with fake timers (`vi.useFakeTimers`): the first
       call fetches and stores (MISS); an identical call within 5 minutes
       returns the cached data with the upstream fetch called exactly once
       (HIT); advancing the clock past 5 minutes makes the next call refetch
       and update the entry (the following call is a HIT again); different
       queries are cached independently; a failed fetch neither creates nor
-      refreshes an entry.
-- [ ] supertest: two identical `GET /api/shows?q=office` calls return
-      identical JSON with the upstream fetch called once.
-- [ ] E2E cache spec: searching the same query twice keeps the stub counter
+      refreshes an entry. (5 unit tests, green.)
+- [x] supertest: two identical `GET /api/shows?q=office` calls return
+      identical JSON with the upstream fetch called once. (Green — the
+      second call also proves the cached data, not the re-mocked payload,
+      is served; per-test cache reset — Revision 9,
+      point 3.)
+- [x] E2E cache spec: searching the same query twice keeps the stub counter
       at 1; a different query raises it to 2. (The 5-minute expiry is not
       exercised in E2E — it is covered deterministically by the fake-timer
-      unit tests.)
-- [ ] Manual: `HIT`/`MISS` lines are visible in the server log; restarting
-      the server clears the cache (first request is a MISS).
+      unit tests.) (Green — dedicated queries + reload semantics per
+      Revision 9, point 4; Playwright 4/4, Phase 4 specs unaffected.)
+- [x] Manual: `HIT`/`MISS` lines are visible in the server log; restarting
+      the server clears the cache (first request is a MISS). (Verified
+      against the live API after Revision 10: office logged a `cache MISS`
+      plus the full-URL request line; the identical second call logged
+      only a `cache HIT` (no request line) with a byte-identical (SHA-256)
+      response; `friends` logged its own `MISS`; after a clean restart
+      (killing the port owner until zero listeners) office was a `MISS`
+      again.)
 
 **When ready:**
 
@@ -531,14 +593,21 @@ user's perspective.
 
 **Acceptance Criteria:**
 
-- [ ] TVmaze responses are stored in a plain object cache (`const cache = {}`)
-      keyed by the TVmaze request.
-- [ ] Repeating an identical search within 5 minutes returns the cached data
+- [x] TVmaze responses are stored in a plain object cache (`const cache = {}`)
+      keyed by the TVmaze request. (Keyed by the search query — one-to-one
+      with the `search/shows` request URL within a process per Revision
+      10; entry shape `{ data, fetchedAt }` asserted in the MISS test.)
+- [x] Repeating an identical search within 5 minutes returns the cached data
       and makes no new request to TVmaze (automated tests + server logs).
-- [ ] Repeating an identical search more than 5 minutes after the cached
+      (Fake-timer HIT unit test, supertest repeat test, E2E counter
+      assertion, and the manual `cache HIT` log line.)
+- [x] Repeating an identical search more than 5 minutes after the cached
       request makes a new TVmaze request and updates the cache entry —
-      proven by fake-timer tests without real-time waiting.
-- [ ] Different search queries are cached independently of each other.
+      proven by fake-timer tests without real-time waiting. (`vi.advanceTimersByTime(CACHE_TTL_MS)`
+      refetch test, entry `fetchedAt` moves, next call is a HIT again.)
+- [x] Different search queries are cached independently of each other.
+      (Distinct URL keys — fake-timer unit test, the E2E spec's
+      `breaking`/`lost` counter pair and the manual `friends` `MISS`.)
 
 ### Phase 6: Backend genre filtering and pagination endpoint
 

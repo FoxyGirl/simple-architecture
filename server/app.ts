@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { searchShows } from './tvmaze';
+import { getCachedShows } from './cache';
 
 export const createApp = () => {
   const app = express();
@@ -14,7 +14,7 @@ export const createApp = () => {
     }
 
     try {
-      res.json(await searchShows(query));
+      res.json(await getCachedShows(query));
     } catch (error) {
       const reason = error instanceof Error ? error.message : String(error);
       console.error(`TVmaze upstream failed: ${reason}`);

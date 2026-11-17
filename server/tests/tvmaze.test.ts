@@ -8,7 +8,7 @@ import {
   type Mock,
 } from 'vitest';
 
-import { searchShows } from './tvmaze';
+import { searchShows } from '../tvmaze';
 
 const jsonResponse = (body: unknown, status = 200): Response =>
   new Response(JSON.stringify(body), {

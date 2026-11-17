@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { Show } from './types';
+import type { Show } from '../types';
 import {
   ALL_GENRES,
   RESULTS_PER_PAGE,
@@ -10,7 +10,7 @@ import {
   filterShowsByGenre,
   getPageCount,
   getPageShows,
-} from './shows';
+} from '../shows';
 
 const show = (id: number, genres: string[]): Show =>
   ({ id, name: `Show ${id}`, genres }) as Show;

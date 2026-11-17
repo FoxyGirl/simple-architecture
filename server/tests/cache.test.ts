@@ -8,7 +8,7 @@ import {
   type Mock,
 } from 'vitest';
 
-import { CACHE_TTL_MS, cache, getCachedShows } from './cache';
+import { CACHE_TTL_MS, cache, getCachedShows } from '../cache';
 
 const jsonResponse = (body: unknown): Response =>
   new Response(JSON.stringify(body), {

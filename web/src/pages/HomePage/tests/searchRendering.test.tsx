@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { searchShowsPage } from '@api/shows';
 
-import { HomePage } from './index';
+import { HomePage } from '../index';
 
 import {
   arrow,
@@ -14,7 +14,7 @@ import {
   page2,
   settle,
   typeQuery,
-} from '../../test/home-flow';
+} from '../../../test/home-flow';
 
 vi.mock('@api/shows', () => ({ searchShowsPage: vi.fn() }));
 

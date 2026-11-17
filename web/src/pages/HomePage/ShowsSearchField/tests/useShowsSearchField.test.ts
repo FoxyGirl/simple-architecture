@@ -2,8 +2,8 @@ import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ChangeEvent } from 'react';
 
-import { STATUS } from '../constants';
-import { useShowsSearchField } from './useShowsSearchField';
+import { STATUS } from '../../constants';
+import { useShowsSearchField } from '../useShowsSearchField';
 
 // Mirrors DEBOUNCE_MS in the presenter hook.
 const DEBOUNCE_MS = 800;

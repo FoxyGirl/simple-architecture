@@ -51,9 +51,10 @@ npm run format       # prettier --write .  (rewrites every file)
 npm run format:check # prettier --check .  (read-only)
 ```
 
-Tests live next to the code they cover: `*.test.ts(x)` in `web/src/` (jsdom +
-Testing Library) and in `server/` (supertest against the exported Express
-app). E2E specs and the local TVmaze stub (fixture-backed `search/shows`
+In `web/` tests live in a `tests/` folder inside the component folder they
+cover (e.g. `web/src/pages/HomePage/tests/`, jsdom + Testing Library); the
+backend's tests live in `server/tests/` (supertest against the exported
+Express app). E2E specs and the local TVmaze stub (fixture-backed `search/shows`
 with a per-query hit counter, `GET /__hits`) live in `e2e/`; the backend
 reads its upstream base URL from `TVMAZE_BASE_URL` (default
 `https://api.tvmaze.com`), which is how E2E points it at the stub. Playwright

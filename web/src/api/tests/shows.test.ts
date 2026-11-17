@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { searchShowsPage } from './shows';
+import { searchShowsPage } from '../shows';
 
 const fetchResponse = (
   body: unknown,

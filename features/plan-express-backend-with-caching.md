@@ -81,6 +81,26 @@
 > (4) the 502 branch additionally logs the upstream failure via
 > `console.error` (the plan only mandates logging outgoing requests).
 >
+> **Revision 8 (2026-11-17, recorded during Phase 4 execution):** deviations
+> from the plan text, all verified against the actual project state:
+> (1) `ShowSearchResult` was removed from `web/src/api/types.ts` — the
+> rename to `shows.ts` makes it dead, since the `{ score, show }` envelope
+> is now mapped server-side and never reaches the browser; (2) the web
+> `searchShows` unit tests use a plain fake response object instead of
+> `Response` (the tests only need `ok`/`status`/`json()` and jsdom's
+> `Response` availability is not guaranteed), and the presenter-hook tests
+> mock the `@api/shows` module boundary (`vi.mock`) rather than `fetch` —
+> the plan only prescribed the fetch mock for the `searchShows` tests;
+> (3) the stub counts armed-failure requests as upstream hits too (the
+> counter counts every `search/shows` request); (4) the E2E hit-count
+> assertion reads the counter before the interaction and asserts a delta,
+> because `reuseExistingServer` keeps the counter warm across runs; (5) the
+> "browser network-tab" manual check was executed as a throwaway Playwright
+> driver script (boot stub + Vite without the backend, search -> error
+> panel, start backend -> "Retry request" -> results, full request list
+> recorded: only `/api/shows`, zero `api.tvmaze.com`) — same observations,
+> scripted for determinism.
+>
 > Target layout:
 >
 > ```
@@ -385,38 +405,56 @@ client-side for now).
 
 **Tasks:**
 
-- [ ] Write this phase's tests first (see Tests) — they must fail before the
-      implementation exists.
-- [ ] Add a dev-server proxy in `web/vite.config.ts`: `/api` ->
+- [x] Write this phase's tests first (see Tests) — they must fail before the
+      implementation existed. (Verified red: web unit suites failed on the
+      missing `./shows`/`@api/shows` modules; both `e2e/search.spec.js`
+      tests failed — no results through the blocked direct path, and the
+      stub's `/__fail-next` control answered 404.)
+- [x] Add a dev-server proxy in `web/vite.config.ts`: `/api` ->
       `http://localhost:3001`.
-- [ ] Rename `web/src/api/tvmaze.ts` to `web/src/api/shows.ts` and change
+- [x] Rename `web/src/api/tvmaze.ts` to `web/src/api/shows.ts` and change
       `searchShows` to fetch `/api/shows?q=` (same signature, same
-      `AbortSignal` support, same non-OK handling); update the import in
-      `useShowsDataFetching.ts`.
-- [ ] Extend the E2E stub with a fail-next control (`POST /__fail-next`
+      `AbortSignal` support, same non-OK handling — the thrown message is
+      unchanged); update the import in `useShowsDataFetching.ts`. (The now
+      dead `ShowSearchResult` shape was removed from `web/src/api/types.ts`
+      — the `{ score, show }` envelope never reaches the browser anymore.)
+- [x] Extend the E2E stub with a fail-next control (`POST /__fail-next`
       arms the next `search/shows` call to return 500) so the error-panel
-      and retry flow becomes deterministic in E2E.
-- [ ] Document how to run the two processes (`npm run server` + `npm run dev`)
-      in the README or AGENTS.md commands section.
+      and retry flow becomes deterministic in E2E. (Armed failures still
+      count as upstream hits — the counter counts every `search/shows`
+      request.)
+- [x] Document how to run the two processes (`npm run server` + `npm run dev`)
+      in the README or AGENTS.md commands section. (README gained a
+      "Running the app" section plus the `/api` proxy and stub-control
+      notes; the AGENTS.md commands list already documents both scripts and
+      its API stack-table row stays a Phase 7 sync item per the plan.)
 
 **Tests:**
 
-- [ ] Web unit tests: `searchShows` calls `/api/shows?q=` with the encoded
+- [x] Web unit tests: `searchShows` calls `/api/shows?q=` with the encoded
       query, returns the shows, throws on non-OK responses and propagates
       the `AbortSignal` (mocked fetch); presenter-hook tests with fake
       timers: the debounce fires a single request and a query change aborts
-      the in-flight one.
-- [ ] `e2e/search.spec.js`: typing a query renders the fixture result cards;
+      the in-flight one. (`web/src/api/shows.test.ts` 4 tests +
+      `useShowsSearchField.test.ts` 2 tests, green.)
+- [x] `e2e/search.spec.js`: typing a query renders the fixture result cards;
       the stub counter shows exactly 1 upstream hit; a route interceptor
-      records zero browser requests to `api.tvmaze.com`.
-- [ ] E2E error flow: with fail-next armed, a search shows the existing
+      records zero browser requests to `api.tvmaze.com`. (Counter asserted
+      as a delta so reruns against the reused stub stay deterministic.)
+- [x] E2E error flow: with fail-next armed, a search shows the existing
       error panel; clicking "Retry request" renders the results (fail-next
-      consumed, backend stays up).
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test` and
-      `npm run test:e2e` all pass.
-- [ ] Manual: browser network-tab spot check (only `/api/shows` requests for
+      consumed, backend stays up). (Second test in `e2e/search.spec.js`.)
+- [x] `npm run typecheck`, `npm run lint`, `npm run test` and
+      `npm run test:e2e` all pass. (web 7/7, server 13/13, Playwright 3/3;
+      lint, typecheck and format:check clean.)
+- [x] Manual: browser network-tab spot check (only `/api/shows` requests for
       show data); with the backend stopped, the error panel appears and
-      retry succeeds after restarting it.
+      retry succeeds after restarting it. (Verified with a throwaway
+      Playwright driver script: stub + Vite without the backend — search
+      showed "Something went wrong." (Vite proxy ECONNREFUSED); after
+      starting the backend, "Retry request" rendered the fixture results;
+      the recorded request list contained only
+      `localhost:5173/api/shows?q=office`, zero `api.tvmaze.com`.)
 
 **When ready:**
 
@@ -427,15 +465,21 @@ unchanged and covered by automated tests.
 
 **Acceptance Criteria:**
 
-- [ ] Using the app produces no browser network requests to `api.tvmaze.com`;
+- [x] Using the app produces no browser network requests to `api.tvmaze.com`;
       all show data comes from the backend — asserted by the E2E route
-      interceptor.
-- [ ] When TVmaze fails (or the backend is down), the backend path reports an
+      interceptor. (Plus the recorded request list in the manual check.)
+- [x] When TVmaze fails (or the backend is down), the backend path reports an
       error and the UI shows its existing error state with a working retry —
-      covered in E2E via the stub's fail-next control.
-- [ ] Existing UI behavior is preserved: loading and error states work, and
+      covered in E2E via the stub's fail-next control. (Backend-down case
+      additionally proven by the manual check: Vite proxy ECONNREFUSED ->
+      error panel -> retry recovers.)
+- [x] Existing UI behavior is preserved: loading and error states work, and
       the search flow (debounce, abort, reset on new search) is unchanged —
-      covered by web unit tests.
+      covered by web unit tests. (Debounce, abort and the re-request for the
+      new query are asserted in `useShowsSearchField.test.ts`; the
+      client-side filtering/pagination code was not touched, the smoke test
+      still passes and loading/error rendering is covered by the E2E
+      search/error specs.)
 
 ### Phase 5: TVmaze response cache (plain object, 5-minute TTL)
 

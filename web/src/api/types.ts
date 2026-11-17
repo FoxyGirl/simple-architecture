@@ -1,7 +1,7 @@
 /**
- * Shapes returned by the TVmaze API.
+ * Shapes returned by the backend for TVmaze shows.
  *
- * They mirror the live `search/shows` response, so every field the app does
+ * They mirror the live TVmaze show payload, so every field the app does
  * not use yet is optional rather than invented.
  */
 
@@ -54,11 +54,6 @@ export type Show = {
   image: ShowImage | null;
   summary: string | null;
   updated: number;
-};
-
-export type ShowSearchResult = {
-  score: number;
-  show: Show;
 };
 
 export type SearchShowsOptions = {

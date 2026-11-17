@@ -1,9 +1,9 @@
-import type { SearchShowsOptions, Show, ShowSearchResult } from './types';
+import type { SearchShowsOptions, Show } from './types';
 
-const SEARCH_URL = 'https://api.tvmaze.com/search/shows';
+const SEARCH_URL = '/api/shows';
 
 /**
- * Search TVmaze shows by title.
+ * Search shows through the backend, which owns the TVmaze interaction.
  */
 export const searchShows = async (
   query: string,
@@ -17,7 +17,7 @@ export const searchShows = async (
     throw new Error(`TVmaze search failed with status ${response.status}`);
   }
 
-  const results: ShowSearchResult[] = await response.json();
+  const shows: Show[] = await response.json();
 
-  return results.map((result) => result.show);
+  return shows;
 };

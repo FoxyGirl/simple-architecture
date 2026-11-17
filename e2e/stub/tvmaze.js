@@ -3,9 +3,10 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 // Minimal local stand-in for the TVmaze REST API used by the Playwright E2E
-// harness. Serves `search/shows?q=` from fixtures and counts upstream hits
-// per query so specs can assert backend caching (`GET /__hits`). Later
-// phases extend it (e.g. a fail-next control).
+// harness. Serves `search/shows?q=` from fixtures, counts upstream hits per
+// query so specs can assert backend caching (`GET /__hits`) and can arm a
+// one-shot upstream failure (`POST /__fail-next`) for deterministic error
+// flows.
 
 const PORT = 3002;
 
@@ -18,6 +19,9 @@ const fixtures = JSON.parse(
 
 // Per-query upstream hit counter, e.g. { office: 2 }.
 const hitsByQuery = {};
+
+// Armed by `POST /__fail-next`; the next search/shows call answers 500 once.
+let failNext = false;
 
 const sendJson = (res, statusCode, body) => {
   res.writeHead(statusCode, { 'Content-Type': 'application/json' });
@@ -32,9 +36,23 @@ const server = createServer((req, res) => {
     return;
   }
 
+  if (url.pathname === '/__fail-next' && req.method === 'POST') {
+    failNext = true;
+    sendJson(res, 200, { armed: true });
+    return;
+  }
+
   if (url.pathname.endsWith('/search/shows')) {
     const query = (url.searchParams.get('q') ?? '').toLowerCase();
     hitsByQuery[query] = (hitsByQuery[query] ?? 0) + 1;
+
+    if (failNext) {
+      failNext = false;
+      sendJson(res, 500, {
+        error: 'upstream failure (armed via /__fail-next)',
+      });
+      return;
+    }
 
     const shows = fixtures[query] ?? fixtures.default;
     sendJson(

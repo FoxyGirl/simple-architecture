@@ -29,6 +29,21 @@ A simple React app built with:
 | `npm run format:check` | Check formatting with Prettier                   |
 | `npm run prepare`      | Install husky git hooks (on install)             |
 
+## Running the app
+
+The app runs as two processes — start both in separate terminals:
+
+| Terminal 1         | Terminal 2                       |
+| ------------------ | -------------------------------- |
+| `npm run server`   | `npm run dev`                    |
+| Express on `:3001` | Vite on `:5173`, open in browser |
+
+The frontend only calls its own origin under `/api/...`; the Vite dev
+server proxies `/api` to the backend (see `server.proxy` in
+`web/vite.config.ts`), and the backend owns the TVmaze interaction. With
+`npm run server` stopped, searches show the app's error panel and recover
+via "Retry request" once it is up again.
+
 ## TypeScript
 
 `web/tsconfig.json` is a solution file that references two projects:
@@ -93,8 +108,8 @@ web/                  # frontend workspace (Vite + React)
     index.css         # Global reset + token import
     vite-env.d.ts     # Vite client types (CSS Modules, import.meta.env)
     api/
-      tvmaze.ts       # TVmaze REST client
-      types.ts        # TVmaze API shapes
+      shows.ts        # show search against the backend (/api/shows)
+      types.ts        # TVmaze show shapes used by the frontend
     hooks/
       useMediaQuery.ts
     pages/
@@ -107,22 +122,26 @@ web/                  # frontend workspace (Vite + React)
       tokens.css      # Design tokens as CSS custom properties
     ui-kit/           # Shared, project-wide UI components
   index.html          # SPA shell
-  vite.config.ts      # Vite config (plugins, aliases)
+  vite.config.ts      # Vite config (plugins, aliases, /api dev proxy)
   vitest.config.ts    # Vitest config (jsdom, testing-library)
   scripts/
     generate-css-types.mjs  # CSS Module type declaration generator
   vercel.json         # SPA rewrites (set Vercel "Root Directory" to `web/`)
 
 server/               # backend workspace (Express, TypeScript ESM via tsx)
-  app.ts              # the exported Express app (no port bound — testable)
-  index.ts            # entry: starts the app on port 3001 (no routes yet)
+  app.ts              # exported Express app incl. GET /api/shows
+  index.ts            # entry: starts the app on port 3001
+  tvmaze.ts           # TVmaze client (TVMAZE_BASE_URL seam, request logs)
+  types.ts            # TVmaze API shapes owned by the backend
   tsconfig.json       # same strict compiler rules as the web workspace
   vitest.config.ts    # Vitest config (node environment)
 
 e2e/                  # Playwright specs + local TVmaze stub
   smoke.spec.js       # E2E smoke test
+  search.spec.js      # search through the backend + fail-next error flow
   stub/
-    tvmaze.js         # fixture-backed search/shows stub with hit counter
+    tvmaze.js         # fixture-backed search/shows stub, hit counter,
+                      # /__fail-next one-shot failure control
     fixtures.json     # canned TVmaze responses
 playwright.config.js  # E2E harness (stub + backend + frontend webServers)
 ```
@@ -140,7 +159,9 @@ forward to the workspaces (`npm run dev` -> `web`, `npm run server` ->
   three servers first: the local TVmaze stub on port 3002, the backend with
   `TVMAZE_BASE_URL=http://localhost:3002` (so it talks to the stub instead of
   the real API) and the frontend dev server. The stub counts upstream hits
-  per query (`GET /__hits`) so cache behavior is assertable.
+  per query (`GET /__hits`) so cache behavior is assertable, and one-shot
+  failures can be armed with `POST /__fail-next` for deterministic error
+  flows.
 - First-time setup: `npx playwright install chromium` downloads the browser
   binary (Playwright does not install it via npm).
 

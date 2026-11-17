@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 
-import { searchShows } from '@api/tvmaze';
+import { searchShows } from '@api/shows';
 
 import type { SearchChange } from '../types';
 

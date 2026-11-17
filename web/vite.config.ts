@@ -45,4 +45,11 @@ export default defineConfig({
       '@hooks': fileURLToPath(new URL('./src/hooks', import.meta.url)),
     },
   },
+  server: {
+    // The Express backend owns the TVmaze interaction; in dev the browser
+    // talks to it through this proxy, so no CORS setup is needed.
+    proxy: {
+      '/api': 'http://localhost:3001',
+    },
+  },
 });

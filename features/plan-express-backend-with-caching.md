@@ -145,6 +145,29 @@
 > then breaks the fixture specs; those processes were stopped, with user
 > consent, before the green run.)
 >
+> **Revision 11 (2026-11-17, recorded during Phase 6 execution):** deviations
+> from the plan text, all verified against the actual project state:
+> (1) the `/api/search` supertest matrix lives in its own file
+> `server/app.search.test.ts` instead of extending `app.test.ts` — the
+> latter is at 111 of the 120-line `max-lines` budget (the same constraint
+> that motivated the Phase 2 fixtures split); (2) the route also answers
+> 502 with an error JSON when the upstream fetch fails (not in the plan's
+> test list, but `getCachedShows` can throw and Express 5 would otherwise
+> turn that into an unhandled rejection — same contract as the Phase 3
+> endpoint, unit-asserted); (3) the envelope type `SearchPage` is declared
+> in `server/shows.ts` next to the helpers that own it — `server/types.ts`
+> is documented as mirroring only TVmaze shapes; (4) `genre` and `page`
+> are advisory parameters: an absent or unparseable value falls back to
+> "no filter" / page 1 and out-of-range pages are clamped by
+> `buildSearchPage` (the plan only prescribed clamping); (5) beyond the
+> plan's automated tests, the endpoint was spot-checked against the real
+> API: `q=office` -> 3 shows/page of totalCount 10 with sorted unfiltered
+> genres, `genre=Documentary` -> empty page with `pageCount` 1, `page=0`
+> and `page=999` clamp, missing `q` -> 400, and the log showed one `MISS`
+> with its request line then three `HIT` lines for the genre/page
+> variations (server stopped afterwards — Revision 10's
+> `reuseExistingServer` note).
+>
 > Target layout:
 >
 > ```
@@ -620,43 +643,57 @@ result set). The Phase 3 endpoint stays untouched so the app keeps working.
 
 **Tasks:**
 
-- [ ] Write this phase's tests first (see Tests) — they must fail before the
-      implementation exists.
-- [ ] Create `server/shows.ts` with the result-processing helpers and the
+- [x] Write this phase's tests first (see Tests) — they must fail before the
+      implementation exists. (Verified red: `shows.test.ts` failed to
+      collect on the missing `./shows` module and all 6
+      `app.search.test.ts` cases returned 404, while the 19 existing
+      server tests stayed green.)
+- [x] Create `server/shows.ts` with the result-processing helpers and the
       shared constants `RESULTS_PER_PAGE = 3` and `ALL_GENRES = 'All genres'`
-      (mirroring the current frontend constants).
-- [ ] Implement genre collection: the sorted, deduplicated list of genres
+      (mirroring the current frontend constants). The envelope type
+      `SearchPage` is declared next to the helpers — Revision 11, point 3.
+- [x] Implement genre collection: the sorted, deduplicated list of genres
       present in the unfiltered result set (the frontend keeps prepending its
-      own `ALL_GENRES` chip).
-- [ ] Implement genre filtering: when the `genre` parameter is present (and
+      own `ALL_GENRES` chip). (`collectGenres` in shows.ts.)
+- [x] Implement genre filtering: when the `genre` parameter is present (and
       is not `All genres`), keep only shows whose `genres` include it; when
-      absent, return unfiltered results.
-- [ ] Implement pagination on the filtered list: `totalCount` = filtered
+      absent, return unfiltered results. (`filterShowsByGenre`; an empty
+      `genre=` value is treated as absent — Revision 11, point 4.)
+- [x] Implement pagination on the filtered list: `totalCount` = filtered
       length, `pageCount = max(1, ceil(totalCount / 3))`, requested page
       clamped to `[1, pageCount]`, `shows` = the 3-item slice of that page.
-- [ ] Add `GET /api/search?q=&genre=&page=` to `server/app.ts` returning
+      (`getPageCount` / `clampPage` / `getPageShows`, assembled by
+      `buildSearchPage`; an unparseable `page` falls back to 1.)
+- [x] Add `GET /api/search?q=&genre=&page=` to `server/app.ts` returning
       `{ shows, page, pageCount, totalCount, genres }` as JSON; 400 when `q`
       is missing; data source is the cached TVmaze fetch from Phase 5 (no
-      per-page/per-genre caching).
+      per-page/per-genre caching). Plus the 502 upstream-failure branch —
+      Revision 11, point 2.
 
 **Tests:**
 
-- [ ] `server/shows.test.ts`: genre collection is sorted and deduplicated;
+- [x] `server/shows.test.ts`: genre collection is sorted and deduplicated;
       filtering keeps only matching shows for a specific genre and returns
       everything when the genre is absent or `All genres`; pagination slices
       3 per page, computes `pageCount = max(1, ceil(totalCount / 3))`,
       clamps pages to `[1, pageCount]`; an empty result yields
-      `{ shows: [], totalCount: 0, pageCount: 1 }`.
-- [ ] supertest matrix against `/api/search`: the envelope
+      `{ shows: [], totalCount: 0, pageCount: 1 }`. (10 unit tests, green.)
+- [x] supertest matrix against `/api/search`: the envelope
       `{ shows, page, pageCount, totalCount, genres }` is returned; `page=1`
       returns at most 3 shows and `page=2` a different slice;
       `genre=Drama` returns only Drama shows with a matching `totalCount`;
       `page=0` and `page=999` clamp to the first/last page; missing `q`
-      returns 400.
-- [ ] Cache reuse: varying only `genre`/`page` for the same `q` keeps the
-      upstream fetch at exactly one call.
-- [ ] The full previous suite passes — `/api/shows` and the running app
-      behave exactly as in Phase 5.
+      returns 400. (6 tests in `server/app.search.test.ts` — Revision 11,
+      point 1 — green; upstream failures answer 502 as well.)
+- [x] Cache reuse: varying only `genre`/`page` for the same `q` keeps the
+      upstream fetch at exactly one call. (Green — 3 `/api/search` calls
+      for one query, `fetch` called once; live-API log: one `MISS` +
+      request line then three `HIT` lines — Revision 11, point 5.)
+- [x] The full previous suite passes — `/api/shows` and the running app
+      behave exactly as in Phase 5. (`npm run test`: web 7/7, server 35/35
+      with the 19 Phase 5 tests unchanged; `npm run test:e2e`: 4/4;
+      typecheck, lint, format:check and build green; the `/api/shows`
+      route code was not touched.)
 
 **When ready:**
 
@@ -667,14 +704,22 @@ is unaffected.
 
 **Acceptance Criteria:**
 
-- [ ] A backend request with a query, a genre, and a page returns only the
+- [x] A backend request with a query, a genre, and a page returns only the
       shows of that page, with 3 shows per page (matching the current UI).
-- [ ] When a specific genre is requested, every returned show includes that
+      (Supertest envelope/slice tests + the live `office` check: 3 shows
+      per page across `totalCount` 10, last page 1 show.)
+- [x] When a specific genre is requested, every returned show includes that
       genre; when no genre filter is applied, shows are returned unfiltered.
-- [ ] The backend response includes the total matching count and the genres
-      present in the unfiltered result set.
-- [ ] Genre/page changes reuse the cache — no extra TVmaze requests for the
-      same query within 5 minutes.
+      (Exact-equality assertions on the filtered slice, the unfiltered
+      `undefined`/`All genres` unit cases, and the empty
+      `genre=Documentary` live result.)
+- [x] The backend response includes the total matching count and the genres
+      present in the unfiltered result set. (`totalCount`/`genres` asserted
+      in unit + supertest — `genres` stays the unfiltered set even when
+      filtering — and in the live envelope.)
+- [x] Genre/page changes reuse the cache — no extra TVmaze requests for the
+      same query within 5 minutes. (The one-fetch supertest case + the
+      live `MISS`/`HIT` log sequence.)
 
 ### Phase 7: Server-driven filtering and pagination in the frontend
 

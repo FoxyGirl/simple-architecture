@@ -168,6 +168,55 @@
 > variations (server stopped afterwards — Revision 10's
 > `reuseExistingServer` note).
 >
+> **Revision 12 (2026-11-17, recorded during Phase 7 execution):** deviations
+> from the plan text, all verified against the actual project state:
+> (1) the "genre omitted for `All genres`" rule is applied by the page
+> presenter (`toRequest` in `useHomePage`), not inside `@api/shows` — the
+> api module stays free of UI constants; the emitted request URL is exactly
+> as planned (no `genre=` parameter for the All genres selection, asserted
+> by the api unit tests and the E2E browse flow);
+> (2) `searchShowsPage(query, { genre?, page? }, { signal })` — positional
+> query plus a selection object; the plan left the signature open;
+> (3) the selection lives in `useHomePage`'s snapshot (state shared by
+> GenreFilter/Pagination/ResultsHead belongs to the common ancestor per
+> docs/architecture.md): `Selection` moved to the page-level `types.ts`,
+> `ShowSearchResults/types.ts` and `useShowSearchResults.ts` were deleted
+> (the view is now purely presentational, the sub-presenters only prepare
+> their own view fragments from the envelope props);
+> (4) the debounce stays in the search-field presenter, but the fetch
+> machinery is the ancestor's: the field receives `submitSearch`,
+> `isCurrentQuery` and `abortSearch` props (the old `lastQueryRef` dedup is
+> the ancestor-owned `isCurrentQuery`), and `registerControls` shrank to
+> `{ clearSearch }` — retry belongs to the ancestor because a retry must
+> re-run the current q/genre/page request, which the field cannot know;
+> (5) the removed `/api/shows` supertest suite is replaced by a regression
+> case in the trimmed `app.test.ts` (`serves no legacy /api/shows endpoint`
+> -> 404); the endpoint's caching contract stays covered by
+> `app.search.test.ts` + `cache.test.ts`;
+> (6) the stub's `/__fail-next` control became per-query
+> (`POST /__fail-next?q=<query>`) — the global one-shot arm raced with the
+> new parallel browse spec (observed: the galaxy request consumed the
+> mystery arm and both specs failed); harness-only change, search.spec and
+> README updated;
+> (7) `browse.spec.js` is a green-to-green equivalence check (identical UX
+> from both pipelines by design); the phase's red came from the web unit
+> suites (16 failing: missing `searchShowsPage`, prop-based field tests,
+> envelope flow tests) and the legacy-endpoint supertest case; the web flow
+> tests split into `searchFlow.test.tsx` + `searchRendering.test.tsx` +
+> shared `web/src/test/home-flow.ts` (120-line budget), with explicit RTL
+> `cleanup()` (vitest runs without `globals`, so auto-cleanup is inactive);
+> (8) the doc sync also fixed pre-existing staleness: the `@api/tvmaze`
+> examples in README/coding-conventions (stale since the Phase 4 rename),
+> the README server tree (missing `cache.ts`/`shows.ts`) and the e2e tree
+> (missing `cache.spec.js`), and the AGENTS.md backend description ("no
+> routes") plus the API row of the stack table;
+> (9) the manual visual comparison ran with a throwaway Playwright driver
+> against the pre-migration app (HEAD via `git stash -u`, same stub +
+> `world` fixture) and the post-migration app: the results-panel text dumps
+> are byte-identical for page 1, the Drama-filtered state and page 2, and
+> the element screenshots are pixel-identical; servers stopped, ports
+> freed, throwaway artifacts deleted.
+>
 > Target layout:
 >
 > ```
@@ -731,55 +780,77 @@ client-side filtering/pagination code and the legacy endpoint are removed.
 
 **Tasks:**
 
-- [ ] Write this phase's tests first (see Tests) — they must fail before the
-      implementation exists.
-- [ ] Add the envelope type to `web/src/api/types.ts` and a `searchShowsPage`
+- [x] Write this phase's tests first (see Tests) — they must fail before the
+      implementation exists. (Verified red: 16 web tests failed — missing
+      `searchShowsPage` in the api suite, prop-based field-presenter suite,
+      envelope flow suites — plus the legacy-endpoint supertest case
+      returned 200; all other pre-Phase-7 tests stayed green.)
+- [x] Add the envelope type to `web/src/api/types.ts` and a `searchShowsPage`
       function in `web/src/api/shows.ts` calling `/api/search?q=&genre=&page=`
-      (genre omitted for `All genres`), with `AbortSignal` support.
-- [ ] Lift the fetch coordination into the common ancestor presenter
+      (genre omitted for `All genres`), with `AbortSignal` support. (The
+      omission is applied by the presenter — Revision 12, points 1-2.)
+- [x] Lift the fetch coordination into the common ancestor presenter
       (`useHomePage`, delegating to the existing data-fetching hook per
       docs/architecture.md): the snapshot now holds the envelope instead of
       the full `Show[]`; submitting a search requests `q` with page 1 and no
-      genre; retry re-runs the current `q`/genre/page request.
-- [ ] Make selection changes server-driven: a genre change requests page 1
+      genre; retry re-runs the current `q`/genre/page request. (The
+      data-fetching hook moved to `useShowsDataFetching.ts` next to
+      `useHomePage.ts`, private to the page presenter.)
+- [x] Make selection changes server-driven: a genre change requests page 1
       with that genre, a page change requests that page — reusing the
       existing loading/error status machinery and aborting the in-flight
-      request when a newer one starts.
-- [ ] Update `GenreFilter` (chips = `ALL_GENRES` + envelope `genres`),
+      request when a newer one starts. (`selectGenre`/`selectPage` in
+      useHomePage drive `runRequest`, which aborts the previous controller;
+      unit-tested.)
+- [x] Update `GenreFilter` (chips = `ALL_GENRES` + envelope `genres`),
       `ResultsHead` (`totalCount` from the envelope) and `Pagination`
       (`page`/`pageCount` from the envelope) to render from the envelope.
-- [ ] Remove the dead client-side code: `filterShowsByGenre`, `collectGenres`,
+- [x] Remove the dead client-side code: `filterShowsByGenre`, `collectGenres`,
       `getPageShows`, `getPageCount`, `clampPage`, the data-bound
       `Selection`/`SelectionChange` shapes and `resolveSelection`; simplify
       the selection to `{ genre, page }` and update the `utils` barrel.
-- [ ] Remove the legacy `/api/shows` route from the backend (with its
+      (Also deleted: `useShowSearchResults.ts`, `ShowSearchResults/types.ts`
+      and `utils/{genres,pagination,selection}.ts` — Revision 12, point 3.)
+- [x] Remove the legacy `/api/shows` route from the backend (with its
       frontend counterpart `searchShows`) and the Phase 4 supertest/unit
       tests that cover them; sync the docs with the final architecture: the
       API row of the AGENTS.md stack table (Express backend in `server/`
       proxying TVmaze with caching) and any data-flow descriptions in
-      `docs/`.
+      `docs/`. (Sync scope also fixed pre-existing staleness — Revision 12,
+      point 8. The stub's fail-next arm went per-query — point 6.)
 
 **Tests:**
 
-- [ ] Web tests (Testing Library): submitting a search requests `q` with
+- [x] Web tests (Testing Library): submitting a search requests `q` with
       page 1 and no genre; a genre change requests page 1 with that genre; a
       page change requests that page; chips render as `ALL_GENRES` + the
       envelope `genres`; the count label and pagination arrows render from
       `totalCount`/`pageCount` and disable at the edges; a new search resets
       genre and page; a selection-change failure shows the error panel and
       retry re-runs the current `q`/genre/page; an in-flight request is
-      aborted when a newer one starts.
-- [ ] `e2e/browse.spec.js`: search renders fixture cards and chips ->
+      aborted when a newer one starts. (`searchFlow.test.tsx` 5 +
+      `searchRendering.test.tsx` 2 + rewritten `useShowsSearchField.test.ts`
+      4 + api suite 5 — 17 green, split per Revision 12 point 7.)
+- [x] `e2e/browse.spec.js`: search renders fixture cards and chips ->
       selecting a genre renders only matching cards and resets the page to 1
       -> `All genres` restores the full list -> paginating changes the slice
       and disables arrows at the edges — with the stub counter staying at 1
       upstream hit through all genre/page changes and rising to 2 only for a
-      new query.
-- [ ] The full suite passes: `npm run test` (both workspaces),
+      new query. (Green — the six-show `world` fixture pair; per-query
+      counters and the per-query fail-next arm keep the parallel specs
+      independent — Revision 12, points 6-7.)
+- [x] The full suite passes: `npm run test` (both workspaces),
       `npm run test:e2e`, `npm run typecheck`, `npm run lint` and
       `npm run build`; compiler/ESLint report no unused utils or types.
-- [ ] Manual: visual comparison — chips list, "N shows found" count and
-      pagination controls look exactly as before the migration.
+      (web 17/17, server 30/30, Playwright 5/5; typecheck, lint (no
+      warnings), format:check and build green; the utils barrel exports
+      only the still-used show-format helpers.)
+- [x] Manual: visual comparison — chips list, "N shows found" count and
+      pagination controls look exactly as before the migration. (Verified
+      with a throwaway driver against HEAD vs the implementation on the
+      same stub data: results-panel text dumps byte-identical for page 1 /
+      Drama-filtered / page 2, element screenshots pixel-identical —
+      Revision 12, point 9.)
 
 **When ready:**
 
@@ -791,15 +862,23 @@ identical to the pre-migration app.
 
 **Acceptance Criteria:**
 
-- [ ] The backend response metadata drives the UI: genre filter chips and
-      pagination controls render unchanged from the envelope.
-- [ ] Existing UI behavior is preserved: loading and error states work, a new
+- [x] The backend response metadata drives the UI: genre filter chips and
+      pagination controls render unchanged from the envelope. (Envelope-fed
+      GenreFilter/Pagination/ResultsHead; rendering unit tests + E2E + the
+      pixel-identical visual comparison.)
+- [x] Existing UI behavior is preserved: loading and error states work, a new
       search resets the genre filter and page, and changing the genre resets
-      the page to 1 — covered by web tests and E2E.
-- [ ] No client-side genre filtering or pagination code remains, and the
-      legacy `/api/shows` endpoint is removed.
-- [ ] Repeated selection changes for the same query are served from the
+      the page to 1 — covered by web tests and E2E. (Skeleton loading and
+      the error/retry flow are untouched components; reset semantics
+      asserted in `searchFlow.test.tsx` and `browse.spec.js`.)
+- [x] No client-side genre filtering or pagination code remains, and the
+      legacy `/api/shows` endpoint is removed. (Utils deleted; grep shows
+      no filtering/pagination helpers left in `web/src`; supertest
+      regression case proves the 404; the browser calls only
+      `/api/search`.)
+- [x] Repeated selection changes for the same query are served from the
       backend cache without new TVmaze requests — asserted via the stub hit
-      counter in E2E.
-- [ ] `npm run test` passes for both workspaces and `npm run test:e2e`
-      passes the full Playwright suite.
+      counter in E2E. (`browse.spec.js`: the `world` counter stays at +1
+      through genre and page changes; only the new query adds a hit.)
+- [x] `npm run test` passes for both workspaces and `npm run test:e2e`
+      passes the full Playwright suite. (17+30 unit/integration, 5/5 E2E.)

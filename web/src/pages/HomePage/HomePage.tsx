@@ -12,10 +12,16 @@ export const HomePage = () => {
     data,
     queryEcho,
     status,
+    selection,
     retry,
     clearSearch,
     onSearchChange,
     registerControls,
+    submitSearch,
+    isCurrentQuery,
+    abortSearch,
+    selectGenre,
+    selectPage,
   } = useHomePage();
 
   return (
@@ -39,6 +45,9 @@ export const HomePage = () => {
         <ShowsSearchField
           onSearchChange={onSearchChange}
           registerControls={registerControls}
+          submitSearch={submitSearch}
+          isCurrentQuery={isCurrentQuery}
+          abortSearch={abortSearch}
         />
       </section>
 
@@ -46,6 +55,9 @@ export const HomePage = () => {
         data={data}
         status={status}
         queryEcho={queryEcho}
+        selection={selection}
+        onGenreSelect={selectGenre}
+        onPageSelect={selectPage}
         onRetry={retry}
         onClear={clearSearch}
       />

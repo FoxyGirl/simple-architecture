@@ -1,25 +1,16 @@
-import type { Show } from '@api/types';
-
-import type { Selection } from '../types';
-
 import { ALL_GENRES } from '../constants';
-import { filterShowsByGenre, resolveSelection } from '../utils';
 
 type UseResultsHeadParams = {
-  data: Show[];
-  selection: Selection;
+  totalCount: number;
+  genre: string;
   queryEcho: string;
 };
 
 export const useResultsHead = ({
-  data,
-  selection,
+  totalCount,
+  genre,
   queryEcho,
 }: UseResultsHeadParams) => {
-  const resolved = resolveSelection(selection, data);
-  const genre = resolved.genre;
-  const totalCount = filterShowsByGenre(data, genre).length;
-
   const countLabel = `${totalCount} ${totalCount === 1 ? 'show' : 'shows'} found`;
   const compactCountLabel = `${totalCount} ${totalCount === 1 ? 'show' : 'shows'}`;
   const resultsEcho = {

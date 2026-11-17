@@ -46,7 +46,7 @@ compiler options live in `tsconfig.app.json` (the app) and `tsconfig.node.json`
   specifier onto a `.ts` file:
 
   ```ts
-  import { searchShows } from '@api/tvmaze';
+  import { searchShowsPage } from '@api/shows';
   import { useMediaQuery } from '@hooks/useMediaQuery';
   import { STATUS } from './constants';
   ```
@@ -192,7 +192,7 @@ Imports that cross directory boundaries MUST use an alias instead of a deep rela
 
 | Alias    | Target      | Example                                                 |
 | -------- | ----------- | ------------------------------------------------------- |
-| `@api`   | `src/api`   | `import { searchShows } from '@api/tvmaze';`            |
+| `@api`   | `src/api`   | `import { searchShowsPage } from '@api/shows';`         |
 | `@hooks` | `src/hooks` | `import { useMediaQuery } from '@hooks/useMediaQuery';` |
 
 - Relative imports remain the default for files in the same directory or in a

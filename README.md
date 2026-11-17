@@ -61,7 +61,7 @@ file next to the code that owns them.
 Import specifiers carry no file extension:
 
 ```ts
-import { searchShows } from '@api/tvmaze';
+import { searchShowsPage } from '@api/shows';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 ```
 
@@ -108,8 +108,8 @@ web/                  # frontend workspace (Vite + React)
     index.css         # Global reset + token import
     vite-env.d.ts     # Vite client types (CSS Modules, import.meta.env)
     api/
-      shows.ts        # show search against the backend (/api/shows)
-      types.ts        # TVmaze show shapes used by the frontend
+      shows.ts        # paginated show search via the backend (/api/search)
+      types.ts        # TVmaze shapes + search envelope used by the frontend
     hooks/
       useMediaQuery.ts
     pages/
@@ -129,9 +129,11 @@ web/                  # frontend workspace (Vite + React)
   vercel.json         # SPA rewrites (set Vercel "Root Directory" to `web/`)
 
 server/               # backend workspace (Express, TypeScript ESM via tsx)
-  app.ts              # exported Express app incl. GET /api/shows
+  app.ts              # exported Express app: GET /api/search
   index.ts            # entry: starts the app on port 3001
   tvmaze.ts           # TVmaze client (TVMAZE_BASE_URL seam, request logs)
+  cache.ts            # 5-minute plain-object TVmaze response cache
+  shows.ts            # server-side genre filtering + pagination helpers
   types.ts            # TVmaze API shapes owned by the backend
   tsconfig.json       # same strict compiler rules as the web workspace
   vitest.config.ts    # Vitest config (node environment)
@@ -139,9 +141,11 @@ server/               # backend workspace (Express, TypeScript ESM via tsx)
 e2e/                  # Playwright specs + local TVmaze stub
   smoke.spec.js       # E2E smoke test
   search.spec.js      # search through the backend + fail-next error flow
+  cache.spec.js       # backend cache reuse + per-query caching
+  browse.spec.js      # server-driven genre filtering + pagination
   stub/
     tvmaze.js         # fixture-backed search/shows stub, hit counter,
-                      # /__fail-next one-shot failure control
+                      # per-query /__fail-next?q= one-shot failure control
     fixtures.json     # canned TVmaze responses
 playwright.config.js  # E2E harness (stub + backend + frontend webServers)
 ```
@@ -160,8 +164,8 @@ forward to the workspaces (`npm run dev` -> `web`, `npm run server` ->
   `TVMAZE_BASE_URL=http://localhost:3002` (so it talks to the stub instead of
   the real API) and the frontend dev server. The stub counts upstream hits
   per query (`GET /__hits`) so cache behavior is assertable, and one-shot
-  failures can be armed with `POST /__fail-next` for deterministic error
-  flows.
+  failures can be armed per query with `POST /__fail-next?q=` for
+  deterministic error flows.
 - First-time setup: `npx playwright install chromium` downloads the browser
   binary (Playwright does not install it via npm).
 

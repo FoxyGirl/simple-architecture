@@ -59,3 +59,16 @@ export type Show = {
 export type SearchShowsOptions = {
   signal?: AbortSignal;
 };
+
+/**
+ * The backend `GET /api/search` envelope: the requested page slice plus the
+ * metadata the UI renders — the total match count and the genres present in
+ * the unfiltered result set.
+ */
+export type SearchPage = {
+  shows: Show[];
+  page: number;
+  pageCount: number;
+  totalCount: number;
+  genres: string[];
+};

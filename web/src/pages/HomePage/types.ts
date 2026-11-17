@@ -1,11 +1,31 @@
-import type { Show } from '@api/types';
+import type { SearchPage } from '@api/types';
 
 import type { SearchStatus } from './constants';
 
+/**
+ * The genre/page selection the UI holds. It is mirrored by the last
+ * `SearchRequest`, so a selection always describes the data on screen.
+ */
+export type Selection = {
+  genre: string;
+  page: number;
+};
+
+/**
+ * One `/api/search` request: the query plus the genre/page selection already
+ * mapped onto the request parameters (an undefined genre means "All genres").
+ */
+export type SearchRequest = {
+  query: string;
+  genre: string | undefined;
+  page: number;
+};
+
 export type SearchSnapshot = {
   status: SearchStatus;
-  data: Show[];
+  data: SearchPage | null;
   queryEcho: string;
+  selection: Selection;
 };
 
 /**
@@ -13,7 +33,9 @@ export type SearchSnapshot = {
  */
 export type SearchChange = Partial<SearchSnapshot>;
 
+/**
+ * The search-field actions the page presenter can trigger from the results.
+ */
 export type SearchControls = {
-  retry: () => void;
   clearSearch: () => void;
 };

@@ -1,25 +1,21 @@
 import clsx from 'clsx';
 
-import type { Show } from '@api/types';
-
-import type { Selection, SelectionChange } from '../types';
-
 import { useGenreFilter } from './useGenreFilter';
 
 import styles from './GenreFilter.module.css';
 
 type GenreFilterProps = {
-  data: Show[];
-  selection: Selection;
-  onSelectionChange: (change: SelectionChange) => void;
+  genres: string[];
+  activeGenre: string;
+  onSelectGenre: (genre: string) => void;
 };
 
 export const GenreFilter = (props: GenreFilterProps) => {
-  const { genres, activeGenre, selectGenre } = useGenreFilter(props);
+  const { chips, activeGenre, selectGenre } = useGenreFilter(props);
 
   return (
     <div className={styles.filter} role="group" aria-label="Filter by genre">
-      {genres.map((genre) => {
+      {chips.map((genre) => {
         const isActive = genre === activeGenre;
 
         return (

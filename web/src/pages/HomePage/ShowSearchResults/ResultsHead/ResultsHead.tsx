@@ -1,15 +1,12 @@
-import type { Show } from '@api/types';
 import { useMediaQuery } from '@hooks/useMediaQuery';
-
-import type { Selection } from '../types';
 
 import { useResultsHead } from './useResultsHead';
 
 import styles from './ResultsHead.module.css';
 
 type ResultsHeadProps = {
-  data: Show[];
-  selection: Selection;
+  totalCount: number;
+  genre: string;
   queryEcho: string;
 };
 

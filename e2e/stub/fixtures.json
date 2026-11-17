@@ -71,6 +71,218 @@
       }
     }
   ],
+  "world": [
+    {
+      "id": 500,
+      "url": "http://localhost:3002/shows/500",
+      "name": "World Tour",
+      "type": "Scripted",
+      "language": "English",
+      "genres": ["Drama", "Adventure"],
+      "status": "Ended",
+      "runtime": 45,
+      "averageRuntime": null,
+      "premiered": "2018-02-04",
+      "ended": "2022-06-12",
+      "officialSite": null,
+      "schedule": { "time": "20:00", "days": ["Sunday"] },
+      "rating": { "average": 8.1 },
+      "weight": null,
+      "network": {
+        "id": 14,
+        "name": "NBC",
+        "country": { "name": "United States" },
+        "officialSite": null
+      },
+      "webChannel": null,
+      "discographyType": "",
+      "externals": { "tvrage": null, "thetvdb": null, "imdb": null },
+      "image": null,
+      "summary": "<p>Dummy fixture.</p>",
+      "updated": 1700000000,
+      "_links": {
+        "self": { "href": "http://localhost:3002/shows/500" },
+        "previous_episodes": {
+          "href": "http://localhost:3002/shows/500/episodes"
+        }
+      }
+    },
+    {
+      "id": 501,
+      "url": "http://localhost:3002/shows/501",
+      "name": "World Series",
+      "type": "Scripted",
+      "language": "English",
+      "genres": ["Comedy"],
+      "status": "Running",
+      "runtime": 25,
+      "averageRuntime": null,
+      "premiered": "2023-03-10",
+      "ended": null,
+      "officialSite": null,
+      "schedule": { "time": "21:00", "days": ["Wednesday"] },
+      "rating": { "average": 7.4 },
+      "weight": null,
+      "network": null,
+      "webChannel": {
+        "id": 5,
+        "name": "StreamCo",
+        "country": { "name": "United States" },
+        "officialSite": null
+      },
+      "discographyType": "",
+      "externals": { "tvrage": null, "thetvdb": null, "imdb": null },
+      "image": null,
+      "summary": "<p>Dummy fixture.</p>",
+      "updated": 1700000000,
+      "_links": {
+        "self": { "href": "http://localhost:3002/shows/501" },
+        "previous_episodes": {
+          "href": "http://localhost:3002/shows/501/episodes"
+        }
+      }
+    },
+    {
+      "id": 502,
+      "url": "http://localhost:3002/shows/502",
+      "name": "World Chef",
+      "type": "Scripted",
+      "language": "English",
+      "genres": ["Drama"],
+      "status": "Ended",
+      "runtime": 40,
+      "averageRuntime": null,
+      "premiered": "2016-09-01",
+      "ended": "2020-05-15",
+      "officialSite": null,
+      "schedule": { "time": "19:00", "days": ["Tuesday"] },
+      "rating": { "average": 7.8 },
+      "weight": null,
+      "network": {
+        "id": 9,
+        "name": "CableOne",
+        "country": { "name": "United States" },
+        "officialSite": null
+      },
+      "webChannel": null,
+      "discographyType": "",
+      "externals": { "tvrage": null, "thetvdb": null, "imdb": null },
+      "image": null,
+      "summary": "<p>Dummy fixture.</p>",
+      "updated": 1700000000,
+      "_links": {
+        "self": { "href": "http://localhost:3002/shows/502" },
+        "previous_episodes": {
+          "href": "http://localhost:3002/shows/502/episodes"
+        }
+      }
+    },
+    {
+      "id": 503,
+      "url": "http://localhost:3002/shows/503",
+      "name": "World Wars",
+      "type": "Scripted",
+      "language": "English",
+      "genres": ["Drama", "Fantasy"],
+      "status": "Running",
+      "runtime": 50,
+      "averageRuntime": null,
+      "premiered": "2024-01-20",
+      "ended": null,
+      "officialSite": null,
+      "schedule": { "time": "22:00", "days": ["Thursday"] },
+      "rating": { "average": 8.9 },
+      "weight": null,
+      "network": {
+        "id": 14,
+        "name": "NBC",
+        "country": { "name": "United States" },
+        "officialSite": null
+      },
+      "webChannel": null,
+      "discographyType": "",
+      "externals": { "tvrage": null, "thetvdb": null, "imdb": null },
+      "image": null,
+      "summary": "<p>Dummy fixture.</p>",
+      "updated": 1700000000,
+      "_links": {
+        "self": { "href": "http://localhost:3002/shows/503" },
+        "previous_episodes": {
+          "href": "http://localhost:3002/shows/503/episodes"
+        }
+      }
+    },
+    {
+      "id": 504,
+      "url": "http://localhost:3002/shows/504",
+      "name": "World Pets",
+      "type": "Scripted",
+      "language": "English",
+      "genres": ["Comedy", "Romance"],
+      "status": "Ended",
+      "runtime": 30,
+      "averageRuntime": null,
+      "premiered": "2019-11-08",
+      "ended": "2023-02-17",
+      "officialSite": null,
+      "schedule": { "time": "18:30", "days": ["Saturday"] },
+      "rating": { "average": 6.8 },
+      "weight": null,
+      "network": null,
+      "webChannel": {
+        "id": 5,
+        "name": "StreamCo",
+        "country": { "name": "United States" },
+        "officialSite": null
+      },
+      "discographyType": "",
+      "externals": { "tvrage": null, "thetvdb": null, "imdb": null },
+      "image": null,
+      "summary": "<p>Dummy fixture.</p>",
+      "updated": 1700000000,
+      "_links": {
+        "self": { "href": "http://localhost:3002/shows/504" },
+        "previous_episodes": {
+          "href": "http://localhost:3002/shows/504/episodes"
+        }
+      }
+    },
+    {
+      "id": 505,
+      "url": "http://localhost:3002/shows/505",
+      "name": "World News",
+      "type": "Scripted",
+      "language": "English",
+      "genres": ["Drama"],
+      "status": "Running",
+      "runtime": 35,
+      "averageRuntime": null,
+      "premiered": "2025-04-02",
+      "ended": null,
+      "officialSite": null,
+      "schedule": { "time": "20:30", "days": ["Monday"] },
+      "rating": { "average": 7.2 },
+      "weight": null,
+      "network": {
+        "id": 9,
+        "name": "CableOne",
+        "country": { "name": "United States" },
+        "officialSite": null
+      },
+      "webChannel": null,
+      "discographyType": "",
+      "externals": { "tvrage": null, "thetvdb": null, "imdb": null },
+      "image": null,
+      "summary": "<p>Dummy fixture.</p>",
+      "updated": 1700000000,
+      "_links": {
+        "self": { "href": "http://localhost:3002/shows/505" },
+        "previous_episodes": {
+          "href": "http://localhost:3002/shows/505/episodes"
+        }
+      }
+    }
+  ],
   "default": [
     {
       "id": 100,

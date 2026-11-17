@@ -1,23 +1,36 @@
-import type { SearchShowsOptions, Show } from './types';
+import type { SearchPage, SearchShowsOptions } from './types';
 
-const SEARCH_URL = '/api/shows';
+type SearchSelection = {
+  genre?: string;
+  page?: number;
+};
+
+const buildUrl = (query: string, { genre, page }: SearchSelection) => {
+  const params = [`q=${encodeURIComponent(query)}`];
+
+  if (genre) params.push(`genre=${encodeURIComponent(genre)}`);
+  if (page) params.push(`page=${page}`);
+
+  return `/api/search?${params.join('&')}`;
+};
 
 /**
- * Search shows through the backend, which owns the TVmaze interaction.
+ * Search shows through the backend, which owns the TVmaze interaction, the
+ * genre filtering and the pagination. Omit `genre` for the "All genres"
+ * option: the backend then returns the unfiltered result set.
  */
-export const searchShows = async (
+export const searchShowsPage = async (
   query: string,
+  selection: SearchSelection,
   { signal }: SearchShowsOptions = {},
-): Promise<Show[]> => {
-  const response = await fetch(`${SEARCH_URL}?q=${encodeURIComponent(query)}`, {
-    signal,
-  });
+): Promise<SearchPage> => {
+  const response = await fetch(buildUrl(query, selection), { signal });
 
   if (!response.ok) {
     throw new Error(`TVmaze search failed with status ${response.status}`);
   }
 
-  const shows: Show[] = await response.json();
+  const page: SearchPage = await response.json();
 
-  return shows;
+  return page;
 };

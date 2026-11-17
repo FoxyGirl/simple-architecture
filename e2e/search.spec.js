@@ -49,7 +49,7 @@ test('a failing upstream shows the error panel and retry recovers', async ({
   await blockTvmaze(page);
 
   await page.goto('/');
-  const arm = await request.post('http://localhost:3002/__fail-next');
+  const arm = await request.post('http://localhost:3002/__fail-next?q=mystery');
   expect(arm.ok()).toBeTruthy();
 
   await searchInput(page).fill('mystery');

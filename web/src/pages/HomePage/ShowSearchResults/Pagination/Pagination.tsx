@@ -1,10 +1,7 @@
 import clsx from 'clsx';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import type { Show } from '@api/types';
 import { useMediaQuery } from '@hooks/useMediaQuery';
-
-import type { Selection, SelectionChange } from '../types';
 
 import { usePagination } from './usePagination';
 
@@ -13,26 +10,18 @@ import { ArrowButton } from './ArrowButton';
 import styles from './Pagination.module.css';
 
 type PaginationProps = {
-  data: Show[];
-  selection: Selection;
-  onSelectionChange: (change: SelectionChange) => void;
+  page: number;
+  pageCount: number;
+  onSelectPage: (page: number) => void;
 };
 
 export const Pagination = ({
-  data,
-  selection,
-  onSelectionChange,
+  page,
+  pageCount,
+  onSelectPage,
 }: PaginationProps) => {
-  const {
-    page,
-    pageCount,
-    pages,
-    isFirstPage,
-    isLastPage,
-    selectPage,
-    goToPrev,
-    goToNext,
-  } = usePagination({ data, selection, onSelectionChange });
+  const { pages, isFirstPage, isLastPage, selectPage, goToPrev, goToNext } =
+    usePagination({ page, pageCount, onSelectPage });
 
   const { isDesktop } = useMediaQuery();
 

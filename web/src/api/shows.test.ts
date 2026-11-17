@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { searchShows } from './shows';
+import { searchShowsPage } from './shows';
 
 const fetchResponse = (
   body: unknown,
@@ -11,7 +11,15 @@ const fetchResponse = (
   json: async () => body,
 });
 
-describe('api searchShows', () => {
+const envelope = {
+  shows: [],
+  page: 1,
+  pageCount: 1,
+  totalCount: 0,
+  genres: [],
+};
+
+describe('api searchShowsPage', () => {
   let mockedFetch: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
@@ -23,22 +31,31 @@ describe('api searchShows', () => {
     vi.unstubAllGlobals();
   });
 
-  it('requests /api/shows with the url-encoded query', async () => {
-    mockedFetch.mockResolvedValue(fetchResponse([]));
+  it('requests /api/search with the encoded query and page, no genre', async () => {
+    mockedFetch.mockResolvedValue(fetchResponse(envelope));
 
-    await searchShows('the office');
+    await searchShowsPage('the office', { page: 1 });
 
-    expect(mockedFetch.mock.calls[0]?.[0]).toBe('/api/shows?q=the%20office');
+    expect(mockedFetch.mock.calls[0]?.[0]).toBe(
+      '/api/search?q=the%20office&page=1',
+    );
   });
 
-  it('returns the shows from the backend response', async () => {
-    const shows = [
-      { id: 1, name: 'The Office (US)' },
-      { id: 2, name: 'Office Romance' },
-    ];
-    mockedFetch.mockResolvedValue(fetchResponse(shows));
+  it('includes the url-encoded genre when one is set', async () => {
+    mockedFetch.mockResolvedValue(fetchResponse(envelope));
 
-    await expect(searchShows('office')).resolves.toEqual(shows);
+    await searchShowsPage('shows', { genre: 'Kids & Family', page: 2 });
+
+    expect(mockedFetch.mock.calls[0]?.[0]).toBe(
+      '/api/search?q=shows&genre=Kids%20%26%20Family&page=2',
+    );
+  });
+
+  it('returns the envelope from the backend response', async () => {
+    const body = { ...envelope, totalCount: 6, genres: ['Comedy', 'Drama'] };
+    mockedFetch.mockResolvedValue(fetchResponse(body));
+
+    await expect(searchShowsPage('office', { page: 1 })).resolves.toEqual(body);
   });
 
   it('throws on a non-OK backend response', async () => {
@@ -49,16 +66,16 @@ describe('api searchShows', () => {
       ),
     );
 
-    await expect(searchShows('office')).rejects.toThrow(
+    await expect(searchShowsPage('office', { page: 1 })).rejects.toThrow(
       'TVmaze search failed with status 502',
     );
   });
 
   it('propagates the AbortSignal to fetch', async () => {
     const controller = new AbortController();
-    mockedFetch.mockResolvedValue(fetchResponse([]));
+    mockedFetch.mockResolvedValue(fetchResponse(envelope));
 
-    await searchShows('office', { signal: controller.signal });
+    await searchShowsPage('office', { page: 1 }, { signal: controller.signal });
 
     expect(mockedFetch.mock.calls[0]?.[1]).toMatchObject({
       signal: controller.signal,

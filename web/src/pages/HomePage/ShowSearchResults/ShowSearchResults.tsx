@@ -1,11 +1,11 @@
 import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
-import type { Show } from '@api/types';
+import type { SearchPage } from '@api/types';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 
-import { STATUS, type SearchStatus } from '../constants';
+import type { Selection } from '../types';
 
-import { useShowSearchResults } from './useShowSearchResults';
+import { STATUS, type SearchStatus } from '../constants';
 
 import { GenreFilter } from './GenreFilter';
 import { Pagination } from './Pagination';
@@ -18,9 +18,12 @@ import { StatusPanel } from './StatusPanel';
 import styles from './ShowSearchResults.module.css';
 
 type ShowSearchResultsProps = {
-  data: Show[];
+  data: SearchPage | null;
   status: SearchStatus;
   queryEcho: string;
+  selection: Selection;
+  onGenreSelect: (genre: string) => void;
+  onPageSelect: (page: number) => void;
   onRetry: () => void;
   onClear: () => void;
 };
@@ -29,15 +32,16 @@ export const ShowSearchResults = ({
   data,
   status,
   queryEcho,
+  selection,
+  onGenreSelect,
+  onPageSelect,
   onRetry,
   onClear,
 }: ShowSearchResultsProps) => {
-  const { shows, selection, onSelectionChange } = useShowSearchResults(data);
-
   const { isDesktop } = useMediaQuery();
 
   const isLoading = status === STATUS.LOADING;
-  const isSuccess = status === STATUS.SUCCESS;
+  const isSuccess = status === STATUS.SUCCESS && data !== null;
 
   if (status === STATUS.IDLE) return null;
 
@@ -65,7 +69,7 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {isSuccess && shows.length === 0 && (
+      {isSuccess && data.shows.length === 0 && (
         <StatusPanel
           overline="STATE · EMPTY"
           icon={SearchX}
@@ -76,22 +80,22 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {isSuccess && shows.length > 0 && (
+      {isSuccess && data.shows.length > 0 && (
         <>
           <ResultsHead
-            data={data}
-            selection={selection}
+            totalCount={data.totalCount}
+            genre={selection.genre}
             queryEcho={queryEcho}
           />
 
           <GenreFilter
-            data={data}
-            selection={selection}
-            onSelectionChange={onSelectionChange}
+            genres={data.genres}
+            activeGenre={selection.genre}
+            onSelectGenre={onGenreSelect}
           />
 
           <div className={styles.list}>
-            {shows.map((show) =>
+            {data.shows.map((show) =>
               isDesktop ? (
                 <ShowCard key={show.id} show={show} />
               ) : (
@@ -101,9 +105,9 @@ export const ShowSearchResults = ({
           </div>
 
           <Pagination
-            data={data}
-            selection={selection}
-            onSelectionChange={onSelectionChange}
+            page={data.page}
+            pageCount={data.pageCount}
+            onSelectPage={onPageSelect}
           />
         </>
       )}

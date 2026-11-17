@@ -8,27 +8,28 @@ Guidance for AI agents (and humans) working in this repository.
 genre, paginate results, and view show details.
 
 The repository is an npm-workspaces monorepo with two packages: `web/`
-(the React frontend) and `server/` (an Express backend that currently runs
-standalone with no routes). Shared tooling (ESLint, Prettier, husky) lives at
+(the React frontend) and `server/` (an Express backend serving the
+`/api/search` endpoint: TVmaze proxying with a 5-minute cache, genre
+filtering and pagination). Shared tooling (ESLint, Prettier, husky) lives at
 the root; root scripts forward to the workspaces.
 
 Stack:
 
-| Concern  | Choice                                                                |
-| -------- | --------------------------------------------------------------------- |
-| Build    | Vite 7                                                                |
-| UI       | React 19                                                              |
-| Language | TypeScript 6 (`strict`, `noUncheckedIndexedAccess`)                   |
-| Routing  | React Router 7 (`react-router-dom`)                                   |
-| Icons    | lucide-react                                                          |
-| Classes  | clsx                                                                  |
-| API      | TVmaze REST (`https://api.tvmaze.com`) via fetch                      |
-| Backend  | Express 5 (`server/`, TypeScript ESM run with tsx, port 3001)         |
-| Tests    | Vitest (both workspaces), supertest, Playwright (E2E)                 |
-| Lint     | ESLint 9 (flat config) + typescript-eslint + `eslint-config-prettier` |
-| Format   | Prettier 3                                                            |
-| Hooks    | husky 9 + lint-staged 17 (pre-commit)                                 |
-| Design   | pen.dev canvas — `design/ScreenScout-design.pen`                      |
+| Concern  | Choice                                                                 |
+| -------- | ---------------------------------------------------------------------- |
+| Build    | Vite 7                                                                 |
+| UI       | React 19                                                               |
+| Language | TypeScript 6 (`strict`, `noUncheckedIndexedAccess`)                    |
+| Routing  | React Router 7 (`react-router-dom`)                                    |
+| Icons    | lucide-react                                                           |
+| Classes  | clsx                                                                   |
+| API      | Express backend (`server/`) proxying TVmaze; browser calls `/api` only |
+| Backend  | Express 5 (`server/`, TypeScript ESM run with tsx, port 3001)          |
+| Tests    | Vitest (both workspaces), supertest, Playwright (E2E)                  |
+| Lint     | ESLint 9 (flat config) + typescript-eslint + `eslint-config-prettier`  |
+| Format   | Prettier 3                                                             |
+| Hooks    | husky 9 + lint-staged 17 (pre-commit)                                  |
+| Design   | pen.dev canvas — `design/ScreenScout-design.pen`                       |
 
 Node 24 / npm 11. Vite 7 requires Node 20.19+ or 22.12+.
 

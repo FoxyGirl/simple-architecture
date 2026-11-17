@@ -9,6 +9,9 @@ import styles from './ShowsSearchField.module.css';
 type ShowsSearchFieldProps = {
   onSearchChange: (change: SearchChange) => void;
   registerControls: (controls: SearchControls | null) => void;
+  submitSearch: (query: string) => void;
+  isCurrentQuery: (query: string) => boolean;
+  abortSearch: () => void;
 };
 
 export const ShowsSearchField = (props: ShowsSearchFieldProps) => {

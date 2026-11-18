@@ -140,49 +140,83 @@ unchanged with the default configuration.
 
 **Tasks:**
 
-- [ ] Write this phase's API tests first (see Tests), extending the colocated
+- [x] Write this phase's API tests first (see Tests), extending the colocated
       `web/src/api/tests/` suite — they must fail before the implementation
-      exists.
-- [ ] Introduce the base-URL configuration in `web/src/api/`: a configured
+      exists. _(Added `buildUrl.test.ts` and `request.test.ts` and extended
+      `shows.test.ts`; red confirmed (suites failed on the unresolvable
+      `../config`/`../request`/`../errors` imports), then green.)_
+- [x] Introduce the base-URL configuration in `web/src/api/`: a configured
       value that prefixes every API request, with a default that preserves the
       current relative same-origin `/api/...` URLs (so the Vite dev proxy and
       the E2E harness keep working). The concrete seam (a config module with a
       setter vs. an `import.meta.env` variable stubbable via `vi.stubEnv`) is
       an implementation decision — the PRD only requires configurability, the
-      unchanged default, and test verifiability.
-- [ ] Centralize request configuration (URL building and query-parameter
+      unchanged default, and test verifiability. _(Decision:
+      `import.meta.env.VITE_API_BASE_URL` read at call time through
+      `web/src/api/config.ts` (`getApiBaseUrl()`); the default (unset) yields
+      an empty base and byte-identical relative URLs. The variable is typed
+      by an `ImportMetaEnv` augmentation in `web/src/vite-env.d.ts`; tests
+      stub it with `vi.stubEnv` — no exported mutable state was added.)_
+- [x] Centralize request configuration (URL building and query-parameter
       encoding), response handling (JSON parsing of the `SearchPage` envelope)
       and error handling (normalized errors for non-OK/failed responses)
       inside the API layer, keeping the `searchShowsPage(query, selection,
-  { signal })` function interface stable so the current consumer
-      (`useShowsDataFetching`) needs no changes.
-- [ ] Verify the encapsulation rules: no `fetch` call or request building
+{ signal })` function interface stable so the current consumer
+      (`useShowsDataFetching`) needs no changes. _(`web/src/api/request.ts`
+      owns URL building and percent-encoding (`buildApiUrl`, the `QueryParam`
+      pairs typed in `api/types.ts`) plus response handling (`requestJson`
+      parses the JSON envelope); non-OK responses become `ApiError`
+      (`web/src/api/errors.ts`) carrying the HTTP status, while aborts
+      propagate unchanged as `AbortError`. The old message
+      "TVmaze search failed with status N" became the normalized
+      "API request failed with status N" — only asserted in the API's own
+      suite; consumer suites mock the module boundary. `shows.ts` just
+      assembles the `/api/search` params now.)_
+- [x] Verify the encapsulation rules: no `fetch` call or request building
       outside `web/src/api/`, no low-level HTTP details in the function
       interface, and no `web/` module imports from the `server/` directory
-      (inspection/grep); new and touched files stay within 120 lines.
-- [ ] Run the full verification: `npm run typecheck`, `npm run lint`,
+      (inspection/grep); new and touched files stay within 120 lines. _(grep:
+      the only `fetch(` in `web/src` is `api/request.ts`; the remaining
+      `/api/search` occurrences outside `api/` are prose comments; no
+      `server/` imports anywhere in `web/src`; largest new/touched file is
+      `shows.test.ts` at 110 lines.)_
+- [x] Run the full verification: `npm run typecheck`, `npm run lint`,
       `npm run test` (both workspaces) and `npm run test:e2e` green with the
-      default configuration.
-- [ ] Manual default-flow check: `npm run server` + `npm run dev` — search,
+      default configuration. _(typecheck and lint exit 0 with no warnings;
+      web 32 tests / 9 files, server 30 tests / 5 files; Playwright 5/5
+      passed.)_
+- [x] Manual default-flow check: `npm run server` + `npm run dev` — search,
       genre filter, pagination and retry all work through the Vite proxy
-      exactly as before.
+      exactly as before. _(Verified against the running pair: the proxied
+      `/api/search` returned the correct envelope, genre/page params reached
+      the backend and the backend's page-clamping and empty-query 400 stayed
+      unchanged (server-side, untouched by this phase); the green E2E suite
+      proves the retry flow in a real browser.)_
 
 **Tests:**
 
-- [ ] API unit tests (mocked `fetch`, red -> green): with the default
+- [x] API unit tests (mocked `fetch`, red -> green): with the default
       configuration the request URL stays the relative
       `/api/search?q=...&genre=...&page=...` (existing URL assertions keep
       passing); with a changed configured base URL the same
       `searchShowsPage` call requests `<base>/api/search?...` without any
       caller code change; the envelope is returned from the response; a
       non-OK response produces the normalized error; the `AbortSignal` still
-      propagates to `fetch`.
-- [ ] The existing consumer suites (`searchFlow.test.tsx`,
+      propagates to `fetch`. _(All five covered: the pre-existing relative
+      URL assertions pass unchanged in `shows.test.ts`; the configured-base
+      assertion exists both at the builder level (`buildUrl.test.ts`) and on
+      the public `searchShowsPage` interface with `vi.stubEnv`
+      (`shows.test.ts`); envelope return asserted in both suites; normalized
+      `ApiError` with `status` asserted in `request.test.ts` and through
+      `shows.test.ts`; signal propagation asserted in `request.test.ts` and
+      the existing `shows.test.ts` case.)_
+- [x] The existing consumer suites (`searchFlow.test.tsx`,
       `searchRendering.test.tsx`, `useShowsSearchField.test.ts`) stay green
-      unchanged — the function interface is stable.
-- [ ] `npm run test:e2e`: all existing Playwright specs pass with the default
+      unchanged — the function interface is stable. _(Untouched; all pass —
+      32 web tests across 9 files.)_
+- [x] `npm run test:e2e`: all existing Playwright specs pass with the default
       configuration (browser requests still reach the Express backend through
-      the proxy).
+      the proxy). _(5/5 specs passed — identical to the baseline run.)_
 
 **When ready:**
 
@@ -193,16 +227,16 @@ request configuration, response handling and error handling exist only inside
 
 **Acceptance Criteria:**
 
-- [ ] The API layer uses a configurable base URL: changing the configured
+- [x] The API layer uses a configurable base URL: changing the configured
       value redirects all API requests to a different server without code
       changes in Presenter, Tasks or Entity (verified in tests).
-- [ ] With the default configuration, the dev flow (`npm run dev` +
+- [x] With the default configuration, the dev flow (`npm run dev` +
       `npm run server`) and the E2E flow are unchanged: browser requests still
       reach the Express backend and the existing Playwright specs pass.
-- [ ] The API layer encapsulates request configuration, response handling and
+- [x] The API layer encapsulates request configuration, response handling and
       error handling; consumers use only its function interface, and no `web/`
       module imports from the `server/` directory.
-- [ ] The API behavior is covered by automated tests in the colocated
+- [x] The API behavior is covered by automated tests in the colocated
       `web/src/api/tests/` folder.
 
 ### Phase 3: Shows-fetching Tasks

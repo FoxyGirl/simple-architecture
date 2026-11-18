@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { ApiError } from '../errors';
 import { searchShowsPage } from '../shows';
 
 const fetchResponse = (
@@ -29,6 +30,7 @@ describe('api searchShowsPage', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
   });
 
   it('requests /api/search with the encoded query and page, no genre', async () => {
@@ -67,7 +69,31 @@ describe('api searchShowsPage', () => {
     );
 
     await expect(searchShowsPage('office', { page: 1 })).rejects.toThrow(
-      'TVmaze search failed with status 502',
+      'API request failed with status 502',
+    );
+  });
+
+  it('normalizes the non-OK failure into an ApiError carrying the status', async () => {
+    mockedFetch.mockResolvedValue(
+      fetchResponse(
+        { error: 'TVmaze request failed' },
+        { ok: false, status: 502 },
+      ),
+    );
+
+    await expect(searchShowsPage('office', { page: 1 })).rejects.toThrow(
+      ApiError,
+    );
+  });
+
+  it('requests <base>/api/search when a base URL is configured', async () => {
+    vi.stubEnv('VITE_API_BASE_URL', 'https://backend.example.test');
+    mockedFetch.mockResolvedValue(fetchResponse(envelope));
+
+    await searchShowsPage('office', { genre: 'Comedy', page: 1 });
+
+    expect(mockedFetch.mock.calls[0]?.[0]).toBe(
+      'https://backend.example.test/api/search?q=office&genre=Comedy&page=1',
     );
   });
 

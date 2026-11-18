@@ -61,6 +61,12 @@ export type SearchShowsOptions = {
 };
 
 /**
+ * A single query-parameter pair used when building API URLs, e.g.
+ * `['genre', 'Comedy']`. Values are percent-encoded by the request layer.
+ */
+export type QueryParam = [key: string, value: string | number];
+
+/**
  * The backend `GET /api/search` envelope: the requested page slice plus the
  * metadata the UI renders — the total match count and the genres present in
  * the unfiltered result set.

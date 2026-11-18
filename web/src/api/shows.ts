@@ -1,36 +1,27 @@
-import type { SearchPage, SearchShowsOptions } from './types';
+import { buildApiUrl, requestJson } from './request';
+
+import type { QueryParam, SearchPage, SearchShowsOptions } from './types';
 
 type SearchSelection = {
   genre?: string;
   page?: number;
 };
 
-const buildUrl = (query: string, { genre, page }: SearchSelection) => {
-  const params = [`q=${encodeURIComponent(query)}`];
-
-  if (genre) params.push(`genre=${encodeURIComponent(genre)}`);
-  if (page) params.push(`page=${page}`);
-
-  return `/api/search?${params.join('&')}`;
-};
-
 /**
  * Search shows through the backend, which owns the TVmaze interaction, the
  * genre filtering and the pagination. Omit `genre` for the "All genres"
- * option: the backend then returns the unfiltered result set.
+ * option: the backend then returns the unfiltered result set. URL building,
+ * response parsing and error normalization live in the API request layer.
  */
 export const searchShowsPage = async (
   query: string,
-  selection: SearchSelection,
+  { genre, page }: SearchSelection,
   { signal }: SearchShowsOptions = {},
 ): Promise<SearchPage> => {
-  const response = await fetch(buildUrl(query, selection), { signal });
+  const params: QueryParam[] = [['q', query]];
 
-  if (!response.ok) {
-    throw new Error(`TVmaze search failed with status ${response.status}`);
-  }
+  if (genre) params.push(['genre', genre]);
+  if (page) params.push(['page', page]);
 
-  const page: SearchPage = await response.json();
-
-  return page;
+  return requestJson<SearchPage>(buildApiUrl('/api/search', params), signal);
 };

@@ -21,5 +21,5 @@
 
     "types": ["node"]
   },
-  "include": ["*.ts", "tests/**/*.ts"]
+  "include": ["**/*.ts"]
 }

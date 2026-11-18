@@ -1,4 +1,4 @@
-import type { Show, ShowSearchResult } from './types';
+import type { Show, ShowSearchResult } from '../types';
 
 const DEFAULT_BASE_URL = 'https://api.tvmaze.com';
 

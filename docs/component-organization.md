@@ -171,6 +171,33 @@ barrel file. The barrel is the public surface of the directory.
 - A component's `index.ts` MUST export its View only. Internal implementation details MUST remain private.
 - Shared pure utility functions MUST be placed in the nearest appropriate `utils/` folder and exported through its `index.ts`.
 
+## Backend (`server/`) organization
+
+The Express workspace mirrors the same ownership rules: every folder publishes
+itself through an `index.ts` barrel, and consumers import from the directory,
+never from a file inside it.
+
+- Every HTTP route MUST live in its own folder under `routes/`, named after the
+  route (e.g. `routes/search/`).
+- A route folder MUST expose its Express router through `index.ts`; the router
+  module (`<route>.ts`) and the route's private helpers (e.g. `shows.ts`) stay
+  inside the folder and MUST NOT be imported from outside it.
+- Helpers used exclusively by one route MUST reside in that route's folder;
+  helpers reused by several routes MUST move to the nearest common ancestor's
+  folder.
+- `routes/index.ts` MUST be a pure barrel re-exporting every route's router.
+- `app.ts` is the single composition point: it creates the Express app and
+  mounts the routers from `routes/` under `/api`. Route handlers MUST NOT be
+  defined in `app.ts`.
+- Backend modules shared by several routes (e.g. `cache/`, `tvmaze/`) MUST have
+  their own folder with an `index.ts` barrel exposing their public API.
+- Shared TVmaze API shapes stay in `server/types.ts`; types owned by a single
+  route live in that route's folder.
+- Tests follow the frontend rule: each folder keeps the suite for its own code
+  in a `tests/` subfolder (e.g. `server/routes/search/tests/`), and suites that
+  drive the whole exported app live in `server/tests/`. A colocated suite MAY
+  import the private files of the folder it covers.
+
 ```
 
 ```

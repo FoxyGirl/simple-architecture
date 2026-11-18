@@ -129,12 +129,25 @@ web/                  # frontend workspace (Vite + React)
   vercel.json         # SPA rewrites (set Vercel "Root Directory" to `web/`)
 
 server/               # backend workspace (Express, TypeScript ESM via tsx)
-  app.ts              # exported Express app: GET /api/search
+  app.ts              # exported Express app: composes and mounts the routes
   index.ts            # entry: starts the app on port 3001
-  tvmaze.ts           # TVmaze client (TVMAZE_BASE_URL seam, request logs)
-  cache.ts            # 5-minute plain-object TVmaze response cache
-  shows.ts            # server-side genre filtering + pagination helpers
   types.ts            # TVmaze API shapes owned by the backend
+  routes/             # one folder per HTTP route, mounted under /api by app.ts
+    index.ts          # barrel: re-exports every route's router
+    search/           # the GET /api/search route (q, genre, page)
+      index.ts        # barrel: exports searchRouter only
+      search.ts       # route handler: validation, cache call, errors
+      shows.ts        # server-side genre filtering + pagination helpers
+      tests/          # unit suite for the route's private helpers
+  cache/              # 5-minute plain-object TVmaze response cache
+    index.ts          # barrel: getCachedShows (+ cache for the suites)
+    cache.ts
+    tests/            # unit suite for the cache
+  tvmaze/             # TVmaze client (TVMAZE_BASE_URL seam, request logs)
+    index.ts          # barrel: searchShows
+    tvmaze.ts
+    tests/            # unit suite for the client
+  tests/              # app-level suites (supertest against the exported app)
   tsconfig.json       # same strict compiler rules as the web workspace
   vitest.config.ts    # Vitest config (node environment)
 

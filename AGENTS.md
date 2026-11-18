@@ -53,8 +53,10 @@ npm run format:check # prettier --check .  (read-only)
 
 In `web/` tests live in a `tests/` folder inside the component folder they
 cover (e.g. `web/src/pages/HomePage/tests/`, jsdom + Testing Library); the
-backend's tests live in `server/tests/` (supertest against the exported
-Express app). E2E specs and the local TVmaze stub (fixture-backed `search/shows`
+backend follows the same rule — app-level suites live in `server/tests/`
+(supertest against the exported Express app) and each backend folder keeps the
+suite for its own code in `<folder>/tests/` (e.g.
+`server/routes/search/tests/`). E2E specs and the local TVmaze stub (fixture-backed `search/shows`
 with a per-query hit counter, `GET /__hits`) live in `e2e/`; the backend
 reads its upstream base URL from `TVMAZE_BASE_URL` (default
 `https://api.tvmaze.com`), which is how E2E points it at the stub. Playwright

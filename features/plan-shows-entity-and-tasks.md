@@ -252,31 +252,51 @@ uses the old machinery; the Tasks are proven in isolation.
 
 **Tasks:**
 
-- [ ] Write the Task tests first (see Tests) in
+- [x] Write the Task tests first (see Tests) in
       `web/src/pages/HomePage/logic/tasks/tests/` — they must fail before the
-      implementation exists.
-- [ ] Create `web/src/pages/HomePage/logic/tasks/` and the shows-fetch Task
+      implementation exists. _(Wrote `fetchShowsPage.test.ts` first; red
+      confirmed as a failing suite (unresolvable `../fetchShowsPage`), then
+      green. Fixtures split into a colocated `tests/helpers.ts` to keep the
+      suite under the 120-line budget.)_
+- [x] Create `web/src/pages/HomePage/logic/tasks/` and the shows-fetch Task
       (e.g. `fetchShowsPage.ts`): an ordinary async TypeScript function — no
       React component, no hook — accepting all required data (query, genre,
       page) as explicit arguments, performing HTTP only through the API layer,
       updating the store only via `store.dispatch` on success, and returning
-      the operation result (success/failure) to the Presenter.
-- [ ] Move the in-flight coordination from `useShowsDataFetching` into the
+      the operation result (success/failure) to the Presenter. _(
+      `fetchShowsPage(request: SearchRequest)` — the page-typed
+      `{ query, genre, page }` object arrives entirely through the argument;
+      result type `ShowsFetchResult` (`success | error | aborted`, declared
+      in the page `types.ts` where the shared page types live); calls
+      `searchShowsPage` from `@api/shows` and dispatches
+      `searchResultStored(page)` from `@store` on success only.)_
+- [x] Move the in-flight coordination from `useShowsDataFetching` into the
       Task layer: every run aborts the previous in-flight request, an aborted
       (superseded) response never dispatches to the store, and the task module
       exposes an abort of the current in-flight request (needed later by the
       search field's discard/cleanup path). Keep task-owned coordination state
-      out of Redux.
-- [ ] Enforce the Task constraints in the implementation: no `fetch` or URL
+      out of Redux. _(Module-level `inFlight: AbortController` in
+      `fetchShowsPage.ts`; each run aborts the predecessor, guards both the
+      rejection path (`isAbortError` -> `'aborted'`) and a response that
+      resolves after its signal was aborted (skips the dispatch), and
+      `abortShowsFetch()` aborts the current request and settles the run as
+      `'aborted'`. Redux holds no coordination state.)_
+- [x] Enforce the Task constraints in the implementation: no `fetch` or URL
       building inside task files, no `store.getState()`, no selector usage, no
       React/hook imports; every file within the 120-line budget (split with
-      private helper modules if needed).
-- [ ] Run `npm run typecheck`, `npm run lint` and `npm run test` green; the
+      private helper modules if needed). _(Inspection of `logic/tasks/`: the
+      only imports are `@api/shows`, `@store` and `../../types`; no `fetch(`,
+      no query encoding, no `getState`/selectors, no React. `fetchShowsPage.ts`
+      63 lines, `tests/fetchShowsPage.test.ts` 117, `tests/helpers.ts` 48.)_
+- [x] Run `npm run typecheck`, `npm run lint` and `npm run test` green; the
       app and the E2E suite are unaffected (the Tasks are not consumed yet).
+      _(typecheck and lint exit 0 without warnings; web 38 tests / 10 files
+      (6 new Task tests), server 30; Playwright 5/5 still green; grep proves
+      nothing outside the suite imports the task module yet.)_
 
 **Tests:**
 
-- [ ] Task unit tests (red -> green; `vi.mock` at the `@api/shows` boundary,
+- [x] Task unit tests (red -> green; `vi.mock` at the `@api/shows` boundary,
       dispatch asserted against store state with per-case isolation): the Task
       calls the API function with exactly the explicit query/genre/page
       arguments; on success it dispatches the Entity action with the fetched
@@ -284,11 +304,23 @@ uses the old machinery; the Tasks are proven in isolation.
       returns an error result and dispatches nothing (no stale data); a
       superseded run (previous request aborted by a newer one) neither
       dispatches nor overwrites the newer data in the store; aborting the
-      in-flight request leaves the store untouched.
-- [ ] Constraint coverage: the task file exposes only the plain function
+      in-flight request leaves the store untouched. _(6 tests:
+      explicit-argument call + store write asserted via `store.getState()`
+      against the dispatched envelope; failure case keeps the sentinel page;
+      supersede case aborts the older signal, the rejected older run
+      dispatches nothing while the newer page lands; the resolve-after-abort
+      guard and `abortShowsFetch()` both settle as `'aborted'` with the store
+      untouched. Isolation: sentinel re-dispatched in `beforeEach`,
+      `abortShowsFetch()` in `afterEach`.)_
+- [x] Constraint coverage: the task file exposes only the plain function
       interface (no hooks), verified by the suite importing it without React.
-- [ ] All pre-existing suites stay green: `npm run test` (web + server);
-      `npm run test:e2e` unaffected.
+      _(The suite is plain TypeScript — no React import anywhere; one test
+      asserts the module exports exactly `abortShowsFetch` and
+      `fetchShowsPage`, both plain functions, and that aborting with nothing
+      in flight is a no-op.)_
+- [x] All pre-existing suites stay green: `npm run test` (web + server);
+      `npm run test:e2e` unaffected. _(web 10 files / 38 tests (the 9
+      previous files untouched), server 30, Playwright 5/5.)_
 
 **When ready:**
 
@@ -299,17 +331,17 @@ handle supersede/abort — while the running application is unchanged.
 
 **Acceptance Criteria:**
 
-- [ ] Shows fetching is implemented as Task functions — plain TypeScript, no
+- [x] Shows fetching is implemented as Task functions — plain TypeScript, no
       React hooks — located in the HomePage `logic/tasks/` folder.
-- [ ] Tasks perform HTTP communication only through the API layer (no `fetch`
+- [x] Tasks perform HTTP communication only through the API layer (no `fetch`
       or request building inside task files) and update the store only via
       `store.dispatch` (no `store.getState()` and no selector usage inside
       tasks).
-- [ ] Tasks receive all required application data (query, genre, page) through
+- [x] Tasks receive all required application data (query, genre, page) through
       explicit function arguments.
-- [ ] A superseded in-flight request does not overwrite the newer data in the
+- [x] A superseded in-flight request does not overwrite the newer data in the
       store.
-- [ ] The Task behavior is covered by automated tests in the colocated
+- [x] The Task behavior is covered by automated tests in the colocated
       `logic/tasks/tests/` folder.
 
 ### Phase 4: Rewire the HomePage to Presenter, Tasks and Entity

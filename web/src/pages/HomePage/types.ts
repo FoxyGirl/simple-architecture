@@ -34,6 +34,15 @@ export type SearchSnapshot = {
 export type SearchChange = Partial<SearchSnapshot>;
 
 /**
+ * The outcome of a shows-fetch Task run, returned to the caller. `'aborted'`
+ * means the request was superseded or cancelled and stored nothing.
+ */
+export type ShowsFetchResult =
+  | { status: 'success'; page: SearchPage }
+  | { status: 'error' }
+  | { status: 'aborted' };
+
+/**
  * The search-field actions the page presenter can trigger from the results.
  */
 export type SearchControls = {

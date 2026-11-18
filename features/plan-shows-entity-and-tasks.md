@@ -44,50 +44,67 @@ yet). Tracer bullet for the Entity layer.
 
 **Tasks:**
 
-- [ ] Write the Entity tests first (see Tests) in a colocated `tests/` folder
+- [x] Write the Entity tests first (see Tests) in a colocated `tests/` folder
       of the store module's directory — they must fail before the
       implementation exists.
-- [ ] Add `@reduxjs/toolkit` and `react-redux` to the `web/` workspace
+- [x] Add `@reduxjs/toolkit` and `react-redux` to the `web/` workspace
       dependencies in versions compatible with React 19 and the strict
       TypeScript 6 configuration; run `npm install` from the root (single
-      lockfile).
-- [ ] Decide the store placement from the documented organization rules
+      lockfile). _(Installed `@reduxjs/toolkit@^2.14.0` and
+      `react-redux@^9.3.1`.)_
+- [x] Decide the store placement from the documented organization rules
       (ownership, `index.ts` barrels, import aliases) — the PRD leaves it
       open; the natural candidate is a new top-level `web/src/store/` folder
       whose barrel publishes the store, the root state/dispatch types and the
-      Entity's actions and selectors. Record the decision.
-- [ ] Implement the shows Entity with `createSlice`: state type declared as a
+      Entity's actions and selectors. Record the decision. _(Decision:
+      `web/src/store/` — `store.ts` (configureStore), `types.ts`
+      (`RootState`/`AppDispatch`) and an `index.ts` barrel publishing the
+      store, the root types and the shows Entity's actions/selectors/state
+      type; the reducer is published by the Entity's own barrel and consumed
+      only by `store.ts`. The Entity lives in `web/src/store/shows/`:
+      `showsSlice.ts` (`createSlice`), `selectors.ts`, `types.ts`
+      (`ShowsState` = `SearchPage` from `@api/types`), plus colocated
+      `tests/`.)_
+- [x] Implement the shows Entity with `createSlice`: state type declared as a
       `type` alias in the Entity's `types.ts` (reusing the `SearchPage` shape
       from `@api/types` for the data model), an empty initial state, a reducer
       that stores a fetched search result, and selectors exposing the shows
       list and the `page`/`pageCount`/`totalCount`/`genres` metadata. No
       request status, no other UI-related state, no presentation logic.
-- [ ] Wire the store at the application root: wrap `<App />` in
+- [x] Wire the store at the application root: wrap `<App />` in
       `<Provider store={...}>` in `web/src/main.tsx`.
-- [ ] If the chosen placement is crossed by directory-boundary imports (store
+- [x] If the chosen placement is crossed by directory-boundary imports (store
       consumed from `pages/` in later phases), register the frontend alias
       (e.g. `@store`) in all four configs in sync: `web/vite.config.ts`
       (`resolve.alias`), `web/vitest.config.ts`, root `eslint.config.js`
       (alias resolver) and `web/tsconfig.app.json` (`compilerOptions.paths`).
-- [ ] Verify independence and the line budget: the store/Entity modules import
+      _(`@store` registered in all four configs in sync; the alias table in
+      `docs/coding-conventions.md` was updated to document it.)_
+- [x] Verify independence and the line budget: the store/Entity modules import
       nothing from Views, Presenters or Tasks; every new file stays within
       120 lines; run `npm run typecheck`, `npm run lint`, `npm run test` and
       `npm run test:e2e` — all existing suites pass unchanged (the page tests
       render `HomePage` without a Provider because it does not consume the
-      store yet).
+      store yet). _(Store modules import only `@reduxjs/toolkit`,
+      `@api/types` and their own files; largest new file is 77 lines; all
+      suites green.)_
 
 **Tests:**
 
-- [ ] Entity unit tests (red -> green): the reducer stores a `SearchPage`
+- [x] Entity unit tests (red -> green): the reducer stores a `SearchPage`
       payload (shows list + `page`, `pageCount`, `totalCount`, `genres`); the
       selectors return each piece from the store; the initial state is empty;
       the state shape contains no request-status or UI-related field.
-- [ ] Store smoke: the store is created with the Entity reducer and its
+- [x] Store smoke: the store is created with the Entity reducer and its
       `dispatch`/selectors round-trip a result (plain store, no React).
-- [ ] All pre-existing suites stay green untouched: `npm run test` (web +
-      server) and `npm run test:e2e` (4 Playwright specs).
-- [ ] Manual: `npm run server` + `npm run dev` — the app loads and a search
-      behaves exactly as before the phase.
+- [x] All pre-existing suites stay green untouched: `npm run test` (web +
+      server) and `npm run test:e2e` (4 Playwright specs). _(The suite
+      actually contains 5 specs; all 5 pass.)_
+- [x] Manual: `npm run server` + `npm run dev` — the app loads and a search
+      behaves exactly as before the phase. _(Verified: the dev server serves
+      the app and `/api/search` through the Vite proxy returned the correct
+      envelope; the green Playwright suite additionally proves the real
+      browser flow with the `Provider` mounted.)_
 
 **When ready:**
 
@@ -98,16 +115,16 @@ running app plus every existing suite is unchanged.
 
 **Acceptance Criteria:**
 
-- [ ] The `web/` workspace depends on Redux Toolkit and `react-redux`; a Redux
+- [x] The `web/` workspace depends on Redux Toolkit and `react-redux`; a Redux
       store is created and provided at the application root, and
       `npm run typecheck`, `npm run lint`, `npm run test` and
       `npm run test:e2e` pass.
-- [ ] The Entity stores the current search result — the shows list plus
+- [x] The Entity stores the current search result — the shows list plus
       `page`, `pageCount`, `totalCount` and `genres` — and exposes actions,
       reducers, selectors and state types as its public API.
-- [ ] The Entity contains no request status or other UI-related state, no
+- [x] The Entity contains no request status or other UI-related state, no
       presentation logic, and no dependencies on Views, Presenters or Tasks.
-- [ ] The Entity behavior is covered by automated tests in a colocated
+- [x] The Entity behavior is covered by automated tests in a colocated
       `tests/` folder.
 
 ### Phase 2: API layer — configurable base URL and centralized request handling
@@ -137,7 +154,7 @@ unchanged with the default configuration.
       encoding), response handling (JSON parsing of the `SearchPage` envelope)
       and error handling (normalized errors for non-OK/failed responses)
       inside the API layer, keeping the `searchShowsPage(query, selection,
-    { signal })` function interface stable so the current consumer
+  { signal })` function interface stable so the current consumer
       (`useShowsDataFetching`) needs no changes.
 - [ ] Verify the encapsulation rules: no `fetch` call or request building
       outside `web/src/api/`, no low-level HTTP details in the function

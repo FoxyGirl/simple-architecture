@@ -194,9 +194,11 @@ Imports that cross directory boundaries MUST use an alias instead of a deep rela
 | -------- | -------------- | ------------------------------------------------------- |
 | `@api`   | `src/api`      | `import { searchShowsPage } from '@api/shows';`         |
 | `@hooks` | `src/hooks`    | `import { useMediaQuery } from '@hooks/useMediaQuery';` |
+| `@store` | `src/store`    | `import { store } from '@store';`                       |
 | `~`      | `server/` root | `import { getCachedShows } from '~/cache';`             |
 
-- `@api` and `@hooks` are frontend aliases; `~` is the backend alias and always
+- `@api`, `@hooks` and `@store` are frontend aliases; `~` is the backend
+  alias and always
   resolves to the `server/` workspace root, so a route folder such as
   `server/routes/search/` writes `'~/cache'` and `'~/types'` instead of
   `'../../cache'` and `'../../types'`.

@@ -23,7 +23,9 @@
 
     "paths": {
       "@api/*": ["./src/api/*"],
-      "@hooks/*": ["./src/hooks/*"]
+      "@hooks/*": ["./src/hooks/*"],
+      "@store": ["./src/store"],
+      "@store/*": ["./src/store/*"]
     }
   },
   "include": ["src"]

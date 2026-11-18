@@ -12,11 +12,11 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
-// Keep in sync with `resolve.alias` in web/vite.config.ts and the `~` alias in
-// server/vitest.config.ts plus the `paths` mappings of both tsconfigs.
+// Keep in sync with the vite/vitest/tsconfig alias and paths maps.
 const aliases = {
   '@api': path.join(rootDir, 'web/src/api'),
   '@hooks': path.join(rootDir, 'web/src/hooks'),
+  '@store': path.join(rootDir, 'web/src/store'),
   '~': path.join(rootDir, 'server'),
 };
 

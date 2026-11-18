@@ -58,11 +58,14 @@ The compiler runs in `strict` mode with `noUncheckedIndexedAccess`,
 `verbatimModuleSyntax` and `erasableSyntaxOnly`. Types live in a `types.ts`
 file next to the code that owns them.
 
-Import specifiers carry no file extension:
+Import specifiers carry no file extension. `@api`/`@hooks` alias frontend
+folders, and `~` aliases the `server/` root so backend routes never write
+`../../` climbs:
 
 ```ts
 import { searchShowsPage } from '@api/shows';
 import { useMediaQuery } from '@hooks/useMediaQuery';
+import { getCachedShows } from '~/cache';
 ```
 
 ### CSS Module types

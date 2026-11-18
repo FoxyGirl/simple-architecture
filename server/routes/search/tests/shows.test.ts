@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { Show } from '../../../types';
+import type { Show } from '~/types';
 import {
   ALL_GENRES,
   RESULTS_PER_PAGE,

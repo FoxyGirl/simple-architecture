@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { getCachedShows } from '../../cache';
+import { getCachedShows } from '~/cache';
 import { buildSearchPage } from './shows';
 
 /**

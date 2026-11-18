@@ -190,18 +190,28 @@ else. For production, self-host with `@fontsource/sora` and `@fontsource/inter`.
 
 Imports that cross directory boundaries MUST use an alias instead of a deep relative path.
 
-| Alias    | Target      | Example                                                 |
-| -------- | ----------- | ------------------------------------------------------- |
-| `@api`   | `src/api`   | `import { searchShowsPage } from '@api/shows';`         |
-| `@hooks` | `src/hooks` | `import { useMediaQuery } from '@hooks/useMediaQuery';` |
+| Alias    | Target         | Example                                                 |
+| -------- | -------------- | ------------------------------------------------------- |
+| `@api`   | `src/api`      | `import { searchShowsPage } from '@api/shows';`         |
+| `@hooks` | `src/hooks`    | `import { useMediaQuery } from '@hooks/useMediaQuery';` |
+| `~`      | `server/` root | `import { getCachedShows } from '~/cache';`             |
 
+- `@api` and `@hooks` are frontend aliases; `~` is the backend alias and always
+  resolves to the `server/` workspace root, so a route folder such as
+  `server/routes/search/` writes `'~/cache'` and `'~/types'` instead of
+  `'../../cache'` and `'../../types'`.
 - Relative imports remain the default for files in the same directory or in a
-  directly owned sibling component.
-- Aliases are declared in `vite.config.ts` (`resolve.alias`) and MUST be
-  mirrored in `eslint.config.js` (alias resolver) and `tsconfig.app.json`
+  directly owned sibling component — and for a colocated `tests/` folder
+  importing the private files of the folder it covers (`'../shows'`).
+- Frontend aliases are declared in `vite.config.ts` (`resolve.alias`) and MUST
+  be mirrored in `eslint.config.js` (alias resolver) and `tsconfig.app.json`
   (`compilerOptions.paths`, editor support).
-- The three configurations MUST be kept in sync when an alias is added,
-  renamed or removed.
+- The backend alias `~` has no Vite config: it lives in `eslint.config.js`,
+  `server/tsconfig.json` (`compilerOptions.paths`) and `server/vitest.config.ts`
+  (`resolve.alias`). `tsx` reads the tsconfig mapping, so the running backend
+  resolves `~` too.
+- Every configuration that declares an alias MUST be kept in sync when an alias
+  is added, renamed or removed.
 
 ## Code style
 

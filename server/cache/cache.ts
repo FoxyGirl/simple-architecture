@@ -1,5 +1,5 @@
-import type { Show } from '../types';
-import { searchShows } from '../tvmaze';
+import type { Show } from '~/types';
+import { searchShows } from '~/tvmaze';
 
 // The in-memory TVmaze response cache required by the PRD: a plain object
 // keyed by the search query, each entry holding the mapped shows and the

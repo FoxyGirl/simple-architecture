@@ -1,4 +1,4 @@
-import type { Show } from '../../types';
+import type { Show } from '~/types';
 
 // Mirrors of the frontend UI constants
 // (web/src/pages/HomePage/ShowSearchResults/constants.ts).

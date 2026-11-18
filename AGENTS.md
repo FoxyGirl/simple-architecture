@@ -157,6 +157,10 @@ Fixable problems are repaired and the commit continues; unfixable errors
   compiler runs. `npm run css-types` runs it on demand.
 - Import specifiers carry no file extension. The ESLint import resolver cannot
   map a `.js` specifier onto a `.ts` file.
+- The backend has one import alias: `~` for the `server/` root, so route
+  folders never write `../../` climbs. It is declared in `eslint.config.js`,
+  `server/tsconfig.json` (`paths`) and `server/vitest.config.ts`
+  (`resolve.alias`); `tsx` honours the tsconfig mapping at runtime.
 - Run `npm run typecheck` before committing — `npm run build` runs the same
   check as its first step.
 

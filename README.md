@@ -105,7 +105,7 @@ The repository is an npm-workspaces monorepo with a shared tooling root:
 ```
 web/                  # frontend workspace (Vite + React)
   src/
-    main.tsx          # Entry point, mounts <App /> inside BrowserRouter
+    main.tsx          # Entry point, mounts <App /> in the Redux Provider + Router
     App.tsx           # Layout + route definitions
     App.module.css    # App shell styles (CSS Module)
     index.css         # Global reset + token import
@@ -118,9 +118,18 @@ web/                  # frontend workspace (Vite + React)
     pages/
       HomePage/
         HomePage.tsx        # "/" route
-        useHomePage.ts      # page presenter
         HomePage.module.css # Page styles (CSS Module)
         index.ts            # public export
+        logic/
+          useHomePage.ts    # page presenter (Entity reads + Task orchestration)
+          tasks/
+            fetchShowsPage.ts # shows-fetch Task: API -> store.dispatch
+        tests/              # page-level suites (jsdom + Testing Library)
+    store/
+      store.ts        # Redux store (configureStore, shows reducer)
+      types.ts        # RootState / AppDispatch
+      shows/          # shows Entity: slice, selectors, state types
+      index.ts        # barrel: store, root types, Entity actions/selectors
     styles/
       tokens.css      # Design tokens as CSS custom properties
     ui-kit/           # Shared, project-wide UI components

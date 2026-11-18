@@ -1,7 +1,12 @@
-import { act, fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import { vi } from 'vitest';
 
+import { searchResultStored, store } from '@store';
+
 import type { SearchPage, Show } from '@api/types';
+
+import { HomePage } from '../pages/HomePage';
 
 // Shared helpers for the HomePage server-driven search-flow test suites.
 
@@ -36,6 +41,13 @@ export const page2 = envelope({
   genres: ['Comedy', 'Drama'],
 });
 
+// What the backend returns for the "Comedy" genre of the same query.
+export const comedyPage = envelope({
+  shows: [show(10, 'Comedy Only')],
+  totalCount: 1,
+  genres: ['Comedy', 'Drama'],
+});
+
 const input = () =>
   screen.getByRole('textbox', { name: 'Search for TV shows' });
 
@@ -66,3 +78,19 @@ export const click = async (element: HTMLElement) => {
   fireEvent.click(element);
   await flush();
 };
+
+// Renders HomePage against the application store the Tasks dispatch into, so
+// the suites can both drive and inspect the shows Entity. The reset empties
+// the Entity — every suite starts from the documented initial state.
+export const renderHomePage = () => {
+  store.dispatch(searchResultStored(envelope()));
+
+  return render(
+    <Provider store={store}>
+      <HomePage />
+    </Provider>,
+  );
+};
+
+// The Entity's current content, straight from the store the Presenter reads.
+export const storedPage = () => store.getState().shows;

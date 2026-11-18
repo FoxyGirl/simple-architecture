@@ -358,7 +358,7 @@ suite (unit + integration + E2E) is green.
 
 **Tasks:**
 
-- [ ] Update the page-level tests first: wrap the `HomePage` renders in the
+- [x] Update the page-level tests first: wrap the `HomePage` renders in the
       Redux `Provider` (the `HomePage.test.tsx`, `searchFlow.test.tsx`,
       `searchRendering.test.tsx` suites and the shared `test/home-flow.ts`
       helper) and add the store-read assertions (after a successful search /
@@ -366,55 +366,94 @@ suite (unit + integration + E2E) is green.
       the rendered shows come from it through the Presenter's selectors);
       keep every existing behavior assertion (loading/error panels, resets,
       dedup, abort, retry). The new assertions are red against the current
-      code.
-- [ ] Move the Presenter to `web/src/pages/HomePage/logic/useHomePage.ts`:
+      code. _(The helper gained `renderHomePage()` — a real-`Provider` render
+      that resets the shows Entity first — plus a `storedPage()` inspection
+      helper and the `comedyPage` fixture; it was renamed to
+      `test/home-flow.tsx` for the JSX (96 lines). 5 assertions were red
+      before the rewiring: the 4 store-state checks in `searchFlow` and the
+      store-driven render test in `searchRendering`; every pre-existing
+      behavior assertion stayed green throughout.)_
+- [x] Move the Presenter to `web/src/pages/HomePage/logic/useHomePage.ts`:
       consume the Entity through selectors (react-redux), keep
       status/queryEcho/selection plus the reset rules (new search resets
       genre and page, genre change resets page to 1) and the current-query
       deduplication (`isCurrentQuery`) as presenter-owned presentation state,
       invoke the Tasks with explicit query/genre/page arguments, translate the
       returned Task results into the loading/success/error status, and make
-      retry re-invoke the Task with the current request.
-- [ ] Delete `useShowsDataFetching.ts` and wire the search field's
+      retry re-invoke the Task with the current request. _(Delegated per the
+      documented allowance: `logic/useHomePage.ts` (105 lines) owns the
+      snapshot and the reset rules; `logic/useStoredSearchPage.ts` reads the
+      Entity through its selectors; `logic/useShowsRequest.ts` coordinates the
+      Task runs (LOADING on start, SUCCESS/ERROR from the returned
+      `ShowsFetchResult`, silence on `'aborted'`, retry via `requestRef`).
+      `SearchSnapshot`/`SearchChange` lost the `data` field — results now
+      live only in the Entity.)_
+- [x] Delete `useShowsDataFetching.ts` and wire the search field's
       discard/cleanup path (`abortSearch` on query change/clear) to the Task
       layer's abort; the field presenter (`useShowsSearchField`) keeps its
-      debounce and prop interface unchanged.
-- [ ] Update `HomePage.tsx` to import the Presenter from `./logic/useHomePage`;
+      debounce and prop interface unchanged. _(Both
+      `useShowsDataFetching.ts` and the old root `useHomePage.ts` deleted;
+      `abortSearch` calls `abortShowsFetch()` from the task module; the field
+      presenter and its suite are untouched.)_
+- [x] Update `HomePage.tsx` to import the Presenter from `./logic/useHomePage`;
       the View's JSX, props flow and styling stay untouched (no visual/UX
-      change), and the View never accesses the store directly.
-- [ ] Respect the boundaries and budgets: the Presenter stays within 120 lines
+      change), and the View never accesses the store directly. _(Only the
+      import line changed; grep proves no `@store`/`react-redux` import in
+      any View file.)_
+- [x] Respect the boundaries and budgets: the Presenter stays within 120 lines
       (it MAY delegate to smaller specialized hooks per
       `docs/architecture.md`); the Presenter contains no `fetch`/API calls and
       dispatches no Redux actions directly; update the `home-flow.ts` helper
-      within its own 120-line budget.
-- [ ] Sync the documentation that describes the changed frontend structure:
+      within its own 120-line budget. _(Presenter 105 + delegation hooks 50
+      and 24 lines; helper 96; grep: no `fetch(`/`@api/shows`/`store.dispatch`
+      outside `api/` and `logic/tasks/`; the only store reads live in
+      `useStoredSearchPage` selectors.)_
+- [x] Sync the documentation that describes the changed frontend structure:
       the README `web/` tree (presenter path, `store/`, `logic/tasks/`) and
       the AGENTS.md stack table (Redux Toolkit + react-redux as the state
-      layer), keeping the documented rules themselves unchanged.
-- [ ] Run the full verification: `npm run typecheck`, `npm run lint`,
+      layer), keeping the documented rules themselves unchanged. _(README tree
+      now shows `HomePage/logic/` + `logic/tasks/` + the `store/` folder and
+      the Provider-aware `main.tsx` line; AGENTS.md gained the
+      `State | Redux Toolkit + react-redux` row.)_
+- [x] Run the full verification: `npm run typecheck`, `npm run lint`,
       `npm run test` (both workspaces), `npm run test:e2e` and
       `npm run build`; manual dev-flow check (`npm run server` +
       `npm run dev`): search, genre filter, pagination, retry, clear, and
-      rapid re-typing (superseded request) all behave as before.
+      rapid re-typing (superseded request) all behave as before. _(typecheck
+      and lint exit 0 with no warnings; web 39 tests / 10 files (the new
+      store-driven test included), server 30 / 5; Playwright 5/5;
+      `npm run build` green. Manual: the dev pair served
+      `q=office` / `genre=Comedy` / `page=2` through the proxy (backend log:
+      cache MISS then HITs) and the green E2E suite proves the browser retry,
+      clear and supersede flows.)_
 
 **Tests:**
 
-- [ ] Provider-wrapped page suites green (red -> green on the new store
+- [x] Provider-wrapped page suites green (red -> green on the new store
       assertions): submitting a search requests page 1 with no genre; a genre
       change requests page 1 with that genre; a page change requests that
       page; a new search resets genre and page; an in-flight request is
       aborted when a newer one starts; the error panel renders on failure and
       "Retry request" re-issues the current request; skeletons/loading states
-      render as before.
-- [ ] Store-read assertions: the shows rendered by HomePage after a
+      render as before. _(All five red store/read assertions went green; the
+      100% pre-existing assertions (request params, resets, abort signals,
+      error panel + retry, envelope-driven rendering) passed unchanged.)_
+- [x] Store-read assertions: the shows rendered by HomePage after a
       successful search, genre change or page change are read from the store
       through the selectors used by the Presenter (verifiable via store state
-      inspection in the suites).
-- [ ] `npm run test:e2e`: all existing Playwright specs pass unchanged — they
+      inspection in the suites). _(After each flow `storedPage()` equals the
+      mocked API payload (`searchFlow`); a new `searchRendering` test
+      dispatches `searchResultStored(page2)` directly and the list re-renders
+      from the store with no additional API call — proving the render path is
+      the Entity's selectors.)_
+- [x] `npm run test:e2e`: all existing Playwright specs pass unchanged — they
       are the equivalence gate for the rewiring (no new E2E behavior exists).
-- [ ] `npm run typecheck`, `npm run lint`, `npm run build` green; no reference
+      _(5/5 specs passed against the rewired page, identical to the baseline
+      run.)_
+- [x] `npm run typecheck`, `npm run lint`, `npm run build` green; no reference
       to the deleted `useShowsDataFetching` remains (compiler/ESLint report no
-      unresolved or unused imports).
+      unresolved or unused imports). _(All exit 0, no lint warnings; grep and
+      the compiler confirm the deleted modules are unreferenced.)_
 
 **When ready:**
 
@@ -426,17 +465,17 @@ behavior identical to the pre-feature app.
 
 **Acceptance Criteria:**
 
-- [ ] After a successful search, genre change or page change, the shows
+- [x] After a successful search, genre change or page change, the shows
       rendered by HomePage are read from the store through selectors used by
       the Presenter.
-- [ ] The Presenter initiates fetching only by invoking Tasks and never calls
+- [x] The Presenter initiates fetching only by invoking Tasks and never calls
       the API layer or `fetch` directly; the Tasks live in the HomePage
       `logic/tasks/` folder.
-- [ ] The HomePage Presenter lives at `logic/useHomePage.ts` and the former
+- [x] The HomePage Presenter lives at `logic/useHomePage.ts` and the former
       direct-fetch helper (`useShowsDataFetching`) no longer exists.
-- [ ] Existing user-visible behavior is preserved: loading and error states
+- [x] Existing user-visible behavior is preserved: loading and error states
       render as before, a new search resets genre and page, a genre change
       resets the page to 1, retry re-issues the current request, and a
       superseded in-flight request does not overwrite newer results.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test` and
+- [x] `npm run typecheck`, `npm run lint`, `npm run test` and
       `npm run test:e2e` pass with the rewired page.

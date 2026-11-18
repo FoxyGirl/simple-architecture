@@ -21,6 +21,7 @@ Stack:
 | UI       | React 19                                                               |
 | Language | TypeScript 6 (`strict`, `noUncheckedIndexedAccess`)                    |
 | Routing  | React Router 7 (`react-router-dom`)                                    |
+| State    | Redux Toolkit + react-redux (store and Entity in `web/src/store/`)     |
 | Icons    | lucide-react                                                           |
 | Classes  | clsx                                                                   |
 | API      | Express backend (`server/`) proxying TVmaze; browser calls `/api` only |

@@ -1,9 +1,8 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { searchShowsPage } from '@api/shows';
-
-import { HomePage } from '../index';
+import { searchResultStored, store } from '@store';
 
 import {
   arrow,
@@ -12,7 +11,9 @@ import {
   click,
   page1,
   page2,
+  renderHomePage,
   settle,
+  storedPage,
   typeQuery,
 } from '../../../test/home-flow';
 
@@ -22,7 +23,7 @@ describe('HomePage envelope-driven rendering', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.mocked(searchShowsPage).mockReset().mockResolvedValue(page1);
-    render(<HomePage />);
+    renderHomePage();
     typeQuery('office');
   });
 
@@ -41,6 +42,25 @@ describe('HomePage envelope-driven rendering', () => {
     expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
     expect(arrow('Previous page')).toBeDisabled();
     expect(arrow('Next page')).toBeEnabled();
+  });
+
+  it('renders the shows the Entity store holds', async () => {
+    await settle();
+
+    // The successful search stored its envelope in the Entity — and that is
+    // what is on screen: replacing the store content re-renders the list
+    // without any new request.
+    expect(storedPage()).toEqual(page1);
+
+    act(() => {
+      store.dispatch(searchResultStored(page2));
+    });
+
+    expect(card('Show Four')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Show One' }),
+    ).not.toBeInTheDocument();
+    expect(searchShowsPage).toHaveBeenCalledTimes(1);
   });
 
   it('a failed selection shows the error panel and retry re-runs the request', async () => {

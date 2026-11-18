@@ -1,6 +1,6 @@
 import { Sparkles } from 'lucide-react';
 
-import { useHomePage } from './useHomePage';
+import { useHomePage } from './logic/useHomePage';
 
 import { ShowSearchResults } from './ShowSearchResults';
 import { ShowsSearchField } from './ShowsSearchField';

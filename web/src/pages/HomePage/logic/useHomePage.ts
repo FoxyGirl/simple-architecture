@@ -6,11 +6,12 @@ import type {
   SearchRequest,
   SearchSnapshot,
   Selection,
-} from './types';
+} from '../types';
 
-import { STATUS } from './constants';
-import { ALL_GENRES } from './ShowSearchResults/constants';
-import { useShowsDataFetching } from './useShowsDataFetching';
+import { STATUS } from '../constants';
+import { ALL_GENRES } from '../ShowSearchResults/constants';
+import { useShowsRequest } from './useShowsRequest';
+import { useStoredSearchPage } from './useStoredSearchPage';
 
 const INITIAL_SELECTION: Selection = { genre: ALL_GENRES, page: 1 };
 
@@ -23,7 +24,6 @@ const toRequest = (query: string, selection: Selection): SearchRequest => ({
 export const useHomePage = () => {
   const [snapshot, setSnapshot] = useState<SearchSnapshot>({
     status: STATUS.IDLE,
-    data: null,
     queryEcho: '',
     selection: INITIAL_SELECTION,
   });
@@ -32,8 +32,14 @@ export const useHomePage = () => {
     setSnapshot((prevSnapshot) => ({ ...prevSnapshot, ...change }));
   }, []);
 
-  const { runRequest, abortSearch, isCurrentQuery, requestRef } =
-    useShowsDataFetching(handleSearchChange);
+  const { runRequest, retry, isCurrentQuery, abortSearch, requestRef } =
+    useShowsRequest(handleSearchChange);
+
+  // The shows themselves are Entity data read through its selectors — only
+  // a successful status echoes them to the View, so a loading or failed
+  // request never renders a stale page.
+  const storedResult = useStoredSearchPage();
+  const data = snapshot.status === STATUS.SUCCESS ? storedResult : null;
 
   // A submitted search starts fresh: first page, no genre filter.
   const submitSearch = useCallback(
@@ -71,12 +77,6 @@ export const useHomePage = () => {
     [applySelection, snapshot.selection.genre],
   );
 
-  // Retry re-issues the current q/genre/page request as it stands.
-  const retry = useCallback(() => {
-    const current = requestRef.current;
-    if (current) void runRequest(current);
-  }, [requestRef, runRequest]);
-
   const controlsRef = useRef<SearchControls | null>(null);
 
   const registerControls = useCallback((controls: SearchControls | null) => {
@@ -88,7 +88,7 @@ export const useHomePage = () => {
   };
 
   return {
-    data: snapshot.data,
+    data,
     queryEcho: snapshot.queryEcho,
     status: snapshot.status,
     selection: snapshot.selection,

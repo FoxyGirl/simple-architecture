@@ -23,13 +23,14 @@ export type SearchRequest = {
 
 export type SearchSnapshot = {
   status: SearchStatus;
-  data: SearchPage | null;
   queryEcho: string;
   selection: Selection;
 };
 
 /**
- * A partial snapshot — the search flow reports status and data separately.
+ * A partial snapshot — the search field and the Task coordination report
+ * presentation status separately; the result data itself lives in the
+ * shows Entity and reaches the View through the Presenter's selectors.
  */
 export type SearchChange = Partial<SearchSnapshot>;
 

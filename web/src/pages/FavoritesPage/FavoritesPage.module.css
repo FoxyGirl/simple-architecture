@@ -20,6 +20,37 @@
   text-align: center;
 }
 
+.backButton {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: 4px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.backButton:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.backButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;

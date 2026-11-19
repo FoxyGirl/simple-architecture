@@ -1,34 +1,35 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import type { Show } from '@api/types';
-import { selectFavoriteShows } from '@store';
+import { selectFavoriteIds } from '@store';
 
+import { syncFavoritesSummary } from '../../tasks/syncFavoritesSummary';
 import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
 
 /**
- * The favorites aspect of the home page presenter: reads the favorites
- * Entity through its selector and exposes the membership test plus the
- * toggle handler the cards' heart buttons need. The toggle rule itself
- * lives in the shared Task.
+ * The favorites aspect of the home page presenter: the backend owns the
+ * favorites, so the mount syncs the `{ count, ids }` summary through the
+ * read Task and the hearts read the mirrored ids from the Entity. The
+ * toggle itself is the shared Task's business rule.
  */
 export const useShowFavorites = () => {
-  const favoriteShows = useSelector(selectFavoriteShows);
+  const favoriteIds = useSelector(selectFavoriteIds);
+
+  useEffect(() => {
+    void syncFavoritesSummary();
+  }, []);
 
   const isFavorite = useCallback(
-    (showId: number) =>
-      favoriteShows.some((favorite) => favorite.id === showId),
-    [favoriteShows],
+    (showId: number) => favoriteIds.includes(showId),
+    [favoriteIds],
   );
 
   const toggleFavorite = useCallback(
     (show: Show) => {
-      toggleShowFavorite(
-        show,
-        favoriteShows.some((favorite) => favorite.id === show.id),
-      );
+      void toggleShowFavorite(show, favoriteIds.includes(show.id));
     },
-    [favoriteShows],
+    [favoriteIds],
   );
 
   return { isFavorite, toggleFavorite };

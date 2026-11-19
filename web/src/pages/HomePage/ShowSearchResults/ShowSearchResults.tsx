@@ -7,8 +7,9 @@ import type { Selection } from '../types';
 
 import { STATUS, type SearchStatus } from '../constants';
 
+import { Pagination } from '../../components/Pagination';
+
 import { GenreFilter } from './GenreFilter';
-import { Pagination } from './Pagination';
 import { ResultsHead } from './ResultsHead';
 import { ShowList } from './ShowList';
 import { Skeleton } from './Skeleton';

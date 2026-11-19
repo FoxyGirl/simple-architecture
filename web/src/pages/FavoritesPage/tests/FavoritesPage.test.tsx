@@ -1,87 +1,120 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { fetchFavoritesListPage, removeFavoriteShow } from '@api/favorites';
 import type { Show } from '@api/types';
-import {
-  addFavorite,
-  removeFavorite,
-  selectFavoriteShows,
-  store,
-} from '@store';
+import { replaceFavoritesSummary, store } from '@store';
 
 import { FavoritesPage } from '..';
 
+// The suite drives a fake of the backend favorites API at its module
+// boundary: three per page, clamped pages, removals visible to the fetch.
+vi.mock('@api/favorites', () => ({
+  addFavoriteShow: vi.fn(),
+  removeFavoriteShow: vi.fn(),
+  fetchFavoritesCount: vi.fn(),
+  fetchFavoritesListPage: vi.fn(),
+}));
 const show = (id: number, name: string): Show =>
   ({ id, name, genres: ['Drama'], premiered: '2010-05-01' }) as Show;
+const ALL = ['One', 'Two', 'Three', 'Four'].map((n, i) =>
+  show(i + 1, `Show ${n}`),
+);
+let storage: Show[] = [];
 
-const favoriteIds = () =>
-  selectFavoriteShows(store.getState()).map((favorite) => favorite.id);
+const sum = () => ({ count: storage.length, ids: storage.map((s) => s.id) });
+const fakeFetchPage = async (page: number) => {
+  const pageCount = Math.max(1, Math.ceil(storage.length / 3));
+  const clamped = Math.min(Math.max(1, page), pageCount);
+  return {
+    shows: storage.slice((clamped - 1) * 3, clamped * 3),
+    page: clamped,
+    pageCount,
+    totalCount: storage.length,
+  };
+};
+const fakeRemove = async (id: number) => {
+  storage = storage.filter((s) => s.id !== id);
+  return sum();
+};
 
-const removeButton = (name: string) => screen.getByRole('button', { name });
+const listMock = vi.mocked(fetchFavoritesListPage);
+const removeMock = vi.mocked(removeFavoriteShow);
+listMock.mockImplementation(fakeFetchPage);
+removeMock.mockImplementation(fakeRemove);
 
-// The page renders inside the router the Presenter navigates with; the
-// catalogue route is a stub the navigation assertion can detect.
+// The router-wrapped render; the home route stub detects navigation.
 const renderFavoritesPage = () =>
   render(
     <Provider store={store}>
       <MemoryRouter initialEntries={['/favorites']}>
         <Routes>
-          <Route path="/" element={<h1>Catalogue stub</h1>} />
+          <Route path="/" element={<h1>Home stub</h1>} />
           <Route path="/favorites" element={<FavoritesPage />} />
         </Routes>
       </MemoryRouter>
     </Provider>,
   );
+const heading = (name: string) => screen.findByRole('heading', { name });
+const button = (name: string) => screen.getByRole('button', { name });
+// Renders and waits for the first page to arrive from the fake API.
+const mount = async (first = 'Show One') => {
+  renderFavoritesPage();
+  await heading(first);
+};
 
 describe('FavoritesPage', () => {
   beforeEach(() => {
-    for (const id of favoriteIds()) store.dispatch(removeFavorite(id));
+    storage = [...ALL];
+    store.dispatch(replaceFavoritesSummary(sum()));
+    vi.clearAllMocks();
+    cleanup();
   });
 
-  afterEach(cleanup);
-
-  it('shows an empty state when nothing is favorited', () => {
-    renderFavoritesPage();
-
-    expect(screen.getByText(/No favorites yet/)).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { level: 3 })).not.toBeInTheDocument();
+  it('fetches the first backend page and lists three shows per page', async () => {
+    await mount('Show Three');
+    expect(listMock).toHaveBeenCalledWith(1);
+    expect(screen.queryByRole('heading', { name: 'Show Four' })).toBeNull();
+    expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
+    expect(screen.getByText('4 shows saved to your list.')).toBeInTheDocument();
   });
 
-  it('lists every favorited show', () => {
-    store.dispatch(addFavorite(show(1, 'Show One')));
-    store.dispatch(addFavorite(show(2, 'Show Two')));
-
-    renderFavoritesPage();
-
-    expect(
-      screen.getByRole('heading', { name: 'Show One' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: 'Show Two' }),
-    ).toBeInTheDocument();
+  it('Next and Prev fetch other pages', async () => {
+    await mount();
+    fireEvent.click(button('Next page'));
+    await heading('Show Four');
+    expect(listMock).toHaveBeenLastCalledWith(2);
+    expect(screen.getByText('Page 2 of 2')).toBeInTheDocument();
+    fireEvent.click(button('Previous page'));
+    await heading('Show One');
+    expect(listMock).toHaveBeenLastCalledWith(1);
   });
 
-  it('the heart button removes a show from the list', () => {
-    store.dispatch(addFavorite(show(1, 'Show One')));
-
-    renderFavoritesPage();
-    fireEvent.click(removeButton('Remove Show One from favorites'));
-
-    expect(favoriteIds()).toEqual([]);
-    expect(
-      screen.queryByRole('heading', { name: 'Show One' }),
-    ).not.toBeInTheDocument();
+  it('removing a show goes through the API and refreshes the list', async () => {
+    await mount();
+    fireEvent.click(button('Remove Show One from favorites'));
+    await screen.findByText('Page 1 of 1');
+    expect(removeMock).toHaveBeenCalledWith(1);
+    expect(screen.queryByRole('heading', { name: 'Show One' })).toBeNull();
+    await heading('Show Four');
+    expect(screen.getByText('3 shows saved to your list.')).toBeInTheDocument();
   });
 
-  it('the browse button navigates back to the catalogue', () => {
+  it('keeps the empty state with its actions when nothing is favorited', async () => {
+    storage = [];
     renderFavoritesPage();
+    expect(await screen.findByText(/No favorites yet/)).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { level: 3 })).toBeNull();
+    expect(button('Back to Home')).toBeInTheDocument();
+    fireEvent.click(button('Browse shows'));
+    expect(await heading('Home stub')).toBeTruthy();
+  });
 
-    fireEvent.click(screen.getByRole('button', { name: /Browse shows/ }));
-
-    expect(
-      screen.getByRole('heading', { name: 'Catalogue stub' }),
-    ).toBeInTheDocument();
+  it('the back button navigates to the catalogue', async () => {
+    await mount();
+    fireEvent.click(button('Back to Home'));
+    expect(await heading('Home stub')).toBeTruthy();
   });
 });

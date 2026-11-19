@@ -9,6 +9,9 @@ import type { SearchPage, Show } from '@api/types';
 import { HomePage } from '../pages/HomePage';
 
 // Shared helpers for the HomePage server-driven search-flow test suites.
+// NOTE: favorites mocking lives in the suites themselves — vi.mock does
+// not hoist inside this helper, so a registration here would run only
+// after the HomePage import chain already resolved the real API module.
 
 // Mirrors DEBOUNCE_MS in the search-field presenter.
 const DEBOUNCE_MS = 800;

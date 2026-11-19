@@ -5,15 +5,12 @@ import type { FavoritesListPage, Show } from '@api/types';
 
 import { showsReducer } from '../../shows';
 import {
-  addFavorite,
   favoritesReducer,
-  removeFavorite,
   replaceFavoritesList,
   replaceFavoritesSummary,
   selectFavoriteIds,
   selectFavoritesCount,
   selectFavoritesList,
-  selectFavoriteShows,
 } from '..';
 
 const show = (id: number, name: string): Show =>
@@ -37,52 +34,10 @@ describe('favorites entity', () => {
 
   it('starts with an empty favorites list', () => {
     expect(store.getState().favorites).toEqual({
-      shows: [],
       ids: [],
       count: 0,
       list: null,
     });
-  });
-
-  it('stores an added show', () => {
-    store.dispatch(addFavorite(show(1, 'Show One')));
-
-    expect(selectFavoriteShows(store.getState())).toEqual([
-      show(1, 'Show One'),
-    ]);
-  });
-
-  it('keeps the insertion order of several favorites', () => {
-    store.dispatch(addFavorite(show(1, 'Show One')));
-    store.dispatch(addFavorite(show(2, 'Show Two')));
-
-    expect(selectFavoriteShows(store.getState()).map((s) => s.id)).toEqual([
-      1, 2,
-    ]);
-  });
-
-  it('ignores adding an already-favorited show', () => {
-    store.dispatch(addFavorite(show(1, 'Show One')));
-    store.dispatch(addFavorite(show(1, 'Show One')));
-
-    expect(selectFavoriteShows(store.getState())).toHaveLength(1);
-  });
-
-  it('removes a favorited show by id', () => {
-    store.dispatch(addFavorite(show(1, 'Show One')));
-    store.dispatch(addFavorite(show(2, 'Show Two')));
-
-    store.dispatch(removeFavorite(1));
-
-    expect(selectFavoriteShows(store.getState()).map((s) => s.id)).toEqual([2]);
-  });
-
-  it('ignores removing an unknown id', () => {
-    store.dispatch(addFavorite(show(1, 'Show One')));
-
-    store.dispatch(removeFavorite(99));
-
-    expect(selectFavoriteShows(store.getState())).toHaveLength(1);
   });
 
   it('replaceFavoritesSummary stores the backend ids and count verbatim', () => {

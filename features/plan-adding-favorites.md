@@ -250,34 +250,41 @@ to end.
 
 **Tasks:**
 
-- [ ] Write `e2e/favorites.spec.js` first (red; every later favorites E2E
+- [x] Write `e2e/favorites.spec.js` first (red; every later favorites E2E
       extension joins this single file): it clears any warm favorites
       through the backend API (request context) for a deterministic start,
-      then searches `world`, hearts a show and asserts the pressed heart
+      then searches `space` (recorded deviation: the spec got its own stub
+      fixture queries `space`/`edge` — searching `world` in parallel with
+      browse.spec raced the shared TVmaze cache and broke its upstream-hit
+      delta assertion), hearts a show and asserts the pressed heart
       state survives a genre change, a page change and a new search;
       favorites four shows, reaches `/favorites` through the existing nav
       link (the count button arrives in Phase 5) and asserts 3-per-page
       listing with `Page 1 of 2` and working Next/Prev; removes one show on
       the page and asserts the list and pagination metadata update; clicks
       the back button and lands on the HomePage.
-- [ ] Move `Pagination` (with its `ArrowButton` and `logic/`) from
+- [x] Move `Pagination` (with its `ArrowButton` and `logic/`) from
       `HomePage/ShowSearchResults/` to `web/src/pages/components/` — it is
       now shared by two pages, so the nearest-common-ancestor rule applies
       (the same folder as `FavoriteButton`); update the imports; the
       HomePage suites stay green untouched.
-- [ ] Rewrite `toggleShowFavorite` in `web/src/pages/tasks/` as the async
+- [x] Rewrite `toggleShowFavorite` in `web/src/pages/tasks/` as the async
       backend Task: it calls `addFavoriteShow`/`removeFavoriteShow` with the
       explicit `(show, isFavorite)` arguments, dispatches
       `replaceFavoritesSummary` from the response on success, and returns a
       success/error result (the Phase 4 toasts consume it); rewrite its
       suite against the mocked API boundary.
-- [ ] Rewire the HomePage: `useShowFavorites` derives `isFavorite` from
+- [x] Rewire the HomePage: `useShowFavorites` derives `isFavorite` from
       `selectFavoriteIds` and invokes the rewritten Task; the page presenter
       runs `syncFavoritesSummary` on mount; update
       `favoritesFlow.test.tsx` (mock `@api/favorites`; heart states follow
       the dispatched summary, a failed toggle dispatches nothing) and extend
-      the shared `test/home-flow.tsx` helper with the `@api/favorites` mock.
-- [ ] Rewire the FavoritesPage: the presenter fetches the list page on
+      the shared `test/home-flow.tsx` helper with the `@api/favorites` mock
+      (recorded deviation: `vi.mock` does not hoist inside helper modules —
+      registering it there double-mocks and splits the mock instances — so
+      the mock is declared in the suite itself and the helper carries a
+      comment documenting why).
+- [x] Rewire the FavoritesPage: the presenter fetches the list page on
       mount and on page selection through `fetchFavoritesPage`, reads the
       envelope through `selectFavoritesList`, renders `Pagination` from its
       new location, removes through the rewritten toggle Task and refetches
@@ -287,28 +294,28 @@ to end.
       empty-state "Browse shows" action stays); rewrite
       `FavoritesPage.test.tsx` accordingly, keeping the empty-state
       assertion.
-- [ ] Delete the legacy client-side storage: the Entity's `shows` field, the
+- [x] Delete the legacy client-side storage: the Entity's `shows` field, the
       `addFavorite`/`removeFavorite` reducers, the `selectFavoriteShows`
       selector, their barrel exports and their suite cases; grep proves no
       references remain anywhere in `web/src`.
-- [ ] Verify: `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] Verify: `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` (including the new spec) and `npm run build` green;
       manual dev-pair round through both pages' toggle/list/remove flows,
       including a backend restart clearing the favorites.
 
 **Tests:**
 
-- [ ] The new E2E spec above (red -> green), self-contained in
-      `favorites.spec.js` for worker safety; the pre-existing 5 specs stay
-      green untouched.
-- [ ] Rewritten unit/integration suites (red -> green): the toggle Task
+- [x] The new E2E spec above (red -> green), self-contained in
+      `favorites.spec.js` for worker safety; the pre-existing specs (4, the
+      plan miscounted 5) stay green untouched.
+- [x] Rewritten unit/integration suites (red -> green): the toggle Task
       (POST/DELETE with the correct arguments, summary dispatched on
       success, nothing dispatched on failure, results returned), the
       HomePage favorites flow (hearts from ids, summary sync on mount), the
       FavoritesPage (list fetch on mount and page change, pagination
       rendering, removal updates the list, back button navigates, empty
       state preserved).
-- [ ] Entity suites cover only the backend-synced state; the deleted legacy
+- [x] Entity suites cover only the backend-synced state; the deleted legacy
       actions are gone (compiler + grep proof).
 
 **When ready:**
@@ -319,21 +326,21 @@ a back button, and the complete suite including the new E2E spec is green.
 
 **Acceptance Criteria:**
 
-- [ ] Clicking the heart on a non-favorite/favorite show issues
+- [x] Clicking the heart on a non-favorite/favorite show issues
       `POST /api/favorites` / `DELETE /api/favorites/:id`, after which the
       backend storage contains/no longer contains the show (E2E + Task
       suites).
-- [ ] The heart state of every rendered show comes from the backend
+- [x] The heart state of every rendered show comes from the backend
       favorite ids and survives a new search, a genre change and a page
       change within the session.
-- [ ] No authoritative client-side favorites storage remains (legacy
+- [x] No authoritative client-side favorites storage remains (legacy
       reducers/selectors deleted); the Entity holds only backend-provided
       data.
-- [ ] The FavoritesPage lists favorites 3 per page from the backend with
+- [x] The FavoritesPage lists favorites 3 per page from the backend with
       pagination controls reflecting the total count; a removal updates the
       list and pagination; the empty state is preserved; a back button to
       the HomePage is visible in every state.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass.
 
 ### Phase 4: Toast notifications

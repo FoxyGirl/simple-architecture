@@ -1,41 +1,69 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { Show } from '@api/types';
-import { removeFavorite, selectFavoriteShows, store } from '@store';
+import { addFavoriteShow, removeFavoriteShow } from '@api/favorites';
+import type { FavoritesSummary, Show } from '@api/types';
+import { replaceFavoritesSummary, selectFavoriteIds, store } from '@store';
 
 import { toggleShowFavorite } from '../toggleShowFavorite';
+
+// The established boundary mock: the Task under test is a plain async
+// function, so the suite needs no React and no fetch stubbing.
+vi.mock('@api/favorites', () => ({
+  addFavoriteShow: vi.fn(),
+  removeFavoriteShow: vi.fn(),
+  fetchFavoritesCount: vi.fn(),
+  fetchFavoritesListPage: vi.fn(),
+}));
 
 const show = (id: number, name: string): Show =>
   ({ id, name, genres: ['Drama'] }) as Show;
 
-const favoriteIds = () =>
-  selectFavoriteShows(store.getState()).map((favorite) => favorite.id);
+const added: FavoritesSummary = { count: 1, ids: [1] };
+const cleared: FavoritesSummary = { count: 0, ids: [] };
 
 describe('toggleShowFavorite task', () => {
   beforeEach(() => {
-    // Empty the Entity — every test starts from a clean favorites list.
-    for (const id of favoriteIds()) store.dispatch(removeFavorite(id));
+    vi.mocked(addFavoriteShow).mockReset();
+    vi.mocked(removeFavoriteShow).mockReset();
+    // Empty the Entity — every test starts from a clean favorites mirror.
+    store.dispatch(replaceFavoritesSummary(cleared));
   });
 
-  it('adds a show that is not a favorite yet', () => {
-    toggleShowFavorite(show(1, 'Show One'), false);
+  it('adds a non-favorite show through the API', async () => {
+    vi.mocked(addFavoriteShow).mockResolvedValue(added);
 
-    expect(favoriteIds()).toEqual([1]);
+    const result = await toggleShowFavorite(show(1, 'Show One'), false);
+
+    expect(addFavoriteShow).toHaveBeenCalledWith(show(1, 'Show One'));
+    expect(removeFavoriteShow).not.toHaveBeenCalled();
+    expect(result).toEqual({ status: 'success', summary: added });
   });
 
-  it('removes a show that is already a favorite', () => {
-    toggleShowFavorite(show(1, 'Show One'), false);
+  it('removes a favorited show through the API', async () => {
+    vi.mocked(removeFavoriteShow).mockResolvedValue(cleared);
 
-    toggleShowFavorite(show(1, 'Show One'), true);
+    const result = await toggleShowFavorite(show(1, 'Show One'), true);
 
-    expect(favoriteIds()).toEqual([]);
+    expect(removeFavoriteShow).toHaveBeenCalledWith(1);
+    expect(addFavoriteShow).not.toHaveBeenCalled();
+    expect(result).toEqual({ status: 'success', summary: cleared });
   });
 
-  it('stores the whole show so the Favorites page can render it', () => {
-    toggleShowFavorite(show(2, 'Show Two'), false);
+  it('stores the summary returned by the backend', async () => {
+    vi.mocked(addFavoriteShow).mockResolvedValue(added);
 
-    expect(selectFavoriteShows(store.getState())).toEqual([
-      show(2, 'Show Two'),
-    ]);
+    await toggleShowFavorite(show(1, 'Show One'), false);
+
+    expect(selectFavoriteIds(store.getState())).toEqual([1]);
+  });
+
+  it('dispatches nothing and reports the failure when the API fails', async () => {
+    vi.mocked(addFavoriteShow).mockRejectedValue(new Error('offline'));
+
+    const before = store.getState().favorites;
+    const result = await toggleShowFavorite(show(1, 'Show One'), false);
+
+    expect(result).toEqual({ status: 'error' });
+    expect(store.getState().favorites).toBe(before);
   });
 });

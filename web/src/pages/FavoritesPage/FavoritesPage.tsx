@@ -1,17 +1,24 @@
 import { ArrowLeft, Heart, HeartOff } from 'lucide-react';
 
-import { useFavoritesPage } from './logic/useFavoritesPage';
+import { Pagination } from '../components/Pagination';
 
 import { FavoriteShowCard } from './FavoriteShowCard';
+import { useFavoritesPage } from './logic/useFavoritesPage';
 
 import styles from './FavoritesPage.module.css';
 
 export const FavoritesPage = () => {
-  const { favorites, removeFromFavorites, goToCatalogue } = useFavoritesPage();
+  const { list, removeFromFavorites, selectPage, goToHome } =
+    useFavoritesPage();
 
   return (
     <section className={styles.page}>
       <header className={styles.head}>
+        <button type="button" className={styles.backButton} onClick={goToHome}>
+          <ArrowLeft size={15} aria-hidden="true" />
+          Back to Home
+        </button>
+
         <p className={styles.eyebrow}>
           <Heart className={styles.eyebrowIcon} size={13} aria-hidden="true" />
           <span>YOUR LIST</span>
@@ -20,15 +27,15 @@ export const FavoritesPage = () => {
         <h1 className={styles.headline}>Favorites</h1>
 
         <p className={styles.subhead}>
-          {favorites.length === 0
+          {list === null || list.totalCount === 0
             ? 'Shows you mark with the heart button live here.'
-            : `${favorites.length} ${
-                favorites.length === 1 ? 'show' : 'shows'
+            : `${list.totalCount} ${
+                list.totalCount === 1 ? 'show' : 'shows'
               } saved to your list.`}
         </p>
       </header>
 
-      {favorites.length === 0 ? (
+      {list !== null && list.shows.length === 0 && (
         <div className={styles.empty} aria-live="polite">
           <HeartOff className={styles.emptyIcon} size={40} aria-hidden="true" />
           <p className={styles.emptyText}>
@@ -38,22 +45,32 @@ export const FavoritesPage = () => {
           <button
             type="button"
             className={styles.browseButton}
-            onClick={goToCatalogue}
+            onClick={goToHome}
           >
             <ArrowLeft size={15} aria-hidden="true" />
             Browse shows
           </button>
         </div>
-      ) : (
-        <div className={styles.list} aria-live="polite">
-          {favorites.map((show) => (
-            <FavoriteShowCard
-              key={show.id}
-              show={show}
-              onRemove={() => removeFromFavorites(show)}
-            />
-          ))}
-        </div>
+      )}
+
+      {list !== null && list.shows.length > 0 && (
+        <>
+          <div className={styles.list} aria-live="polite">
+            {list.shows.map((show) => (
+              <FavoriteShowCard
+                key={show.id}
+                show={show}
+                onRemove={() => removeFromFavorites(show)}
+              />
+            ))}
+          </div>
+
+          <Pagination
+            page={list.page}
+            pageCount={list.pageCount}
+            onSelectPage={selectPage}
+          />
+        </>
       )}
     </section>
   );

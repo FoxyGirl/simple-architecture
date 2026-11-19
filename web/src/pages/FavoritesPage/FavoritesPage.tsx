@@ -1,14 +1,14 @@
 import { ArrowLeft, Heart, HeartOff } from 'lucide-react';
 
-import { Pagination } from '../components/Pagination';
-
-import { FavoriteShowCard } from './FavoriteShowCard';
 import { useFavoritesPage } from './logic/useFavoritesPage';
+
+import { Pagination } from '../components/Pagination';
+import { FavoriteShowCard } from './FavoriteShowCard';
 
 import styles from './FavoritesPage.module.css';
 
 export const FavoritesPage = () => {
-  const { list, removeFromFavorites, selectPage, goToHome } =
+  const { list, subHeadText, removeFromFavorites, selectPage, goToHome } =
     useFavoritesPage();
 
   return (
@@ -26,13 +26,7 @@ export const FavoritesPage = () => {
 
         <h1 className={styles.headline}>Favorites</h1>
 
-        <p className={styles.subhead}>
-          {list === null || list.totalCount === 0
-            ? 'Shows you mark with the heart button live here.'
-            : `${list.totalCount} ${
-                list.totalCount === 1 ? 'show' : 'shows'
-              } saved to your list.`}
-        </p>
+        <p className={styles.subhead}>{subHeadText}</p>
       </header>
 
       {list !== null && list.shows.length === 0 && (

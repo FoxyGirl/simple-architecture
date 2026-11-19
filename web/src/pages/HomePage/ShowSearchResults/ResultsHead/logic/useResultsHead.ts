@@ -1,3 +1,5 @@
+import { pluralize } from '../../../../utils';
+
 import { ALL_GENRES } from '../../constants';
 
 type UseResultsHeadParams = {
@@ -11,8 +13,9 @@ export const useResultsHead = ({
   genre,
   queryEcho,
 }: UseResultsHeadParams) => {
-  const countLabel = `${totalCount} ${totalCount === 1 ? 'show' : 'shows'} found`;
-  const compactCountLabel = `${totalCount} ${totalCount === 1 ? 'show' : 'shows'}`;
+  const showWord = pluralize(totalCount, 'show');
+  const countLabel = `${totalCount} ${showWord} found`;
+  const compactCountLabel = `${totalCount} ${showWord}`;
   const resultsEcho = {
     query: `for “${queryEcho}”`,
     filter: genre === ALL_GENRES ? null : `filtered by ${genre}`,

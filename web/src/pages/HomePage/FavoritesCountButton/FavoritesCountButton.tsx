@@ -1,5 +1,7 @@
 import { Heart } from 'lucide-react';
 
+import { pluralize } from '../../utils';
+
 import styles from './FavoritesCountButton.module.css';
 
 type FavoritesCountButtonProps = {
@@ -24,6 +26,6 @@ export const FavoritesCountButton = ({
       fill="currentColor"
     />
     <span className={styles.count}>{count}</span>
-    <span className={styles.label}>favorites</span>
+    <span className={styles.label}>{pluralize(count, 'favorite')}</span>
   </button>
 );

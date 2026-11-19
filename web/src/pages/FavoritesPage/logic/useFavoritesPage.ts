@@ -6,6 +6,7 @@ import type { Show } from '@api/types';
 import { notify } from '@notification';
 import { selectFavoritesList } from '@store';
 
+import { pluralize } from '../../utils';
 import { TOAST_MESSAGES } from '../../constants';
 import { fetchFavoritesPage } from '../../tasks/fetchFavoritesPage';
 import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
@@ -51,5 +52,13 @@ export const useFavoritesPage = () => {
     navigate('/');
   }, [navigate]);
 
-  return { list, removeFromFavorites, selectPage, goToHome };
+  const subHeadText =
+    list === null || list.totalCount === 0
+      ? 'Shows you mark with the heart button live here.'
+      : `${list.totalCount} ${pluralize(
+          list.totalCount,
+          'show',
+        )} saved to your list.`;
+
+  return { list, subHeadText, removeFromFavorites, selectPage, goToHome };
 };

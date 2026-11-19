@@ -190,14 +190,15 @@ else. For production, self-host with `@fontsource/sora` and `@fontsource/inter`.
 
 Imports that cross directory boundaries MUST use an alias instead of a deep relative path.
 
-| Alias    | Target         | Example                                                 |
-| -------- | -------------- | ------------------------------------------------------- |
-| `@api`   | `src/api`      | `import { searchShowsPage } from '@api/shows';`         |
-| `@hooks` | `src/hooks`    | `import { useMediaQuery } from '@hooks/useMediaQuery';` |
-| `@store` | `src/store`    | `import { store } from '@store';`                       |
-| `~`      | `server/` root | `import { getCachedShows } from '~/cache';`             |
+| Alias           | Target             | Example                                                 |
+| --------------- | ------------------ | ------------------------------------------------------- |
+| `@api`          | `src/api`          | `import { searchShowsPage } from '@api/shows';`         |
+| `@hooks`        | `src/hooks`        | `import { useMediaQuery } from '@hooks/useMediaQuery';` |
+| `@notification` | `src/notification` | `import { notify } from '@notification';`               |
+| `@store`        | `src/store`        | `import { store } from '@store';`                       |
+| `~`             | `server/` root     | `import { getCachedShows } from '~/cache';`             |
 
-- `@api`, `@hooks` and `@store` are frontend aliases; `~` is the backend
+- `@api`, `@hooks`, `@notification` and `@store` are frontend aliases; `~` is the backend
   alias and always
   resolves to the `server/` workspace root, so a route folder such as
   `server/routes/search/` writes `'~/cache'` and `'~/types'` instead of

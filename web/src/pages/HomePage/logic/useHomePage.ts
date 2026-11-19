@@ -85,7 +85,8 @@ export const useHomePage = () => {
   }, []);
 
   // The favorites Entity data the cards' heart buttons reflect; the toggle
-  // itself is the shared Task's business rule.
+  // itself is the shared Task's business rule, its success the toast the
+  // global notify API renders.
   const { isFavorite, toggleFavorite } = useShowFavorites();
 
   const clearSearch = () => {

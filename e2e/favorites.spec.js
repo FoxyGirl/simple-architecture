@@ -1,65 +1,43 @@
 import { test, expect } from '@playwright/test';
 
-// All favorites E2E lives in this single file: Playwright runs spec files
-// in parallel workers against the one shared backend, so keeping every
-// favorites mutation sequential here makes the in-memory storage readable.
-// The backend may be warm from earlier runs, so each test clears the
-// favorites through the API first.
+import {
+  addFourSpaceShows,
+  arrow,
+  card,
+  clearFavorites,
+  heart,
+  hiddenToast,
+  pressed,
+  searchInput,
+  searchSpace,
+  shownToast,
+  summaryIds,
+} from './favorites-helpers';
 
-const BACKEND = 'http://localhost:3001';
-
-const summaryIds = async (request) =>
-  (await (await request.get(`${BACKEND}/api/favorites/count`)).json()).ids;
-
-const searchInput = (page) =>
-  page.getByRole('textbox', { name: 'Search for TV shows' });
-
-const card = (page, name) => page.getByRole('heading', { name });
-
-const arrow = (page, label) => page.getByRole('button', { name: label });
-
-const heart = (page, name, favorite) =>
-  page.getByRole('button', {
-    name: `${favorite ? 'Remove' : 'Add'} ${name} ${favorite ? 'from' : 'to'} favorites`,
-  });
-
-const pressed = (page, name) =>
-  expect(heart(page, name, true)).toHaveAttribute('aria-pressed', 'true');
-
-const addFourSpaceShows = async (page) => {
-  for (const name of ['Space Tour', 'Space Series', 'Space Chef']) {
-    await heart(page, name, false).click();
-    await pressed(page, name);
-  }
-  await arrow(page, 'Next page').click();
-  await heart(page, 'Space Wars', false).click();
-  await pressed(page, 'Space Wars');
-};
+// All favorites E2E lives in this single spec: Playwright parallelizes
+// spec files against the one shared backend, so the favorites mutations
+// stay sequential here. Each test starts from cleared favorites through
+// the API; shared locators and probes live in ./favorites-helpers.js.
 
 test.beforeEach(async ({ request }) => {
-  for (const id of await summaryIds(request))
-    await request.delete(`${BACKEND}/api/favorites/${id}`);
+  await clearFavorites(request);
 });
 
 test('hearts are backend-driven and survive genre, page and search changes', async ({
   page,
   request,
 }) => {
-  await page.goto('/');
-  await searchInput(page).fill('space');
-  await expect(card(page, 'Space Tour')).toBeVisible();
+  await searchSpace(page);
 
   // Adding through the heart writes to the backend, not just to the page.
   await heart(page, 'Space Tour', false).click();
   await pressed(page, 'Space Tour');
   await expect.poll(() => summaryIds(request)).toEqual([600]);
 
-  // The pressed state survives a genre change…
+  // The pressed state survives a genre change, a page change…
   await page.getByRole('button', { name: 'Drama', exact: true }).click();
   await expect(card(page, 'Space Chef')).toBeVisible();
   await pressed(page, 'Space Tour');
-
-  // …a page change…
   await arrow(page, 'Next page').click();
   await expect(page.getByText('Page 2 of 2')).toBeVisible();
   await arrow(page, 'Previous page').click();
@@ -82,10 +60,7 @@ test('the favorites page paginates, updates on removal and returns home', async 
   page,
   request,
 }) => {
-  await page.goto('/');
-  await searchInput(page).fill('space');
-  await expect(card(page, 'Space Tour')).toBeVisible();
-
+  await searchSpace(page);
   await addFourSpaceShows(page);
   await expect.poll(() => summaryIds(request)).toHaveLength(4);
 
@@ -117,4 +92,29 @@ test('the favorites page paginates, updates on removal and returns home', async 
   await page.getByRole('button', { name: 'Back to Home' }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect(searchInput(page)).toBeVisible();
+});
+
+test('favorites toasts appear and dismiss themselves', async ({ page }) => {
+  await searchSpace(page);
+
+  // A heart add toasts the addition and disappears without interaction.
+  await heart(page, 'Space Tour', false).click();
+  await shownToast(page, '"Space Tour" was added to favorites');
+  await hiddenToast(page, '"Space Tour" was added to favorites');
+
+  // A heart removal on the HomePage toasts the distinct removal message.
+  await heart(page, 'Space Tour', true).click();
+  await shownToast(page, '"Space Tour" was removed from favorites');
+  await hiddenToast(page, '"Space Tour" was removed from favorites');
+
+  // A removal on the Favorites page toasts the same removal message. The
+  // global toaster survives the navigation and stacks, so the probes pick
+  // the expected message out of the toast stack.
+  await heart(page, 'Space Chef', false).click();
+  await pressed(page, 'Space Chef');
+  await page.getByRole('link', { name: 'Favorites' }).click();
+  await expect(card(page, 'Space Chef')).toBeVisible();
+  await heart(page, 'Space Chef', true).click();
+  await shownToast(page, '"Space Chef" was removed from favorites');
+  await hiddenToast(page, '"Space Chef" was removed from favorites');
 });

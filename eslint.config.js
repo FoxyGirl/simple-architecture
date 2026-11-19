@@ -16,6 +16,7 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const aliases = {
   '@api': path.join(rootDir, 'web/src/api'),
   '@hooks': path.join(rootDir, 'web/src/hooks'),
+  '@notification': path.join(rootDir, 'web/src/notification'),
   '@store': path.join(rootDir, 'web/src/store'),
   '~': path.join(rootDir, 'server'),
 };
@@ -46,8 +47,7 @@ const unusedVars = [
 ];
 
 export default defineConfig([
-  // ESLint patterns are minimatch (not gitignore-style), so `**/` prefixes are
-  // required to match the nested `web/dist` build output as well as `dist`.
+  // Minimatch (not gitignore-style): `**/` prefixes also match `web/dist`.
   globalIgnores(['**/dist', '**/coverage']),
   {
     // Plain JavaScript — this config, the backend and plain-JS tooling.

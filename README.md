@@ -108,8 +108,14 @@ The repository is an npm-workspaces monorepo with a shared tooling root:
 web/                  # frontend workspace (Vite + React)
   src/
     main.tsx          # Entry point, mounts <App /> in the Redux Provider + Router
-    App.tsx           # Layout + route definitions
-    App.module.css    # App shell styles (CSS Module)
+    App/              # the App shell component (layout, nav, routes, Toaster)
+      App.tsx         # Layout + routes + the single global <Toaster />
+      App.module.css  # App shell styles (CSS Module)
+      index.ts        # public export
+      Toaster/        # the global toast outlet component (token-skinned)
+        Toaster.tsx   # Sonner config: placement, duration, tokens
+        Toaster.module.css
+        index.ts      # public export
     index.css         # Global reset + token import
     vite-env.d.ts     # Vite client types (CSS Modules, import.meta.env)
     api/
@@ -119,6 +125,11 @@ web/                  # frontend workspace (Vite + React)
       types.ts        # TVmaze shapes + search and favorites envelopes
     hooks/
       useMediaQuery.ts
+    notification/     # library-independent notify API (wraps Sonner)
+      index.ts        # barrel: notify + option types
+      notify.ts       # success/error/info/warning/loading/promise wrapper
+      types.ts        # NotifyOptions / NotifyPromiseMessages
+      tests/          # notify delegation suite (Sonner mocked)
     pages/
       HomePage/
         HomePage.tsx        # "/" route

@@ -1,10 +1,12 @@
 import { Link, Route, Routes } from 'react-router-dom';
-import { FavoritesPage } from './pages/FavoritesPage';
-import { HomePage } from './pages/HomePage';
+
+import { FavoritesPage } from '../pages/FavoritesPage';
+import { HomePage } from '../pages/HomePage';
+import { Toaster } from './Toaster';
 
 import styles from './App.module.css';
 
-function App() {
+export const App = () => {
   return (
     <div className={styles.app}>
       <nav className={styles.nav}>
@@ -22,8 +24,9 @@ function App() {
           <Route path="/favorites" element={<FavoritesPage />} />
         </Routes>
       </main>
+
+      {/* The single global toast outlet — every notify call renders here. */}
+      <Toaster />
     </div>
   );
-}
-
-export default App;
+};

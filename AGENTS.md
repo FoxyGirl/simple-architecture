@@ -26,6 +26,7 @@ Stack:
 | State    | Redux Toolkit + react-redux (store and Entity in `web/src/store/`)                |
 | Icons    | lucide-react                                                                      |
 | Classes  | clsx                                                                              |
+| Toasts   | sonner — `notify` API in `web/src/notification/`, outlet in `App/Toaster`         |
 | API      | Express backend (`server/`): TVmaze search + favorites; browser calls `/api` only |
 | Backend  | Express 5 (`server/`, TypeScript ESM run with tsx, port 3001)                     |
 | Tests    | Vitest (both workspaces), supertest, Playwright (E2E)                             |

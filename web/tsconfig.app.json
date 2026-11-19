@@ -24,6 +24,8 @@
     "paths": {
       "@api/*": ["./src/api/*"],
       "@hooks/*": ["./src/hooks/*"],
+      "@notification": ["./src/notification"],
+      "@notification/*": ["./src/notification/*"],
       "@store": ["./src/store"],
       "@store/*": ["./src/store/*"]
     }

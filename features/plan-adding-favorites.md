@@ -16,8 +16,13 @@
 > pages, the paginated FavoritesPage with its back button, and the deletion
 > of the legacy client-side storage. The remaining user-visible features
 > stack on the migrated flow one phase each: toasts (4), the HomePage count
-> button (5), HomePage state restoration (6). Every phase leaves the app
-> fully functional, so work can stop after any completed phase.
+> button (5), HomePage state restoration (6). A later tooling decision
+> adopted the **Sonner** library as the app-wide toast system: Phase 7 —
+> executed directly after Phase 4 and before Phases 5–6 — replaced the
+> hand-rolled Toast component with one global Sonner toaster behind a
+> library-independent `notify` API, keeping the Phase 4 user-visible
+> behavior unchanged. Every phase leaves the app fully functional, so work
+> can stop after any completed phase.
 >
 > **Testing.** Red -> green per AGENTS.md: each phase writes its automated
 > tests before the implementation. Backend suites are colocated unit tests
@@ -47,7 +52,8 @@
 > `verbatimModuleSyntax`, `erasableSyntaxOnly`), object shapes as `type`
 > aliases in the owning `types.ts`, extensionless import specifiers,
 > `index.ts` barrels publishing Views/routers only, aliases (`@api`,
-> `@store`, `~`) kept in sync across all declaring configs, CSS Modules with
+> `@notification`, `@store`, `~`) kept in sync across all declaring
+> configs, CSS Modules with
 > generated `.d.ts` (`npm run css-types` after every new/changed module) +
 > `clsx` + design tokens, navigation only at Presenter level, Views never
 > touching store or router, Tasks as plain functions with explicit arguments
@@ -345,6 +351,12 @@ a back button, and the complete suite including the new E2E spec is green.
 
 ### Phase 4: Toast notifications
 
+> **Superseded in part by Phase 7:** the hand-rolled
+> `pages/components/Toast/` component built in this phase was replaced by
+> the Sonner-backed global toaster; the user-visible behavior recorded
+> here (distinct messages, bottom-centred placement, 3000 ms auto-dismiss,
+> silent failures) is unchanged.
+
 **Goal:** A successful add or removal shows a distinct, automatically
 disappearing toast on both pages; failed operations never toast. The Toast
 component joins `pages/components/` (shared by two pages); the page
@@ -354,12 +366,12 @@ presenters own the toast state driven by the toggle Task's results.
 
 **Tasks:**
 
-- [ ] Extend `e2e/favorites.spec.js` first (red): after a heart add the
+- [x] Extend `e2e/favorites.spec.js` first (red): after a heart add the
       addition toast is visible; after a heart removal on the HomePage and
       on the FavoritesPage the distinct removal toast is visible; each toast
       disappears without any user interaction (assert hidden after waiting
       past the display duration).
-- [ ] Create `web/src/pages/components/Toast/` (nearest common ancestor of
+- [x] Create `web/src/pages/components/Toast/` (nearest common ancestor of
       the two consuming pages): the presentational View (message and
       `onDismiss` via props, `role="status"` live region) styled with a CSS
       Module using existing tokens; the auto-dismiss timer lives in the
@@ -367,28 +379,28 @@ presenters own the toast state driven by the toggle Task's results.
       after a `TOAST_DURATION_MS` constant — the exact duration and
       placement are a recorded design decision (the PRD leaves them to the
       design); regenerate the CSS Module types.
-- [ ] Wire the HomePage presenter: toast state set from the rewritten toggle
+- [x] Wire the HomePage presenter: toast state set from the rewritten toggle
       Task's success result (distinct add vs. remove messages), cleared on
       dismiss; the View renders `<Toast />` while a message is active; a
       failed toggle shows nothing.
-- [ ] Wire the FavoritesPage presenter the same way for the removals
+- [x] Wire the FavoritesPage presenter the same way for the removals
       performed there.
-- [ ] Unit tests: the Toast component suite (fake timers — renders the
+- [x] Unit tests: the Toast component suite (fake timers — renders the
       message, calls `onDismiss` after the duration) and page-suite
       extensions at the mocked API boundary (successful add shows the
       addition message, successful removal shows the removal message,
       failure shows no toast).
-- [ ] Record the deferred design-canvas mirroring of the toast (pen.dev
+- [x] Record the deferred design-canvas mirroring of the toast (pen.dev
       tooling currently blocked); verify `npm run typecheck`,
       `npm run lint`, `npm run test` and `npm run test:e2e` green plus a
       manual dev-pair round.
 
 **Tests:**
 
-- [ ] Toast component suite with fake timers (red -> green).
-- [ ] Page-suite toast assertions for both pages, including the
+- [x] Toast component suite with fake timers (red -> green).
+- [x] Page-suite toast assertions for both pages, including the
       failure-shows-nothing case (red -> green).
-- [ ] E2E toast assertions including the auto-dismiss without interaction
+- [x] E2E toast assertions including the auto-dismiss without interaction
       (red -> green); all other specs unaffected.
 
 **When ready:**
@@ -399,17 +411,58 @@ is green.
 
 **Acceptance Criteria:**
 
-- [ ] A successful add shows a toast confirming the addition; a successful
+- [x] A successful add shows a toast confirming the addition; a successful
       removal shows a toast with a distinct message confirming the removal —
       on the HomePage and on the FavoritesPage.
-- [ ] Toasts disappear automatically without user interaction.
-- [ ] A failed favorite operation shows no toast.
-- [ ] The Toast component follows the organization and styling rules
+- [x] Toasts disappear automatically without user interaction.
+- [x] A failed favorite operation shows no toast.
+- [x] The Toast component follows the organization and styling rules
       (`pages/components/` placement, presentational View, CSS Module +
       design tokens, barrel exporting the View only) and is covered by unit
       tests; the toast flows are covered by E2E.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test` and
+- [x] `npm run typecheck`, `npm run lint`, `npm run test` and
       `npm run test:e2e` pass.
+
+**Phase 4 execution notes (recorded decisions and deviations):**
+
+- Design decisions (canvas mirroring deferred — the pen.dev MCP tools are
+  still plan-usage-limited, confirmed during this phase; the `.pen` file
+  was not touched): `TOAST_DURATION_MS = 3000`; the toast renders as a
+  fixed, bottom-centred pill (`--surface-2` background, `--accent-border`,
+  `--radius-pill`, `--shadow-card`, heart icon in `--favorite`); messages
+  `Added to favorites` / `Removed from favorites`.
+- The shared message strings live in `web/src/pages/constants.ts`
+  (`TOAST_MESSAGES`) and the shared toast-state shape in
+  `web/src/pages/types.ts` (`PageToast = { id, message }`) — both at the
+  two consuming pages' nearest common ancestor. Presenters keep
+  `{ id, message } | null` state and the Views key the component with the
+  `id`, so every successful operation remounts the Toast and re-arms its
+  auto-dismiss timer even for a repeated identical message.
+- `useToast` deliberately depends only on `onDismiss` (a `setTimeout`
+  armed on mount, cancelled on unmount); the re-key remount, not a message
+  dependency, is what re-arms the timer.
+- Deviation (120-line `max-lines` budget): the favorites E2E helper
+  functions were extracted into `e2e/favorites-helpers.js` (pure locators
+  and API probes; the toast test also uses `shownToast`/`hiddenToast`
+  probes there) — all favorites _tests_ remain in the single
+  `favorites.spec.js`, preserving the sequential-mutation design. The
+  Phase 3 specs keep every original assertion; only their repeated opening
+  became the shared `searchSpace` helper, adjacent comment lines merged
+  and the file kept <= 120 lines.
+- Deviation (same budget): the toast flow suites were added as sibling
+  files `web/src/pages/HomePage/tests/favoritesToastFlow.test.tsx` and
+  `web/src/pages/FavoritesPage/tests/favoritesToast.test.tsx` instead of
+  growing the Phase 3 suites past 120 lines; those committed suites stay
+  byte-identical.
+- Verification performed: the new E2E toast spec was written first and ran
+  red; after implementation — `npm run typecheck`, `npm run lint` (no
+  warnings; the repo's max-lines budget is honoured by every new/changed
+  source file), `npm run test` (web 20 files/79 tests, server 8/45) and
+  `npm run test:e2e` (8 passed) are green. The manual round: the Playwright
+  webServer pair boots the real `npm run dev` + backend, and the four
+  favorites endpoints were additionally exercised by hand against a running
+  backend (add -> `{count, ids}`, re-add deduped, count, list envelope
+  `page=1/1 total=1`, delete -> updated summary, invalid body -> 400).
 
 ### Phase 5: Favorites count button on the HomePage
 
@@ -443,8 +496,10 @@ the backend-synced Entity after every add/remove on either page.
       the favorites route (route-stub assertion); grep proves the View
       imports neither the router nor the store.
 - [ ] Sync the README `web/` tree with the frontend structure accumulated
-      by this feature (`pages/components/Pagination` and `Toast`,
-      `FavoritesCountButton`, the favorites Tasks); verify
+      by this feature (`pages/components/Pagination`,
+      `FavoritesCountButton`, the favorites Tasks — the `App/` component
+      directory, the `notification/` module and the removed `Toast`
+      component were already synced in Phase 7); verify
       `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` green plus a manual round.
 
@@ -555,3 +610,150 @@ re-verified.
 - [ ] The restoration flows are covered by unit tests and E2E;
       `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass.
+
+### Phase 7: Sonner toast integration (replaces the Phase 4 Toast component)
+
+> Executed directly after Phase 4, before Phases 5–6. A tooling decision
+> adopts the `sonner` library as the app-wide toast system, so the
+> hand-rolled `pages/components/Toast/` component and the per-page toast
+> state are removed and every toast flows through one library-independent
+> notification API. The Phase 4 user-visible behavior is preserved.
+
+**Goal:** The app owns a single global toast outlet and a centralized,
+library-independent notification API (`success`, `error`, `info`,
+`warning`, `loading`, `promise`) backed by Sonner; the favorites
+confirmations migrate to it with unchanged behavior — distinct add/remove
+messages, bottom-centred placement, 3000 ms auto-dismiss, failures silent.
+
+**Affects:** frontend
+
+**Tasks:**
+
+- [x] Install `sonner` in the `web/` workspace (npm workspaces).
+- [x] Move the App shell into its own component directory
+      (`web/src/App/`: `App.tsx`, `App.module.css`, its generated
+      declaration and an `index.ts` exporting the App View only — the App
+      becomes a named export, `main.tsx` imports the directory) and
+      extract the notification API into its own top-level module
+      `web/src/notification/`, the home of the sending API: `notify.ts`
+      (the wrapper), `types.ts` (`NotifyAction`, `NotifyOptions`,
+      `NotifyPromiseMessages<T>` — consumers never touch a Sonner type),
+      the module `index.ts` publishing `notify` + types, and the
+      delegation suite. The rendering outlet stays with its owner as the
+      App child component `web/src/App/Toaster/` (View + styles + the
+      inlined `NOTIFY_DURATION_MS = 3000`), rendered once in the App View
+      and published through its View-only directory barrel.
+- [x] Declare the `@notification` alias (pointing at `src/notification`)
+      in all four declaring configs (`web/vite.config.ts`,
+      `web/vitest.config.ts`, `eslint.config.js`,
+      `web/tsconfig.app.json`) and in the coding-conventions alias table.
+- [x] Migrate both pages: the presenters call `notify.success(...)` on
+      the toggle Task's success result; the per-page `PageToast` state,
+      the `dismissToast` handlers and the `<Toast />` rendering are
+      removed from both Views; delete `pages/components/Toast/` and
+      `pages/types.ts`; `TOAST_MESSAGES` in `pages/constants.ts` stays
+      the shared message source.
+- [x] Rewrite the two page toast suites against the mocked
+      `@notification` boundary; add the wrapper delegation suite in
+      `notification/tests/` (Sonner mocked); delete the Toast component
+      suite; update the E2E probes to Sonner's `[data-sonner-toast]`
+      markup, filtered by the expected message.
+- [x] Sync the docs: README `web/` tree (`App/` component directory and
+      the top-level `notification/` module) and the AGENTS.md stack table
+      (`Toasts | sonner`).
+- [x] Verify: `npm run css-types`, `npm run typecheck`, `npm run lint`,
+      `npm run test`, `npm run test:e2e` and `npm run build` green plus a
+      manual dev-pair round of both pages' toast flows.
+
+**Tests:**
+
+- [x] `notify` delegation suite (red -> green): every message type
+      forwards the message and options to the matching Sonner call;
+      `promise` forwards the promise and its lifecycle messages.
+- [x] Page suites at the mocked `@notification` boundary (red -> green):
+      a successful add/removal calls `notify.success` with the distinct
+      `TOAST_MESSAGES` string; a failed toggle calls nothing.
+- [x] E2E toast assertions unchanged in intent (message visible,
+      auto-dismiss without interaction) through the message-filtered
+      probes; all other specs green.
+
+**When ready:**
+
+Every toast in the app is rendered by the one global Sonner outlet and
+triggered through the library-independent `notify` API; the favorites
+confirmations behave exactly as in Phase 4; the complete suite is green.
+
+**Acceptance Criteria:**
+
+- [x] Exactly one global `<Toaster />` instance, mounted at App level;
+      Sonner is imported only inside the toast facility
+      (`web/src/notification/` and `web/src/App/Toaster/`) — grep proof.
+- [x] `notify` exposes `success`, `error`, `info`, `warning`, `loading`
+      and `promise` with typed, library-independent signatures (no
+      `any`); toasts are triggered at Presenter level only — Tasks and
+      Views never touch the notification API.
+- [x] The favorites confirmations keep the Phase 4 behavior: distinct
+      messages from `TOAST_MESSAGES`, 3000 ms auto-dismiss, bottom-centred
+      placement, token-based styling, silent failures.
+- [x] The hand-rolled Toast component, the `PageToast` type and the
+      per-page toast state are deleted with no remaining references
+      (grep proof).
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`,
+      `npm run test:e2e` and `npm run build` pass.
+
+**Phase 7 execution notes (recorded decisions and deviations):**
+
+- Design decisions (canvas mirroring still deferred — the pen.dev MCP
+  tools remain plan-usage-limited; the `.pen` file was not touched): the
+  Toaster keeps the recorded placement (`position="bottom-center"`) and
+  duration (3000 ms) and uses `theme="dark"` to match the app palette;
+  the toast skin redefines the Sonner CSS variables on the toast element
+  through a CSS Module class (`toastOptions.className`): `--normal-bg:
+var(--surface-2)`, `--normal-text: var(--text-primary)`,
+  `--normal-border: var(--accent-border)`, `--border-radius:
+var(--radius-pill)`, plus `font-family: var(--font-body)` — variable
+  redefinition on the element itself beats Sonner's runtime-injected
+  stylesheet without specificity fights. The Phase 4 heart icon is
+  replaced by Sonner's built-in per-type status icons (a generic notify
+  API must not hardcode a favorites-specific icon); Sonner's toaster
+  z-index keeps toasts above every app surface.
+- Structure (component-organization compliance): the App shell became a
+  proper component directory — `src/App/` with `App.tsx`, its styles, an
+  `index.ts` exporting the View only and a named `App` export — and the
+  toast facility is split by ownership: the sending API lives in the
+  top-level `src/notification/` module (`notify` + types + delegation
+  suite; pages consume it through the `@notification` alias), while the
+  rendering outlet is the App-owned `src/App/Toaster/` component (View +
+  styles + duration, View-only barrel) rendered once by the App View.
+- The wrapper returns `void` (no toast-id plumbing) — nothing in the app
+  updates or dismisses toasts imperatively yet; `NotifyOptions` covers
+  `id`, `duration` and an `action` (e.g. Undo) for future use.
+- Deviation (behavior, by design): Sonner toasts are global — they stack
+  and survive SPA navigation, unlike the per-page single-slot Phase 4
+  Toast that unmounted with its page. The E2E toast probes therefore
+  filter `[data-sonner-toast]` by the expected message instead of
+  matching the single `role="status"` element (Sonner exposes the toaster
+  outlet, not each toast, as the aria-live region).
+- Deviation (tests): the Phase 4 auto-dismiss unit assertions (fake
+  timers on the Toast presenter) are gone with the component — dismissal
+  is Sonner's own behavior now, asserted only in E2E (`hiddenToast`
+  probes). The suite counts move from web 20 files/79 tests to 20/77.
+- Deviation (120-line budget): adding the alias entry pushed
+  `eslint.config.js` to 121 lines; the two-line `globalIgnores` minimatch
+  comment was condensed to one line to restore the budget (no code
+  change).
+- Deviation (environment): `reuseExistingServer` kept a Vite dev server
+  that predated the sonner install, so its stale dep cache served blank
+  pages and 7 E2E specs failed; killing the stray servers and clearing
+  `node_modules/.vite` fixed the run — a fresh machine or a restarted dev
+  server is required after adding a dependency.
+- Verification performed: the rewritten toast suites and the notify
+  delegation suite were written before the implementation (red); after
+  implementation — `npm run css-types` (Toaster declaration generated),
+  `npm run typecheck`, `npm run lint` (0 errors, 0 warnings),
+  `npm run test` (web 20 files/77 tests, server 8/45),
+  `npm run test:e2e` (8 passed, including the message-filtered toast
+  lifecycle spec) and `npm run build` are all green. The App/Toaster
+  relocation and the later `notification/` extraction were re-verified
+  with the same commands — typecheck, lint (0 warnings), test (web 20
+  files/77 tests, server 8/45), E2E (8 passed) and build all green.

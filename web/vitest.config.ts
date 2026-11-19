@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       '@api': path.join(rootDir, 'src', 'api'),
       '@hooks': path.join(rootDir, 'src', 'hooks'),
+      '@notification': path.join(rootDir, 'src', 'notification'),
       '@store': path.join(rootDir, 'src', 'store'),
     },
   },

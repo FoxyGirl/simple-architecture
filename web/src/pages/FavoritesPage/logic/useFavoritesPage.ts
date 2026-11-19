@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import type { Show } from '@api/types';
+import { notify } from '@notification';
 import { selectFavoritesList } from '@store';
 
+import { TOAST_MESSAGES } from '../../constants';
 import { fetchFavoritesPage } from '../../tasks/fetchFavoritesPage';
 import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
 
@@ -14,8 +16,9 @@ import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
  * through the read Task. A listed show is always a favorite, so the heart
  * removes it through the shared toggle Task and the current page is
  * refetched afterwards — the backend clamps the envelope when the last
- * page shrinks away. Navigation back to the catalogue stays here, at
- * Presenter level.
+ * page shrinks away. A successful removal toasts the confirmation through
+ * the global notify API, a failed one stays silent. Navigation back to
+ * the catalogue stays here, at Presenter level.
  */
 export const useFavoritesPage = () => {
   const list = useSelector(selectFavoritesList);
@@ -35,6 +38,8 @@ export const useFavoritesPage = () => {
         const result = await toggleShowFavorite(show, true);
 
         if (result.status === 'success') {
+          notify.info(`"${show.name}" ${TOAST_MESSAGES.REMOVED}`);
+
           await fetchFavoritesPage(list?.page ?? 1);
         }
       })();

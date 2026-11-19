@@ -60,6 +60,21 @@ export type SearchShowsOptions = {
   signal?: AbortSignal;
 };
 
+/** The HTTP methods the API layer speaks. */
+export type HttpMethod = 'GET' | 'POST' | 'DELETE';
+
+/**
+ * The options of {@link requestJson}: the HTTP method (default GET), a
+ * JSON body — any defined value is serialized with the matching content
+ * type — and the abort signal. The request layer also accepts a bare
+ * `AbortSignal` where a caller only needs cancellation.
+ */
+export type RequestJsonOptions = {
+  method?: HttpMethod;
+  body?: unknown;
+  signal?: AbortSignal;
+};
+
 /**
  * A single query-parameter pair used when building API URLs, e.g.
  * `['genre', 'Comedy']`. Values are percent-encoded by the request layer.
@@ -77,4 +92,25 @@ export type SearchPage = {
   pageCount: number;
   totalCount: number;
   genres: string[];
+};
+
+/**
+ * The backend favorites summary served by add, remove and count: the
+ * favorite count plus the ids the heart states read.
+ */
+export type FavoritesSummary = {
+  count: number;
+  ids: number[];
+};
+
+/**
+ * The backend `GET /api/favorites` list envelope: one favorites page plus
+ * the metadata the pagination renders — the same shape as the search page
+ * without the genre list.
+ */
+export type FavoritesListPage = {
+  shows: Show[];
+  page: number;
+  pageCount: number;
+  totalCount: number;
 };

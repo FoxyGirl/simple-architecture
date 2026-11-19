@@ -166,18 +166,18 @@ unchanged — it still uses the client-side favorites.
 
 **Tasks:**
 
-- [ ] Write this phase's tests first (see Tests): extend
+- [x] Write this phase's tests first (see Tests): extend
       `web/src/api/tests/` and `web/src/store/favorites/tests/`, and add the
       new Task suites in `web/src/pages/tasks/tests/` — red before the
       implementation exists.
-- [ ] Extend `web/src/api/request.ts` with HTTP-method + JSON-body support
+- [x] Extend `web/src/api/request.ts` with HTTP-method + JSON-body support
       (existing GET callers and the `ApiError`/`AbortError` semantics stay
       unchanged) and add `web/src/api/favorites.ts`:
       `addFavoriteShow(show)`, `removeFavoriteShow(id)`,
       `fetchFavoritesCount()`, `fetchFavoritesListPage(page)`. Declare
       `FavoritesSummary` (`{ count, ids }`) and `FavoritesListPage`
       (`{ shows, page, pageCount, totalCount }`) in `web/src/api/types.ts`.
-- [ ] Extend the favorites Entity additively: the state gains
+- [x] Extend the favorites Entity additively: the state gains
       `ids: number[]`, `count: number` and `list: FavoritesListPage | null`
       (the legacy `shows` field stays until Phase 3); reducers
       `replaceFavoritesSummary` and `replaceFavoritesList`; selectors
@@ -185,35 +185,35 @@ unchanged — it still uses the client-side favorites.
       the Entity `types.ts` and both barrels (`store/favorites/index.ts`,
       `store/index.ts`) publish the additions. Adjust the entity suite's
       exact-shape initial-state assertion to the extended shape.
-- [ ] Add the read-side Tasks to `web/src/pages/tasks/` (the nearest common
+- [x] Add the read-side Tasks to `web/src/pages/tasks/` (the nearest common
       ancestor of both consuming pages — the same placement as the existing
       toggle Task): `syncFavoritesSummary.ts` (fetch count -> dispatch
       `replaceFavoritesSummary`) and `fetchFavoritesPage.ts` (fetch a list
       page -> dispatch `replaceFavoritesList`). Plain async functions,
       explicit arguments, HTTP only through `@api/favorites`, state only via
       `store.dispatch`, success/error results returned to the caller.
-- [ ] Sync the README `web/` tree with the new API module and Task files.
-- [ ] Verify: `npm run typecheck`, `npm run lint` and `npm run test` green;
+- [x] Sync the README `web/` tree with the new API module and Task files.
+- [x] Verify: `npm run typecheck`, `npm run lint` and `npm run test` green;
       `npm run test:e2e` unaffected; manual dev-pair round showing the app
       behaves exactly as before (nothing consumes the new layers yet).
 
 **Tests:**
 
-- [ ] API unit tests (mocked `fetch`, red -> green): add sends
+- [x] API unit tests (mocked `fetch`, red -> green): add sends
       `POST /api/favorites` with the JSON show body and content-type header;
       remove sends `DELETE /api/favorites/:id`; count and list send GETs
       (list with the `page` param); each returns the parsed envelope; a
       non-OK response produces the normalized `ApiError`; the existing
       `searchShowsPage` assertions stay unchanged.
-- [ ] Entity unit tests (red -> green): both reducers store their payload
+- [x] Entity unit tests (red -> green): both reducers store their payload
       verbatim; the selectors return ids, count and list; the extended
       initial state.
-- [ ] Task unit tests (`vi.mock` at the `@api/favorites` boundary, red ->
+- [x] Task unit tests (`vi.mock` at the `@api/favorites` boundary, red ->
       green): success dispatches the corresponding reducer with the API
       payload and returns a success result; an API failure dispatches
       nothing and returns an error result; the suites import the task
       modules without React, proving the plain-function interface.
-- [ ] All pre-existing suites stay green (only the single initial-state
+- [x] All pre-existing suites stay green (only the single initial-state
       assertion is adjusted).
 
 **When ready:**
@@ -224,15 +224,15 @@ are unchanged.
 
 **Acceptance Criteria:**
 
-- [ ] `web/src/api/favorites.ts` is the only place holding favorites HTTP
+- [x] `web/src/api/favorites.ts` is the only place holding favorites HTTP
       details; consumers use only its function interface.
-- [ ] The favorites Entity exposes the backend-synced state (ids, count,
+- [x] The favorites Entity exposes the backend-synced state (ids, count,
       list) through reducers and selectors and contains no
       presentation/UI-related state.
-- [ ] The read-side Tasks follow the documented Task rules: plain
+- [x] The read-side Tasks follow the documented Task rules: plain
       functions, explicit arguments, HTTP only through the API layer, store
       updates only via `store.dispatch`, results returned to the caller.
-- [ ] The new behavior is covered by automated tests in the colocated
+- [x] The new behavior is covered by automated tests in the colocated
       `tests/` folders; `npm run typecheck`, `npm run lint` and
       `npm run test` pass with the app behavior unchanged.
 

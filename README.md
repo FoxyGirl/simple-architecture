@@ -114,7 +114,9 @@ web/                  # frontend workspace (Vite + React)
     vite-env.d.ts     # Vite client types (CSS Modules, import.meta.env)
     api/
       shows.ts        # paginated show search via the backend (/api/search)
-      types.ts        # TVmaze shapes + search envelope used by the frontend
+      favorites.ts    # favorites calls: add, remove, count, list page
+      request.ts      # shared fetch layer (URLs, JSON method/body, ApiError)
+      types.ts        # TVmaze shapes + search and favorites envelopes
     hooks/
       useMediaQuery.ts
     pages/
@@ -127,6 +129,12 @@ web/                  # frontend workspace (Vite + React)
           tasks/
             fetchShowsPage.ts # shows-fetch Task: API -> store.dispatch
         tests/              # page-level suites (jsdom + Testing Library)
+      tasks/                # Tasks shared by both pages (common ancestor)
+        toggleShowFavorite.ts # favorite-toggle Task (hearts on both pages)
+        syncFavoritesSummary.ts # summary Task: GET count -> Entity dispatch
+        fetchFavoritesPage.ts # list Task: GET page -> Entity dispatch
+        types.ts            # Task result types
+        tests/              # Task unit suites (API mocked at the boundary)
     store/
       store.ts        # Redux store (configureStore, shows reducer)
       types.ts        # RootState / AppDispatch

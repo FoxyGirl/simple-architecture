@@ -60,4 +60,43 @@ describe('api requestJson', () => {
       signal: controller.signal,
     });
   });
+
+  it('defaults to a GET without a body', async () => {
+    mockedFetch.mockResolvedValue(fetchResponse(envelope));
+
+    await requestJson('/api/favorites/count');
+
+    expect(mockedFetch.mock.calls[0]?.[1]).toMatchObject({ method: 'GET' });
+    expect(mockedFetch.mock.calls[0]?.[1]).not.toHaveProperty('body');
+  });
+
+  it('sends the method, the JSON body and its content type for optioned calls', async () => {
+    mockedFetch.mockResolvedValue(fetchResponse(envelope));
+
+    await requestJson('/api/favorites', {
+      method: 'POST',
+      body: { show: { id: 1 } },
+    });
+
+    expect(mockedFetch.mock.calls[0]?.[1]).toMatchObject({
+      method: 'POST',
+      body: '{"show":{"id":1}}',
+      headers: { 'Content-Type': 'application/json' },
+    });
+  });
+
+  it('accepts the signal inside the options object as well', async () => {
+    const controller = new AbortController();
+    mockedFetch.mockResolvedValue(fetchResponse(envelope));
+
+    await requestJson('/api/favorites', {
+      method: 'DELETE',
+      signal: controller.signal,
+    });
+
+    expect(mockedFetch.mock.calls[0]?.[1]).toMatchObject({
+      method: 'DELETE',
+      signal: controller.signal,
+    });
+  });
 });

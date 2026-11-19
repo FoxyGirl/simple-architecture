@@ -1,13 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import type { Show } from '@api/types';
+import type { FavoritesListPage, Show } from '@api/types';
 
 import { showsReducer } from '../../shows';
 import {
   addFavorite,
   favoritesReducer,
   removeFavorite,
+  replaceFavoritesList,
+  replaceFavoritesSummary,
+  selectFavoriteIds,
+  selectFavoritesCount,
+  selectFavoritesList,
   selectFavoriteShows,
 } from '..';
 
@@ -31,7 +36,12 @@ describe('favorites entity', () => {
   });
 
   it('starts with an empty favorites list', () => {
-    expect(store.getState().favorites).toEqual({ shows: [] });
+    expect(store.getState().favorites).toEqual({
+      shows: [],
+      ids: [],
+      count: 0,
+      list: null,
+    });
   });
 
   it('stores an added show', () => {
@@ -73,5 +83,25 @@ describe('favorites entity', () => {
     store.dispatch(removeFavorite(99));
 
     expect(selectFavoriteShows(store.getState())).toHaveLength(1);
+  });
+
+  it('replaceFavoritesSummary stores the backend ids and count verbatim', () => {
+    store.dispatch(replaceFavoritesSummary({ count: 2, ids: [7, 3] }));
+
+    expect(selectFavoriteIds(store.getState())).toEqual([7, 3]);
+    expect(selectFavoritesCount(store.getState())).toBe(2);
+  });
+
+  it('replaceFavoritesList stores the page envelope verbatim', () => {
+    const listPage: FavoritesListPage = {
+      shows: [show(1, 'Show One')],
+      page: 2,
+      pageCount: 2,
+      totalCount: 4,
+    };
+
+    store.dispatch(replaceFavoritesList(listPage));
+
+    expect(selectFavoritesList(store.getState())).toEqual(listPage);
   });
 });

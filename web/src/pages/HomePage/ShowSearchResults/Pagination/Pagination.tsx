@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { useMediaQuery } from '@hooks/useMediaQuery';
 
-import { usePagination } from './usePagination';
+import { usePagination } from './logic/usePagination';
 
 import { ArrowButton } from './ArrowButton';
 

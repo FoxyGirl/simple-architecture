@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 
-import type { SearchChange, SearchControls } from '../types';
+import type { SearchChange, SearchControls } from '../../types';
 
-import { STATUS } from '../constants';
+import { STATUS } from '../../constants';
 
 const DEBOUNCE_MS = 800;
 

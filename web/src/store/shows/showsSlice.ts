@@ -16,11 +16,11 @@ const showsSlice = createSlice({
   reducers: {
     // The Entity only stores what a Task fetched: the whole search result
     // replaces the previous one, so superseded data can never linger.
-    searchResultStored(_state, action: PayloadAction<ShowsState>): ShowsState {
+    replaceSearchResult(_state, action: PayloadAction<ShowsState>): ShowsState {
       return action.payload;
     },
   },
 });
 
-export const { searchResultStored } = showsSlice.actions;
+export const { replaceSearchResult } = showsSlice.actions;
 export const showsReducer = showsSlice.reducer;

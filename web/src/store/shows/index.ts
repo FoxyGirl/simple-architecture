@@ -1,4 +1,4 @@
-export { searchResultStored, showsReducer } from './showsSlice';
+export { replaceSearchResult, showsReducer } from './showsSlice';
 export {
   selectGenres,
   selectPage,

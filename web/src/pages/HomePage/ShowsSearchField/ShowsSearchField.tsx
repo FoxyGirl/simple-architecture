@@ -2,7 +2,7 @@ import { Search, X } from 'lucide-react';
 
 import type { SearchChange, SearchControls } from '../types';
 
-import { useShowsSearchField } from './useShowsSearchField';
+import { useShowsSearchField } from './logic/useShowsSearchField';
 
 import styles from './ShowsSearchField.module.css';
 

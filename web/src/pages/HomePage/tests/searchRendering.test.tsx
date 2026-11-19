@@ -2,7 +2,7 @@ import { act, cleanup, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { searchShowsPage } from '@api/shows';
-import { searchResultStored, store } from '@store';
+import { replaceSearchResult, store } from '@store';
 
 import {
   arrow,
@@ -53,7 +53,7 @@ describe('HomePage envelope-driven rendering', () => {
     expect(storedPage()).toEqual(page1);
 
     act(() => {
-      store.dispatch(searchResultStored(page2));
+      store.dispatch(replaceSearchResult(page2));
     });
 
     expect(card('Show Four')).toBeInTheDocument();

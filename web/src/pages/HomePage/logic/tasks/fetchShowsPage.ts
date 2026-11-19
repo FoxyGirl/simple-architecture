@@ -1,5 +1,5 @@
 import { searchShowsPage } from '@api/shows';
-import { searchResultStored, store } from '@store';
+import { replaceSearchResult, store } from '@store';
 
 import type { SearchRequest, ShowsFetchResult } from '../../types';
 
@@ -41,7 +41,7 @@ export const fetchShowsPage = async (
     // overwrite the newer data the next run already stored.
     if (controller.signal.aborted) return { status: 'aborted' };
 
-    store.dispatch(searchResultStored(page));
+    store.dispatch(replaceSearchResult(page));
 
     return { status: 'success', page };
   } catch (error) {

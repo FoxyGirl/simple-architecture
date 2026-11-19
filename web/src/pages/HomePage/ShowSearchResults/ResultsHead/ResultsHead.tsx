@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@hooks/useMediaQuery';
 
-import { useResultsHead } from './useResultsHead';
+import { useResultsHead } from './logic/useResultsHead';
 
 import styles from './ResultsHead.module.css';
 

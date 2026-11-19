@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { useGenreFilter } from './useGenreFilter';
+import { useGenreFilter } from './logic/useGenreFilter';
 
 import styles from './GenreFilter.module.css';
 
@@ -11,7 +11,8 @@ type GenreFilterProps = {
 };
 
 export const GenreFilter = (props: GenreFilterProps) => {
-  const { chips, activeGenre, selectGenre } = useGenreFilter(props);
+  const { genres, activeGenre, onSelectGenre } = props;
+  const { chips } = useGenreFilter(genres);
 
   return (
     <div className={styles.filter} role="group" aria-label="Filter by genre">
@@ -24,7 +25,7 @@ export const GenreFilter = (props: GenreFilterProps) => {
             className={clsx(styles.chip, { [styles.chipActive]: isActive })}
             type="button"
             aria-pressed={isActive}
-            onClick={() => selectGenre(genre)}
+            onClick={() => onSelectGenre(genre)}
           >
             {genre}
           </button>

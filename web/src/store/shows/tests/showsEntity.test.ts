@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import type { SearchPage, Show } from '@api/types';
 
 import {
-  searchResultStored,
+  replaceSearchResult,
   selectGenres,
   selectPage,
   selectPageCount,
@@ -47,7 +47,7 @@ describe('shows entity', () => {
   });
 
   it('holds no request-status or UI-related field', () => {
-    store.dispatch(searchResultStored(result));
+    store.dispatch(replaceSearchResult(result));
 
     expect(Object.keys(store.getState().shows).sort()).toEqual([
       'genres',
@@ -59,13 +59,13 @@ describe('shows entity', () => {
   });
 
   it('stores a fetched search result', () => {
-    store.dispatch(searchResultStored(result));
+    store.dispatch(replaceSearchResult(result));
 
     expect(store.getState().shows).toEqual(result);
   });
 
   it('exposes the shows list and the metadata through selectors', () => {
-    store.dispatch(searchResultStored(result));
+    store.dispatch(replaceSearchResult(result));
     const state = store.getState();
 
     expect(selectShows(state)).toEqual(result.shows);

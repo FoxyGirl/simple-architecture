@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { searchShowsPage } from '@api/shows';
-import { searchResultStored, store } from '@store';
+import { replaceSearchResult, store } from '@store';
 
 import { abortShowsFetch, fetchShowsPage } from '../fetchShowsPage';
 
@@ -21,7 +21,7 @@ const mocked = vi.mocked(searchShowsPage);
 describe('fetchShowsPage Task', () => {
   beforeEach(() => {
     mocked.mockReset();
-    store.dispatch(searchResultStored(SENTINEL));
+    store.dispatch(replaceSearchResult(SENTINEL));
   });
 
   afterEach(() => {

@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { vi } from 'vitest';
 
-import { searchResultStored, store } from '@store';
+import { replaceSearchResult, store } from '@store';
 
 import type { SearchPage, Show } from '@api/types';
 
@@ -83,7 +83,7 @@ export const click = async (element: HTMLElement) => {
 // the suites can both drive and inspect the shows Entity. The reset empties
 // the Entity — every suite starts from the documented initial state.
 export const renderHomePage = () => {
-  store.dispatch(searchResultStored(envelope()));
+  store.dispatch(replaceSearchResult(envelope()));
 
   return render(
     <Provider store={store}>

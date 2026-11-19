@@ -269,7 +269,7 @@ uses the old machinery; the Tasks are proven in isolation.
       result type `ShowsFetchResult` (`success | error | aborted`, declared
       in the page `types.ts` where the shared page types live); calls
       `searchShowsPage` from `@api/shows` and dispatches
-      `searchResultStored(page)` from `@store` on success only.)_
+      `replaceSearchResult(page)` from `@store` on success only.)_
 - [x] Move the in-flight coordination from `useShowsDataFetching` into the
       Task layer: every run aborts the previous in-flight request, an aborted
       (superseded) response never dispatches to the store, and the task module
@@ -443,7 +443,7 @@ suite (unit + integration + E2E) is green.
       through the selectors used by the Presenter (verifiable via store state
       inspection in the suites). _(After each flow `storedPage()` equals the
       mocked API payload (`searchFlow`); a new `searchRendering` test
-      dispatches `searchResultStored(page2)` directly and the list re-renders
+      dispatches `replaceSearchResult(page2)` directly and the list re-renders
       from the store with no additional API call — proving the render path is
       the Entity's selectors.)_
 - [x] `npm run test:e2e`: all existing Playwright specs pass unchanged — they

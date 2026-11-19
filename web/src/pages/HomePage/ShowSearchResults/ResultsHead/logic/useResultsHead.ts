@@ -1,4 +1,4 @@
-import { ALL_GENRES } from '../constants';
+import { ALL_GENRES } from '../../constants';
 
 type UseResultsHeadParams = {
   totalCount: number;

@@ -3,13 +3,9 @@ import { describe, expect, it } from 'vitest';
 import type { Show } from '~/types';
 import {
   ALL_GENRES,
-  RESULTS_PER_PAGE,
   buildSearchPage,
-  clampPage,
   collectGenres,
   filterShowsByGenre,
-  getPageCount,
-  getPageShows,
 } from '../shows';
 
 const show = (id: number, genres: string[]): Show =>
@@ -47,29 +43,6 @@ describe('filterShowsByGenre', () => {
   it('returns everything when no genre or All genres is selected', () => {
     expect(filterShowsByGenre(shows, undefined)).toBe(shows);
     expect(filterShowsByGenre(shows, ALL_GENRES)).toBe(shows);
-  });
-});
-
-describe('pagination helpers', () => {
-  it('computes pageCount as max(1, ceil(totalCount / RESULTS_PER_PAGE))', () => {
-    expect(RESULTS_PER_PAGE).toBe(3);
-    expect(getPageCount(0)).toBe(1);
-    expect(getPageCount(3)).toBe(1);
-    expect(getPageCount(4)).toBe(2);
-    expect(getPageCount(7)).toBe(3);
-  });
-
-  it('slices RESULTS_PER_PAGE shows per page', () => {
-    expect(getPageShows(shows, 1)).toEqual([shows[0], shows[1], shows[2]]);
-    expect(getPageShows(shows, 2)).toEqual([shows[3], shows[4], shows[5]]);
-    expect(getPageShows(shows, 3)).toEqual([shows[6]]);
-  });
-
-  it('clamps the requested page into [1, pageCount]', () => {
-    expect(clampPage(0, 3)).toBe(1);
-    expect(clampPage(2, 3)).toBe(2);
-    expect(clampPage(-5, 1)).toBe(1);
-    expect(clampPage(999, 3)).toBe(3);
   });
 });
 

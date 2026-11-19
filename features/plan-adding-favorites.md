@@ -71,7 +71,7 @@ foundation every later phase consumes.
 
 **Tasks:**
 
-- [ ] Extract the pagination helpers both routes will share
+- [x] Extract the pagination helpers both routes will share
       (`RESULTS_PER_PAGE`, `getPageCount`, `clampPage`, `getPageShows`) from
       the private `server/routes/search/shows.ts` into their own backend
       module with an `index.ts` barrel — per the organization rule, helpers
@@ -80,15 +80,15 @@ foundation every later phase consumes.
       along and update the search route's imports; the genre helpers
       (`collectGenres`, `filterShowsByGenre`, `buildSearchPage`) stay
       search-private and every search suite stays green.
-- [ ] Write this phase's tests first (see Tests): the storage/helper unit
+- [x] Write this phase's tests first (see Tests): the storage/helper unit
       suite in `server/routes/favorites/tests/` and the app-level supertest
       suite in `server/tests/` — both red before the implementation exists.
-- [ ] Implement the favorites storage module inside
+- [x] Implement the favorites storage module inside
       `server/routes/favorites/`: the exported plain object `favorite`
       (`Record<number, Show>` — the test-reset seam mirroring `cache`) plus
       pure add/remove/summary/list-page helpers preserving insertion order;
       the helpers never call TVmaze. Route-owned types live in the folder.
-- [ ] Implement the favorites router and mount it: `POST /api/favorites`
+- [x] Implement the favorites router and mount it: `POST /api/favorites`
       (JSON body `{ show }`; 400 `{ error }` on a missing or invalid show),
       `DELETE /api/favorites/:id` (400 on a non-numeric id; an unknown id is
       a no-op — record the decision), `GET /api/favorites/count` returning
@@ -100,30 +100,30 @@ foundation every later phase consumes.
       the router through the folder barrel + `routes/index.ts`, mount it in
       `app.ts`, and add `express.json()` body parsing there (the first POST
       route of the app).
-- [ ] Sync the backend documentation: the README `server/` tree (the new
+- [x] Sync the backend documentation: the README `server/` tree (the new
       `routes/favorites/` folder and the shared pagination module) and the
       README/AGENTS.md backend description (the server now serves
       `/api/search` plus the favorites endpoints).
-- [ ] Verify: `npm run typecheck`, `npm run lint` and `npm run test` green
+- [x] Verify: `npm run typecheck`, `npm run lint` and `npm run test` green
       in both workspaces, `npm run test:e2e` unaffected; manual
       `npm run server` round through the four endpoints, including the
       restart-clears-favorites observation.
 
 **Tests:**
 
-- [ ] Storage/helper unit tests (red -> green): adding stores the full show
+- [x] Storage/helper unit tests (red -> green): adding stores the full show
       snapshot keyed by its id; adding the same id twice keeps one entry;
       removing deletes the entry and removing an unknown id is a no-op; the
       summary is `{ count, ids }` in insertion order; the list-page helper
       slices 3 per page, clamps the requested page into `[1, pageCount]`,
       reports `totalCount`, and an empty storage yields one empty page.
-- [ ] Supertest app-level suite (red -> green, storage reset in
+- [x] Supertest app-level suite (red -> green, storage reset in
       `beforeEach`): POST adds -> 200 with the updated summary; POST without
       a valid show body -> 400 `{ error }`; GET count reflects adds and
       removes; GET list page 2 returns the second slice with correct
       metadata; DELETE removes -> updated summary; the favorites routes make
       no upstream calls (the stubbed global `fetch` is never invoked).
-- [ ] All pre-existing suites stay green: the search route behaves
+- [x] All pre-existing suites stay green: the search route behaves
       identically after the pagination extraction (unit + supertest + the 5
       Playwright specs).
 
@@ -135,20 +135,20 @@ storage, shares one pagination module with the search route, and every suite
 
 **Acceptance Criteria:**
 
-- [ ] Favorites are stored on the backend in a plain in-memory object
+- [x] Favorites are stored on the backend in a plain in-memory object
       (`const favorite = {}`) keyed by show id, holding full show snapshots;
       no database or file persistence is involved; a server restart clears
       the storage (observed manually).
-- [ ] `POST /api/favorites`, `DELETE /api/favorites/:id`,
+- [x] `POST /api/favorites`, `DELETE /api/favorites/:id`,
       `GET /api/favorites/count` and `GET /api/favorites?page=` behave per
       the shapes above; the list serves 3 shows per page with clamped page
       metadata.
-- [ ] Serving favorites never calls TVmaze.
-- [ ] The route follows the documented backend organization: own folder +
+- [x] Serving favorites never calls TVmaze.
+- [x] The route follows the documented backend organization: own folder +
       barrel, mounted in `app.ts`, `~` alias imports, and the pagination
       helpers shared with the search route live in a single module (no
       duplication).
-- [ ] The backend favorites behavior is covered by the colocated unit suite
+- [x] The backend favorites behavior is covered by the colocated unit suite
       and the app-level supertest suite; `npm run typecheck`,
       `npm run lint` and `npm run test` pass and `npm run test:e2e` is
       unaffected.

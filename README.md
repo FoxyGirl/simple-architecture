@@ -40,9 +40,11 @@ The app runs as two processes — start both in separate terminals:
 
 The frontend only calls its own origin under `/api/...`; the Vite dev
 server proxies `/api` to the backend (see `server.proxy` in
-`web/vite.config.ts`), and the backend owns the TVmaze interaction. With
-`npm run server` stopped, searches show the app's error panel and recover
-via "Retry request" once it is up again.
+`web/vite.config.ts`), and the backend owns the TVmaze interaction plus the
+favorites API (`/api/search`, `POST/DELETE /api/favorites`,
+`GET /api/favorites/count` and the paginated `GET /api/favorites` list served
+from the in-memory storage). With `npm run server` stopped, searches show the
+app's error panel and recover via "Retry request" once it is up again.
 
 ## TypeScript
 
@@ -141,7 +143,7 @@ web/                  # frontend workspace (Vite + React)
   vercel.json         # SPA rewrites (set Vercel "Root Directory" to `web/`)
 
 server/               # backend workspace (Express, TypeScript ESM via tsx)
-  app.ts              # exported Express app: composes and mounts the routes
+  app.ts              # exported Express app: JSON body parsing + the mounted routes
   index.ts            # entry: starts the app on port 3001
   types.ts            # TVmaze API shapes owned by the backend
   routes/             # one folder per HTTP route, mounted under /api by app.ts
@@ -149,8 +151,19 @@ server/               # backend workspace (Express, TypeScript ESM via tsx)
     search/           # the GET /api/search route (q, genre, page)
       index.ts        # barrel: exports searchRouter only
       search.ts       # route handler: validation, cache call, errors
-      shows.ts        # server-side genre filtering + pagination helpers
+      shows.ts        # server-side genre filtering + search page builder
       tests/          # unit suite for the route's private helpers
+    favorites/        # the favorites API over the in-memory storage
+      index.ts        # barrel: favoritesRouter (+ favorite for the suite reset)
+      favorites.ts    # route handlers: add, remove, count, paginated list
+      storage.ts      # plain-object favorites keyed by show id + helpers
+      types.ts        # FavoritesSummary / FavoritesListPage shapes
+      tests/          # unit suite for the storage and its helpers
+  pagination/         # shared pagination primitives (3 shows per page)
+    index.ts          # barrel: RESULTS_PER_PAGE, getPageCount, clampPage,
+                      # getPageShows
+    pagination.ts
+    tests/            # unit suite for the shared helpers
   cache/              # 5-minute plain-object TVmaze response cache
     index.ts          # barrel: getCachedShows (+ cache for the suites)
     cache.ts

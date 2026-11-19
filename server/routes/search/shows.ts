@@ -1,8 +1,9 @@
 import type { Show } from '~/types';
+import { clampPage, getPageCount, getPageShows } from '~/pagination';
 
-// Mirrors of the frontend UI constants
-// (web/src/pages/HomePage/ShowSearchResults/constants.ts).
-export const RESULTS_PER_PAGE = 3;
+// The genre helpers stay search-private; the shared pagination primitives
+// (RESULTS_PER_PAGE, getPageCount, clampPage, getPageShows) moved to the
+// ~/pagination module when the favorites route joined as a consumer.
 export const ALL_GENRES = 'All genres';
 
 /** The `GET /api/search` response envelope. */
@@ -13,9 +14,6 @@ export type SearchPage = {
   totalCount: number;
   genres: string[];
 };
-
-const clamp = (value: number, min: number, max: number) =>
-  Math.min(Math.max(value, min), max);
 
 /**
  * The sorted, deduplicated list of genres present in a result set. The UI
@@ -40,17 +38,6 @@ export const filterShowsByGenre = (shows: Show[], genre?: string): Show[] => {
 
   return shows.filter((show) => show.genres.includes(genre));
 };
-
-/** A result set always has at least one page, even when it is empty. */
-export const getPageCount = (totalCount: number): number =>
-  Math.max(1, Math.ceil(totalCount / RESULTS_PER_PAGE));
-
-export const clampPage = (page: number, pageCount: number): number =>
-  clamp(page, 1, pageCount);
-
-/** Slice the shows visible on the given (already clamped) page. */
-export const getPageShows = (shows: Show[], page: number): Show[] =>
-  shows.slice((page - 1) * RESULTS_PER_PAGE, page * RESULTS_PER_PAGE);
 
 /**
  * Build the `GET /api/search` envelope from the full (unpaginated, cached)

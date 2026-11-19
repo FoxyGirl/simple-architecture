@@ -474,28 +474,28 @@ the backend-synced Entity after every add/remove on either page.
 
 **Tasks:**
 
-- [ ] Extend `e2e/favorites.spec.js` first (red): the count button is
+- [x] Extend `e2e/favorites.spec.js` first (red): the count button is
       visible on the HomePage showing the current count; a heart add
       increments it; a removal on the FavoritesPage is reflected after
       returning Home; clicking the button lands on the Favorites page.
-- [ ] Create `FavoritesCountButton` inside `web/src/pages/HomePage/`
+- [x] Create `FavoritesCountButton` inside `web/src/pages/HomePage/`
       (exclusive-owner rule — only the HomePage uses it): a presentational
       View (count + `onClick` props, heart icon, accessible name) with a
       CSS Module using existing tokens; regenerate the CSS Module types.
-- [ ] Wire the HomePage presenter and View: the count comes from
+- [x] Wire the HomePage presenter and View: the count comes from
       `selectFavoritesCount`, the navigation happens through
       `navigate('/favorites')` at the Presenter level (the View never
       touches the router); the button renders in the hero section — the
       final placement is a recorded design decision, with the canvas
       mirroring deferred while the pen.dev tooling is blocked.
-- [ ] Update the shared `test/home-flow.tsx` helper to wrap `HomePage` in a
+- [x] Update the shared `test/home-flow.tsx` helper to wrap `HomePage` in a
       `MemoryRouter` (its presenter now navigates), keeping every
       helper-driven suite green.
-- [ ] Unit tests (red -> green): the button renders the count from the
+- [x] Unit tests (red -> green): the button renders the count from the
       store and updates after a summary dispatch; the click navigates to
       the favorites route (route-stub assertion); grep proves the View
       imports neither the router nor the store.
-- [ ] Sync the README `web/` tree with the frontend structure accumulated
+- [x] Sync the README `web/` tree with the frontend structure accumulated
       by this feature (`pages/components/Pagination`,
       `FavoritesCountButton`, the favorites Tasks — the `App/` component
       directory, the `notification/` module and the removed `Toast`
@@ -505,10 +505,10 @@ the backend-synced Entity after every add/remove on either page.
 
 **Tests:**
 
-- [ ] Component/presenter suites as listed above (red -> green).
-- [ ] E2E count, cross-page freshness and navigation assertions (red ->
+- [x] Component/presenter suites as listed above (red -> green).
+- [x] E2E count, cross-page freshness and navigation assertions (red ->
       green).
-- [ ] All pre-existing suites green with the router-aware test helper.
+- [x] All pre-existing suites green with the router-aware test helper.
 
 **When ready:**
 
@@ -518,17 +518,56 @@ unchanged.
 
 **Acceptance Criteria:**
 
-- [ ] The HomePage displays a button showing the current number of favorite
+- [x] The HomePage displays a button showing the current number of favorite
       shows; the count updates after every add and remove, including
       removals performed on the FavoritesPage.
-- [ ] Clicking the button navigates to the Favorites page; the navigation
+- [x] Clicking the button navigates to the Favorites page; the navigation
       is presenter-driven and the View never touches the router.
-- [ ] The count is the backend-computed value read from the Entity — no
+- [x] The count is the backend-computed value read from the Entity — no
       client-side authoritative counting.
-- [ ] The existing global navigation stays unchanged.
-- [ ] The button is covered by unit tests and the E2E spec;
+- [x] The existing global navigation stays unchanged.
+- [x] The button is covered by unit tests and the E2E spec;
       `npm run typecheck`, `npm run lint`, `npm run test` and
       `npm run test:e2e` pass.
+
+**Phase 5 execution notes (recorded decisions and deviations):**
+
+- Design decisions (canvas mirroring deferred — the pen.dev MCP tools
+  remain plan-usage-limited; the `.pen` file was not touched): the button
+  renders in the hero directly below the search field as an accent-soft
+  pill (`--accent-border`, `--radius-pill`, filled heart in `--favorite`,
+  `--font-body`) showing the count and the word "favorites"; its accessible
+  name is `View favorites (${count})`, so the count is part of the role
+  name and both the unit and E2E suites assert exact counts.
+- The count and navigation logic lives in
+  `HomePage/logic/useShowFavorites.ts` (the presenter's favorites aspect)
+  rather than in a new hook: `selectFavoritesCount` + `useNavigate`, with
+  `navigate('/favorites')` inside a `useCallback`. Keeping it there holds
+  `useHomePage.ts` at 116 lines, inside the 120-line budget.
+- `renderHomePage` in `web/src/test/home-flow.tsx` now wraps the page in a
+  `MemoryRouter` (the presenter navigates); the count suite renders its own
+  `/favorites` route stub to assert the navigation without depending on the
+  app shell.
+- E2E deviation (line budget): the count assertions extend the two existing
+  favorites tests instead of adding a fourth test, preserving the
+  single-spec sequential-mutation design and the 120-line budget. The count
+  button replaces the nav-link click in the pagination test (proving the
+  URL change); the global nav link stays covered by the toast test.
+- Environment note: the first E2E run reused externally started
+  `npm run dev`/`npm run server` processes whose backend used the real
+  TVmaze base URL, so every fixture spec failed; restarting the dev pair
+  through the Playwright webServers (the Phase 7 note's remedy) fixed the
+  run.
+- Verification performed: the unit suite was written first and ran red (no
+  button rendered); the E2E count assertions also ran red with the
+  implementation stashed. After implementation — `npm run css-types`,
+  `npm run typecheck`, `npm run lint` (0 errors, 0 warnings),
+  `npm run test` (web 21 files/80 tests, server 8/45),
+  `npm run test:e2e` (8 passed) and `npm run build` are green. Grep proves
+  the View imports neither the router nor the store. The manual dev-pair
+  round is covered by the Playwright webServers: the real `npm run dev` and
+  backend served the add, cross-page removal and count-button navigation
+  flows end to end.
 
 ### Phase 6: HomePage search-state restoration
 

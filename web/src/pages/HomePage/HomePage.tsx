@@ -4,6 +4,7 @@ import { useHomePage } from './logic/useHomePage';
 
 import { ShowSearchResults } from './ShowSearchResults';
 import { ShowsSearchField } from './ShowsSearchField';
+import { FavoritesCountButton } from './FavoritesCountButton';
 
 import styles from './HomePage.module.css';
 
@@ -16,6 +17,7 @@ export const HomePage = () => {
     retry,
     clearSearch,
     isFavorite,
+    count,
     onSearchChange,
     registerControls,
     submitSearch,
@@ -24,6 +26,7 @@ export const HomePage = () => {
     selectGenre,
     selectPage,
     toggleFavorite,
+    goToFavorites,
   } = useHomePage();
 
   return (
@@ -51,6 +54,8 @@ export const HomePage = () => {
           isCurrentQuery={isCurrentQuery}
           abortSearch={abortSearch}
         />
+
+        <FavoritesCountButton count={count} onClick={goToFavorites} />
       </section>
 
       <ShowSearchResults

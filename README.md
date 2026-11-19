@@ -135,11 +135,18 @@ web/                  # frontend workspace (Vite + React)
         HomePage.tsx        # "/" route
         HomePage.module.css # Page styles (CSS Module)
         index.ts            # public export
+        FavoritesCountButton/ # hero count pill: Entity count + navigation
+          FavoritesCountButton.tsx # presentational View (count + onClick)
+          FavoritesCountButton.module.css
+          index.ts          # public export
         logic/
           useHomePage.ts    # page presenter (Entity reads + Task orchestration)
           tasks/
             fetchShowsPage.ts # shows-fetch Task: API -> store.dispatch
         tests/              # page-level suites (jsdom + Testing Library)
+      components/           # components shared by both pages (common ancestor)
+        FavoriteButton/     # heart toggle used by the cards on both pages
+        Pagination/         # page controls: search results + favorites list
       tasks/                # Tasks shared by both pages (common ancestor)
         toggleShowFavorite.ts # favorite-toggle Task (hearts on both pages)
         syncFavoritesSummary.ts # summary Task: GET count -> Entity dispatch

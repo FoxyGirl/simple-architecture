@@ -87,7 +87,8 @@ export const useHomePage = () => {
   // The favorites Entity data the cards' heart buttons reflect; the toggle
   // itself is the shared Task's business rule, its success the toast the
   // global notify API renders.
-  const { isFavorite, toggleFavorite } = useShowFavorites();
+  const { isFavorite, toggleFavorite, count, goToFavorites } =
+    useShowFavorites();
 
   const clearSearch = () => {
     controlsRef.current?.clearSearch();
@@ -99,12 +100,14 @@ export const useHomePage = () => {
     status: snapshot.status,
     selection: snapshot.selection,
     isFavorite,
+    count,
     onSearchChange: handleSearchChange,
     registerControls,
     submitSearch,
     selectGenre,
     selectPage,
     toggleFavorite,
+    goToFavorites,
     isCurrentQuery,
     abortSearch,
     retry,

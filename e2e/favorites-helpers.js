@@ -24,6 +24,11 @@ export const card = (page, name) => page.getByRole('heading', { name });
 
 export const arrow = (page, label) => page.getByRole('button', { name: label });
 
+// The HomePage count button; the accessible name carries the backend count,
+// so a changed count is a different role name and a precise assertion.
+export const countButton = (page, count) =>
+  page.getByRole('button', { name: `View favorites (${count})` });
+
 export const heart = (page, name, favorite) =>
   page.getByRole('button', {
     name: `${favorite ? 'Remove' : 'Add'} ${name} ${favorite ? 'from' : 'to'} favorites`,

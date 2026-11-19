@@ -1,9 +1,10 @@
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import type { Show } from '@api/types';
 import { notify } from '@notification';
-import { selectFavoriteIds } from '@store';
+import { selectFavoriteIds, selectFavoritesCount } from '@store';
 
 import { TOAST_MESSAGES } from '../../constants';
 import { syncFavoritesSummary } from '../../tasks/syncFavoritesSummary';
@@ -13,16 +14,24 @@ import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
  * The favorites aspect of the home page presenter: the backend owns the
  * favorites, so the mount syncs the `{ count, ids }` summary through the
  * read Task and the hearts read the mirrored ids from the Entity. The
- * toggle itself is the shared Task's business rule; its success result is
- * confirmed through the global notify API — distinct add/remove messages,
- * while a failed operation stays silent.
+ * count button reads the backend-computed count from the same summary and
+ * its navigation stays here, at Presenter level. The toggle itself is the
+ * shared Task's business rule; its success result is confirmed through the
+ * global notify API — distinct add/remove messages, while a failed
+ * operation stays silent.
  */
 export const useShowFavorites = () => {
   const favoriteIds = useSelector(selectFavoriteIds);
+  const count = useSelector(selectFavoritesCount);
+  const navigate = useNavigate();
 
   useEffect(() => {
     void syncFavoritesSummary();
   }, []);
+
+  const goToFavorites = useCallback(() => {
+    navigate('/favorites');
+  }, [navigate]);
 
   const isFavorite = useCallback(
     (showId: number) => favoriteIds.includes(showId),
@@ -48,5 +57,5 @@ export const useShowFavorites = () => {
     [favoriteIds],
   );
 
-  return { isFavorite, toggleFavorite };
+  return { isFavorite, toggleFavorite, count, goToFavorites };
 };

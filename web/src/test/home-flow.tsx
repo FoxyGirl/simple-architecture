@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import { replaceSearchResult, store } from '@store';
@@ -84,13 +85,17 @@ export const click = async (element: HTMLElement) => {
 
 // Renders HomePage against the application store the Tasks dispatch into, so
 // the suites can both drive and inspect the shows Entity. The reset empties
-// the Entity — every suite starts from the documented initial state.
+// the Entity — every suite starts from the documented initial state. The
+// presenter navigates through the Router, so the page renders inside a
+// MemoryRouter (the count suite adds route stubs of its own).
 export const renderHomePage = () => {
   store.dispatch(replaceSearchResult(envelope()));
 
   return render(
     <Provider store={store}>
-      <HomePage />
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>
     </Provider>,
   );
 };

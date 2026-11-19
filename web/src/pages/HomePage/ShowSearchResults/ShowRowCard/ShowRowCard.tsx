@@ -3,8 +3,9 @@ import { ChevronRight, Star } from 'lucide-react';
 
 import type { Show } from '@api/types';
 
+import { FavoriteButton } from '../../../components/FavoriteButton';
+import { formatNetwork, formatRating, formatYear } from '../../../utils';
 import { STATUS_LABELS } from '../constants';
-import { formatNetwork, formatRating, formatYear } from '../utils';
 
 import { STATUS_CLASSES } from './constants';
 
@@ -12,9 +13,15 @@ import styles from './ShowRowCard.module.css';
 
 type ShowRowCardProps = {
   show: Show;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 };
 
-export const ShowRowCard = ({ show }: ShowRowCardProps) => {
+export const ShowRowCard = ({
+  show,
+  isFavorite,
+  onToggleFavorite,
+}: ShowRowCardProps) => {
   const statusLabel = STATUS_LABELS[show.status] ?? 'Unknown';
   const statusClass = STATUS_CLASSES[show.status] ?? styles.ended;
 
@@ -54,6 +61,12 @@ export const ShowRowCard = ({ show }: ShowRowCardProps) => {
           </span>
         </div>
       </div>
+
+      <FavoriteButton
+        showName={show.name}
+        isFavorite={isFavorite}
+        onToggle={onToggleFavorite}
+      />
 
       <ChevronRight className={styles.chevron} size={16} aria-hidden="true" />
     </article>

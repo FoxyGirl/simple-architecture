@@ -56,6 +56,12 @@
   gap: var(--space-xs);
 }
 
+.badgesRight {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
 .statusBadge,
 .ratingBadge {
   display: inline-flex;

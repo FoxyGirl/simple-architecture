@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import type { SearchPage, Show } from '@api/types';
 
+import { favoritesReducer } from '../../favorites';
 import {
   replaceSearchResult,
   selectGenres,
@@ -24,10 +25,14 @@ const result: SearchPage = {
   genres: ['Comedy', 'Drama'],
 };
 
-// A store owning only the shows entity: the Entity is independent of any
-// other module, so its suite exercises it in isolation.
+// A store owning the shows entity: the Entity is independent of any other
+// module, so its suite exercises it in isolation. The favorites reducer is
+// mounted only because the RootState selectors are typed against the whole
+// store shape.
 const createTestStore = () =>
-  configureStore({ reducer: { shows: showsReducer } });
+  configureStore({
+    reducer: { shows: showsReducer, favorites: favoritesReducer },
+  });
 
 describe('shows entity', () => {
   let store: ReturnType<typeof createTestStore>;

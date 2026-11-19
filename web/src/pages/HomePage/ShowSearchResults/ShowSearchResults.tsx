@@ -1,6 +1,6 @@
 import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
-import type { SearchPage } from '@api/types';
+import type { SearchPage, Show } from '@api/types';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 
 import type { Selection } from '../types';
@@ -10,8 +10,7 @@ import { STATUS, type SearchStatus } from '../constants';
 import { GenreFilter } from './GenreFilter';
 import { Pagination } from './Pagination';
 import { ResultsHead } from './ResultsHead';
-import { ShowCard } from './ShowCard';
-import { ShowRowCard } from './ShowRowCard';
+import { ShowList } from './ShowList';
 import { Skeleton } from './Skeleton';
 import { StatusPanel } from './StatusPanel';
 
@@ -22,8 +21,10 @@ type ShowSearchResultsProps = {
   status: SearchStatus;
   queryEcho: string;
   selection: Selection;
+  isFavorite: (showId: number) => boolean;
   onGenreSelect: (genre: string) => void;
   onPageSelect: (page: number) => void;
+  onToggleFavorite: (show: Show) => void;
   onRetry: () => void;
   onClear: () => void;
 };
@@ -33,8 +34,10 @@ export const ShowSearchResults = ({
   status,
   queryEcho,
   selection,
+  isFavorite,
   onGenreSelect,
   onPageSelect,
+  onToggleFavorite,
   onRetry,
   onClear,
 }: ShowSearchResultsProps) => {
@@ -94,15 +97,12 @@ export const ShowSearchResults = ({
             onSelectGenre={onGenreSelect}
           />
 
-          <div className={styles.list}>
-            {data.shows.map((show) =>
-              isDesktop ? (
-                <ShowCard key={show.id} show={show} />
-              ) : (
-                <ShowRowCard key={show.id} show={show} />
-              ),
-            )}
-          </div>
+          <ShowList
+            shows={data.shows}
+            isDesktop={isDesktop}
+            isFavorite={isFavorite}
+            onToggleFavorite={onToggleFavorite}
+          />
 
           <Pagination
             page={data.page}

@@ -15,6 +15,7 @@ export const HomePage = () => {
     selection,
     retry,
     clearSearch,
+    isFavorite,
     onSearchChange,
     registerControls,
     submitSearch,
@@ -22,6 +23,7 @@ export const HomePage = () => {
     abortSearch,
     selectGenre,
     selectPage,
+    toggleFavorite,
   } = useHomePage();
 
   return (
@@ -56,8 +58,10 @@ export const HomePage = () => {
         status={status}
         queryEcho={queryEcho}
         selection={selection}
+        isFavorite={isFavorite}
         onGenreSelect={selectGenre}
         onPageSelect={selectPage}
+        onToggleFavorite={toggleFavorite}
         onRetry={retry}
         onClear={clearSearch}
       />

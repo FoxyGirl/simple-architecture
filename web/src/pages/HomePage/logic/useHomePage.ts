@@ -10,6 +10,7 @@ import type {
 
 import { STATUS } from '../constants';
 import { ALL_GENRES } from '../ShowSearchResults/constants';
+import { useShowFavorites } from './useShowFavorites';
 import { useShowsRequest } from './useShowsRequest';
 import { useStoredSearchPage } from './useStoredSearchPage';
 
@@ -83,6 +84,10 @@ export const useHomePage = () => {
     controlsRef.current = controls;
   }, []);
 
+  // The favorites Entity data the cards' heart buttons reflect; the toggle
+  // itself is the shared Task's business rule.
+  const { isFavorite, toggleFavorite } = useShowFavorites();
+
   const clearSearch = () => {
     controlsRef.current?.clearSearch();
   };
@@ -92,11 +97,13 @@ export const useHomePage = () => {
     queryEcho: snapshot.queryEcho,
     status: snapshot.status,
     selection: snapshot.selection,
+    isFavorite,
     onSearchChange: handleSearchChange,
     registerControls,
     submitSearch,
     selectGenre,
     selectPage,
+    toggleFavorite,
     isCurrentQuery,
     abortSearch,
     retry,

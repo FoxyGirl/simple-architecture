@@ -9,3 +9,5 @@ export {
   selectTotalCount,
 } from './shows';
 export type { ShowsState } from './shows';
+export { addFavorite, removeFavorite, selectFavoriteShows } from './favorites';
+export type { FavoritesState } from './favorites';

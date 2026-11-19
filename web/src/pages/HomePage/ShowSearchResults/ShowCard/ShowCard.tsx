@@ -3,8 +3,9 @@ import { Star } from 'lucide-react';
 
 import type { Show } from '@api/types';
 
+import { FavoriteButton } from '../../../components/FavoriteButton';
+import { formatNetwork, formatRating, formatYear } from '../../../utils';
 import { STATUS_LABELS } from '../constants';
-import { formatNetwork, formatRating, formatYear } from '../utils';
 
 import { STATUS_CLASSES } from './constants';
 
@@ -12,9 +13,15 @@ import styles from './ShowCard.module.css';
 
 type ShowCardProps = {
   show: Show;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 };
 
-export const ShowCard = ({ show }: ShowCardProps) => {
+export const ShowCard = ({
+  show,
+  isFavorite,
+  onToggleFavorite,
+}: ShowCardProps) => {
   const statusLabel = STATUS_LABELS[show.status] ?? 'Unknown';
   const statusClass = STATUS_CLASSES[show.status] ?? styles.ended;
 
@@ -40,9 +47,17 @@ export const ShowCard = ({ show }: ShowCardProps) => {
             <span className={statusClass}>{statusLabel}</span>
           </span>
 
-          <span className={styles.ratingBadge}>
-            <Star className={styles.star} size={13} aria-hidden="true" />
-            {formatRating(show.rating?.average)}
+          <span className={styles.badgesRight}>
+            <span className={styles.ratingBadge}>
+              <Star className={styles.star} size={13} aria-hidden="true" />
+              {formatRating(show.rating?.average)}
+            </span>
+
+            <FavoriteButton
+              showName={show.name}
+              isFavorite={isFavorite}
+              onToggle={onToggleFavorite}
+            />
           </span>
         </div>
       </div>

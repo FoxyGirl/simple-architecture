@@ -3,6 +3,7 @@ import { test } from '@playwright/test';
 import { clearFavorites } from './favorites-helpers';
 import { heartsFlow } from './favorites-hearts';
 import { favoritesPaginationFlow } from './favorites-list';
+import { favoritesReloadReturnFlow } from './favorites-reload';
 import { roundTripRestoresSearch } from './favorites-round-trip';
 import { favoritesToastFlow } from './favorites-toasts';
 import { favoritesPageUrlFlow } from './favorites-url';
@@ -38,4 +39,10 @@ test('search state survives the URL round trip', async ({ page }) => {
 
 test('the favorites list page lives in the URL', async ({ page }) => {
   await favoritesPageUrlFlow(page);
+});
+
+test('reloading Favorites keeps Back to Home on the Home URL', async ({
+  page,
+}) => {
+  await favoritesReloadReturnFlow(page);
 });

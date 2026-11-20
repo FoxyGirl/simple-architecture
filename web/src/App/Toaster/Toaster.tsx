@@ -6,7 +6,7 @@ const NOTIFY_DURATION_MS = 3000;
 
 export const Toaster = () => (
   <SonnerToaster
-    position="bottom-center"
+    position="top-right"
     theme="dark"
     duration={NOTIFY_DURATION_MS}
     richColors

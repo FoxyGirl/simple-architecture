@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import type { Show } from '@api/types';
 import { notify } from '@notification';
 import { selectFavoritesList } from '@store';
+
+import type { FavoritesLocationState } from '../../types';
 
 import { parsePageParam, pluralize } from '../../utils';
 import { TOAST_MESSAGES } from '../../constants';
@@ -18,22 +20,18 @@ import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
  * the shared toggle Task and the URL page is refetched afterwards — the
  * backend clamps the envelope when the last page shrinks away, and the URL is
  * not rewritten to the clamped page. A successful removal toasts through the
- * global notify API, a failed one stays silent. Back to Home keeps the
- * parameterized HomePage URL: the mount remembers the history entry before
- * Favorites, so any list-page entries pushed since are stepped over, while a
- * direct Favorites load opens a fresh HomePage.
+ * global notify API, a failed one stays silent. Back to Home returns to the
+ * HomePage URL remembered by the Favorites entry — navigation state survives
+ * reloads and list-page changes, while a direct Favorites load opens `/`.
  */
 export const useFavoritesPage = () => {
   const list = useSelector(selectFavoritesList);
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parsePageParam(searchParams.get('page'));
-  // The history index this Favorites mount arrived at, so Back to Home can
-  // step over any list-page entries pushed since then.
-  const [arrivalIndex] = useState(
-    () => (window.history.state as { idx?: number } | null)?.idx ?? 0,
-  );
-
+  const fromHome = (location.state as FavoritesLocationState | null)?.fromHome;
+  console.log('\n\n fromHome:', fromHome);
   useEffect(() => {
     void fetchFavoritesPage(page);
   }, [page]);
@@ -47,9 +45,9 @@ export const useFavoritesPage = () => {
       if (nextPage > 1) params.set('page', String(nextPage));
       else params.delete('page');
 
-      setSearchParams(params);
+      setSearchParams(params, { state: location.state });
     },
-    [searchParams, setSearchParams],
+    [searchParams, setSearchParams, location.state],
   );
 
   const removeFromFavorites = useCallback(
@@ -68,15 +66,8 @@ export const useFavoritesPage = () => {
   );
 
   const goToHome = useCallback(() => {
-    if (arrivalIndex === 0) {
-      navigate('/');
-      return;
-    }
-
-    const currentIndex =
-      (window.history.state as { idx?: number } | null)?.idx ?? 0;
-    navigate(arrivalIndex - 1 - currentIndex);
-  }, [arrivalIndex, navigate]);
+    navigate(fromHome ?? '/');
+  }, [fromHome, navigate]);
 
   const subHeadText =
     list === null || list.totalCount === 0

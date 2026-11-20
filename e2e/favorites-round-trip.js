@@ -55,9 +55,17 @@ const navToFreshHome = async (page) => {
   await expectFreshHome(page);
 };
 
+// A Favorites-link arrival still remembers the parameterized Home URL.
+const navBackToRestoredSearch = async (page) => {
+  await page.getByRole('link', { name: 'Favorites' }).click();
+  await page.getByRole('button', { name: 'Back to Home' }).click();
+  await expectRestoredSearch(page);
+};
+
 export const roundTripRestoresSearch = async (page) => {
   await searchSpaceDramaPageTwo(page);
   await backToRestoredSearch(page);
   await browserBackRestoresSearch(page);
+  await navBackToRestoredSearch(page);
   await navToFreshHome(page);
 };

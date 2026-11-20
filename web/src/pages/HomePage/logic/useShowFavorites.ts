@@ -1,10 +1,12 @@
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import type { Show } from '@api/types';
 import { notify } from '@notification';
 import { selectFavoriteIds, selectFavoritesCount } from '@store';
+
+import type { FavoritesLocationState } from '../../types';
 
 import { TOAST_MESSAGES } from '../../constants';
 import { syncFavoritesSummary } from '../../tasks/syncFavoritesSummary';
@@ -24,14 +26,17 @@ export const useShowFavorites = () => {
   const favoriteIds = useSelector(selectFavoriteIds);
   const count = useSelector(selectFavoritesCount);
   const navigate = useNavigate();
+  const { pathname, search } = useLocation();
 
   useEffect(() => {
     void syncFavoritesSummary();
   }, []);
 
   const goToFavorites = useCallback(() => {
-    navigate('/favorites');
-  }, [navigate]);
+    const state: FavoritesLocationState = { fromHome: `${pathname}${search}` };
+
+    navigate('/favorites', { state });
+  }, [navigate, pathname, search]);
 
   const isFavorite = useCallback(
     (showId: number) => favoriteIds.includes(showId),

@@ -41,6 +41,11 @@ export const favoritesPaginationFlow = async (page, request) => {
   await expect(page.getByText('3 shows saved to your list.')).toBeVisible();
   await expect.poll(() => summaryIds(request)).toHaveLength(3);
 
+  // A reload must keep the remembered Home URL: Back to Home still restores
+  // the parameterized HomePage instead of stepping through old history.
+  await page.reload();
+  await expect(page.getByText('Page 1 of 1')).toBeVisible();
+
   // Back home, the count reflects the removal made on the other page.
   await page.getByRole('button', { name: 'Back to Home' }).click();
   await expect(page).toHaveURL(/\/\?search=space&page=2$/);

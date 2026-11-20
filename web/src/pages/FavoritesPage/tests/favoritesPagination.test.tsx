@@ -58,4 +58,18 @@ describe('FavoritesPage URL pagination', () => {
     expect(location()).toBe('/favorites');
     expect(listMock).toHaveBeenLastCalledWith(1);
   });
+
+  it('Back to Home returns to the Home URL remembered by the entry', async () => {
+    const state = { fromHome: '/?search=space&page=2' };
+    await mountFavorites('Show One', [{ pathname: '/favorites', state }]);
+
+    fireEvent.click(button('Next page'));
+    await screen.findByRole('heading', { name: 'Show Four' });
+    fireEvent.click(button('Back to Home'));
+
+    expect(
+      await screen.findByRole('heading', { name: 'Home stub' }),
+    ).toBeTruthy();
+    expect(location()).toBe('/?search=space&page=2');
+  });
 });

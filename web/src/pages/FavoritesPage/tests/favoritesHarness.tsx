@@ -6,6 +6,8 @@ import { vi } from 'vitest';
 import type { Show } from '@api/types';
 import { replaceFavoritesSummary, store } from '@store';
 
+import type { FavoritesLocationState } from '../../types';
+
 import { FavoritesPage } from '..';
 import { LocationProbe } from '../../../test/location-probe';
 
@@ -56,6 +58,9 @@ export const createFavoritesBackend = () => {
 
 export type FavoritesBackend = ReturnType<typeof createFavoritesBackend>;
 
+export type FavoritesEntry =
+  string | { pathname: string; state?: FavoritesLocationState };
+
 // Every suite starts from a clean Entity and mock history.
 export const resetFavorites = (backend: FavoritesBackend) => {
   backend.reset();
@@ -64,7 +69,9 @@ export const resetFavorites = (backend: FavoritesBackend) => {
   cleanup();
 };
 
-export const renderFavoritesPage = (entries: string[] = ['/favorites']) =>
+export const renderFavoritesPage = (
+  entries: FavoritesEntry[] = ['/favorites'],
+) =>
   render(
     <Provider store={store}>
       <MemoryRouter initialEntries={entries}>
@@ -85,7 +92,7 @@ export const navigationType = () =>
 
 export const mountFavorites = async (
   first = 'Show One',
-  entries = ['/favorites'],
+  entries: FavoritesEntry[] = ['/favorites'],
 ) => {
   renderFavoritesPage(entries);
   await heading(first);

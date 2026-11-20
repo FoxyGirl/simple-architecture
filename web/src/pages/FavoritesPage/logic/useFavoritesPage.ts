@@ -1,39 +1,56 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import type { Show } from '@api/types';
 import { notify } from '@notification';
 import { selectFavoritesList } from '@store';
 
-import { pluralize } from '../../utils';
+import { parsePageParam, pluralize } from '../../utils';
 import { TOAST_MESSAGES } from '../../constants';
 import { fetchFavoritesPage } from '../../tasks/fetchFavoritesPage';
 import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
 
 /**
- * The Favorites page Presenter: the backend list is the page's data
- * source, so it fetches the first page on mount and every later page
- * through the read Task. A listed show is always a favorite, so the heart
- * removes it through the shared toggle Task and the current page is
- * refetched afterwards — the backend clamps the envelope when the last
- * page shrinks away. A successful removal toasts the confirmation through
- * the global notify API, a failed one stays silent. Navigation back to
- * the catalogue stays here, at Presenter level: an in-app previous entry is
- * preferred so the parameterized HomePage URL is preserved, while a direct
- * Favorites load opens a fresh HomePage.
+ * The Favorites page Presenter: the URL page is the list's single source of
+ * truth, so a single effect drives the read Task on mount and on every page
+ * change. A listed show is always a favorite, so the heart removes it through
+ * the shared toggle Task and the URL page is refetched afterwards — the
+ * backend clamps the envelope when the last page shrinks away, and the URL is
+ * not rewritten to the clamped page. A successful removal toasts through the
+ * global notify API, a failed one stays silent. Back to Home keeps the
+ * parameterized HomePage URL: the mount remembers the history entry before
+ * Favorites, so any list-page entries pushed since are stepped over, while a
+ * direct Favorites load opens a fresh HomePage.
  */
 export const useFavoritesPage = () => {
   const list = useSelector(selectFavoritesList);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parsePageParam(searchParams.get('page'));
+  // The history index this Favorites mount arrived at, so Back to Home can
+  // step over any list-page entries pushed since then.
+  const [arrivalIndex] = useState(
+    () => (window.history.state as { idx?: number } | null)?.idx ?? 0,
+  );
 
   useEffect(() => {
-    void fetchFavoritesPage(1);
-  }, []);
-
-  const selectPage = useCallback((page: number) => {
     void fetchFavoritesPage(page);
-  }, []);
+  }, [page]);
+
+  // A page change is a URL write that pushes a history entry; page 1 omits
+  // the parameter.
+  const selectPage = useCallback(
+    (nextPage: number) => {
+      const params = new URLSearchParams(searchParams);
+
+      if (nextPage > 1) params.set('page', String(nextPage));
+      else params.delete('page');
+
+      setSearchParams(params);
+    },
+    [searchParams, setSearchParams],
+  );
 
   const removeFromFavorites = useCallback(
     (show: Show) => {
@@ -43,20 +60,23 @@ export const useFavoritesPage = () => {
         if (result.status === 'success') {
           notify.info(`"${show.name}" ${TOAST_MESSAGES.REMOVED}`);
 
-          await fetchFavoritesPage(list?.page ?? 1);
+          await fetchFavoritesPage(page);
         }
       })();
     },
-    [list?.page],
+    [page],
   );
 
   const goToHome = useCallback(() => {
-    const historyState = window.history.state as { idx?: number } | null;
-    const hasInAppHistory = (historyState?.idx ?? 0) > 0;
+    if (arrivalIndex === 0) {
+      navigate('/');
+      return;
+    }
 
-    if (hasInAppHistory) navigate(-1);
-    else navigate('/');
-  }, [navigate]);
+    const currentIndex =
+      (window.history.state as { idx?: number } | null)?.idx ?? 0;
+    navigate(arrivalIndex - 1 - currentIndex);
+  }, [arrivalIndex, navigate]);
 
   const subHeadText =
     list === null || list.totalCount === 0

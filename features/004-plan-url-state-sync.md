@@ -277,41 +277,41 @@ unchanged.
 
 **Tasks:**
 
-- [ ] Write this phase's E2E first (red): extend `e2e/favorites.spec.js`
+- [x] Write this phase's E2E first (red): extend `e2e/favorites.spec.js`
       (mutations stay in this single file): seed 4 favorites via the UI,
       next-page click updates the URL to `?page=2` and renders page 2;
       back/forward walk the list pages; direct `goto('/favorites?page=2')`
       and reload show page 2; `?page=abc` and `?page=0` fall back to page 1;
       removing the last item of page 2 clamps to the served envelope
       (existing assertion, now reached through the URL page).
-- [ ] Rework `useFavoritesPage` onto the URL: read the page through
+- [x] Rework `useFavoritesPage` onto the URL: read the page through
       `useSearchParams` + the shared `parsePageParam` from `pages/utils`
       (Phase 1); the mount fetch uses the URL page instead of the hard-coded
       `1`; a single effect keyed on the URL page drives
       `fetchFavoritesPage(page)` (Task and Entity untouched).
-- [ ] `selectPage` pushes the `page` parameter (omitted when 1) instead of
+- [x] `selectPage` pushes the `page` parameter (omitted when 1) instead of
       calling the Task directly; the rendered list and pagination continue
       to come from the stored envelope (served page may be clamped — the URL
       is not rewritten, mirroring the HomePage rule).
-- [ ] Keep the removal flow URL-based: after a successful
+- [x] Keep the removal flow URL-based: after a successful
       `toggleShowFavorite`, refetch the current URL page; toast and
       summary-sync behavior unchanged.
-- [ ] Update the FavoritesPage unit suites (`FavoritesPage.test.tsx`,
+- [x] Update the FavoritesPage unit suites (`FavoritesPage.test.tsx`,
       `favoritesToast.test.tsx`) to render with `initialEntries` and a
       location probe: URL page drives the Task argument, page changes write
       the URL, invalid values fetch page 1.
-- [ ] Run all gates green and confirm both routes' URL scenarios are covered
+- [x] Run all gates green and confirm both routes' URL scenarios are covered
       end-to-end (PRD test-coverage criterion).
 
 **Tests:**
 
-- [ ] E2E (red -> green): favorites page parameter writes (push), deep link,
+- [x] E2E (red -> green): favorites page parameter writes (push), deep link,
       reload, back/forward, invalid-value defaults, removal clamping via the
       URL page — inside `e2e/favorites.spec.js`.
-- [ ] Unit: presenter fetches the URL page on mount and on change;
+- [x] Unit: presenter fetches the URL page on mount and on change;
       `selectPage` writes the parameter; `parsePageParam` fallbacks applied;
       removal refetches the URL page.
-- [ ] Regression gate: all pre-existing suites and the 6 Playwright specs
+- [x] Regression gate: all pre-existing suites and the 6 Playwright specs
       pass.
 
 **When ready:**
@@ -322,20 +322,20 @@ criterion on both routes is covered by automated tests and all gates pass.
 
 **Acceptance Criteria:**
 
-- [ ] The current favorites list page appears in the `/favorites` URL as the
+- [x] The current favorites list page appears in the `/favorites` URL as the
       `page` query parameter; changing the page updates the parameter (push)
       and the displayed list matches the URL.
-- [ ] Loading `/favorites?page=N` directly (new tab or reload) shows page N;
+- [x] Loading `/favorites?page=N` directly (new tab or reload) shows page N;
       a missing, non-numeric, or sub-1 `page` falls back to page 1 without
       errors.
-- [ ] Favorites page changes push browser history entries, and the
+- [x] Favorites page changes push browser history entries, and the
       back/forward buttons restore the corresponding list page.
-- [ ] Removing a show refetches the list based on the URL page, with the
+- [x] Removing a show refetches the list based on the URL page, with the
       existing backend clamping behavior when the last page shrinks
       unchanged.
-- [ ] The URL synchronization scenarios on both routes (deep link, reload,
+- [x] The URL synchronization scenarios on both routes (deep link, reload,
       debounced search write, genre/page reset, defaults for invalid values,
       favorites page sync, back/forward navigation) are covered by automated
       tests.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`, and
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`, and
       `npm run test:e2e` pass.

@@ -9,6 +9,7 @@ import { notify } from '@notification';
 import { replaceFavoritesSummary, store } from '@store';
 
 import { FavoritesPage } from '..';
+import { LocationProbe } from '../../../test/location-probe';
 
 // The same fake backend favorites API as the page suite: three per page,
 // removals visible to the refetch that follows a successful toggle.
@@ -56,6 +57,7 @@ const renderFavoritesPage = () =>
   render(
     <Provider store={store}>
       <MemoryRouter initialEntries={['/favorites']}>
+        <LocationProbe />
         <Routes>
           <Route path="/" element={<h1>Home stub</h1>} />
           <Route path="/favorites" element={<FavoritesPage />} />

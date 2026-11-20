@@ -8,9 +8,9 @@ import type { Show } from '@api/types';
 import { replaceFavoritesSummary, store } from '@store';
 
 import { FavoritesPage } from '..';
+import { LocationProbe } from '../../../test/location-probe';
 
-// The suite drives a fake of the backend favorites API at its module
-// boundary: three per page, clamped pages, removals visible to the fetch.
+// A fake backend favorites API: three per page, clamped pages, live removals.
 vi.mock('@api/favorites', () => ({
   addFavoriteShow: vi.fn(),
   removeFavoriteShow: vi.fn(),
@@ -39,17 +39,20 @@ const fakeRemove = async (id: number) => {
   storage = storage.filter((s) => s.id !== id);
   return sum();
 };
-
 const listMock = vi.mocked(fetchFavoritesListPage);
 const removeMock = vi.mocked(removeFavoriteShow);
 listMock.mockImplementation(fakeFetchPage);
 removeMock.mockImplementation(fakeRemove);
+const location = () => screen.getByTestId('location').textContent ?? '';
+const navigationType = () =>
+  screen.getByTestId('navigation-type').textContent ?? '';
 
 // The router-wrapped render; the home route stub detects navigation.
 const renderFavoritesPage = () =>
   render(
     <Provider store={store}>
       <MemoryRouter initialEntries={['/favorites']}>
+        <LocationProbe />
         <Routes>
           <Route path="/" element={<h1>Home stub</h1>} />
           <Route path="/favorites" element={<FavoritesPage />} />
@@ -59,7 +62,6 @@ const renderFavoritesPage = () =>
   );
 const heading = (name: string) => screen.findByRole('heading', { name });
 const button = (name: string) => screen.getByRole('button', { name });
-// Renders and waits for the first page to arrive from the fake API.
 const mount = async (first = 'Show One') => {
   renderFavoritesPage();
   await heading(first);
@@ -81,14 +83,17 @@ describe('FavoritesPage', () => {
     expect(screen.getByText('4 shows saved to your list.')).toBeInTheDocument();
   });
 
-  it('Next and Prev fetch other pages', async () => {
+  it('Next and Prev write the URL page and fetch it', async () => {
     await mount();
     fireEvent.click(button('Next page'));
     await heading('Show Four');
+    expect(location()).toBe('/favorites?page=2');
+    expect(navigationType()).toBe('PUSH');
     expect(listMock).toHaveBeenLastCalledWith(2);
     expect(screen.getByText('Page 2 of 2')).toBeInTheDocument();
     fireEvent.click(button('Previous page'));
     await heading('Show One');
+    expect(location()).toBe('/favorites');
     expect(listMock).toHaveBeenLastCalledWith(1);
   });
 

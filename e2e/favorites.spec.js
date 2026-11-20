@@ -15,6 +15,7 @@ import {
   shownToast,
   summaryIds,
 } from './favorites-helpers';
+import { favoritesPageUrlFlow } from './favorites-url';
 
 test.beforeEach(async ({ request }) => {
   await clearFavorites(request);
@@ -72,7 +73,6 @@ test('the favorites page paginates, updates on removal and returns home', async 
   await expect(card(page, 'Space Wars')).toHaveCount(0);
   await expect(page.getByText('Page 1 of 2')).toBeVisible();
   await expect(page.getByText('4 shows saved to your list.')).toBeVisible();
-
   // Next/Prev walk the pages; a removal updates the list and pagination.
   await arrow(page, 'Next page').click();
   await expect(card(page, 'Space Wars')).toBeVisible();
@@ -117,4 +117,8 @@ test('favorites toasts appear and dismiss themselves', async ({ page }) => {
 
 test('search state survives the URL round trip', async ({ page }) => {
   await roundTripRestoresSearch(page);
+});
+
+test('the favorites list page lives in the URL', async ({ page }) => {
+  await favoritesPageUrlFlow(page);
 });

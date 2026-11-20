@@ -1,7 +1,7 @@
+import type { QueryParam, RequestJsonOptions } from '~/types';
+
 import { getApiBaseUrl } from './config';
 import { ApiError } from './errors';
-
-import type { QueryParam, RequestJsonOptions } from './types';
 
 const encodeParams = (params: QueryParam[]): string =>
   params
@@ -39,12 +39,36 @@ const buildRequestInit = ({
   return init;
 };
 
+// The backend answers failures with `{ error: string }`. A non-JSON or
+// shapeless error body falls back to the status-based message.
+const readErrorMessage = async (response: Response): Promise<string> => {
+  const fallback = `API request failed with status ${response.status}`;
+
+  try {
+    const body: unknown = await response.json();
+
+    if (
+      typeof body === 'object' &&
+      body !== null &&
+      'error' in body &&
+      typeof body.error === 'string'
+    ) {
+      return body.error;
+    }
+  } catch {
+    // Keep the status-based fallback.
+  }
+
+  return fallback;
+};
+
 /**
  * Requests `url` and parses the JSON body of the response. The second
  * argument is either the {@link RequestJsonOptions} — method, JSON body,
  * signal — or, for a plain GET, just the `AbortSignal`. A non-OK response
- * becomes a normalized {@link ApiError}; an aborted request keeps throwing
- * its `AbortError` so superseded runs stay recognisable to the caller.
+ * becomes a normalized {@link ApiError} carrying the backend's `error`
+ * message; an aborted request keeps throwing its `AbortError` so superseded
+ * runs stay recognisable to the caller.
  */
 export const requestJson = async <T>(
   url: string,
@@ -55,10 +79,7 @@ export const requestJson = async <T>(
   const response = await fetch(url, buildRequestInit(options));
 
   if (!response.ok) {
-    throw new ApiError(
-      `API request failed with status ${response.status}`,
-      response.status,
-    );
+    throw new ApiError(await readErrorMessage(response), response.status);
   }
 
   return (await response.json()) as T;

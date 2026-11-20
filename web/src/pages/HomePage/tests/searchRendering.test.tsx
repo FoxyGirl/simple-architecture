@@ -1,8 +1,9 @@
 import { act, cleanup, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { searchShowsPage } from '~/api/shows';
+import { requestJson } from '~/api/request';
 import { replaceSearchResult, store } from '~/store';
+import { searchCalls, searchSelection, stubApi } from '~/test/api-mock';
 
 import {
   arrow,
@@ -17,12 +18,19 @@ import {
   typeQuery,
 } from '../../../test/home-flow';
 
-vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
+
+  return { ...actual, requestJson: vi.fn() };
+});
+
+const api = vi.mocked(requestJson);
 
 describe('HomePage envelope-driven rendering', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.mocked(searchShowsPage).mockReset().mockResolvedValue(page1);
+    api.mockReset();
+    stubApi(api, { search: () => page1 });
     renderHomePage();
     typeQuery('office');
   });
@@ -60,24 +68,37 @@ describe('HomePage envelope-driven rendering', () => {
     expect(
       screen.queryByRole('heading', { name: 'Show One' }),
     ).not.toBeInTheDocument();
-    expect(searchShowsPage).toHaveBeenCalledTimes(1);
+    expect(searchCalls(api)).toHaveLength(1);
   });
 
   it('a failed selection shows the error panel and retry re-runs the request', async () => {
     await settle();
-    vi.mocked(searchShowsPage)
-      .mockRejectedValueOnce(new Error('TVmaze search failed with status 502'))
-      .mockResolvedValue(page2);
+    stubApi(api, {
+      search: () => {
+        throw new Error('TVmaze search failed with status 502');
+      },
+    });
 
     await click(arrow('Next page'));
 
     expect(card('Something went wrong.')).toBeInTheDocument();
+    expect(
+      screen.getByText('TVmaze search failed with status 502'),
+    ).toBeInTheDocument();
+
+    stubApi(api, { search: () => page2 });
 
     await click(arrow('Retry request'));
 
-    const calls = vi.mocked(searchShowsPage).mock.calls;
-    expect(calls[calls.length - 2]?.[1]).toEqual({ genre: undefined, page: 2 });
-    expect(calls[calls.length - 1]?.[1]).toEqual({ genre: undefined, page: 2 });
+    const calls = searchCalls(api);
+    expect(searchSelection(calls[calls.length - 2])).toEqual({
+      genre: undefined,
+      page: 2,
+    });
+    expect(searchSelection(calls[calls.length - 1])).toEqual({
+      genre: undefined,
+      page: 2,
+    });
     expect(card('Show Four')).toBeInTheDocument();
   });
 });

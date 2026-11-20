@@ -1,7 +1,13 @@
 import { cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { searchShowsPage } from '~/api/shows';
+import { requestJson } from '~/api/request';
+import {
+  lastSearchCall,
+  searchCalls,
+  searchSelection,
+  stubApi,
+} from '~/test/api-mock';
 
 import {
   arrow,
@@ -16,17 +22,21 @@ import {
   typeQuery,
 } from '../../../test/home-flow';
 
-vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
 
-const selectionOfLast = () => {
-  const calls = vi.mocked(searchShowsPage).mock.calls;
-  return calls[calls.length - 1]?.[1];
-};
+  return { ...actual, requestJson: vi.fn() };
+});
+
+const api = vi.mocked(requestJson);
+
+const selectionOfLast = () => searchSelection(lastSearchCall(api));
 
 describe('HomePage server-driven request flow', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.mocked(searchShowsPage).mockReset().mockResolvedValue(page1);
+    api.mockReset();
+    stubApi(api, { search: () => page1 });
     renderHomePage();
     typeQuery('office');
   });
@@ -39,17 +49,17 @@ describe('HomePage server-driven request flow', () => {
   it('submitting a search requests page 1 with no genre', async () => {
     await settle();
 
-    expect(searchShowsPage).toHaveBeenCalledWith(
-      'office',
-      { genre: undefined, page: 1 },
-      { signal: expect.any(AbortSignal) },
-    );
+    const call = lastSearchCall(api);
+
+    expect(call?.params.get('q')).toBe('office');
+    expect(searchSelection(call)).toEqual({ genre: undefined, page: 1 });
+    expect(call?.signal).toBeInstanceOf(AbortSignal);
     expect(storedPage()).toEqual(page1);
   });
 
   it('a genre change requests page 1 with that genre', async () => {
     await settle();
-    vi.mocked(searchShowsPage).mockResolvedValue(comedyPage);
+    stubApi(api, { search: () => comedyPage });
 
     await click(chip('Comedy'));
 
@@ -59,7 +69,7 @@ describe('HomePage server-driven request flow', () => {
 
   it('a page change requests that page', async () => {
     await settle();
-    vi.mocked(searchShowsPage).mockResolvedValue(page2);
+    stubApi(api, { search: () => page2 });
 
     await click(arrow('Next page'));
 
@@ -74,21 +84,25 @@ describe('HomePage server-driven request flow', () => {
     typeQuery('friends');
     await settle();
 
-    expect(searchShowsPage).toHaveBeenLastCalledWith(
-      'friends',
-      { genre: undefined, page: 1 },
-      expect.anything(),
-    );
+    const calls = searchCalls(api);
+    const last = calls[calls.length - 1];
+
+    expect(last?.params.get('q')).toBe('friends');
+    expect(searchSelection(last)).toEqual({ genre: undefined, page: 1 });
     expect(chip('All genres')).toHaveAttribute('aria-pressed', 'true');
     expect(storedPage()).toEqual(page1);
   });
 
   it('aborts the in-flight request when a newer one starts', async () => {
     const signals: AbortSignal[] = [];
-    vi.mocked(searchShowsPage).mockImplementation((_query, _sel, options) => {
-      if (options?.signal) signals.push(options.signal);
-      // Pending forever, like a real in-flight fetch.
-      return new Promise(() => undefined);
+
+    stubApi(api, {
+      search: (call) => {
+        if (call.signal) signals.push(call.signal);
+
+        // Pending forever, like a real in-flight fetch.
+        return new Promise(() => undefined);
+      },
     });
 
     await settle();

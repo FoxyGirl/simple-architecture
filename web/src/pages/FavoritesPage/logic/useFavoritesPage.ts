@@ -7,7 +7,7 @@ import { selectFavoritesList } from '~/store';
 import type { FavoritesLocationState } from '../../types';
 
 import { parsePageParam, pluralize } from '../../utils';
-import { fetchFavoritesPage } from '../../tasks/fetchFavoritesPage';
+import { fetchFavoritesPage } from './tasks/fetchFavoritesPage';
 import { useSoftRemoval } from './useSoftRemoval';
 
 /**

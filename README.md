@@ -64,7 +64,7 @@ Import specifiers carry no file extension. `~` aliases the frontend
 `web/src/` root and `@server` aliases the `server/` root:
 
 ```ts
-import { searchShowsPage } from '~/api/shows';
+import type { Show } from '~/types';
 import { useMediaQuery } from '~/hooks/useMediaQuery';
 import { formatShow } from '~/pages/utils/show-format';
 import { getCachedShows } from '@server/cache';

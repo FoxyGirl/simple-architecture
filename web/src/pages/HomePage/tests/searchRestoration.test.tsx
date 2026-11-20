@@ -1,9 +1,9 @@
 import { cleanup, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchFavoritesCount } from '~/api/favorites';
-import { searchShowsPage } from '~/api/shows';
-import type { SearchPage, Show } from '~/api/types';
+import { requestJson } from '~/api/request';
+import { searchCalls, searchSelection, stubApi } from '~/test/api-mock';
+import type { SearchPage, Show } from '~/types';
 
 import {
   card,
@@ -14,15 +14,15 @@ import {
   storedPage,
 } from '../../../test/home-flow';
 
-// The presenter runs over the mocked API boundary (vi.mock never hoists
-// inside the shared helper, so both mocks live in this suite).
-vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
-vi.mock('~/api/favorites', () => ({
-  addFavoriteShow: vi.fn(),
-  removeFavoriteShow: vi.fn(),
-  fetchFavoritesCount: vi.fn(),
-  fetchFavoritesListPage: vi.fn(),
-}));
+// The presenter runs over the mocked request boundary (vi.mock never hoists
+// inside the shared helper, so the mock lives in this suite).
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
+
+  return { ...actual, requestJson: vi.fn() };
+});
+
+const api = vi.mocked(requestJson);
 
 const show = (id: number, name: string): Show =>
   ({ id, name, genres: ['Drama'] }) as Show;
@@ -51,10 +51,11 @@ const expectRestoredView = () => {
 describe('HomePage URL restoration', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.mocked(searchShowsPage).mockReset().mockResolvedValue(dramaPage2);
-    vi.mocked(fetchFavoritesCount)
-      .mockReset()
-      .mockResolvedValue({ count: 0, ids: [] });
+    api.mockReset();
+    stubApi(api, {
+      search: () => dramaPage2,
+      favoritesCount: () => ({ count: 0, ids: [] }),
+    });
   });
 
   afterEach(() => {
@@ -67,7 +68,7 @@ describe('HomePage URL restoration', () => {
     await settle();
 
     expect(input()).toHaveValue('');
-    expect(searchShowsPage).not.toHaveBeenCalled();
+    expect(searchCalls(api)).toHaveLength(0);
     expect(screen.queryByText('Page 2 of 2')).toBeNull();
   });
 
@@ -75,11 +76,12 @@ describe('HomePage URL restoration', () => {
     renderHomePage([URL]);
     await settle();
 
-    expect(searchShowsPage).toHaveBeenCalledWith(
-      'office',
-      { genre: 'Drama', page: 2 },
-      expect.anything(),
-    );
+    expect(searchCalls(api)).toHaveLength(1);
+    expect(searchSelection(searchCalls(api)[0])).toEqual({
+      genre: 'Drama',
+      page: 2,
+    });
+    expect(searchCalls(api)[0]?.params.get('q')).toBe('office');
     expectRestoredView();
   });
 
@@ -91,7 +93,7 @@ describe('HomePage URL restoration', () => {
     remountHomePage([URL]);
     await settle();
 
-    expect(searchShowsPage).toHaveBeenCalledTimes(2);
+    expect(searchCalls(api)).toHaveLength(2);
     expectRestoredView();
   });
 });

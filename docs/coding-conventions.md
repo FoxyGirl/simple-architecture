@@ -9,8 +9,8 @@ compiler options live in `tsconfig.app.json` (the app) and `tsconfig.node.json`
 ### Where types live
 
 - MUST declare types in a `types.ts` file next to the code that owns them.
-  `src/api/types.ts` holds the TVmaze API shapes, a page's `types.ts` holds
-  the types shared inside that page's directory.
+  `src/types.ts` holds the app-wide TVmaze and backend response shapes, a
+  page's `types.ts` holds the types shared inside that page's directory.
 - MUST NOT duplicate a type in several places — import it from its owner.
 - Component prop types are declared locally in the component file and are not
   exported; a component file exports the component only.
@@ -46,10 +46,21 @@ compiler options live in `tsconfig.app.json` (the app) and `tsconfig.node.json`
   specifier onto a `.ts` file:
 
   ```ts
-  import { searchShowsPage } from '~/api/shows';
+  import type { Show } from '~/types';
   import { useMediaQuery } from '~/hooks/useMediaQuery';
   import { STATUS } from './constants';
   ```
+
+### API layer
+
+- `src/api/` holds only the shared request plumbing — `config.ts`, `errors.ts`
+  and `request.ts` (URL building, JSON parsing, error normalization).
+- Endpoint-specific request composition — path, HTTP method, body, query
+  parameters — belongs to the Task that performs the business operation, not
+  to a per-endpoint API module. Tasks call `buildApiUrl` and `requestJson`
+  from `src/api/request.ts`.
+- The browser calls only the app's own `/api` endpoints; response and data
+  shapes shared across the app live in `src/types.ts`.
 
 ### Syntax
 

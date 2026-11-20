@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { ChevronRight, Star } from 'lucide-react';
 
-import type { Show } from '~/api/types';
+import type { Show } from '~/types';
 
 import { formatNetwork, formatRating, formatYear } from '../../utils';
 import { FavoriteButton } from '../FavoriteButton';

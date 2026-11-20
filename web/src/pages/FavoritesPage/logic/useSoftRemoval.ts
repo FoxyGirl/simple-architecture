@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import type { FavoritesListPage, Show } from '~/api/types';
+import type { FavoritesListPage, Show } from '~/types';
 import { notify } from '~/notification';
 
 import type { RemovedMarking } from '../types';
@@ -14,8 +14,9 @@ import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
  * removed ids are view state of the current fetched list. The marking
  * carries the envelope it was made against, so every fresh fetch (a page
  * change, a re-visit or a reload) invalidates it automatically. The shared
- * toggle Task receives the card's current state; only a success flips the
- * marking and toasts, a failure leaves the card as it was.
+ * toggle Task receives the card's current state; a success flips the marking
+ * and toasts, a failure leaves the card as it was and shows the reported
+ * error message.
  */
 export const useSoftRemoval = (list: FavoritesListPage | null) => {
   const [marking, setMarking] = useState<RemovedMarking>({ list, ids: [] });
@@ -30,7 +31,10 @@ export const useSoftRemoval = (list: FavoritesListPage | null) => {
     void (async () => {
       const result = await toggleShowFavorite(show, wasFavorite);
 
-      if (result.status !== 'success') return;
+      if (result.status !== 'success') {
+        notify.error(result.message);
+        return;
+      }
 
       setMarking({
         list,

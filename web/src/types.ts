@@ -1,8 +1,7 @@
 /**
- * Shapes returned by the backend for TVmaze shows.
- *
- * They mirror the live TVmaze show payload, so every field the app does
- * not use yet is optional rather than invented.
+ * Shapes shared across the app: the TVmaze show model, the backend response
+ * envelopes and the primitives of the API request layer. Types owned by a
+ * single page, component or Entity stay in that owner's `types.ts`.
  */
 
 export type ShowStatus =
@@ -56,31 +55,6 @@ export type Show = {
   updated: number;
 };
 
-export type SearchShowsOptions = {
-  signal?: AbortSignal;
-};
-
-/** The HTTP methods the API layer speaks. */
-export type HttpMethod = 'GET' | 'POST' | 'DELETE';
-
-/**
- * The options of {@link requestJson}: the HTTP method (default GET), a
- * JSON body — any defined value is serialized with the matching content
- * type — and the abort signal. The request layer also accepts a bare
- * `AbortSignal` where a caller only needs cancellation.
- */
-export type RequestJsonOptions = {
-  method?: HttpMethod;
-  body?: unknown;
-  signal?: AbortSignal;
-};
-
-/**
- * A single query-parameter pair used when building API URLs, e.g.
- * `['genre', 'Comedy']`. Values are percent-encoded by the request layer.
- */
-export type QueryParam = [key: string, value: string | number];
-
 /**
  * The backend `GET /api/search` envelope: the requested page slice plus the
  * metadata the UI renders — the total match count and the genres present in
@@ -114,3 +88,24 @@ export type FavoritesListPage = {
   pageCount: number;
   totalCount: number;
 };
+
+/** The HTTP methods the request layer speaks. */
+export type HttpMethod = 'GET' | 'POST' | 'DELETE';
+
+/**
+ * The options of `requestJson`: the HTTP method (default GET), a JSON body —
+ * any defined value is serialized with the matching content type — and the
+ * abort signal. The request layer also accepts a bare `AbortSignal` where a
+ * caller only needs cancellation.
+ */
+export type RequestJsonOptions = {
+  method?: HttpMethod;
+  body?: unknown;
+  signal?: AbortSignal;
+};
+
+/**
+ * A single query-parameter pair used when building API URLs, e.g.
+ * `['genre', 'Comedy']`. Values are percent-encoded by the request layer.
+ */
+export type QueryParam = [key: string, value: string | number];

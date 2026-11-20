@@ -16,9 +16,15 @@ export const useHomePage = () => {
   const [status, setStatus] = useState<SearchStatus>(() =>
     search ? STATUS.LOADING : STATUS.IDLE,
   );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSearchChange = useCallback((change: SearchChange) => {
-    if (change.status !== undefined) setStatus(change.status);
+    if (change.status !== undefined) {
+      setStatus(change.status);
+      setErrorMessage(
+        change.status === STATUS.ERROR ? (change.errorMessage ?? null) : null,
+      );
+    }
   }, []);
 
   const { runRequest, retry, abortSearch, requestRef } =
@@ -67,6 +73,7 @@ export const useHomePage = () => {
     data,
     queryEcho: search,
     status,
+    errorMessage,
     selection: { genre, page },
     search,
     isFavorite,

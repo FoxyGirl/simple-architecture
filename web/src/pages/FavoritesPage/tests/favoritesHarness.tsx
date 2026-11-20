@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
-import type { Show } from '~/api/types';
+import type { Show } from '~/types';
 import { replaceFavoritesSummary, store } from '~/store';
 
 import type { FavoritesLocationState } from '../../types';

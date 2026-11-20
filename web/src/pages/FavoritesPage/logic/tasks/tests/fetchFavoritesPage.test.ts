@@ -1,17 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchFavoritesListPage } from '~/api/favorites';
-import type { FavoritesListPage, Show } from '~/api/types';
+import { requestJson } from '~/api/request';
 import { selectFavoritesList, store } from '~/store';
+import { favoritesPageRequests, stubApi } from '~/test/api-mock';
+import type { FavoritesListPage, Show } from '~/types';
 
 import { fetchFavoritesPage } from '../fetchFavoritesPage';
 
-vi.mock('~/api/favorites', () => ({
-  addFavoriteShow: vi.fn(),
-  removeFavoriteShow: vi.fn(),
-  fetchFavoritesCount: vi.fn(),
-  fetchFavoritesListPage: vi.fn(),
-}));
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
+
+  return { ...actual, requestJson: vi.fn() };
+});
+
+const api = vi.mocked(requestJson);
 
 const listPage: FavoritesListPage = {
   shows: [{ id: 1, name: 'Show One', genres: ['Drama'] } as Show],
@@ -22,26 +24,30 @@ const listPage: FavoritesListPage = {
 
 describe('fetchFavoritesPage task', () => {
   beforeEach(() => {
-    vi.mocked(fetchFavoritesListPage).mockReset();
+    api.mockReset();
   });
 
   it('fetches the requested page and stores the envelope in the Entity', async () => {
-    vi.mocked(fetchFavoritesListPage).mockResolvedValue(listPage);
+    stubApi(api, { favoritesPage: () => listPage });
 
     const result = await fetchFavoritesPage(2);
 
-    expect(fetchFavoritesListPage).toHaveBeenCalledWith(2);
+    expect(favoritesPageRequests(api)).toEqual([2]);
     expect(result).toEqual({ status: 'success', list: listPage });
     expect(selectFavoritesList(store.getState())).toEqual(listPage);
   });
 
-  it('dispatches nothing and reports the failure when the API fails', async () => {
-    vi.mocked(fetchFavoritesListPage).mockRejectedValue(new Error('offline'));
+  it('dispatches nothing and reports the failure when the request fails', async () => {
+    stubApi(api, {
+      favoritesPage: () => {
+        throw new Error('offline');
+      },
+    });
 
     const before = store.getState().favorites;
     const result = await fetchFavoritesPage(1);
 
-    expect(result).toEqual({ status: 'error' });
+    expect(result).toEqual({ status: 'error', message: 'offline' });
     expect(store.getState().favorites).toBe(before);
   });
 });

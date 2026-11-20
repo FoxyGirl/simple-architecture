@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { SearchPage, Show } from '~/api/types';
+import type { SearchPage, Show } from '~/types';
 
 import { replaceSearchResult, selectShows, store } from '..';
 

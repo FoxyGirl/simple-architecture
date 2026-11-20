@@ -38,7 +38,7 @@ describe('api requestJson', () => {
     await expect(requestJson('/api/search')).resolves.toEqual(envelope);
   });
 
-  it('normalizes a non-OK response into an ApiError with the status', async () => {
+  it('normalizes a non-OK response into an ApiError with the server message and status', async () => {
     mockedFetch.mockResolvedValue(
       fetchResponse({ error: 'gone' }, { ok: false, status: 503 }),
     );
@@ -47,7 +47,25 @@ describe('api requestJson', () => {
 
     expect(error).toBeInstanceOf(ApiError);
     expect(error).toBeInstanceOf(Error);
-    expect(error).toMatchObject({ name: 'ApiError', status: 503 });
+    expect(error).toMatchObject({
+      name: 'ApiError',
+      message: 'gone',
+      status: 503,
+    });
+  });
+
+  it('falls back to the status message when the error body is not JSON', async () => {
+    mockedFetch.mockResolvedValue({
+      ok: false,
+      status: 502,
+      json: async () => {
+        throw new SyntaxError('invalid JSON');
+      },
+    });
+
+    await expect(requestJson('/api/search')).rejects.toThrow(
+      'API request failed with status 502',
+    );
   });
 
   it('propagates the AbortSignal to fetch', async () => {

@@ -1,4 +1,4 @@
-import type { SearchPage } from '~/api/types';
+import type { SearchPage } from '~/types';
 
 import type { SearchStatus } from './constants';
 
@@ -35,20 +35,23 @@ export type SearchRequest = {
 /**
  * A partial presentation update — the search field and the Task coordination
  * report status separately; the result data itself lives in the shows Entity
- * and reaches the View through the Presenter's selectors.
+ * and reaches the View through the Presenter's selectors. A failed run also
+ * carries the message the request layer reported.
  */
 export type SearchChange = {
   status?: SearchStatus;
   queryEcho?: string;
+  errorMessage?: string;
 };
 
 /**
  * The outcome of a shows-fetch Task run, returned to the caller. `'aborted'`
- * means the request was superseded or cancelled and stored nothing.
+ * means the request was superseded or cancelled and stored nothing;
+ * `'error'` carries the message the request layer reported.
  */
 export type ShowsFetchResult =
   | { status: 'success'; page: SearchPage }
-  | { status: 'error' }
+  | { status: 'error'; message: string }
   | { status: 'aborted' };
 
 /**

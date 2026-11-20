@@ -1,4 +1,4 @@
-import type { Show } from '~/api/types';
+import type { Show } from '~/types';
 import { useMediaQuery } from '~/hooks/useMediaQuery';
 
 import { ShowCard } from '../ShowCard';

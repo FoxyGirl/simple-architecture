@@ -3,23 +3,22 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchFavoritesCount } from '~/api/favorites';
+import { requestJson } from '~/api/request';
 import { replaceFavoritesSummary, store } from '~/store';
+import { stubApi } from '~/test/api-mock';
 
 import { HomePage } from '../HomePage';
 
 import { click, renderHomePage, settle } from '../../../test/home-flow';
 
-// The count button reads the backend summary the Entity mirrors. Both
-// boundary mocks are declared in this file — vi.mock only hoists inside
-// suites, never inside the shared helper.
-vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
-vi.mock('~/api/favorites', () => ({
-  addFavoriteShow: vi.fn(),
-  removeFavoriteShow: vi.fn(),
-  fetchFavoritesCount: vi.fn(),
-  fetchFavoritesListPage: vi.fn(),
-}));
+// The count button reads the backend summary the Entity mirrors.
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
+
+  return { ...actual, requestJson: vi.fn() };
+});
+
+const api = vi.mocked(requestJson);
 
 const countButton = (count: number) =>
   screen.getByRole('button', { name: `View favorites (${count})` });
@@ -42,9 +41,8 @@ describe('HomePage favorites count button', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     store.dispatch(replaceFavoritesSummary({ count: 0, ids: [] }));
-    vi.mocked(fetchFavoritesCount)
-      .mockReset()
-      .mockResolvedValue({ count: 2, ids: [1, 2] });
+    api.mockReset();
+    stubApi(api, { favoritesCount: () => ({ count: 2, ids: [1, 2] }) });
   });
 
   afterEach(() => {

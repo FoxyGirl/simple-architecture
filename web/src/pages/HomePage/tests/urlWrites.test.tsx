@@ -1,7 +1,8 @@
 import { cleanup, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { searchShowsPage } from '~/api/shows';
+import { requestJson } from '~/api/request';
+import { lastSearchCall, searchSelection, stubApi } from '~/test/api-mock';
 
 import {
   arrow,
@@ -16,12 +17,15 @@ import {
   typeQuery,
 } from '../../../test/home-flow';
 
-vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
 
-const requestOfLast = () => {
-  const calls = vi.mocked(searchShowsPage).mock.calls;
-  return calls[calls.length - 1]?.[1];
-};
+  return { ...actual, requestJson: vi.fn() };
+});
+
+const api = vi.mocked(requestJson);
+
+const requestOfLast = () => searchSelection(lastSearchCall(api));
 
 const input = () =>
   screen.getByRole('textbox', { name: 'Search for TV shows' });
@@ -29,7 +33,8 @@ const input = () =>
 describe('HomePage URL writes', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.mocked(searchShowsPage).mockReset().mockResolvedValue(page1);
+    api.mockReset();
+    stubApi(api, { search: () => page1 });
   });
 
   afterEach(() => {
@@ -56,17 +61,17 @@ describe('HomePage URL writes', () => {
     typeQuery('office');
     await settle();
 
-    vi.mocked(searchShowsPage).mockResolvedValue(page1);
+    stubApi(api, { search: () => page1 });
     await click(chip('Comedy'));
     expect(currentLocation()).toBe('/?search=office&genre=Comedy');
     expect(navigationType()).toBe('PUSH');
 
-    vi.mocked(searchShowsPage).mockResolvedValue(page2);
+    stubApi(api, { search: () => page2 });
     await click(arrow('Next page'));
     expect(currentLocation()).toBe('/?search=office&genre=Comedy&page=2');
     expect(navigationType()).toBe('PUSH');
 
-    vi.mocked(searchShowsPage).mockResolvedValue(page1);
+    stubApi(api, { search: () => page1 });
     typeQuery('friends');
     await settle();
 

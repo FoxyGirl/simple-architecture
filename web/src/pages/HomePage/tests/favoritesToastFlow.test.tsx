@@ -1,14 +1,10 @@
 import { cleanup, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  addFavoriteShow,
-  fetchFavoritesCount,
-  removeFavoriteShow,
-} from '~/api/favorites';
-import { searchShowsPage } from '~/api/shows';
+import { requestJson } from '~/api/request';
 import { notify } from '~/notification';
 import { replaceFavoritesSummary, store } from '~/store';
+import { stubApi } from '~/test/api-mock';
 
 import {
   click,
@@ -18,22 +14,20 @@ import {
   typeQuery,
 } from '../../../test/home-flow';
 
-// The toasts follow the results the mocked favorites API resolves with.
-// Both boundary mocks are declared in this file — vi.mock only hoists
-// inside suites, never inside the shared helper.
-vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
-vi.mock('~/api/favorites', () => ({
-  addFavoriteShow: vi.fn(),
-  removeFavoriteShow: vi.fn(),
-  fetchFavoritesCount: vi.fn(),
-  fetchFavoritesListPage: vi.fn(),
-}));
+// The toasts follow the results the mocked request boundary resolves with.
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
+
+  return { ...actual, requestJson: vi.fn() };
+});
 // The notification boundary: the suite asserts the presenter calls the
 // library-independent notify API — Sonner itself never renders here, and
 // its auto-dismiss behavior is asserted in the E2E spec instead.
 vi.mock('~/notification', () => ({
-  notify: { success: vi.fn(), info: vi.fn() },
+  notify: { success: vi.fn(), info: vi.fn(), error: vi.fn() },
 }));
+
+const api = vi.mocked(requestJson);
 
 const favoriteButton = (name: string) => screen.getByRole('button', { name });
 
@@ -53,12 +47,14 @@ describe('HomePage favorites toasts', () => {
     store.dispatch(replaceFavoritesSummary(emptySummary));
     vi.mocked(notify.success).mockClear();
     vi.mocked(notify.info).mockClear();
-    vi.mocked(searchShowsPage).mockReset().mockResolvedValue(page1);
-    vi.mocked(fetchFavoritesCount).mockReset().mockResolvedValue(emptySummary);
-    vi.mocked(addFavoriteShow)
-      .mockReset()
-      .mockResolvedValue({ count: 1, ids: [1] });
-    vi.mocked(removeFavoriteShow).mockReset().mockResolvedValue(emptySummary);
+    vi.mocked(notify.error).mockClear();
+    api.mockReset();
+    stubApi(api, {
+      search: () => page1,
+      favoritesCount: () => emptySummary,
+      addFavorite: () => ({ count: 1, ids: [1] }),
+      removeFavorite: () => emptySummary,
+    });
   });
 
   afterEach(() => {
@@ -87,12 +83,18 @@ describe('HomePage favorites toasts', () => {
     );
   });
 
-  it('a failed toggle toasts nothing', async () => {
+  it('a failed toggle shows the error notification', async () => {
     await searchAsGuest();
-    vi.mocked(addFavoriteShow).mockRejectedValue(new Error('offline'));
+    stubApi(api, {
+      search: () => page1,
+      addFavorite: () => {
+        throw new Error('offline');
+      },
+    });
 
     await click(favoriteButton('Add Show One to favorites'));
 
+    expect(notify.error).toHaveBeenCalledWith('offline');
     expect(notify.success).not.toHaveBeenCalled();
     expect(notify.info).not.toHaveBeenCalled();
   });

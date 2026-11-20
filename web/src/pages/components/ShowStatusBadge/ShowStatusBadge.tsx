@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import type { ShowStatus } from '~/api/types';
+import type { ShowStatus } from '~/types';
 
 import { STATUS_CLASSES, STATUS_LABELS } from './constants';
 

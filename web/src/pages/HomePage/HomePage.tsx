@@ -13,6 +13,7 @@ export const HomePage = () => {
     data,
     queryEcho,
     status,
+    errorMessage,
     selection,
     search,
     retry,
@@ -61,6 +62,7 @@ export const HomePage = () => {
       <ShowSearchResults
         data={data}
         status={status}
+        errorMessage={errorMessage}
         queryEcho={queryEcho}
         selection={selection}
         isFavorite={isFavorite}

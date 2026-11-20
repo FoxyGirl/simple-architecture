@@ -150,8 +150,8 @@ Fixable problems are repaired and the commit continues; unfixable errors
 - The compiler runs in `strict` mode with `noUncheckedIndexedAccess`,
   `verbatimModuleSyntax` and `erasableSyntaxOnly`.
 - Types live in a `types.ts` file next to the code that owns them —
-  `web/src/api/types.ts` for the TVmaze shapes, a page's `types.ts` for the
-  types shared inside that page.
+  `web/src/types.ts` for the app-wide TVmaze and backend response shapes, a
+  page's `types.ts` for the types shared inside that page.
 - Object shapes are declared as `type` aliases, never as `interface`.
 - Every CSS Module has a generated `<Component>.module.css.d.ts` giving each
   class a literal type — that is what makes

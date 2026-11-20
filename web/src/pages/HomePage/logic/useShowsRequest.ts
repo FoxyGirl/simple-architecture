@@ -24,9 +24,12 @@ export const useShowsRequest = (
       const result = await fetchShowsPage(request);
       if (result.status === 'aborted') return result;
 
-      onSearchChange({
-        status: result.status === 'success' ? STATUS.SUCCESS : STATUS.ERROR,
-      });
+      if (result.status === 'error') {
+        onSearchChange({ status: STATUS.ERROR, errorMessage: result.message });
+        return result;
+      }
+
+      onSearchChange({ status: STATUS.SUCCESS });
 
       return result;
     },

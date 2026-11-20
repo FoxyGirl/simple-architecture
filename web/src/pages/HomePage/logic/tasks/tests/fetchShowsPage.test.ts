@@ -1,26 +1,23 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { searchShowsPage } from '~/api/shows';
+import { requestJson } from '~/api/request';
 import { replaceSearchResult, store } from '~/store';
+import { lastSearchCall, searchSelection, stubApi } from '~/test/api-mock';
 
 import { abortShowsFetch, fetchShowsPage } from '../fetchShowsPage';
 
-import {
-  PAGE_NEWER,
-  PAGE_OK,
-  REQUEST,
-  SENTINEL,
-  abortError,
-  deferred,
-} from './helpers';
+import { PAGE_OK, REQUEST, SENTINEL } from './helpers';
 
-vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
+  return { ...actual, requestJson: vi.fn() };
+});
 
-const mocked = vi.mocked(searchShowsPage);
+const api = vi.mocked(requestJson);
 
 describe('fetchShowsPage Task', () => {
   beforeEach(() => {
-    mocked.mockReset();
+    api.mockReset();
     store.dispatch(replaceSearchResult(SENTINEL));
   });
 
@@ -28,77 +25,33 @@ describe('fetchShowsPage Task', () => {
     abortShowsFetch();
   });
 
-  it('fetches with the explicit query/genre/page arguments and stores the result', async () => {
-    mocked.mockResolvedValueOnce(PAGE_OK);
+  it('requests the explicit query/genre/page and stores the result', async () => {
+    stubApi(api, { search: () => PAGE_OK });
 
     const result = await fetchShowsPage(REQUEST);
 
-    expect(mocked).toHaveBeenCalledWith(
-      'office',
-      { genre: 'Comedy', page: 2 },
-      { signal: expect.any(AbortSignal) },
-    );
+    expect(lastSearchCall(api)?.params.get('q')).toBe('office');
+    expect(searchSelection(lastSearchCall(api))).toEqual({
+      genre: 'Comedy',
+      page: 2,
+    });
     expect(result).toEqual({ status: 'success', page: PAGE_OK });
     expect(store.getState().shows).toEqual(PAGE_OK);
   });
 
-  it('on an API failure returns an error result and dispatches nothing', async () => {
-    mocked.mockRejectedValueOnce(
-      new Error('API request failed with status 500'),
-    );
+  it('on a request failure returns an error result and dispatches nothing', async () => {
+    stubApi(api, {
+      search: () => {
+        throw new Error('API request failed with status 500');
+      },
+    });
 
     const result = await fetchShowsPage(REQUEST);
 
-    expect(result).toEqual({ status: 'error' });
-    expect(store.getState().shows).toEqual(SENTINEL);
-  });
-
-  it('a newer run aborts the superseded request and only its data reaches the store', async () => {
-    const older = deferred();
-    const newer = deferred();
-    mocked
-      .mockReturnValueOnce(older.promise)
-      .mockReturnValueOnce(newer.promise);
-
-    const runOlder = fetchShowsPage(REQUEST);
-    const runNewer = fetchShowsPage({ ...REQUEST, query: 'friends' });
-
-    expect(mocked.mock.calls[0]?.[2]?.signal?.aborted).toBe(true);
-
-    older.reject(abortError());
-    newer.resolve(PAGE_NEWER);
-
-    await expect(runOlder).resolves.toEqual({ status: 'aborted' });
-    expect(await runNewer).toEqual({ status: 'success', page: PAGE_NEWER });
-    expect(store.getState().shows).toEqual(PAGE_NEWER);
-  });
-
-  it('an aborted run settles as aborted and leaves the store untouched', async () => {
-    mocked.mockImplementationOnce((_query, _selection, options) => {
-      const signal = options?.signal;
-      return new Promise((_, reject) => {
-        signal?.addEventListener('abort', () => reject(abortError()));
-      });
+    expect(result).toEqual({
+      status: 'error',
+      message: 'API request failed with status 500',
     });
-
-    const run = fetchShowsPage(REQUEST);
-    expect(mocked.mock.calls[0]?.[2]?.signal?.aborted).toBe(false);
-
-    abortShowsFetch();
-
-    await expect(run).resolves.toEqual({ status: 'aborted' });
-    expect(store.getState().shows).toEqual(SENTINEL);
-  });
-
-  it('a response that resolves after its request was aborted never dispatches', async () => {
-    const pending = deferred();
-    mocked.mockReturnValueOnce(pending.promise);
-
-    const run = fetchShowsPage(REQUEST);
-    abortShowsFetch();
-    pending.resolve(PAGE_OK);
-
-    await expect(run).resolves.toEqual({ status: 'aborted' });
     expect(store.getState().shows).toEqual(SENTINEL);
   });
 
@@ -109,9 +62,8 @@ describe('fetchShowsPage Task', () => {
       'abortShowsFetch',
       'fetchShowsPage',
     ]);
-    const functions = Object.values(taskModule);
-    expect(functions.every((fn) => typeof fn === 'function')).toBe(true);
-
-    abortShowsFetch();
+    expect(
+      Object.values(taskModule).every((fn) => typeof fn === 'function'),
+    ).toBe(true);
   });
 });

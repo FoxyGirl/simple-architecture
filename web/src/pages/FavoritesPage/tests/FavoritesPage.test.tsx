@@ -1,7 +1,8 @@
 import { fireEvent, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchFavoritesListPage } from '~/api/favorites';
+import { requestJson } from '~/api/request';
+import { favoritesPageRequests, stubApi } from '~/test/api-mock';
 
 import {
   button,
@@ -12,23 +13,26 @@ import {
   resetFavorites,
 } from './favoritesHarness';
 
-vi.mock('~/api/favorites', () => ({
-  addFavoriteShow: vi.fn(),
-  removeFavoriteShow: vi.fn(),
-  fetchFavoritesCount: vi.fn(),
-  fetchFavoritesListPage: vi.fn(),
-}));
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
+
+  return { ...actual, requestJson: vi.fn() };
+});
+
+const api = vi.mocked(requestJson);
 
 const backend = createFavoritesBackend();
-const listMock = vi.mocked(fetchFavoritesListPage);
-listMock.mockImplementation(backend.fetchPage);
 
 describe('FavoritesPage', () => {
-  beforeEach(() => resetFavorites(backend));
+  beforeEach(() => {
+    resetFavorites(backend);
+    api.mockReset();
+    stubApi(api, { favoritesPage: backend.fetchPage });
+  });
 
   it('fetches the first backend page and lists three shows per page', async () => {
     await mountFavorites('Show Three');
-    expect(listMock).toHaveBeenCalledWith(1);
+    expect(favoritesPageRequests(api)).toEqual([1]);
     expect(screen.queryByRole('heading', { name: 'Show Four' })).toBeNull();
     expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
     expect(screen.getByText('4 shows saved to your list.')).toBeInTheDocument();

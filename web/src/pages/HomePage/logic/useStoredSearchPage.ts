@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import type { SearchPage } from '~/api/types';
+import type { SearchPage } from '~/types';
 import {
   selectGenres,
   selectPage,

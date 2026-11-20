@@ -1,4 +1,4 @@
-import type { FavoritesListPage } from '~/api/types';
+import type { FavoritesListPage } from '~/types';
 
 /**
  * The favorites Entity state: the backend-synced mirror only. The favorite

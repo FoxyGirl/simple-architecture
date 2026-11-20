@@ -1,6 +1,6 @@
 import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
-import type { SearchPage, Show } from '~/api/types';
+import type { SearchPage, Show } from '~/types';
 
 import type { Selection } from '../types';
 
@@ -19,6 +19,7 @@ import styles from './ShowSearchResults.module.css';
 type ShowSearchResultsProps = {
   data: SearchPage | null;
   status: SearchStatus;
+  errorMessage: string | null;
   queryEcho: string;
   selection: Selection;
   isFavorite: (showId: number) => boolean;
@@ -32,6 +33,7 @@ type ShowSearchResultsProps = {
 export const ShowSearchResults = ({
   data,
   status,
+  errorMessage,
   queryEcho,
   selection,
   isFavorite,
@@ -60,7 +62,10 @@ export const ShowSearchResults = ({
           icon={TriangleAlert}
           variant="error"
           title="Something went wrong."
-          body="We couldn’t reach the TVmaze API. Check your connection and give it another go."
+          body={
+            errorMessage ??
+            'We couldn’t reach the TVmaze API. Check your connection and give it another go.'
+          }
           action={{
             icon: RotateCcw,
             label: 'Retry request',

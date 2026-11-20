@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import type { Show } from '~/api/types';
+import type { Show } from '~/types';
 import { notify } from '~/notification';
 import { selectFavoriteIds, selectFavoritesCount } from '~/store';
 
 import type { FavoritesLocationState } from '../../types';
 
 import { TOAST_MESSAGES } from '../../constants';
-import { syncFavoritesSummary } from '../../tasks/syncFavoritesSummary';
 import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
+import { syncFavoritesSummary } from './tasks/syncFavoritesSummary';
 
 /**
  * The favorites aspect of the home page presenter: the backend owns the
@@ -19,8 +19,8 @@ import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
  * count button reads the backend-computed count from the same summary and
  * its navigation stays here, at Presenter level. The toggle itself is the
  * shared Task's business rule; its success result is confirmed through the
- * global notify API — distinct add/remove messages, while a failed
- * operation stays silent.
+ * global notify API — distinct add/remove messages — while a failure shows
+ * the message the request layer reported.
  */
 export const useShowFavorites = () => {
   const favoriteIds = useSelector(selectFavoriteIds);
@@ -46,12 +46,15 @@ export const useShowFavorites = () => {
     void (async () => {
       const result = await toggleShowFavorite(show, wasFavorite);
 
-      if (result.status === 'success') {
-        if (wasFavorite) {
-          notify.info(`"${show.name}" ${TOAST_MESSAGES.REMOVED}`);
-        } else {
-          notify.success(`"${show.name}" ${TOAST_MESSAGES.ADDED}`);
-        }
+      if (result.status !== 'success') {
+        notify.error(result.message);
+        return;
+      }
+
+      if (wasFavorite) {
+        notify.info(`"${show.name}" ${TOAST_MESSAGES.REMOVED}`);
+      } else {
+        notify.success(`"${show.name}" ${TOAST_MESSAGES.ADDED}`);
       }
     })();
   };

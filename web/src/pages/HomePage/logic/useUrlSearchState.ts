@@ -25,21 +25,15 @@ export const useUrlSearchState = () => {
   );
 
   // Changing the genre invalidates the current page.
-  const selectGenre = useCallback(
-    (nextGenre: string) => {
-      setSearchParams(
-        serializeSearchState({ search, genre: nextGenre, page: 1 }),
-      );
-    },
-    [setSearchParams, search],
-  );
+  const selectGenre = (nextGenre: string) => {
+    setSearchParams(
+      serializeSearchState({ search, genre: nextGenre, page: 1 }),
+    );
+  };
 
-  const selectPage = useCallback(
-    (nextPage: number) => {
-      setSearchParams(serializeSearchState({ search, genre, page: nextPage }));
-    },
-    [setSearchParams, search, genre],
-  );
+  const selectPage = (nextPage: number) => {
+    setSearchParams(serializeSearchState({ search, genre, page: nextPage }));
+  };
 
   // An unknown genre is corrected after the fetch; the page is preserved.
   const resetGenre = useCallback(() => {

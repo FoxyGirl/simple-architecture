@@ -31,6 +31,7 @@ export const useFavoritesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parsePageParam(searchParams.get('page'));
   const fromHome = (location.state as FavoritesLocationState | null)?.fromHome;
+
   useEffect(() => {
     void fetchFavoritesPage(page);
   }, [page]);
@@ -41,8 +42,11 @@ export const useFavoritesPage = () => {
     (nextPage: number) => {
       const params = new URLSearchParams(searchParams);
 
-      if (nextPage > 1) params.set('page', String(nextPage));
-      else params.delete('page');
+      if (nextPage > 1) {
+        params.set('page', String(nextPage));
+      } else {
+        params.delete('page');
+      }
 
       setSearchParams(params, { state: location.state });
     },

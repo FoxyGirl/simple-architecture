@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -32,35 +32,29 @@ export const useShowFavorites = () => {
     void syncFavoritesSummary();
   }, []);
 
-  const goToFavorites = useCallback(() => {
+  const goToFavorites = () => {
     const state: FavoritesLocationState = { fromHome: `${pathname}${search}` };
 
     navigate('/favorites', { state });
-  }, [navigate, pathname, search]);
+  };
 
-  const isFavorite = useCallback(
-    (showId: number) => favoriteIds.includes(showId),
-    [favoriteIds],
-  );
+  const isFavorite = (showId: number) => favoriteIds.includes(showId);
 
-  const toggleFavorite = useCallback(
-    (show: Show) => {
-      const wasFavorite = favoriteIds.includes(show.id);
+  const toggleFavorite = (show: Show) => {
+    const wasFavorite = favoriteIds.includes(show.id);
 
-      void (async () => {
-        const result = await toggleShowFavorite(show, wasFavorite);
+    void (async () => {
+      const result = await toggleShowFavorite(show, wasFavorite);
 
-        if (result.status === 'success') {
-          if (wasFavorite) {
-            notify.info(`"${show.name}" ${TOAST_MESSAGES.REMOVED}`);
-          } else {
-            notify.success(`"${show.name}" ${TOAST_MESSAGES.ADDED}`);
-          }
+      if (result.status === 'success') {
+        if (wasFavorite) {
+          notify.info(`"${show.name}" ${TOAST_MESSAGES.REMOVED}`);
+        } else {
+          notify.success(`"${show.name}" ${TOAST_MESSAGES.ADDED}`);
         }
-      })();
-    },
-    [favoriteIds],
-  );
+      }
+    })();
+  };
 
   return { isFavorite, toggleFavorite, count, goToFavorites };
 };

@@ -34,10 +34,10 @@ export const useShowsRequest = (
   );
 
   // Retry re-issues the current q/genre/page request as it stands.
-  const retry = useCallback(() => {
+  const retry = () => {
     const current = requestRef.current;
     if (current) void runRequest(current);
-  }, [runRequest]);
+  };
 
   // Discarding a search aborts through the Task layer, never directly.
   const abortSearch = useCallback(() => abortShowsFetch(), []);

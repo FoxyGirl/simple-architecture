@@ -1,7 +1,11 @@
 import { cleanup, fireEvent, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchFavoritesListPage, removeFavoriteShow } from '@api/favorites';
+import {
+  addFavoriteShow,
+  fetchFavoritesListPage,
+  removeFavoriteShow,
+} from '@api/favorites';
 import { notify } from '@notification';
 
 import {
@@ -25,8 +29,10 @@ vi.mock('@notification', () => ({
 const backend = createFavoritesBackend();
 const listMock = vi.mocked(fetchFavoritesListPage);
 const removeMock = vi.mocked(removeFavoriteShow);
+const addMock = vi.mocked(addFavoriteShow);
 listMock.mockImplementation(backend.fetchPage);
 removeMock.mockImplementation(backend.remove);
+addMock.mockImplementation(backend.add);
 
 describe('FavoritesPage toasts', () => {
   beforeEach(() => resetFavorites(backend));
@@ -58,6 +64,42 @@ describe('FavoritesPage toasts', () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(notify.info).not.toHaveBeenCalled();
+    expect(notify.success).not.toHaveBeenCalled();
+    expect(listMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('a successful re-add toasts the addition', async () => {
+    await mountFavorites();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Remove Show One from favorites' }),
+    );
+    const addHeart = await screen.findByRole('button', {
+      name: 'Add Show One to favorites',
+    });
+
+    fireEvent.click(addHeart);
+
+    await vi.waitFor(() =>
+      expect(notify.success).toHaveBeenCalledWith(
+        '"Show One" was added to favorites',
+      ),
+    );
+    expect(notify.info).toHaveBeenCalledTimes(1);
+  });
+
+  it('a failed re-add toasts nothing and refetches nothing', async () => {
+    await mountFavorites();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Remove Show One from favorites' }),
+    );
+    const addHeart = await screen.findByRole('button', {
+      name: 'Add Show One to favorites',
+    });
+    addMock.mockRejectedValueOnce(new Error('offline'));
+
+    fireEvent.click(addHeart);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     expect(notify.success).not.toHaveBeenCalled();
     expect(listMock).toHaveBeenCalledTimes(1);
   });

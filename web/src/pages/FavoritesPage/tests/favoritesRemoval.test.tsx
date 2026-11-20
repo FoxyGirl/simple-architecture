@@ -1,13 +1,15 @@
 import { fireEvent, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchFavoritesListPage, removeFavoriteShow } from '@api/favorites';
+import {
+  addFavoriteShow,
+  fetchFavoritesListPage,
+  removeFavoriteShow,
+} from '@api/favorites';
 
 import {
-  button,
   createFavoritesBackend,
   heading,
-  location,
   mountFavorites,
   resetFavorites,
 } from './favoritesHarness';
@@ -22,34 +24,77 @@ vi.mock('@api/favorites', () => ({
 const backend = createFavoritesBackend();
 const listMock = vi.mocked(fetchFavoritesListPage);
 const removeMock = vi.mocked(removeFavoriteShow);
+const addMock = vi.mocked(addFavoriteShow);
 listMock.mockImplementation(backend.fetchPage);
 removeMock.mockImplementation(backend.remove);
+addMock.mockImplementation(backend.add);
 
-describe('FavoritesPage removal', () => {
+const label = (action: 'Remove' | 'Add', name: string) =>
+  `${action} ${name} ${action === 'Remove' ? 'from' : 'to'} favorites`;
+const heart = (action: 'Remove' | 'Add', name: string) =>
+  screen.getByRole('button', { name: label(action, name) });
+const findHeart = (action: 'Remove' | 'Add', name: string) =>
+  screen.findByRole('button', { name: label(action, name) });
+const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+describe('FavoritesPage soft removal', () => {
   beforeEach(() => resetFavorites(backend));
 
-  it('removing a show on page 1 refetches and refreshes the list', async () => {
+  it('keeps a removed card listed with an unpressed heart and no refetch', async () => {
     await mountFavorites();
 
-    fireEvent.click(button('Remove Show One from favorites'));
-    await screen.findByText('Page 1 of 1');
+    fireEvent.click(heart('Remove', 'Show One'));
 
+    expect(await findHeart('Add', 'Show One')).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    await heading('Show One');
+    expect(screen.getByText('4 shows saved to your list.')).toBeVisible();
+    expect(screen.getByText('Page 1 of 2')).toBeVisible();
     expect(removeMock).toHaveBeenCalledWith(1);
-    expect(screen.queryByRole('heading', { name: 'Show One' })).toBeNull();
-    await heading('Show Four');
-    expect(screen.getByText('3 shows saved to your list.')).toBeInTheDocument();
-    expect(location()).toBe('/favorites');
+    expect(listMock).toHaveBeenCalledTimes(1);
   });
 
-  it('removing on URL page 2 refetches that page and keeps the URL', async () => {
-    await mountFavorites('Show Four', ['/favorites?page=2']);
+  it('restores a pressed heart in place when a removed show is re-added', async () => {
+    await mountFavorites();
+    fireEvent.click(heart('Remove', 'Show One'));
+    await findHeart('Add', 'Show One');
 
-    fireEvent.click(button('Remove Show Four from favorites'));
-    await screen.findByText('Page 1 of 1');
+    fireEvent.click(heart('Add', 'Show One'));
 
-    expect(removeMock).toHaveBeenCalledWith(4);
-    expect(listMock).toHaveBeenLastCalledWith(2);
-    expect(location()).toBe('/favorites?page=2');
-    expect(screen.getByText('3 shows saved to your list.')).toBeInTheDocument();
+    expect(await findHeart('Remove', 'Show One')).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(addMock).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 1, name: 'Show One' }),
+    );
+    expect(screen.getByText('4 shows saved to your list.')).toBeVisible();
+    expect(listMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the card pressed when the removal fails', async () => {
+    await mountFavorites();
+    removeMock.mockRejectedValueOnce(new Error('offline'));
+
+    fireEvent.click(heart('Remove', 'Show One'));
+    await settle();
+
+    expect(heart('Remove', 'Show One')).toHaveAttribute('aria-pressed', 'true');
+    expect(listMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the card removed when the re-add fails', async () => {
+    await mountFavorites();
+    fireEvent.click(heart('Remove', 'Show One'));
+    await findHeart('Add', 'Show One');
+    addMock.mockRejectedValueOnce(new Error('offline'));
+
+    fireEvent.click(heart('Add', 'Show One'));
+    await settle();
+
+    expect(heart('Add', 'Show One')).toHaveAttribute('aria-pressed', 'false');
+    expect(listMock).toHaveBeenCalledTimes(1);
   });
 });

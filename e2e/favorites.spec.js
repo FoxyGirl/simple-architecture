@@ -5,6 +5,7 @@ import { heartsFlow } from './favorites-hearts';
 import { favoritesPaginationFlow } from './favorites-list';
 import { favoritesReloadReturnFlow } from './favorites-reload';
 import { roundTripRestoresSearch } from './favorites-round-trip';
+import { favoritesSoftRemovalFlow } from './favorites-soft-removal';
 import { favoritesToastFlow } from './favorites-toasts';
 import { favoritesPageUrlFlow } from './favorites-url';
 
@@ -31,6 +32,13 @@ test('the favorites page paginates, updates on removal and returns home', async 
 
 test('favorites toasts appear and dismiss themselves', async ({ page }) => {
   await favoritesToastFlow(page);
+});
+
+test('a removed favorite stays listed until the next fresh fetch', async ({
+  page,
+  request,
+}) => {
+  await favoritesSoftRemovalFlow(page, request);
 });
 
 test('search state survives the URL round trip', async ({ page }) => {

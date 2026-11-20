@@ -17,7 +17,7 @@ const ALL = ['One', 'Two', 'Three', 'Four'].map((n, i) =>
   show(i + 1, `Show ${n}`),
 );
 
-// A fake favorites backend: three per page, clamped pages, live removals.
+// A fake favorites backend: three per page, clamped pages, live writes.
 export const createFavoritesBackend = () => {
   let storage: Show[] = [];
 
@@ -38,6 +38,15 @@ export const createFavoritesBackend = () => {
     };
   };
 
+  // The real storage is a record iterated in ascending id order, and
+  // re-adding a known id keeps its position — mirror both here.
+  const add = async (item: Show) => {
+    storage = [...storage.filter((entry) => entry.id !== item.id), item].sort(
+      (a, b) => a.id - b.id,
+    );
+    return summary();
+  };
+
   const remove = async (id: number) => {
     storage = storage.filter((item) => item.id !== id);
     return summary();
@@ -52,6 +61,7 @@ export const createFavoritesBackend = () => {
     },
     summary,
     fetchPage,
+    add,
     remove,
   };
 };

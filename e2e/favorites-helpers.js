@@ -21,6 +21,16 @@ export const searchInput = (page) =>
 
 export const card = (page, name) => page.getByRole('heading', { name });
 
+// The card element containing the show heading — the stable scope for the
+// soft-removal CSS probes.
+export const cardArticle = (page, name) =>
+  page.locator('article').filter({ has: card(page, name) });
+
+// The page subhead ("N shows saved to your list.") and the pagination info
+// ("Page X of Y") are the fetched-metadata probes.
+export const subhead = (page, text) => page.getByText(text);
+export const pageInfo = (page, text) => page.getByText(text);
+
 export const arrow = (page, label) => page.getByRole('button', { name: label });
 
 export const countButton = (page, count) =>

@@ -101,7 +101,7 @@ every visual assertion of Phase 2 builds on.
 
 **Tasks:**
 
-- [ ] Revise the two existing E2E flow modules first (red):
+- [x] Revise the two existing E2E flow modules first (red):
       `e2e/favorites-list.js` — after the page-1 removal assert the card
       stays visible, its heart now reads `Add Space Tour to favorites`,
       `Page 1 of 2` and `4 shows saved to your list.` persist, and the
@@ -112,7 +112,7 @@ every visual assertion of Phase 2 builds on.
       with `Page 2 of 2`, `4 shows saved` and the `?page=2` URL untouched;
       the backend clamping (`Page 1 of 1`, URL not rewritten) moves behind
       an added reload step.
-- [ ] Write the new E2E flow first (red): `e2e/favorites-soft-removal.js`,
+- [x] Write the new E2E flow first (red): `e2e/favorites-soft-removal.js`,
       registered in `favorites.spec.js` — remove a show (card stays, heart
       flips, metadata stable, `summaryIds` shrank), click the flipped heart
       (POST re-add, heart pressed again, `summaryIds` restored, metadata
@@ -120,9 +120,9 @@ every visual assertion of Phase 2 builds on.
       removal), return to `/favorites` and reload (fresh list, removed shows
       absent, no stale marking). Extend `e2e/favorites-helpers.js` with the
       needed probes (subhead/page-info text probes, a `cardArticle(page,
-    name)` locator returning the card element that contains a heading —
+name)` locator returning the card element that contains a heading —
       Phase 2's CSS probes reuse it); every touched file stays <= 120 lines.
-- [ ] Rewrite/extend the unit suites first (red), all at the mocked
+- [x] Rewrite/extend the unit suites first (red), all at the mocked
       `@api/favorites` boundary: `favoritesRemoval.test.tsx` becomes the
       soft-removal suite (removal keeps the card listed, flips the heart to
       `Add … to favorites` with `aria-pressed="false"`, issues no extra
@@ -136,7 +136,7 @@ every visual assertion of Phase 2 builds on.
       re-add cases (success -> `notify.success` with the ADDED message;
       failure -> no toast). `favoritesHarness.tsx`'s fake backend gains an
       `add` mirroring `addFavoriteShow`.
-- [ ] Implement the presenter-aspect hook
+- [x] Implement the presenter-aspect hook
       `web/src/pages/FavoritesPage/logic/useSoftRemoval.ts`: the removed-ids
       state, the derived `isFavorite`/`isRemoved` predicates, the toggle
       handler that calls the shared `toggleShowFavorite` Task with the
@@ -144,7 +144,7 @@ every visual assertion of Phase 2 builds on.
       toasts (REMOVED via `notify.info`, ADDED via `notify.success`), and
       the reset of the marking when the URL page changes. Memoization
       follows `rules/react-memoization.md`.
-- [ ] Rewire the FavoritesPage presenter and View: `useFavoritesPage.ts`
+- [x] Rewire the FavoritesPage presenter and View: `useFavoritesPage.ts`
       drops the post-removal `fetchFavoritesPage(page)` call, composes the
       aspect hook and exposes `isFavorite`, `isRemoved` (consumed in
       Phase 2) and the toggle handler; `FavoritesPage.tsx` deletes the
@@ -153,21 +153,21 @@ every visual assertion of Phase 2 builds on.
       "every heart removes" note, the refetch description in the presenter
       JSDoc) are updated. The mount/page-change fetch effect, the Tasks and
       the Entity are untouched.
-- [ ] Verify: `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] Verify: `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` green; the HomePage suites and
       every other pre-existing suite pass untouched; `server/` has no diff.
 
 **Tests:**
 
-- [ ] Revised E2E flows `favorites-list.js` and `favorites-url.js`
+- [x] Revised E2E flows `favorites-list.js` and `favorites-url.js`
       (red -> green): deferred refresh, stable metadata, clamping moved
       behind the reload, back-home count freshness.
-- [ ] New E2E flow `favorites-soft-removal.js` (red -> green): the full
+- [x] New E2E flow `favorites-soft-removal.js` (red -> green): the full
       remove -> re-add -> leave -> return -> reload round.
-- [ ] Rewritten soft-removal unit suite and the extended toast suite
+- [x] Rewritten soft-removal unit suite and the extended toast suite
       (red -> green), including the failure, reset-on-page-change and
       all-removed cases.
-- [ ] All pre-existing suites stay green: `FavoritesPage.test.tsx`,
+- [x] All pre-existing suites stay green: `FavoritesPage.test.tsx`,
       `favoritesPagination.test.tsx`, the removal-toast cases, every
       HomePage flow suite, the Entity/Task/store suites, all server suites.
 
@@ -181,36 +181,36 @@ the HomePage untouched.
 
 **Acceptance Criteria:**
 
-- [ ] Clicking the heart on a favorite show on the Favorites page issues
+- [x] Clicking the heart on a favorite show on the Favorites page issues
       `DELETE /api/favorites/:id`; on success the card remains in the list
       with its heart at `aria-pressed="false"` and the
       `Add {name} to favorites` label (unit + E2E).
-- [ ] After a successful removal or re-add, no `GET /api/favorites` list
+- [x] After a successful removal or re-add, no `GET /api/favorites` list
       refetch occurs until the pagination page changes, the page is left or
       it is reloaded (unit: list-mock call counts; E2E: stable metadata and
       the reload/return refresh).
-- [ ] Clicking the heart of a removed card issues `POST /api/favorites`; on
+- [x] Clicking the heart of a removed card issues `POST /api/favorites`; on
       success the card returns to the pressed favorite state in place,
       without a list refetch.
-- [ ] The subhead count and pagination controls keep their fetched values
+- [x] The subhead count and pagination controls keep their fetched values
       after removals and re-adds until the next fresh fetch.
-- [ ] The backend `summaryIds` and the HomePage count button reflect a
+- [x] The backend `summaryIds` and the HomePage count button reflect a
       removal made on the Favorites page immediately (existing summary
       dispatch unchanged).
-- [ ] Leaving the Favorites page and returning, or reloading it, shows the
+- [x] Leaving the Favorites page and returning, or reloading it, shows the
       freshly fetched backend list: removed shows are absent, re-added shows
       are present, no stale marking remains.
-- [ ] Switching pagination pages fetches the target page fresh (existing
+- [x] Switching pagination pages fetches the target page fresh (existing
       behavior); after a page-2 removal the URL stays `?page=2` and the
       backend clamping becomes visible at the next fresh fetch.
-- [ ] A failed removal leaves the card in its normal favorite state with no
+- [x] A failed removal leaves the card in its normal favorite state with no
       toast; a failed re-add leaves the card removed with no toast.
-- [ ] A successful removal shows the existing removal toast; a successful
+- [x] A successful removal shows the existing removal toast; a successful
       re-add shows the existing add toast — messages unchanged.
-- [ ] When every show of the current page is removed, all cards remain
+- [x] When every show of the current page is removed, all cards remain
       listed with unpressed hearts and the empty state appears only after a
       fresh fetch returns an empty list.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass; `server/` is untouched.
 
 ### Phase 2: Removed-card visuals (grayed out, semi-transparent)

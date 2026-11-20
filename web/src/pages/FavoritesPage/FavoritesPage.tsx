@@ -7,12 +7,15 @@ import { ShowList } from '../components/ShowList';
 
 import styles from './FavoritesPage.module.css';
 
-// Everything listed here is a favorite, so every heart removes its show.
-const isFavorite = () => true;
-
 export const FavoritesPage = () => {
-  const { list, subHeadText, removeFromFavorites, selectPage, goToHome } =
-    useFavoritesPage();
+  const {
+    list,
+    subHeadText,
+    isFavorite,
+    toggleFavorite,
+    selectPage,
+    goToHome,
+  } = useFavoritesPage();
 
   return (
     <section className={styles.page}>
@@ -56,7 +59,7 @@ export const FavoritesPage = () => {
             <ShowList
               shows={list.shows}
               isFavorite={isFavorite}
-              onToggleFavorite={removeFromFavorites}
+              onToggleFavorite={toggleFavorite}
             />
           </div>
 

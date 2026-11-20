@@ -1,4 +1,4 @@
-import type { Show } from '~/types';
+import type { Show } from '@server/types';
 
 /** The add/remove/count response: the current favorites in storage order. */
 export type FavoritesSummary = {

@@ -41,12 +41,7 @@ export default defineConfig({
   plugins: [react(), cssModuleTypes()],
   resolve: {
     alias: {
-      '@api': fileURLToPath(new URL('./src/api', import.meta.url)),
-      '@hooks': fileURLToPath(new URL('./src/hooks', import.meta.url)),
-      '@notification': fileURLToPath(
-        new URL('./src/notification', import.meta.url),
-      ),
-      '@store': fileURLToPath(new URL('./src/store', import.meta.url)),
+      '~': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   server: {

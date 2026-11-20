@@ -1,6 +1,6 @@
-import { addFavoriteShow, removeFavoriteShow } from '@api/favorites';
-import type { Show } from '@api/types';
-import { replaceFavoritesSummary, store } from '@store';
+import { addFavoriteShow, removeFavoriteShow } from '~/api/favorites';
+import type { Show } from '~/api/types';
+import { replaceFavoritesSummary, store } from '~/store';
 
 import type { FavoritesSummaryResult } from './types';
 

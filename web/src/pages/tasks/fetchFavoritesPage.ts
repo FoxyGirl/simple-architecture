@@ -1,5 +1,5 @@
-import { fetchFavoritesListPage } from '@api/favorites';
-import { replaceFavoritesList, store } from '@store';
+import { fetchFavoritesListPage } from '~/api/favorites';
+import { replaceFavoritesList, store } from '~/store';
 
 import type { FavoritesListResult } from './types';
 

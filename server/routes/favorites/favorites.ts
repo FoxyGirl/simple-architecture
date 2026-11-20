@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import type { Show } from '~/types';
+import type { Show } from '@server/types';
 
 import {
   addFavorite,

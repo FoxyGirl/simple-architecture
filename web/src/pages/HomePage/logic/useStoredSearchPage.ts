@@ -1,13 +1,13 @@
 import { useSelector } from 'react-redux';
 
-import type { SearchPage } from '@api/types';
+import type { SearchPage } from '~/api/types';
 import {
   selectGenres,
   selectPage,
   selectPageCount,
   selectShows,
   selectTotalCount,
-} from '@store';
+} from '~/store';
 
 /**
  * The current search result assembled from the shows Entity's selectors —

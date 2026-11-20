@@ -1,8 +1,8 @@
 import { act, cleanup, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { searchShowsPage } from '@api/shows';
-import { replaceSearchResult, store } from '@store';
+import { searchShowsPage } from '~/api/shows';
+import { replaceSearchResult, store } from '~/store';
 
 import {
   arrow,
@@ -17,7 +17,7 @@ import {
   typeQuery,
 } from '../../../test/home-flow';
 
-vi.mock('@api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
 
 describe('HomePage envelope-driven rendering', () => {
   beforeEach(() => {

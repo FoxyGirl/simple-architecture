@@ -1,4 +1,4 @@
-import type { SearchPage } from '@api/types';
+import type { SearchPage } from '~/api/types';
 
 import type { SearchStatus } from './constants';
 

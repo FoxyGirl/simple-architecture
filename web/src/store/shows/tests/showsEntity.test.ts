@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import type { SearchPage, Show } from '@api/types';
+import type { SearchPage, Show } from '~/api/types';
 
 import { favoritesReducer } from '../../favorites';
 import {

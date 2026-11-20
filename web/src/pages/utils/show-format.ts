@@ -1,4 +1,4 @@
-import type { Show } from '@api/types';
+import type { Show } from '~/api/types';
 
 export const formatRating = (average?: number | null): string =>
   average === null || average === undefined ? 'NR' : average.toFixed(1);

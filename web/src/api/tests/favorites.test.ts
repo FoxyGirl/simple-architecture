@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { Show } from '@api/types';
+import type { Show } from '~/api/types';
 
 import { ApiError } from '../errors';
 import {

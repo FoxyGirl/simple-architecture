@@ -1,4 +1,4 @@
-import type { Show } from '~/types';
+import type { Show } from '@server/types';
 
 // Shared pagination primitives for the routes that page through shows.
 // Moved out of routes/search when routes/favorites became the second

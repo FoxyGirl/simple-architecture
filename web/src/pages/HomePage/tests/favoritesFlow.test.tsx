@@ -5,9 +5,9 @@ import {
   addFavoriteShow,
   fetchFavoritesCount,
   removeFavoriteShow,
-} from '@api/favorites';
-import { searchShowsPage } from '@api/shows';
-import { replaceFavoritesSummary, selectFavoriteIds, store } from '@store';
+} from '~/api/favorites';
+import { searchShowsPage } from '~/api/shows';
+import { replaceFavoritesSummary, selectFavoriteIds, store } from '~/store';
 
 import {
   click,
@@ -20,8 +20,8 @@ import {
 // The hearts follow the summaries the mocked favorites API resolves with.
 // Both boundary mocks are declared in this file — vi.mock only hoists
 // inside suites, never inside the shared helper.
-vi.mock('@api/shows', () => ({ searchShowsPage: vi.fn() }));
-vi.mock('@api/favorites', () => ({
+vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/favorites', () => ({
   addFavoriteShow: vi.fn(),
   removeFavoriteShow: vi.fn(),
   fetchFavoritesCount: vi.fn(),

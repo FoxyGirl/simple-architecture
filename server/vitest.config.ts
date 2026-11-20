@@ -5,10 +5,10 @@ import { defineConfig } from 'vitest/config';
 const serverRoot = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  // Mirrors the `~/*` paths mapping in tsconfig.json; keep both in sync.
+  // Mirrors the `@server/*` paths mapping in tsconfig.json; keep both in sync.
   resolve: {
     alias: {
-      '~': serverRoot,
+      '@server': serverRoot,
     },
   },
   test: {

@@ -1,5 +1,5 @@
-import type { Show } from '~/types';
-import { clampPage, getPageCount, getPageShows } from '~/pagination';
+import type { Show } from '@server/types';
+import { clampPage, getPageCount, getPageShows } from '@server/pagination';
 
 // The genre helpers stay search-private; the shared pagination primitives
 // (RESULTS_PER_PAGE, getPageCount, clampPage, getPageShows) moved to the

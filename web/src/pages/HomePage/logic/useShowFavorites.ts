@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import type { Show } from '@api/types';
-import { notify } from '@notification';
-import { selectFavoriteIds, selectFavoritesCount } from '@store';
+import type { Show } from '~/api/types';
+import { notify } from '~/notification';
+import { selectFavoriteIds, selectFavoritesCount } from '~/store';
 
 import type { FavoritesLocationState } from '../../types';
 

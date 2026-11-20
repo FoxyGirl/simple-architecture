@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { searchShowsPage } from '@api/shows';
-import { replaceSearchResult, store } from '@store';
+import { searchShowsPage } from '~/api/shows';
+import { replaceSearchResult, store } from '~/store';
 
 import { abortShowsFetch, fetchShowsPage } from '../fetchShowsPage';
 
@@ -14,7 +14,7 @@ import {
   deferred,
 } from './helpers';
 
-vi.mock('@api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
 
 const mocked = vi.mocked(searchShowsPage);
 

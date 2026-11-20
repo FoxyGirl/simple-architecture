@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchFavoritesListPage } from '@api/favorites';
-import type { FavoritesListPage, Show } from '@api/types';
-import { selectFavoritesList, store } from '@store';
+import { fetchFavoritesListPage } from '~/api/favorites';
+import type { FavoritesListPage, Show } from '~/api/types';
+import { selectFavoritesList, store } from '~/store';
 
 import { fetchFavoritesPage } from '../fetchFavoritesPage';
 
-vi.mock('@api/favorites', () => ({
+vi.mock('~/api/favorites', () => ({
   addFavoriteShow: vi.fn(),
   removeFavoriteShow: vi.fn(),
   fetchFavoritesCount: vi.fn(),

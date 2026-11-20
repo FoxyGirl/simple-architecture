@@ -1,6 +1,6 @@
 import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
-import type { SearchPage, Show } from '@api/types';
+import type { SearchPage, Show } from '~/api/types';
 
 import type { Selection } from '../types';
 

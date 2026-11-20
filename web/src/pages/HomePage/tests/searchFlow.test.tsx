@@ -1,7 +1,7 @@
 import { cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { searchShowsPage } from '@api/shows';
+import { searchShowsPage } from '~/api/shows';
 
 import {
   arrow,
@@ -16,7 +16,7 @@ import {
   typeQuery,
 } from '../../../test/home-flow';
 
-vi.mock('@api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
 
 const selectionOfLast = () => {
   const calls = vi.mocked(searchShowsPage).mock.calls;

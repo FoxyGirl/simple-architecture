@@ -1,5 +1,5 @@
-import type { Show } from '@api/types';
-import { useMediaQuery } from '@hooks/useMediaQuery';
+import type { Show } from '~/api/types';
+import { useMediaQuery } from '~/hooks/useMediaQuery';
 
 import { ShowCard } from '../ShowCard';
 import { ShowRowCard } from '../ShowRowCard';

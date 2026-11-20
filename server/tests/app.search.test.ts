@@ -9,8 +9,8 @@ import {
   type Mock,
 } from 'vitest';
 
-import { createApp } from '~/app';
-import { cache } from '~/cache';
+import { createApp } from '@server/app';
+import { cache } from '@server/cache';
 
 const jsonResponse = (body: unknown) => new Response(JSON.stringify(body));
 

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { useMediaQuery } from '@hooks/useMediaQuery';
+import { useMediaQuery } from '~/hooks/useMediaQuery';
 
 import { usePagination } from './logic/usePagination';
 

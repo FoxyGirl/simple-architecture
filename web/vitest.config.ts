@@ -10,10 +10,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@api': path.join(rootDir, 'src', 'api'),
-      '@hooks': path.join(rootDir, 'src', 'hooks'),
-      '@notification': path.join(rootDir, 'src', 'notification'),
-      '@store': path.join(rootDir, 'src', 'store'),
+      '~': path.join(rootDir, 'src'),
     },
   },
   test: {

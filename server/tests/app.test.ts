@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 
-import { createApp } from '~/app';
+import { createApp } from '@server/app';
 
 describe('server app', () => {
   it('responds with Express 404 for an unknown route', async () => {

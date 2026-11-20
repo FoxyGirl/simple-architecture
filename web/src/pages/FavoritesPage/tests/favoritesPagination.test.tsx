@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchFavoritesListPage } from '@api/favorites';
+import { fetchFavoritesListPage } from '~/api/favorites';
 
 import {
   button,
@@ -12,7 +12,7 @@ import {
   resetFavorites,
 } from './favoritesHarness';
 
-vi.mock('@api/favorites', () => ({
+vi.mock('~/api/favorites', () => ({
   addFavoriteShow: vi.fn(),
   removeFavoriteShow: vi.fn(),
   fetchFavoritesCount: vi.fn(),

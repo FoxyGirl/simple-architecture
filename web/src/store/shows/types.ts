@@ -1,4 +1,4 @@
-import type { SearchPage } from '@api/types';
+import type { SearchPage } from '~/api/types';
 
 /**
  * The shows Entity state: the current search result — the page of shows the

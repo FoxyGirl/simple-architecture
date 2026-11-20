@@ -60,14 +60,14 @@ The compiler runs in `strict` mode with `noUncheckedIndexedAccess`,
 `verbatimModuleSyntax` and `erasableSyntaxOnly`. Types live in a `types.ts`
 file next to the code that owns them.
 
-Import specifiers carry no file extension. `@api`/`@hooks` alias frontend
-folders, and `~` aliases the `server/` root so backend routes never write
-`../../` climbs:
+Import specifiers carry no file extension. `~` aliases the frontend
+`web/src/` root and `@server` aliases the `server/` root:
 
 ```ts
-import { searchShowsPage } from '@api/shows';
-import { useMediaQuery } from '@hooks/useMediaQuery';
-import { getCachedShows } from '~/cache';
+import { searchShowsPage } from '~/api/shows';
+import { useMediaQuery } from '~/hooks/useMediaQuery';
+import { formatShow } from '~/pages/utils/show-format';
+import { getCachedShows } from '@server/cache';
 ```
 
 ### CSS Module types
@@ -105,116 +105,17 @@ via the `prepare` script, so `npm install` wires up the hooks automatically.
 The repository is an npm-workspaces monorepo with a shared tooling root:
 
 ```
-web/                  # frontend workspace (Vite + React)
-  src/
-    main.tsx          # Entry point, mounts <App /> in the Redux Provider + Router
-    App/              # the App shell component (layout, nav, routes, Toaster)
-      App.tsx         # Layout + routes + the single global <Toaster />
-      App.module.css  # App shell styles (CSS Module)
-      index.ts        # public export
-      Toaster/        # the global toast outlet component (token-skinned)
-        Toaster.tsx   # Sonner config: placement, duration, tokens
-        Toaster.module.css
-        index.ts      # public export
-    index.css         # Global reset + token import
-    vite-env.d.ts     # Vite client types (CSS Modules, import.meta.env)
-    api/
-      shows.ts        # paginated show search via the backend (/api/search)
-      favorites.ts    # favorites calls: add, remove, count, list page
-      request.ts      # shared fetch layer (URLs, JSON method/body, ApiError)
-      types.ts        # TVmaze shapes + search and favorites envelopes
-    hooks/
-      useMediaQuery.ts
-    notification/     # library-independent notify API (wraps Sonner)
-      index.ts        # barrel: notify + option types
-      notify.ts       # success/error/info/warning/loading/promise wrapper
-      types.ts        # NotifyOptions / NotifyPromiseMessages
-      tests/          # notify delegation suite (Sonner mocked)
-    pages/
-      HomePage/
-        HomePage.tsx        # "/" route
-        HomePage.module.css # Page styles (CSS Module)
-        index.ts            # public export
-        FavoritesCountButton/ # hero count pill: Entity count + navigation
-          FavoritesCountButton.tsx # presentational View (count + onClick)
-          FavoritesCountButton.module.css
-          index.ts          # public export
-        logic/
-          useHomePage.ts    # page presenter (Entity reads + Task orchestration)
-          urlState.ts       # URL codec: parse/serialize the applied state
-          useUrlSearchState.ts # URL-backed state and replace/push writes
-          tasks/
-            fetchShowsPage.ts # shows-fetch Task: API -> store.dispatch
-        tests/              # page-level suites (jsdom + Testing Library)
-      components/           # components shared by both pages (common ancestor)
-        FavoriteButton/     # heart toggle used by the cards on both pages
-        Pagination/         # page controls: search results + favorites list
-      tasks/                # Tasks shared by both pages (common ancestor)
-        toggleShowFavorite.ts # favorite-toggle Task (hearts on both pages)
-        syncFavoritesSummary.ts # summary Task: GET count -> Entity dispatch
-        fetchFavoritesPage.ts # list Task: GET page -> Entity dispatch
-        types.ts            # Task result types
-        tests/              # Task unit suites (API mocked at the boundary)
-    store/
-      store.ts        # Redux store (configureStore, every Entity reducer)
-      types.ts        # RootState / AppDispatch
-      shows/          # shows Entity: slice, selectors, state types
-      favorites/      # favorites Entity: backend-synced ids/count/list
-      index.ts        # barrel: store, root types, Entity actions/selectors
-    styles/
-      tokens.css      # Design tokens as CSS custom properties
-    ui-kit/           # Shared, project-wide UI components
-  index.html          # SPA shell
-  vite.config.ts      # Vite config (plugins, aliases, /api dev proxy)
-  vitest.config.ts    # Vitest config (jsdom, testing-library)
-  scripts/
-    generate-css-types.mjs  # CSS Module type declaration generator
-  vercel.json         # SPA rewrites (set Vercel "Root Directory" to `web/`)
+web/          # frontend workspace: the Vite + React app
+  src/        # app code: pages, components, store, api, styles, ui-kit
+  scripts/    # CSS Module type declaration generator
 
-server/               # backend workspace (Express, TypeScript ESM via tsx)
-  app.ts              # exported Express app: JSON body parsing + the mounted routes
-  index.ts            # entry: starts the app on port 3001
-  types.ts            # TVmaze API shapes owned by the backend
-  routes/             # one folder per HTTP route, mounted under /api by app.ts
-    index.ts          # barrel: re-exports every route's router
-    search/           # the GET /api/search route (q, genre, page)
-      index.ts        # barrel: exports searchRouter only
-      search.ts       # route handler: validation, cache call, errors
-      shows.ts        # server-side genre filtering + search page builder
-      tests/          # unit suite for the route's private helpers
-    favorites/        # the favorites API over the in-memory storage
-      index.ts        # barrel: favoritesRouter (+ favorite for the suite reset)
-      favorites.ts    # route handlers: add, remove, count, paginated list
-      storage.ts      # plain-object favorites keyed by show id + helpers
-      types.ts        # FavoritesSummary / FavoritesListPage shapes
-      tests/          # unit suite for the storage and its helpers
-  pagination/         # shared pagination primitives (3 shows per page)
-    index.ts          # barrel: RESULTS_PER_PAGE, getPageCount, clampPage,
-                      # getPageShows
-    pagination.ts
-    tests/            # unit suite for the shared helpers
-  cache/              # 5-minute plain-object TVmaze response cache
-    index.ts          # barrel: getCachedShows (+ cache for the suites)
-    cache.ts
-    tests/            # unit suite for the cache
-  tvmaze/             # TVmaze client (TVMAZE_BASE_URL seam, request logs)
-    index.ts          # barrel: searchShows
-    tvmaze.ts
-    tests/            # unit suite for the client
-  tests/              # app-level suites (supertest against the exported app)
-  tsconfig.json       # same strict compiler rules as the web workspace
-  vitest.config.ts    # Vitest config (node environment)
+server/       # backend workspace: the Express API
+  routes/     # one folder per HTTP route (search, favorites)
+  cache/      # 5-minute TVmaze response cache
+  tvmaze/     # TVmaze client
+  pagination/ # shared pagination helpers
 
-e2e/                  # Playwright specs + local TVmaze stub
-  smoke.spec.js       # E2E smoke test
-  search.spec.js      # search through the backend + fail-next error flow
-  cache.spec.js       # backend cache reuse + per-query caching
-  browse.spec.js      # server-driven genre filtering + pagination
-  stub/
-    tvmaze.js         # fixture-backed search/shows stub, hit counter,
-                      # per-query /__fail-next?q= one-shot failure control
-    fixtures.json     # canned TVmaze responses
-playwright.config.js  # E2E harness (stub + backend + frontend webServers)
+e2e/          # Playwright specs + the local TVmaze stub
 ```
 
 ESLint, Prettier and husky/lint-staged stay at the repo root; the root scripts

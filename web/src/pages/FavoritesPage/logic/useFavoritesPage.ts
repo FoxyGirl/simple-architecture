@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { selectFavoritesList } from '@store';
+import { selectFavoritesList } from '~/store';
 
 import type { FavoritesLocationState } from '../../types';
 

@@ -1,9 +1,9 @@
 import request from 'supertest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { createApp } from '~/app';
-import { favorite } from '~/routes/favorites';
-import type { Show } from '~/types';
+import { createApp } from '@server/app';
+import { favorite } from '@server/routes/favorites';
+import type { Show } from '@server/types';
 
 const show = (id: number): Show =>
   ({ id, name: `Show ${id}`, genres: ['Drama'] }) as Show;

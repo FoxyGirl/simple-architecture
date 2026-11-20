@@ -193,11 +193,12 @@ never from a file inside it.
   their own folder with an `index.ts` barrel exposing their public API.
 - Shared TVmaze API shapes stay in `server/types.ts`; types owned by a single
   route live in that route's folder.
-- An import that leaves the importing file's own folder MUST use the `~` alias
-  for the `server/` root (`'~/cache'`, `'~/types'`), never a deep relative
-  climb (`'../../cache'`). Imports inside the same folder stay `./<file>`, and
-  the root composition files (`app.ts`, `index.ts`) reference their own children
-  relatively (`'./routes'`, `'./app'`).
+- An import that leaves the importing file's own folder MUST use the
+  `@server` alias for the `server/` root (`'@server/cache'`,
+  `'@server/types'`), never a deep relative climb (`'../../cache'`). Imports
+  inside the same folder stay `./<file>`, and the root composition files
+  (`app.ts`, `index.ts`) reference their own children relatively
+  (`'./routes'`, `'./app'`).
 - Tests follow the frontend rule: each folder keeps the suite for its own code
   in a `tests/` subfolder (e.g. `server/routes/search/tests/`), and suites that
   drive the whole exported app live in `server/tests/`. A colocated suite MAY

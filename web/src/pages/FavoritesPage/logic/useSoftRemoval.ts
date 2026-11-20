@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import type { FavoritesListPage, Show } from '@api/types';
-import { notify } from '@notification';
+import type { FavoritesListPage, Show } from '~/api/types';
+import { notify } from '~/notification';
 
 import type { RemovedMarking } from '../types';
 

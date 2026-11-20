@@ -1,4 +1,4 @@
-import type { ShowStatus } from '@api/types';
+import type { ShowStatus } from '~/api/types';
 
 import styles from './ShowStatusBadge.module.css';
 

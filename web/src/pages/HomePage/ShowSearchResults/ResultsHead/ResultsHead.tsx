@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@hooks/useMediaQuery';
+import { useMediaQuery } from '~/hooks/useMediaQuery';
 
 import { useResultsHead } from './logic/useResultsHead';
 

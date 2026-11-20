@@ -1,4 +1,4 @@
-import type { SearchPage, Show } from '@api/types';
+import type { SearchPage, Show } from '~/api/types';
 
 import type { SearchRequest } from '../../../types';
 

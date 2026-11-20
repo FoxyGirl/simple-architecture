@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import type { FavoritesListPage, FavoritesSummary } from '@api/types';
+import type { FavoritesListPage, FavoritesSummary } from '~/api/types';
 
 import type { FavoritesState } from './types';
 

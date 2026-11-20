@@ -1,9 +1,9 @@
 import { cleanup, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchFavoritesCount } from '@api/favorites';
-import { searchShowsPage } from '@api/shows';
-import type { SearchPage, Show } from '@api/types';
+import { fetchFavoritesCount } from '~/api/favorites';
+import { searchShowsPage } from '~/api/shows';
+import type { SearchPage, Show } from '~/api/types';
 
 import {
   card,
@@ -16,8 +16,8 @@ import {
 
 // The presenter runs over the mocked API boundary (vi.mock never hoists
 // inside the shared helper, so both mocks live in this suite).
-vi.mock('@api/shows', () => ({ searchShowsPage: vi.fn() }));
-vi.mock('@api/favorites', () => ({
+vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/favorites', () => ({
   addFavoriteShow: vi.fn(),
   removeFavoriteShow: vi.fn(),
   fetchFavoritesCount: vi.fn(),

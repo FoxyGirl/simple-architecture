@@ -3,9 +3,9 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
-import { replaceSearchResult, store } from '@store';
+import { replaceSearchResult, store } from '~/store';
 
-import type { SearchPage, Show } from '@api/types';
+import type { SearchPage, Show } from '~/api/types';
 
 import { HomePage } from '../pages/HomePage';
 import { LocationProbe } from './location-probe';

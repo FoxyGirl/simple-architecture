@@ -5,10 +5,10 @@ import {
   addFavoriteShow,
   fetchFavoritesCount,
   removeFavoriteShow,
-} from '@api/favorites';
-import { searchShowsPage } from '@api/shows';
-import { notify } from '@notification';
-import { replaceFavoritesSummary, store } from '@store';
+} from '~/api/favorites';
+import { searchShowsPage } from '~/api/shows';
+import { notify } from '~/notification';
+import { replaceFavoritesSummary, store } from '~/store';
 
 import {
   click,
@@ -21,8 +21,8 @@ import {
 // The toasts follow the results the mocked favorites API resolves with.
 // Both boundary mocks are declared in this file — vi.mock only hoists
 // inside suites, never inside the shared helper.
-vi.mock('@api/shows', () => ({ searchShowsPage: vi.fn() }));
-vi.mock('@api/favorites', () => ({
+vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/favorites', () => ({
   addFavoriteShow: vi.fn(),
   removeFavoriteShow: vi.fn(),
   fetchFavoritesCount: vi.fn(),
@@ -31,7 +31,7 @@ vi.mock('@api/favorites', () => ({
 // The notification boundary: the suite asserts the presenter calls the
 // library-independent notify API — Sonner itself never renders here, and
 // its auto-dismiss behavior is asserted in the E2E spec instead.
-vi.mock('@notification', () => ({
+vi.mock('~/notification', () => ({
   notify: { success: vi.fn(), info: vi.fn() },
 }));
 

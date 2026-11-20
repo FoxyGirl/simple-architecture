@@ -5,7 +5,7 @@ import {
   addFavoriteShow,
   fetchFavoritesListPage,
   removeFavoriteShow,
-} from '@api/favorites';
+} from '~/api/favorites';
 
 import cardStyles from '../../components/ShowRowCard/ShowRowCard.module.css';
 import {
@@ -15,7 +15,7 @@ import {
   resetFavorites,
 } from './favoritesHarness';
 
-vi.mock('@api/favorites', () => ({
+vi.mock('~/api/favorites', () => ({
   addFavoriteShow: vi.fn(),
   removeFavoriteShow: vi.fn(),
   fetchFavoritesCount: vi.fn(),

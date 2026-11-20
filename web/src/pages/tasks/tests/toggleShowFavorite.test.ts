@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { addFavoriteShow, removeFavoriteShow } from '@api/favorites';
-import type { FavoritesSummary, Show } from '@api/types';
-import { replaceFavoritesSummary, selectFavoriteIds, store } from '@store';
+import { addFavoriteShow, removeFavoriteShow } from '~/api/favorites';
+import type { FavoritesSummary, Show } from '~/api/types';
+import { replaceFavoritesSummary, selectFavoriteIds, store } from '~/store';
 
 import { toggleShowFavorite } from '../toggleShowFavorite';
 
 // The established boundary mock: the Task under test is a plain async
 // function, so the suite needs no React and no fetch stubbing.
-vi.mock('@api/favorites', () => ({
+vi.mock('~/api/favorites', () => ({
   addFavoriteShow: vi.fn(),
   removeFavoriteShow: vi.fn(),
   fetchFavoritesCount: vi.fn(),

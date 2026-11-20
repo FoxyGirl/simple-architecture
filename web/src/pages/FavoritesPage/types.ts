@@ -1,4 +1,4 @@
-import type { FavoritesListPage } from '@api/types';
+import type { FavoritesListPage } from '~/api/types';
 
 /**
  * The soft-removal view state: the removed show ids plus the list envelope

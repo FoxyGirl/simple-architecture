@@ -1,5 +1,5 @@
-import { searchShowsPage } from '@api/shows';
-import { replaceSearchResult, store } from '@store';
+import { searchShowsPage } from '~/api/shows';
+import { replaceSearchResult, store } from '~/store';
 
 import type { SearchRequest, ShowsFetchResult } from '../../types';
 

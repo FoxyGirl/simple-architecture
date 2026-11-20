@@ -5,8 +5,8 @@ import {
   addFavoriteShow,
   fetchFavoritesListPage,
   removeFavoriteShow,
-} from '@api/favorites';
-import { notify } from '@notification';
+} from '~/api/favorites';
+import { notify } from '~/notification';
 
 import {
   createFavoritesBackend,
@@ -14,7 +14,7 @@ import {
   resetFavorites,
 } from './favoritesHarness';
 
-vi.mock('@api/favorites', () => ({
+vi.mock('~/api/favorites', () => ({
   addFavoriteShow: vi.fn(),
   removeFavoriteShow: vi.fn(),
   fetchFavoritesCount: vi.fn(),
@@ -22,7 +22,7 @@ vi.mock('@api/favorites', () => ({
 }));
 // The notification boundary: the suite asserts the presenter calls the
 // library-independent notify API — Sonner itself never renders here.
-vi.mock('@notification', () => ({
+vi.mock('~/notification', () => ({
   notify: { success: vi.fn(), info: vi.fn() },
 }));
 

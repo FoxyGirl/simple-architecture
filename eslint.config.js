@@ -14,11 +14,8 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
 // Keep in sync with the vite/vitest/tsconfig alias and paths maps.
 const aliases = {
-  '@api': path.join(rootDir, 'web/src/api'),
-  '@hooks': path.join(rootDir, 'web/src/hooks'),
-  '@notification': path.join(rootDir, 'web/src/notification'),
-  '@store': path.join(rootDir, 'web/src/store'),
-  '~': path.join(rootDir, 'server'),
+  '~': path.join(rootDir, 'web/src'),
+  '@server': path.join(rootDir, 'server'),
 };
 
 const nodeResolver = createNodeResolver({
@@ -111,8 +108,7 @@ export default defineConfig([
     },
   },
   {
-    // The backend workspace is plain Node: same TS rules, server globals
-    // instead of the browser ones assumed by the block above.
+    // The backend workspace is plain Node: server globals, not browser ones.
     files: ['server/**/*.ts'],
     languageOptions: { globals: globals.node },
   },

@@ -1,5 +1,5 @@
-import { clampPage, getPageCount, getPageShows } from '~/pagination';
-import type { Show } from '~/types';
+import { clampPage, getPageCount, getPageShows } from '@server/pagination';
+import type { Show } from '@server/types';
 
 import type { FavoritesListPage, FavoritesSummary } from './types';
 

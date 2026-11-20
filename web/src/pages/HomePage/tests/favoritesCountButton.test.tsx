@@ -3,8 +3,8 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchFavoritesCount } from '@api/favorites';
-import { replaceFavoritesSummary, store } from '@store';
+import { fetchFavoritesCount } from '~/api/favorites';
+import { replaceFavoritesSummary, store } from '~/store';
 
 import { HomePage } from '../HomePage';
 
@@ -13,8 +13,8 @@ import { click, renderHomePage, settle } from '../../../test/home-flow';
 // The count button reads the backend summary the Entity mirrors. Both
 // boundary mocks are declared in this file — vi.mock only hoists inside
 // suites, never inside the shared helper.
-vi.mock('@api/shows', () => ({ searchShowsPage: vi.fn() }));
-vi.mock('@api/favorites', () => ({
+vi.mock('~/api/shows', () => ({ searchShowsPage: vi.fn() }));
+vi.mock('~/api/favorites', () => ({
   addFavoriteShow: vi.fn(),
   removeFavoriteShow: vi.fn(),
   fetchFavoritesCount: vi.fn(),

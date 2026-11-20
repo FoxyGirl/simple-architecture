@@ -46,8 +46,8 @@ compiler options live in `tsconfig.app.json` (the app) and `tsconfig.node.json`
   specifier onto a `.ts` file:
 
   ```ts
-  import { searchShowsPage } from '@api/shows';
-  import { useMediaQuery } from '@hooks/useMediaQuery';
+  import { searchShowsPage } from '~/api/shows';
+  import { useMediaQuery } from '~/hooks/useMediaQuery';
   import { STATUS } from './constants';
   ```
 
@@ -190,29 +190,26 @@ else. For production, self-host with `@fontsource/sora` and `@fontsource/inter`.
 
 Imports that cross directory boundaries MUST use an alias instead of a deep relative path.
 
-| Alias           | Target             | Example                                                 |
-| --------------- | ------------------ | ------------------------------------------------------- |
-| `@api`          | `src/api`          | `import { searchShowsPage } from '@api/shows';`         |
-| `@hooks`        | `src/hooks`        | `import { useMediaQuery } from '@hooks/useMediaQuery';` |
-| `@notification` | `src/notification` | `import { notify } from '@notification';`               |
-| `@store`        | `src/store`        | `import { store } from '@store';`                       |
-| `~`             | `server/` root     | `import { getCachedShows } from '~/cache';`             |
+| Alias     | Target         | Example                                                   |
+| --------- | -------------- | --------------------------------------------------------- |
+| `~`       | `web/src`      | `import { formatShow } from '~/pages/utils/show-format';` |
+| `@server` | `server/` root | `import { getCachedShows } from '@server/cache';`         |
 
-- `@api`, `@hooks`, `@notification` and `@store` are frontend aliases; `~` is the backend
-  alias and always
-  resolves to the `server/` workspace root, so a route folder such as
-  `server/routes/search/` writes `'~/cache'` and `'~/types'` instead of
-  `'../../cache'` and `'../../types'`.
+- `~` is the frontend source root (`web/src`), so any file can cross folders
+  with `~/...`. `@server` is the backend alias and always resolves to the
+  `server/` workspace root, so a route folder such as
+  `server/routes/search/` writes `'@server/cache'` and `'@server/types'`
+  instead of `'../../cache'` and `'../../types'`.
 - Relative imports remain the default for files in the same directory or in a
   directly owned sibling component — and for a colocated `tests/` folder
   importing the private files of the folder it covers (`'../shows'`).
-- Frontend aliases are declared in `vite.config.ts` (`resolve.alias`) and MUST
-  be mirrored in `eslint.config.js` (alias resolver) and `tsconfig.app.json`
-  (`compilerOptions.paths`, editor support).
-- The backend alias `~` has no Vite config: it lives in `eslint.config.js`,
-  `server/tsconfig.json` (`compilerOptions.paths`) and `server/vitest.config.ts`
-  (`resolve.alias`). `tsx` reads the tsconfig mapping, so the running backend
-  resolves `~` too.
+- The frontend alias `~` is declared in `vite.config.ts` (`resolve.alias`) and
+  MUST be mirrored in `vitest.config.ts`, `eslint.config.js` (alias resolver)
+  and `tsconfig.app.json` (`compilerOptions.paths`, editor support).
+- The backend alias `@server` has no Vite config: it lives in
+  `eslint.config.js`, `server/tsconfig.json` (`compilerOptions.paths`) and
+  `server/vitest.config.ts` (`resolve.alias`). `tsx` reads the tsconfig
+  mapping, so the running backend resolves `@server` too.
 - Every configuration that declares an alias MUST be kept in sync when an alias
   is added, renamed or removed.
 

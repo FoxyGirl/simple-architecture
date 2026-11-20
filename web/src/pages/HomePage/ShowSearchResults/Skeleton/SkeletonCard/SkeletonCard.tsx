@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { useMediaQuery } from '@hooks/useMediaQuery';
+import { useMediaQuery } from '~/hooks/useMediaQuery';
 
 import styles from './SkeletonCard.module.css';
 

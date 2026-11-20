@@ -7,21 +7,20 @@ import { useShowsSearchField } from '../logic/useShowsSearchField';
 
 // Mirrors DEBOUNCE_MS in the presenter hook.
 const DEBOUNCE_MS = 800;
-
 const renderField = (over = {}) => {
   const props = {
+    search: '',
     onSearchChange: vi.fn(),
     registerControls: vi.fn(),
-    submitSearch: vi.fn(),
-    isCurrentQuery: vi.fn((): boolean => false),
+    applySearch: vi.fn(),
     abortSearch: vi.fn(),
-    initialQuery: '',
     ...over,
   };
-  const { result } = renderHook(() => useShowsSearchField(props));
-  return { props, result };
+  const view = renderHook((current) => useShowsSearchField(current), {
+    initialProps: props,
+  });
+  return { props, ...view };
 };
-
 const typeQuery = (
   handleSearch: (event: ChangeEvent<HTMLInputElement>) => void,
   value: string,
@@ -30,13 +29,11 @@ const typeQuery = (
     handleSearch({ target: { value } } as ChangeEvent<HTMLInputElement>);
   });
 };
-
 const advance = async (ms: number) => {
   await act(async () => {
     await vi.advanceTimersByTimeAsync(ms);
   });
 };
-
 describe('useShowsSearchField', () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -45,22 +42,25 @@ describe('useShowsSearchField', () => {
   afterEach(() => {
     vi.useRealTimers();
   });
-
-  it('fires exactly one debounced submission once typing settles', async () => {
+  it('fires exactly one debounced URL write once typing settles', async () => {
     const { result, props } = renderField();
 
     typeQuery(result.current.handleSearch, 'off');
     await advance(DEBOUNCE_MS - 1);
-    expect(props.submitSearch).not.toHaveBeenCalled();
+    expect(props.applySearch).not.toHaveBeenCalled();
 
     typeQuery(result.current.handleSearch, 'office');
     await advance(DEBOUNCE_MS);
 
-    expect(props.submitSearch).toHaveBeenCalledTimes(1);
-    expect(props.submitSearch).toHaveBeenCalledWith('office');
+    expect(props.applySearch).toHaveBeenCalledTimes(1);
+    expect(props.applySearch).toHaveBeenCalledWith('office');
+    expect(props.onSearchChange).toHaveBeenLastCalledWith({
+      status: STATUS.LOADING,
+      queryEcho: 'office',
+    });
   });
 
-  it('aborts the in-flight request when the query changes', async () => {
+  it('aborts the in-flight request when the draft changes', async () => {
     const { result, props } = renderField();
 
     typeQuery(result.current.handleSearch, 'office');
@@ -71,48 +71,47 @@ describe('useShowsSearchField', () => {
     expect(props.abortSearch).toHaveBeenCalledTimes(1);
 
     await advance(DEBOUNCE_MS);
-    expect(props.submitSearch).toHaveBeenCalledTimes(2);
-    expect(props.submitSearch).toHaveBeenLastCalledWith('friends');
+    expect(props.applySearch).toHaveBeenCalledTimes(2);
+    expect(props.applySearch).toHaveBeenLastCalledWith('friends');
   });
 
-  it('keeps the current results when the query equals the active one', async () => {
-    const searched = new Set<string>();
-    const { result, props } = renderField({
-      submitSearch: vi.fn((query: string) => void searched.add(query)),
-      isCurrentQuery: vi.fn((query: string) => searched.has(query)),
-    });
+  it('does not re-write a draft that equals the applied search', async () => {
+    const { result, props } = renderField({ search: 'office' });
 
-    typeQuery(result.current.handleSearch, 'office');
-    await advance(DEBOUNCE_MS);
-
-    // Re-typing the same query (here with trailing whitespace) is echoed,
-    // not re-requested.
     typeQuery(result.current.handleSearch, 'office ');
     await advance(DEBOUNCE_MS);
 
-    expect(props.submitSearch).toHaveBeenCalledTimes(1);
-    expect(props.onSearchChange).toHaveBeenLastCalledWith({
-      status: STATUS.SUCCESS,
-      queryEcho: 'office',
-    });
+    expect(props.applySearch).not.toHaveBeenCalled();
   });
 
-  it('clearing the query aborts and reports idle, registered with the page', async () => {
-    const { result, props } = renderField();
+  it('re-syncs the input from an external URL change', async () => {
+    const { result, props, rerender } = renderField();
 
-    typeQuery(result.current.handleSearch, 'office');
+    typeQuery(result.current.handleSearch, 'friends');
+    rerender({ ...props, search: 'office' });
+
+    expect(result.current.query).toBe('office');
     await advance(DEBOUNCE_MS);
+    expect(props.applySearch).not.toHaveBeenCalled();
+    expect(props.abortSearch).toHaveBeenCalled();
+  });
+
+  it('clearing reports idle now and removes the parameter after the debounce', async () => {
+    const { result, props } = renderField({ search: 'office' });
 
     await act(async () => {
       result.current.clearQuery();
     });
 
-    expect(props.abortSearch).toHaveBeenCalled();
     expect(result.current.query).toBe('');
+    expect(props.abortSearch).toHaveBeenCalled();
     expect(props.onSearchChange).toHaveBeenLastCalledWith({
       status: STATUS.IDLE,
       queryEcho: '',
     });
+
+    await advance(DEBOUNCE_MS);
+    expect(props.applySearch).toHaveBeenCalledWith('');
 
     const registered = props.registerControls.mock.calls.at(-1)?.[0];
     expect(registered).toEqual({ clearSearch: expect.any(Function) });

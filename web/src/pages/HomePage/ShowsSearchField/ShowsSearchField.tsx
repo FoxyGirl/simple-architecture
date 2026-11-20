@@ -7,12 +7,11 @@ import { useShowsSearchField } from './logic/useShowsSearchField';
 import styles from './ShowsSearchField.module.css';
 
 type ShowsSearchFieldProps = {
+  search: string;
   onSearchChange: (change: SearchChange) => void;
   registerControls: (controls: SearchControls | null) => void;
-  submitSearch: (query: string) => void;
-  isCurrentQuery: (query: string) => boolean;
+  applySearch: (query: string) => void;
   abortSearch: () => void;
-  initialQuery: string;
 };
 
 export const ShowsSearchField = (props: ShowsSearchFieldProps) => {

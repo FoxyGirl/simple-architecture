@@ -88,7 +88,7 @@ parameter-less `/`, removed in Phase 2).
 
 **Tasks:**
 
-- [ ] Write this phase's E2E first (red): new `e2e/url-sync.spec.js` against
+- [x] Write this phase's E2E first (red): new `e2e/url-sync.spec.js` against
       the stub fixtures (`world` query, multi-page + genre-able): deep link
       `/?search=world&genre=Drama&page=2` renders input text, pressed genre
       chip, active page and the matching slice; typing updates the input
@@ -98,7 +98,7 @@ parameter-less `/`, removed in Phase 2).
       sets `page`; back/forward restore state including input text; reload
       restores; `page=abc`, `page=0`, `genre=Horror` (not in envelope) fall
       back to defaults without crashing.
-- [ ] Add the pure URL-state codec with unit tests: shared page-parameter
+- [x] Add the pure URL-state codec with unit tests: shared page-parameter
       primitives (`parsePageParam`: missing/non-numeric/sub-1 -> 1) in
       `web/src/pages/utils/url-params.ts` published through the existing
       `pages/utils` barrel (nearest common ancestor with the Favorites page,
@@ -106,19 +106,19 @@ parameter-less `/`, removed in Phase 2).
       `pages/HomePage/logic/urlState.ts` — parse `URLSearchParams` into
       `{ search, genre, page }` and serialize back omitting default-valued
       parameters.
-- [ ] Extract the URL read/write hook (e.g. `logic/useUrlSearchState.ts`):
+- [x] Extract the URL read/write hook (e.g. `logic/useUrlSearchState.ts`):
       wraps `useSearchParams`, exposes the parsed state plus
       `applySearch` (replace; resets `genre`/`page` by omission),
       `selectGenre` (push; `page` reset to 1), `selectPage` (push) — keeping
       `useHomePage.ts` within `max-lines`.
-- [ ] Rework `useShowsSearchField` to the draft/applied split: local
+- [x] Rework `useShowsSearchField` to the draft/applied split: local
       `draftSearch` state feeds the input; the debounce effect writes the
       trimmed value through `applySearch` (clear -> parameter removed ->
       idle); the input re-syncs from the URL `search` whenever it changes
       externally (mount, back/forward, programmatic clear); the optimistic
       LOADING report via `onSearchChange` while the debounce is pending is
       preserved; `initialQuery` plumbing is replaced by the URL value.
-- [ ] Rework `useHomePage` onto URL state: `selection` derives from the
+- [x] Rework `useHomePage` onto URL state: `selection` derives from the
       parsed URL (not snapshot state); `selectGenre`/`selectPage` delegate to
       the URL hook; a single effect keyed on the parsed URL state runs the
       request through the existing `useShowsRequest` coordination
@@ -126,11 +126,11 @@ parameter-less `/`, removed in Phase 2).
       the mount, Task-owned abort of superseded runs); mount with a `search`
       parameter always fetches; mount on parameter-less `/` keeps the
       existing `useRestoredSession` seeding unchanged (transitional).
-- [ ] Add the post-fetch genre validation: after a successful run, a URL
+- [x] Add the post-fetch genre validation: after a successful run, a URL
       `genre` that is neither `ALL_GENRES` nor present in the stored
       envelope's `genres` is reset to the default with a replace write (one
       extra unfiltered fetch — the recorded decision for "unknown genre").
-- [ ] Update the HomePage unit/component suites to the URL-driven behavior
+- [x] Update the HomePage unit/component suites to the URL-driven behavior
       (render with `initialEntries`, assert through a location probe):
       `useShowsSearchField.test.ts` (draft/applied, debounce -> URL, external
       sync), `searchFlow`/`searchRendering`/`HomePage` suites (URL-driven
@@ -140,16 +140,16 @@ parameter-less `/`, removed in Phase 2).
 
 **Tests:**
 
-- [ ] E2E `url-sync.spec.js` (red -> green): deep link, reload, debounced
+- [x] E2E `url-sync.spec.js` (red -> green): deep link, reload, debounced
       replace-write, genre/page push-writes with resets, back/forward
       restoration including input text, invalid-parameter defaults.
-- [ ] Codec unit tests: parse/serialize round-trips, default omission,
+- [x] Codec unit tests: parse/serialize round-trips, default omission,
       `page` fallbacks (missing/non-numeric/sub-1), trimmed search.
-- [ ] Component/unit tests: input updates without URL change before the
+- [x] Component/unit tests: input updates without URL change before the
       debounce; URL written (replace) after; clearing removes the parameter
       and idles the page; requests derive from URL values; displayed
       queryEcho/genre/page match the URL; unknown genre resets after fetch.
-- [ ] Regression gate: the 5 pre-existing Playwright specs and all Vitest
+- [x] Regression gate: the 5 pre-existing Playwright specs and all Vitest
       suites stay green (`browse.spec.js` and `favorites.spec.js` exercise
       genre/page/search flows that now write the URL).
 
@@ -163,28 +163,28 @@ dependence is the parameter-less `/` mount, documented as transitional.
 
 **Acceptance Criteria:**
 
-- [ ] The applied search term, selected genre, and current page appear in the
+- [x] The applied search term, selected genre, and current page appear in the
       HomePage URL as `search`, `genre`, `page` (defaults omitted).
-- [ ] Typing updates the input immediately without changing the URL; after
+- [x] Typing updates the input immediately without changing the URL; after
       the debounce the URL `search` equals the trimmed value, written with
       replace semantics (no new history entry).
-- [ ] Clearing the search field removes the `search` parameter after the
+- [x] Clearing the search field removes the `search` parameter after the
       debounce and the page shows its idle/empty state.
-- [ ] Selecting a genre updates `genre` and resets `page` to 1; applying a
+- [x] Selecting a genre updates `genre` and resets `page` to 1; applying a
       new search term resets `genre` and `page`; genre/page changes push
       history entries and back/forward restore the state, including the
       search input text.
-- [ ] Every `/api/search` request derives from the current URL parameter
+- [x] Every `/api/search` request derives from the current URL parameter
       values, and the displayed results (query echo, genre selection, active
       page) match the URL.
-- [ ] Loading a parameterized URL directly (new tab or reload) restores input
+- [x] Loading a parameterized URL directly (new tab or reload) restores input
       text, genre, page, and fetches the corresponding results without user
       interaction.
-- [ ] Missing/invalid parameters fall back to defaults without errors: empty
+- [x] Missing/invalid parameters fall back to defaults without errors: empty
       `search` -> idle; unknown or missing `genre` -> "All genres" (unknown
       validated against the loaded envelope); non-numeric or sub-1 `page` ->
       page 1.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`, and
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`, and
       `npm run test:e2e` pass.
 
 ### Phase 2: URL-based restoration and `searchSession` removal

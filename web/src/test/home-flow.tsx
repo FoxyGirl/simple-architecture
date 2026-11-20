@@ -8,6 +8,7 @@ import { replaceSearchResult, replaceSearchSession, store } from '@store';
 import type { SearchPage, Show } from '@api/types';
 
 import { HomePage } from '../pages/HomePage';
+import { LocationProbe } from './location-probe';
 
 // Shared helpers for the HomePage server-driven search-flow test suites.
 // NOTE: favorites mocking lives in the suites themselves — vi.mock does
@@ -89,19 +90,20 @@ export const click = async (element: HTMLElement) => {
 // documented fresh-start state. The presenter navigates through the Router, so
 // the page renders inside a MemoryRouter (the count suite adds route stubs of
 // its own).
-export const renderHomePage = () => {
+export const renderHomePage = (entries: string[] = ['/']) => {
   store.dispatch(replaceSearchResult(envelope()));
   store.dispatch(replaceSearchSession(null));
 
-  return remountHomePage();
+  return remountHomePage(entries);
 };
 
 // An in-session return to the page: the Entity and the persisted session
 // survive, exactly as they do on navigation within a running app.
-export const remountHomePage = () =>
+export const remountHomePage = (entries: string[] = ['/']) =>
   render(
     <Provider store={store}>
-      <MemoryRouter>
+      <MemoryRouter initialEntries={entries}>
+        <LocationProbe />
         <HomePage />
       </MemoryRouter>
     </Provider>,
@@ -109,3 +111,10 @@ export const remountHomePage = () =>
 
 // The Entity's current content, straight from the store the Presenter reads.
 export const storedPage = () => store.getState().shows;
+
+// The router state rendered by the LocationProbe.
+export const currentLocation = () =>
+  screen.getByTestId('location').textContent ?? '';
+
+export const navigationType = () =>
+  screen.getByTestId('navigation-type').textContent ?? '';

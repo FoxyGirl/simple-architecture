@@ -14,15 +14,14 @@ export const HomePage = () => {
     queryEcho,
     status,
     selection,
-    initialQuery,
+    search,
     retry,
     clearSearch,
     isFavorite,
     count,
     onSearchChange,
     registerControls,
-    submitSearch,
-    isCurrentQuery,
+    applySearch,
     abortSearch,
     selectGenre,
     selectPage,
@@ -49,12 +48,11 @@ export const HomePage = () => {
         </p>
 
         <ShowsSearchField
+          search={search}
           onSearchChange={onSearchChange}
           registerControls={registerControls}
-          submitSearch={submitSearch}
-          isCurrentQuery={isCurrentQuery}
+          applySearch={applySearch}
           abortSearch={abortSearch}
-          initialQuery={initialQuery}
         />
 
         <FavoritesCountButton count={count} onClick={goToFavorites} />

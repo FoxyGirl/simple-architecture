@@ -13,7 +13,7 @@ import type { SearchRequest } from '../types';
 export const useRestoredRequest = (
   request: SearchRequest | null,
   storedPage: number,
-  runRequest: (request: SearchRequest) => Promise<void>,
+  runRequest: (request: SearchRequest) => Promise<unknown>,
 ) => {
   const restored = useRef(request);
   const used = useRef(false);

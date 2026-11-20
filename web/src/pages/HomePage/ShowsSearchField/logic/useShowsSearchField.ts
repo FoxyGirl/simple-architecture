@@ -8,67 +8,62 @@ import { STATUS } from '../../constants';
 const DEBOUNCE_MS = 800;
 
 type UseShowsSearchFieldParams = {
+  search: string;
   onSearchChange: (change: SearchChange) => void;
   registerControls: (controls: SearchControls | null) => void;
-  submitSearch: (query: string) => void;
-  isCurrentQuery: (query: string) => boolean;
+  applySearch: (query: string) => void;
   abortSearch: () => void;
-  initialQuery: string;
 };
 
 export const useShowsSearchField = ({
+  search,
   onSearchChange,
   registerControls,
-  submitSearch,
-  isCurrentQuery,
+  applySearch,
   abortSearch,
-  initialQuery,
 }: UseShowsSearchFieldParams) => {
-  // The restored query is only the initial text: seeding the state never
-  // schedules a submission, and the dedup below recognises it as current.
-  const [query, setQuery] = useState(initialQuery);
+  // The draft is what the user typed; `applied` records the URL value it was
+  // typed against, so a URL change from navigation wins over a stale draft.
+  const [draft, setDraft] = useState({ applied: search, value: search });
+  const query = draft.applied === search ? draft.value : search;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // The request is driven by the debounced query: typing only schedules a
-  // submission through the page presenter, and the in-flight one is dropped
-  // as soon as the query changes.
   useEffect(() => {
-    const trimmed = query.trim();
-
-    if (!trimmed) {
-      onSearchChange({ status: STATUS.IDLE, queryEcho: '' });
+    // An external change (back/forward, programmatic clear) discards the
+    // draft; an empty URL search is the idle state.
+    if (draft.applied !== search) {
+      if (!search) onSearchChange({ status: STATUS.IDLE, queryEcho: '' });
       return;
     }
 
-    if (isCurrentQuery(trimmed)) {
-      onSearchChange({ status: STATUS.SUCCESS, queryEcho: trimmed });
-      return;
-    }
+    const trimmed = draft.value.trim();
+    if (trimmed === search) return;
 
     // The request is already inevitable, so report it right away: the view
     // shows skeletons while the debounce is still pending.
-    onSearchChange({ status: STATUS.LOADING, queryEcho: trimmed });
+    onSearchChange({
+      status: trimmed ? STATUS.LOADING : STATUS.IDLE,
+      queryEcho: trimmed,
+    });
 
-    const timer = setTimeout(() => {
-      submitSearch(trimmed);
-    }, DEBOUNCE_MS);
+    const timer = setTimeout(() => applySearch(trimmed), DEBOUNCE_MS);
 
     return () => {
       clearTimeout(timer);
       abortSearch();
     };
-  }, [query, onSearchChange, submitSearch, isCurrentQuery, abortSearch]);
+  }, [draft, search, onSearchChange, applySearch, abortSearch]);
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    setDraft({ applied: search, value: event.target.value });
   };
 
   const clearSearch = useCallback(() => {
     abortSearch();
-    setQuery('');
+    setDraft({ applied: search, value: '' });
     inputRef.current?.focus();
-  }, [abortSearch]);
+  }, [abortSearch, search]);
 
   // Expose the input reset so the page can clear the field from the results.
   useEffect(() => {

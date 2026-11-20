@@ -12,6 +12,17 @@ export type Selection = {
 };
 
 /**
+ * The HomePage state the URL carries: the applied query, the genre filter
+ * (with "All genres" as the default) and the results page. Defaults are
+ * omitted from the serialized URL.
+ */
+export type UrlSearchState = {
+  search: string;
+  genre: string;
+  page: number;
+};
+
+/**
  * One `/api/search` request: the query plus the genre/page selection already
  * mapped onto the request parameters (an undefined genre means "All genres").
  */

@@ -32,18 +32,15 @@ export type SearchRequest = {
   page: number;
 };
 
-export type SearchSnapshot = {
-  status: SearchStatus;
-  queryEcho: string;
-  selection: Selection;
-};
-
 /**
- * A partial snapshot — the search field and the Task coordination report
- * presentation status separately; the result data itself lives in the
- * shows Entity and reaches the View through the Presenter's selectors.
+ * A partial presentation update — the search field and the Task coordination
+ * report status separately; the result data itself lives in the shows Entity
+ * and reaches the View through the Presenter's selectors.
  */
-export type SearchChange = Partial<SearchSnapshot>;
+export type SearchChange = {
+  status?: SearchStatus;
+  queryEcho?: string;
+};
 
 /**
  * The outcome of a shows-fetch Task run, returned to the caller. `'aborted'`

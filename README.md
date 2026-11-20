@@ -141,12 +141,10 @@ web/                  # frontend workspace (Vite + React)
           index.ts          # public export
         logic/
           useHomePage.ts    # page presenter (Entity reads + Task orchestration)
-          searchSession.ts  # snapshot/request helpers of the search session
-          useRestoredSession.ts # mount-time persisted search state
-          useRestoredRequest.ts # re-fetch a persisted search with no result
+          urlState.ts       # URL codec: parse/serialize the applied state
+          useUrlSearchState.ts # URL-backed state and replace/push writes
           tasks/
             fetchShowsPage.ts # shows-fetch Task: API -> store.dispatch
-            saveSearchSession.ts # session Task: persist the successful search
         tests/              # page-level suites (jsdom + Testing Library)
       components/           # components shared by both pages (common ancestor)
         FavoriteButton/     # heart toggle used by the cards on both pages
@@ -162,7 +160,6 @@ web/                  # frontend workspace (Vite + React)
       types.ts        # RootState / AppDispatch
       shows/          # shows Entity: slice, selectors, state types
       favorites/      # favorites Entity: backend-synced ids/count/list
-      searchSession/  # in-session search state: query + genre/page
       index.ts        # barrel: store, root types, Entity actions/selectors
     styles/
       tokens.css      # Design tokens as CSS custom properties

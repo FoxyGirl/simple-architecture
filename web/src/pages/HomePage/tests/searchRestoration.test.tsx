@@ -4,19 +4,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fetchFavoritesCount } from '@api/favorites';
 import { searchShowsPage } from '@api/shows';
 import type { SearchPage, Show } from '@api/types';
-import { replaceSearchSession, store } from '@store';
 
 import {
-  arrow,
   card,
   chip,
-  click,
-  page1,
   remountHomePage,
   renderHomePage,
   settle,
   storedPage,
-  typeQuery,
 } from '../../../test/home-flow';
 
 // The presenter runs over the mocked API boundary (vi.mock never hoists
@@ -32,18 +27,6 @@ vi.mock('@api/favorites', () => ({
 const show = (id: number, name: string): Show =>
   ({ id, name, genres: ['Drama'] }) as Show;
 
-const dramaPage1: SearchPage = {
-  shows: [
-    show(10, 'Drama One'),
-    show(11, 'Drama Two'),
-    show(12, 'Drama Three'),
-  ],
-  page: 1,
-  pageCount: 2,
-  totalCount: 4,
-  genres: ['Comedy', 'Drama'],
-};
-
 const dramaPage2: SearchPage = {
   shows: [show(13, 'Drama Four')],
   page: 2,
@@ -52,13 +35,23 @@ const dramaPage2: SearchPage = {
   genres: ['Comedy', 'Drama'],
 };
 
+const URL = '/?search=office&genre=Drama&page=2';
+
 const input = () =>
   screen.getByRole('textbox', { name: 'Search for TV shows' });
 
-describe('HomePage search-state restoration', () => {
+const expectRestoredView = () => {
+  expect(input()).toHaveValue('office');
+  expect(chip('Drama')).toHaveAttribute('aria-pressed', 'true');
+  expect(screen.getByText('Page 2 of 2')).toBeInTheDocument();
+  expect(card('Drama Four')).toBeInTheDocument();
+  expect(storedPage()).toEqual(dramaPage2);
+};
+
+describe('HomePage URL restoration', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.mocked(searchShowsPage).mockReset().mockResolvedValue(page1);
+    vi.mocked(searchShowsPage).mockReset().mockResolvedValue(dramaPage2);
     vi.mocked(fetchFavoritesCount)
       .mockReset()
       .mockResolvedValue({ count: 0, ids: [] });
@@ -72,41 +65,14 @@ describe('HomePage search-state restoration', () => {
   it('a fresh app start stays idle with an empty input', async () => {
     renderHomePage();
     await settle();
+
     expect(input()).toHaveValue('');
     expect(searchShowsPage).not.toHaveBeenCalled();
-    expect(screen.queryByText('Page 1 of 2')).toBeNull();
+    expect(screen.queryByText('Page 2 of 2')).toBeNull();
   });
 
-  it('remounting restores input, genre, page and cards', async () => {
-    const view = renderHomePage();
-    typeQuery('office');
-    await settle();
-
-    vi.mocked(searchShowsPage).mockResolvedValueOnce(dramaPage1);
-    await click(chip('Drama'));
-    vi.mocked(searchShowsPage).mockResolvedValueOnce(dramaPage2);
-    await click(arrow('Next page'));
-    const calls = vi.mocked(searchShowsPage).mock.calls.length;
-
-    view.unmount();
-    remountHomePage();
-    await settle();
-    expect(input()).toHaveValue('office');
-    expect(chip('Drama')).toHaveAttribute('aria-pressed', 'true');
-    expect(screen.getByText('Page 2 of 2')).toBeInTheDocument();
-    expect(card('Drama Four')).toBeInTheDocument();
-    expect(searchShowsPage).toHaveBeenCalledTimes(calls);
-    expect(storedPage()).toEqual(dramaPage2);
-  });
-
-  it('re-issues the persisted request when its result is gone', async () => {
-    const view = renderHomePage();
-    view.unmount();
-    store.dispatch(
-      replaceSearchSession({ query: 'office', genre: 'Drama', page: 2 }),
-    );
-    vi.mocked(searchShowsPage).mockResolvedValueOnce(dramaPage2);
-    remountHomePage();
+  it('mounting a parameterized URL restores and fetches that page', async () => {
+    renderHomePage([URL]);
     await settle();
 
     expect(searchShowsPage).toHaveBeenCalledWith(
@@ -114,7 +80,18 @@ describe('HomePage search-state restoration', () => {
       { genre: 'Drama', page: 2 },
       expect.anything(),
     );
-    expect(input()).toHaveValue('office');
-    expect(card('Drama Four')).toBeInTheDocument();
+    expectRestoredView();
+  });
+
+  it('remounting with the same URL restores the view and fetches again', async () => {
+    const view = renderHomePage([URL]);
+    await settle();
+
+    view.unmount();
+    remountHomePage([URL]);
+    await settle();
+
+    expect(searchShowsPage).toHaveBeenCalledTimes(2);
+    expectRestoredView();
   });
 });

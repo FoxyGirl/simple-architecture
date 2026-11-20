@@ -198,7 +198,7 @@ history, the global Home nav link opens a fresh `/`, and the Redux
 
 **Tasks:**
 
-- [ ] Write this phase's E2E first (red): rework
+- [x] Write this phase's E2E first (red): rework
       `roundTripRestoresSearch` in `e2e/favorites-helpers.js` — after
       `searchSpaceDramaPageTwo`, the count-button -> "Back to Home" round
       trip lands on a HomePage URL carrying `search`/`genre`/`page` and
@@ -206,45 +206,45 @@ history, the global Home nav link opens a fresh `/`, and the Redux
       (Favorites link -> Home link) now asserts the fresh idle HomePage
       (recorded decision); browser-back from `/favorites` likewise restores
       the parameterized URL.
-- [ ] Change the FavoritesPage presenter's `goToHome` (used by both "Back to
+- [x] Change the FavoritesPage presenter's `goToHome` (used by both "Back to
       Home" and the empty-state "Browse shows" button): `navigate(-1)` when
       in-app history exists, else `navigate('/')`; the global nav `Link`s in
       `App.tsx` stay as-is (`/` = fresh start).
-- [ ] Remove the transitional fallback and read side: delete
+- [x] Remove the transitional fallback and read side: delete
       `useRestoredSession.ts` and `useRestoredRequest.ts`, drop the
       `restoredSnapshot`/`sessionRequest` helpers from
       `logic/searchSession.ts` (keep `INITIAL_SELECTION`/`toRequest` or move
       them per component-organization rules); HomePage mounts seed from URL
       parameters only.
-- [ ] Remove the write side: delete `logic/tasks/saveSearchSession.ts` and
+- [x] Remove the write side: delete `logic/tasks/saveSearchSession.ts` and
       its call in `useShowsRequest.ts` (a successful run no longer persists
       anything beyond the shows Entity); delete the now-unused `sessionOf`
       helper.
-- [ ] Delete the Entity slice: `web/src/store/searchSession/` (slice,
+- [x] Delete the Entity slice: `web/src/store/searchSession/` (slice,
       selectors, types, barrel, tests), its wiring in `store/store.ts`, and
       the `replaceSearchSession`/`selectSearchSession`/`SearchSession`
       exports from `store/index.ts`; update `store.test.ts` root-state
       assertions and drop `searchSessionReducer` from the shows/favorites
       Entity test stores.
-- [ ] Rework the restoration unit coverage to URL-based: rewrite
+- [x] Rework the restoration unit coverage to URL-based: rewrite
       `searchRestoration.test.tsx` (mount with `initialEntries` renders
       input/genre/page from the URL and fetches; remount with parameters
       restores); update the shared harness `web/src/test/home-flow.tsx` —
       drop the `replaceSearchSession(null)` reset and let
       `renderHomePage`/`remountHomePage` accept router `initialEntries`.
-- [ ] Verify no stale references remain (`searchSession` grep across `web/`,
+- [x] Verify no stale references remain (`searchSession` grep across `web/`,
       `docs/`, `AGENTS.md`, `README` — docs carry none today) and run all
       gates green.
 
 **Tests:**
 
-- [ ] E2E (red -> green): back-button round trip preserves the parameterized
+- [x] E2E (red -> green): back-button round trip preserves the parameterized
       HomePage URL and full state; nav-link Home opens fresh idle `/`;
       browser-back restoration; the rest of `favorites.spec.js` unchanged.
-- [ ] Unit: URL-based restoration suite replaces the session-seeded one;
+- [x] Unit: URL-based restoration suite replaces the session-seeded one;
       store smoke suite passes without the `searchSession` key; Entity
       suites pass without the reducer; harness-driven flow suites stay green.
-- [ ] Static check: no import, export, or type reference to `searchSession`
+- [x] Static check: no import, export, or type reference to `searchSession`
       remains anywhere in the workspace.
 
 **When ready:**
@@ -255,14 +255,14 @@ through URL parameters; the Home nav link yields a fresh idle HomePage.
 
 **Acceptance Criteria:**
 
-- [ ] After navigating to the Favorites page and returning via "Back to Home"
+- [x] After navigating to the Favorites page and returning via "Back to Home"
       or browser back, the search term, genre filter, page number, and
       corresponding results are preserved via the HomePage URL parameters.
-- [ ] The Redux `searchSession` slice is removed from the store, and no other
+- [x] The Redux `searchSession` slice is removed from the store, and no other
       persisted client state determines the restored view on either route.
-- [ ] The global Home nav link opens a fresh `/` (idle HomePage) — asserted
+- [x] The global Home nav link opens a fresh `/` (idle HomePage) — asserted
       in the reworked round-trip E2E.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`, and
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`, and
       `npm run test:e2e` pass.
 
 ### Phase 3: Favorites page URL synchronization

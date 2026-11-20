@@ -1,55 +1,33 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import type { SearchChange, SearchControls, UrlSearchState } from '../types';
+import type { SearchChange, SearchControls } from '../types';
 
-import { STATUS } from '../constants';
-import { toRequest } from './searchSession';
-import { isSameRequest, toSelection } from './urlState';
-import { useRestoredRequest } from './useRestoredRequest';
-import { useRestoredSession } from './useRestoredSession';
+import { STATUS, type SearchStatus } from '../constants';
+import { isSameRequest, toRequest, toSelection } from './urlState';
 import { useShowFavorites } from './useShowFavorites';
 import { useShowsRequest } from './useShowsRequest';
 import { useStoredSearchPage } from './useStoredSearchPage';
 import { useUrlSearchState } from './useUrlSearchState';
 
 export const useHomePage = () => {
-  const restored = useRestoredSession();
-  // The transitional fallback is frozen at mount: a parameter-less `/` with
-  // a persisted session seeds the page until the first URL write.
-  const [seed] = useState<UrlSearchState | null>(() =>
-    restored.initialRequest === null
-      ? null
-      : {
-          search: restored.initialQuery,
-          genre: restored.initialSnapshot.selection.genre,
-          page: restored.initialSnapshot.selection.page,
-        },
-  );
-  const url = useUrlSearchState(seed);
-  const { search, genre, page, fallbackActive, resetGenre } = url;
+  const url = useUrlSearchState();
+  const { search, genre, page, resetGenre } = url;
 
-  const [status, setStatus] = useState(() =>
-    fallbackActive
-      ? restored.initialSnapshot.status
-      : search
-        ? STATUS.LOADING
-        : STATUS.IDLE,
+  const [status, setStatus] = useState<SearchStatus>(() =>
+    search ? STATUS.LOADING : STATUS.IDLE,
   );
 
   const handleSearchChange = useCallback((change: SearchChange) => {
     if (change.status !== undefined) setStatus(change.status);
   }, []);
 
-  const restoredRequest = fallbackActive ? restored.initialRequest : null;
-  const { runRequest, retry, abortSearch, requestRef } = useShowsRequest(
-    handleSearchChange,
-    restoredRequest,
-  );
+  const { runRequest, retry, abortSearch, requestRef } =
+    useShowsRequest(handleSearchChange);
 
   // The URL state is the only request trigger: identical values are deduped
   // against the last request, superseded runs are aborted by the Task.
   useEffect(() => {
-    if (fallbackActive || !search) return;
+    if (!search) return;
 
     const request = toRequest(search, toSelection({ search, genre, page }));
     if (isSameRequest(requestRef.current, request)) return;
@@ -61,16 +39,13 @@ export const useHomePage = () => {
 
       resetGenre();
     });
-  }, [fallbackActive, search, genre, page, resetGenre, runRequest, requestRef]);
+  }, [search, genre, page, resetGenre, runRequest, requestRef]);
 
   // The shows themselves are Entity data read through its selectors — only
   // a successful status echoes them to the View, so a loading or failed
   // request never renders a stale page.
   const storedResult = useStoredSearchPage();
   const data = status === STATUS.SUCCESS ? storedResult : null;
-
-  // A restored session whose stored result is gone re-fetches once on mount.
-  useRestoredRequest(restoredRequest, storedResult.page, runRequest);
 
   const controlsRef = useRef<SearchControls | null>(null);
 

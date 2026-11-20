@@ -14,7 +14,11 @@ const result: SearchPage = {
 
 // Plain store smoke — no React involved.
 describe('store', () => {
-  it('is created with the shows entity reducer', () => {
+  it('is created with the shows and favorites entities only', () => {
+    expect(Object.keys(store.getState()).sort()).toEqual([
+      'favorites',
+      'shows',
+    ]);
     expect(store.getState().shows).toEqual({
       shows: [],
       page: 1,

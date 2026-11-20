@@ -89,7 +89,7 @@ test('the favorites page paginates, updates on removal and returns home', async 
 
   // Back home, the count reflects the removal made on the other page.
   await page.getByRole('button', { name: 'Back to Home' }).click();
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/\?search=space&page=2$/);
   await expect(searchInput(page)).toBeVisible();
   await expect(countButton(page, 3)).toBeVisible();
 });
@@ -115,6 +115,6 @@ test('favorites toasts appear and dismiss themselves', async ({ page }) => {
   await hiddenToast(page, '"Space Chef" was removed from favorites');
 });
 
-test('search state survives the session round trip', async ({ page }) => {
+test('search state survives the URL round trip', async ({ page }) => {
   await roundTripRestoresSearch(page);
 });

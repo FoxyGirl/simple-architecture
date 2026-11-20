@@ -36,10 +36,23 @@ export const serializeSearchState = (
   return params;
 };
 
-/** Map a URL state onto the selection the existing request helper expects. */
+/** Map a URL state onto the selection the request helper expects. */
 export const toSelection = (state: UrlSearchState): Selection => ({
   genre: state.genre,
   page: state.page,
+});
+
+/**
+ * The genre/page selection mapped onto the request parameters the API
+ * speaks: an undefined genre means "All genres".
+ */
+export const toRequest = (
+  query: string,
+  selection: Selection,
+): SearchRequest => ({
+  query,
+  genre: selection.genre === ALL_GENRES ? undefined : selection.genre,
+  page: selection.page,
 });
 
 /** Is the stored request the one this URL state describes? */

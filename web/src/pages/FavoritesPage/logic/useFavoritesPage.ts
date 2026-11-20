@@ -19,7 +19,9 @@ import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
  * refetched afterwards — the backend clamps the envelope when the last
  * page shrinks away. A successful removal toasts the confirmation through
  * the global notify API, a failed one stays silent. Navigation back to
- * the catalogue stays here, at Presenter level.
+ * the catalogue stays here, at Presenter level: an in-app previous entry is
+ * preferred so the parameterized HomePage URL is preserved, while a direct
+ * Favorites load opens a fresh HomePage.
  */
 export const useFavoritesPage = () => {
   const list = useSelector(selectFavoritesList);
@@ -49,7 +51,11 @@ export const useFavoritesPage = () => {
   );
 
   const goToHome = useCallback(() => {
-    navigate('/');
+    const historyState = window.history.state as { idx?: number } | null;
+    const hasInAppHistory = (historyState?.idx ?? 0) > 0;
+
+    if (hasInAppHistory) navigate(-1);
+    else navigate('/');
   }, [navigate]);
 
   const subHeadText =

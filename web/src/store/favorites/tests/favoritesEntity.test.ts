@@ -4,7 +4,6 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import type { FavoritesListPage, Show } from '@api/types';
 
 import { showsReducer } from '../../shows';
-import { searchSessionReducer } from '../../searchSession';
 import {
   favoritesReducer,
   replaceFavoritesList,
@@ -26,7 +25,6 @@ const createTestStore = () =>
     reducer: {
       favorites: favoritesReducer,
       shows: showsReducer,
-      searchSession: searchSessionReducer,
     },
   });
 

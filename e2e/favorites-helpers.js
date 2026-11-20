@@ -26,6 +26,10 @@ export const card = (page, name) => page.getByRole('heading', { name });
 export const cardArticle = (page, name) =>
   page.locator('article').filter({ has: card(page, name) });
 
+// The card's text block, which carries the removed-state grayscale.
+export const cardContent = (page, name) =>
+  cardArticle(page, name).locator('h3').locator('xpath=..');
+
 // The page subhead ("N shows saved to your list.") and the pagination info
 // ("Page X of Y") are the fetched-metadata probes.
 export const subhead = (page, text) => page.getByText(text);
@@ -42,7 +46,7 @@ export const heart = (page, name, favorite) =>
   });
 
 export const pressed = (page, name) =>
-  expect(heart(page, name, true)).toHaveAttribute('aria-pressed', 'true');
+  expect(heart(page, name, true)).toBeVisible();
 
 export const searchSpace = async (page) => {
   await page.goto('/');

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { ChevronRight, Star } from 'lucide-react';
 
 import type { Show } from '@api/types';
@@ -12,14 +13,16 @@ type ShowRowCardProps = {
   show: Show;
   isFavorite: boolean;
   onToggleFavorite: () => void;
+  isRemoved?: boolean;
 };
 
 export const ShowRowCard = ({
   show,
   isFavorite,
   onToggleFavorite,
+  isRemoved = false,
 }: ShowRowCardProps) => (
-  <article className={styles.row}>
+  <article className={clsx(styles.row, { [styles.removed]: isRemoved })}>
     <div className={styles.poster}>
       {show.image ? (
         <img

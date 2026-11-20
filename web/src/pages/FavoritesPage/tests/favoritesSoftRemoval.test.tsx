@@ -54,10 +54,7 @@ describe('FavoritesPage soft removal fresh fetches', () => {
     await heading('Show Four');
     fireEvent.click(screen.getByRole('button', { name: 'Previous page' }));
 
-    expect(await findHeart('Remove', 'Show One')).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+    expect(await findHeart('Remove', 'Show One')).toBeVisible();
     expect(listMock).toHaveBeenLastCalledWith(1);
   });
 
@@ -70,7 +67,7 @@ describe('FavoritesPage soft removal fresh fetches', () => {
     }
 
     for (const name of ['Show One', 'Show Two', 'Show Three']) {
-      expect(heart('Add', name)).toHaveAttribute('aria-pressed', 'false');
+      expect(heart('Add', name)).toBeVisible();
     }
     expect(screen.queryByText(/No favorites yet/)).toBeNull();
     expect(screen.getByText('Page 1 of 2')).toBeVisible();

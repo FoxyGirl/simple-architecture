@@ -9,6 +9,7 @@ declare const classes: {
   readonly posterImage: 'posterImage';
   readonly rating: 'rating';
   readonly ratingRow: 'ratingRow';
+  readonly removed: 'removed';
   readonly row: 'row';
   readonly star: 'star';
   readonly status: 'status';

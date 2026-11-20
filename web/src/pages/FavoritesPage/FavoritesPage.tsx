@@ -12,6 +12,7 @@ export const FavoritesPage = () => {
     list,
     subHeadText,
     isFavorite,
+    isRemoved,
     toggleFavorite,
     selectPage,
     goToHome,
@@ -59,6 +60,7 @@ export const FavoritesPage = () => {
             <ShowList
               shows={list.shows}
               isFavorite={isFavorite}
+              isRemoved={isRemoved}
               onToggleFavorite={toggleFavorite}
             />
           </div>

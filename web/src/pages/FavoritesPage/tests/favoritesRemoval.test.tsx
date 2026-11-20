@@ -7,6 +7,7 @@ import {
   removeFavoriteShow,
 } from '@api/favorites';
 
+import cardStyles from '../../components/ShowRowCard/ShowRowCard.module.css';
 import {
   createFavoritesBackend,
   heading,
@@ -36,6 +37,8 @@ const heart = (action: 'Remove' | 'Add', name: string) =>
 const findHeart = (action: 'Remove' | 'Add', name: string) =>
   screen.findByRole('button', { name: label(action, name) });
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
+const article = (name: string) =>
+  screen.getByRole('heading', { name }).closest('article');
 
 describe('FavoritesPage soft removal', () => {
   beforeEach(() => resetFavorites(backend));
@@ -45,11 +48,9 @@ describe('FavoritesPage soft removal', () => {
 
     fireEvent.click(heart('Remove', 'Show One'));
 
-    expect(await findHeart('Add', 'Show One')).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    );
+    expect(await findHeart('Add', 'Show One')).toBeVisible();
     await heading('Show One');
+    expect(article('Show One')).toHaveClass(cardStyles.removed);
     expect(screen.getByText('4 shows saved to your list.')).toBeVisible();
     expect(screen.getByText('Page 1 of 2')).toBeVisible();
     expect(removeMock).toHaveBeenCalledWith(1);
@@ -63,10 +64,8 @@ describe('FavoritesPage soft removal', () => {
 
     fireEvent.click(heart('Add', 'Show One'));
 
-    expect(await findHeart('Remove', 'Show One')).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+    expect(await findHeart('Remove', 'Show One')).toBeVisible();
+    expect(article('Show One')).not.toHaveClass(cardStyles.removed);
     expect(addMock).toHaveBeenCalledWith(
       expect.objectContaining({ id: 1, name: 'Show One' }),
     );
@@ -81,7 +80,8 @@ describe('FavoritesPage soft removal', () => {
     fireEvent.click(heart('Remove', 'Show One'));
     await settle();
 
-    expect(heart('Remove', 'Show One')).toHaveAttribute('aria-pressed', 'true');
+    expect(heart('Remove', 'Show One')).toBeVisible();
+    expect(article('Show One')).not.toHaveClass(cardStyles.removed);
     expect(listMock).toHaveBeenCalledTimes(1);
   });
 
@@ -94,7 +94,8 @@ describe('FavoritesPage soft removal', () => {
     fireEvent.click(heart('Add', 'Show One'));
     await settle();
 
-    expect(heart('Add', 'Show One')).toHaveAttribute('aria-pressed', 'false');
+    expect(heart('Add', 'Show One')).toBeVisible();
+    expect(article('Show One')).toHaveClass(cardStyles.removed);
     expect(listMock).toHaveBeenCalledTimes(1);
   });
 });

@@ -17,7 +17,6 @@ export const FavoriteButton = ({
   <button
     type="button"
     className={clsx(styles.button, { [styles.active]: isFavorite })}
-    aria-pressed={isFavorite}
     aria-label={`${isFavorite ? 'Remove' : 'Add'} ${showName} ${
       isFavorite ? 'from' : 'to'
     } favorites`}

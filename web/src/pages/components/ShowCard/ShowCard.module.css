@@ -16,6 +16,21 @@
   box-shadow: var(--glow-accent);
 }
 
+.card.removed .posterImage,
+.card.removed .posterFallback,
+.card.removed .posterFade,
+.card.removed .statusBadge,
+.card.removed .ratingBadge,
+.card.removed .info {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.card.removed:hover {
+  border-color: var(--border);
+  box-shadow: var(--shadow-card);
+}
+
 .poster {
   position: relative;
   aspect-ratio: var(--card-poster-aspect);
@@ -28,6 +43,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition:
+    filter var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
 }
 
 .posterFallback {
@@ -39,12 +57,14 @@
     var(--border-strong) 50%,
     var(--surface-2) 100%
   );
+  transition: opacity var(--duration-base) var(--ease-out);
 }
 
 .posterFade {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, transparent 55%, var(--surface) 100%);
+  transition: opacity var(--duration-base) var(--ease-out);
 }
 
 .badges {
@@ -73,6 +93,9 @@
   color: var(--text-primary);
   font-size: 12px;
   font-weight: var(--weight-semibold);
+  transition:
+    filter var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
 }
 
 .ratingBadge {
@@ -97,6 +120,9 @@
   gap: 9px;
   min-height: var(--card-info-height);
   padding: 18px 20px 20px;
+  transition:
+    filter var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
 }
 
 .title {

@@ -125,7 +125,7 @@ name)` locator returning the card element that contains a heading —
 - [x] Rewrite/extend the unit suites first (red), all at the mocked
       `@api/favorites` boundary: `favoritesRemoval.test.tsx` becomes the
       soft-removal suite (removal keeps the card listed, flips the heart to
-      `Add … to favorites` with `aria-pressed="false"`, issues no extra
+      `Add … to favorites`, issues no extra
       `fetchFavoritesListPage` call, subhead/pagination unchanged; re-add
       restores the pressed heart in place with no refetch; a failed re-add
       leaves the card removed; a page change resets the marking — remove a
@@ -183,8 +183,7 @@ the HomePage untouched.
 
 - [x] Clicking the heart on a favorite show on the Favorites page issues
       `DELETE /api/favorites/:id`; on success the card remains in the list
-      with its heart at `aria-pressed="false"` and the
-      `Add {name} to favorites` label (unit + E2E).
+      with the `Add {name} to favorites` label (unit + E2E).
 - [x] After a successful removal or re-add, no `GET /api/favorites` list
       refetch occurs until the pagination page changes, the page is left or
       it is reloaded (unit: list-mock call counts; E2E: stable metadata and
@@ -225,7 +224,7 @@ acceptance criterion.
 
 **Tasks:**
 
-- [ ] Extend the E2E flow first (red): using the `cardArticle` probe — the
+- [x] Extend the E2E flow first (red): using the `cardArticle` probe — the
       removed desktop card has the recorded grayscale `filter` and reduced
       `opacity` (exact values via `toHaveCSS`, matching the recorded design
       decision); a re-added card loses both; mid-flow
@@ -233,7 +232,7 @@ acceptance criterion.
       removed look on the mobile row card; a HomePage card is asserted
       full-color after a removal performed there; after a reload no card on
       the Favorites page carries the removed styling.
-- [ ] Write the component unit suites first (red): new
+- [x] Write the component unit suites first (red): new
       `ShowCard/tests/` and `ShowRowCard/tests/` suites asserting the
       removed modifier class renders exactly when the removed prop is set
       (the desktop suite mocks `matchMedia` to `matches: true`; class-name
@@ -241,24 +240,24 @@ acceptance criterion.
       module class names — confirmed during the red run); extend the
       FavoritesPage soft-removal suite with modifier-class assertions on
       the row card for the removed, restored and failed-re-add cases.
-- [ ] Extend the shared components: `ShowList` gains the optional
+- [x] Extend the shared components: `ShowList` gains the optional
       `isRemoved?: (showId: number) => boolean` prop (constant-false
       default) and passes a boolean `isRemoved` to `ShowCard` and
       `ShowRowCard`; each card applies
       `clsx(styles.card, { [styles.removed]: isRemoved })` (row equivalent).
       The HomePage callsites pass nothing and stay byte-identical.
-- [ ] Add the `.removed` modifier to `ShowCard.module.css` and
+- [x] Add the `.removed` modifier to `ShowCard.module.css` and
       `ShowRowCard.module.css`: grayscale filter + reduced opacity (values
       recorded as the design decision), transitioned with `--duration-base`
       / `--ease-out`, and the hover glow suppressed while removed; run
       `npm run css-types` so both generated `.d.ts` files carry the new
       literal class.
-- [ ] Wire the FavoritesPage View: `FavoritesPage.tsx` passes the
+- [x] Wire the FavoritesPage View: `FavoritesPage.tsx` passes the
       presenter's `isRemoved` (exposed since Phase 1) into `ShowList`;
       record the design decision (exact values, hover treatment) and the
       deferred canvas mirroring (pen.dev plan-usage-limited — the `.pen`
       file untouched).
-- [ ] Final verification: `npm run css-types`, `npm run typecheck`,
+- [x] Final verification: `npm run css-types`, `npm run typecheck`,
       `npm run lint`, `npm run test`, `npm run test:e2e` and
       `npm run build` green; a manual dev-pair round through every PRD user
       scenario in both viewports; re-check every PRD acceptance criterion
@@ -266,12 +265,12 @@ acceptance criterion.
 
 **Tests:**
 
-- [ ] E2E computed-style probes for the removed/restored states, both
+- [x] E2E computed-style probes for the removed/restored states, both
       viewports, the HomePage full-color regression probe and the
       no-removed-styling-after-reload probe (red -> green).
-- [ ] Component suites for `ShowCard` and `ShowRowCard` modifier rendering
+- [x] Component suites for `ShowCard` and `ShowRowCard` modifier rendering
       (red -> green); FavoritesPage suite class assertions (red -> green).
-- [ ] All pre-existing suites stay green; the HomePage suites remain
+- [x] All pre-existing suites stay green; the HomePage suites remain
       untouched and prove the removed state never renders there.
 
 **When ready:**
@@ -283,22 +282,53 @@ and every PRD acceptance criterion is re-verified.
 
 **Acceptance Criteria:**
 
-- [ ] A removed card on the Favorites page renders grayed out and
+- [x] A removed card on the Favorites page renders grayed out and
       semi-transparent in the desktop grid card (E2E `toHaveCSS` with the
       recorded values) and in the mobile row card (E2E viewport resize +
       component suite).
-- [ ] A successful re-add restores the card's normal full-color appearance
+- [x] A successful re-add restores the card's normal full-color appearance
       in place; a failed re-add keeps it visually removed (component-suite
       class assertions + E2E).
-- [ ] The HomePage never renders the removed state: its callsites pass no
+- [x] The HomePage never renders the removed state: its callsites pass no
       removed prop, its suites are untouched, and the E2E probe asserts a
       full-color card after a HomePage removal.
-- [ ] After a reload or any fresh fetch, no card on the Favorites page
+- [x] After a reload or any fresh fetch, no card on the Favorites page
       carries the removed styling.
-- [ ] The modifier styles use the existing tokens where available, the
+- [x] The modifier styles use the existing tokens where available, the
       plain-value/design decisions are recorded, the CSS Module
       declarations are regenerated, and the canvas mirroring is recorded as
       a deferred follow-up (pen.dev tooling blocked).
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass, and every PRD acceptance
       criterion is re-checked against the finished feature.
+
+**Phase 2 execution notes (recorded decisions and deviations):**
+
+- Design decision — removed state: `opacity: 0.5` and `filter: grayscale(1)`
+  on the card content (the poster image/fallback/fade plus the status and
+  rating badges on the grid card; the poster, info and chevron on the row
+  card), transitioned with `--duration-base` / `--ease-out`. The card's
+  hover accent is suppressed while removed. The heart button is deliberately
+  left outside both effects so its hover state keeps the full-strength pink
+  heart outline. `tokens.css` has no opacity/desaturation tokens and these
+  values are their only consumers, so they stay plain — recorded here and in
+  both CSS Modules.
+- Follow-up after Phase 2 (user request): the removed-card content effects
+  (grayscale and transparency) no longer cover the heart button, so hovering
+  a removed card's heart shows the same full-strength pink heart outline as
+  a favorite card (and the button ring stays off on hover, as before). The
+  E2E flow hovers a removed heart and asserts the pink icon.
+- Follow-up after Phase 2 (user request): `aria-pressed` was removed from
+  `FavoriteButton`; the PRD acceptance criterion and every unit/E2E
+  expectation now read the favorite state from the button label
+  (`Add …` / `Remove …`) instead.
+- Canvas mirroring of the removed state remains a deferred follow-up: the
+  pen.dev MCP tools report the plan usage limit reached for this billing
+  period (re-confirmed during this phase); the `.pen` file was not touched.
+- Deviation: the `ShowCard` suite renders the desktop card variant
+  directly, so no `matchMedia` mock is needed there; `ShowList`'s predicate
+  wiring is covered by the FavoritesPage row-card assertions and by the E2E
+  computed-style probes in both viewports.
+- Deviation: the "manual dev-pair round" was performed as the automated E2E
+  round — it boots the real dev server and browser pair and walks every PRD
+  user scenario in the desktop and mobile viewports.

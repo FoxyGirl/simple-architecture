@@ -10,12 +10,16 @@ type ShowListProps = {
   shows: Show[];
   isFavorite: (showId: number) => boolean;
   onToggleFavorite: (show: Show) => void;
+  isRemoved?: (showId: number) => boolean;
 };
+
+const neverRemoved = () => false;
 
 export const ShowList = ({
   shows,
   isFavorite,
   onToggleFavorite,
+  isRemoved = neverRemoved,
 }: ShowListProps) => {
   const { isDesktop } = useMediaQuery();
 
@@ -27,6 +31,7 @@ export const ShowList = ({
             key={show.id}
             show={show}
             isFavorite={isFavorite(show.id)}
+            isRemoved={isRemoved(show.id)}
             onToggleFavorite={() => onToggleFavorite(show)}
           />
         ) : (
@@ -34,6 +39,7 @@ export const ShowList = ({
             key={show.id}
             show={show}
             isFavorite={isFavorite(show.id)}
+            isRemoved={isRemoved(show.id)}
             onToggleFavorite={() => onToggleFavorite(show)}
           />
         ),

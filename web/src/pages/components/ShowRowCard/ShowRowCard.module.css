@@ -13,6 +13,17 @@
   border-color: var(--accent);
 }
 
+.row.removed .poster,
+.row.removed .info,
+.row.removed .chevron {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.row.removed:hover {
+  border-color: var(--border);
+}
+
 .poster {
   flex: none;
   overflow: hidden;
@@ -20,6 +31,9 @@
   height: 124px;
   border-radius: 10px;
   background: var(--surface-2);
+  transition:
+    filter var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
 }
 
 .posterImage {
@@ -45,6 +59,9 @@
   flex-direction: column;
   gap: 6px;
   min-width: 0;
+  transition:
+    filter var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
 }
 
 .title {
@@ -96,4 +113,7 @@
 .chevron {
   flex: none;
   color: var(--text-muted);
+  transition:
+    filter var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
 }

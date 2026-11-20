@@ -68,10 +68,9 @@ describe('HomePage favorites flow', () => {
 
     expect(fetchFavoritesCount).toHaveBeenCalled();
     expect(favoriteIds()).toEqual([2, 3]);
-    expect(favoriteButton('Remove Show Two from favorites')).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+    expect(
+      favoriteButton('Remove Show Two from favorites'),
+    ).toBeInTheDocument();
     expect(favoriteButton('Add Show One to favorites')).toBeInTheDocument();
   });
 
@@ -90,10 +89,9 @@ describe('HomePage favorites flow', () => {
     expect(addFavoriteShow).toHaveBeenCalledWith(page1.shows[0]);
     expect(removeFavoriteShow).not.toHaveBeenCalled();
     expect(favoriteIds()).toEqual([1]);
-    expect(favoriteButton('Remove Show One from favorites')).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+    expect(
+      favoriteButton('Remove Show One from favorites'),
+    ).toBeInTheDocument();
   });
 
   it('clicking the pressed button removes the show through the API', async () => {

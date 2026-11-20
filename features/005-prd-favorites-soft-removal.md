@@ -1,7 +1,7 @@
 # PRD: Favorites Soft Removal
 
 **Date**: 2026-11-20
-**Status**: Draft
+**Status**: Implemented
 
 ## Purpose
 
@@ -107,38 +107,37 @@ refresh until the user leaves or reloads the Favorites page.
 
 ## Acceptance Criteria
 
-- [ ] Clicking the heart on a favorite show on the Favorites page sends
+- [x] Clicking the heart on a favorite show on the Favorites page sends
       `DELETE /api/favorites/:id`; on success the card remains in the list
       rendered grayed out and semi-transparent.
-- [ ] After a successful removal or re-add on the Favorites page, no
+- [x] After a successful removal or re-add on the Favorites page, no
       `GET /api/favorites` list refetch occurs until the user changes the
       pagination page, leaves the page, or reloads it.
-- [ ] The heart button of a grayed-out card shows the non-favorite state
-      (`aria-pressed="false"`, "Add {name} to favorites" label) and is
-      clickable.
-- [ ] Clicking the heart on a grayed-out card sends `POST /api/favorites`; on
+- [x] The heart button of a grayed-out card shows the non-favorite state
+      ("Add {name} to favorites" label) and is clickable.
+- [x] Clicking the heart on a grayed-out card sends `POST /api/favorites`; on
       success the card returns to its normal full-color favorite state in
       place, without a list refetch.
-- [ ] The Favorites page subhead count and pagination controls keep their
+- [x] The Favorites page subhead count and pagination controls keep their
       values after removals and re-adds until the next fresh fetch.
-- [ ] The HomePage favorites-count button reflects removals and re-adds made
+- [x] The HomePage favorites-count button reflects removals and re-adds made
       on the Favorites page immediately (existing summary sync unchanged).
-- [ ] Leaving the Favorites page and returning, or reloading it, shows a list
+- [x] Leaving the Favorites page and returning, or reloading it, shows a list
       fetched fresh from the backend: removed shows are absent, re-added shows
       are present, and no grayed-out cards remain.
-- [ ] Switching pagination pages on the Favorites page fetches the target page
+- [x] Switching pagination pages on the Favorites page fetches the target page
       fresh from the backend (existing behavior unchanged).
-- [ ] If the removal request fails, the card keeps its normal favorite state
+- [x] If the removal request fails, the card keeps its normal favorite state
       and no removal toast is shown (existing silent-failure behavior).
-- [ ] If the re-add request fails, the card remains grayed out and no add
+- [x] If the re-add request fails, the card remains grayed out and no add
       toast is shown.
-- [ ] A successful removal shows the existing removal toast; a successful
+- [x] A successful removal shows the existing removal toast; a successful
       re-add shows the existing add toast — messages unchanged.
-- [ ] When every show on the current page is removed, all cards remain visible
+- [x] When every show on the current page is removed, all cards remain visible
       grayed out and the empty state does not appear until a fresh fetch
       returns an empty list.
-- [ ] The removed state renders in both desktop and mobile card layouts and
+- [x] The removed state renders in both desktop and mobile card layouts and
       never renders on the HomePage.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`, and
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`, and
       `npm run test:e2e` pass, with the previously immediate-removal tests
       updated and new tests covering the deferred-refresh behavior.

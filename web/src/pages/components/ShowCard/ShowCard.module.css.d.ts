@@ -12,6 +12,7 @@ declare const classes: {
   readonly posterFallback: 'posterFallback';
   readonly posterImage: 'posterImage';
   readonly ratingBadge: 'ratingBadge';
+  readonly removed: 'removed';
   readonly separator: 'separator';
   readonly star: 'star';
   readonly statusBadge: 'statusBadge';

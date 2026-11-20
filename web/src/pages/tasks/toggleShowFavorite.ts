@@ -11,7 +11,7 @@ import type { FavoritesSummaryResult } from './types';
  * caller mirrors without refetching.
  */
 const addFavoriteShow = (show: Show): Promise<FavoritesSummary> =>
-  requestJson<FavoritesSummary>(buildApiUrl('/api/favorites22'), {
+  requestJson<FavoritesSummary>(buildApiUrl('/api/favorites'), {
     method: 'POST',
     body: { show },
   });

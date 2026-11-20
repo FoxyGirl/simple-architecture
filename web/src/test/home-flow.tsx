@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
-import { replaceSearchResult, store } from '@store';
+import { replaceSearchResult, replaceSearchSession, store } from '@store';
 
 import type { SearchPage, Show } from '@api/types';
 
@@ -85,20 +85,27 @@ export const click = async (element: HTMLElement) => {
 
 // Renders HomePage against the application store the Tasks dispatch into, so
 // the suites can both drive and inspect the shows Entity. The reset empties
-// the Entity — every suite starts from the documented initial state. The
-// presenter navigates through the Router, so the page renders inside a
-// MemoryRouter (the count suite adds route stubs of its own).
+// the Entity and the persisted search session — every suite starts from the
+// documented fresh-start state. The presenter navigates through the Router, so
+// the page renders inside a MemoryRouter (the count suite adds route stubs of
+// its own).
 export const renderHomePage = () => {
   store.dispatch(replaceSearchResult(envelope()));
+  store.dispatch(replaceSearchSession(null));
 
-  return render(
+  return remountHomePage();
+};
+
+// An in-session return to the page: the Entity and the persisted session
+// survive, exactly as they do on navigation within a running app.
+export const remountHomePage = () =>
+  render(
     <Provider store={store}>
       <MemoryRouter>
         <HomePage />
       </MemoryRouter>
     </Provider>,
   );
-};
 
 // The Entity's current content, straight from the store the Presenter reads.
 export const storedPage = () => store.getState().shows;

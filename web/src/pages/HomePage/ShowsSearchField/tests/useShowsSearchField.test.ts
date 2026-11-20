@@ -15,6 +15,7 @@ const renderField = (over = {}) => {
     submitSearch: vi.fn(),
     isCurrentQuery: vi.fn((): boolean => false),
     abortSearch: vi.fn(),
+    initialQuery: '',
     ...over,
   };
   const { result } = renderHook(() => useShowsSearchField(props));

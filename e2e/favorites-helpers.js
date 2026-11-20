@@ -45,6 +45,53 @@ export const searchSpace = async (page) => {
   await expect(card(page, 'Space Tour')).toBeVisible();
 };
 
+// The recorded in-session search state: the Drama filter of the isolated
+// `space` fixture, second page — a query, genre and page to restore.
+const searchSpaceDramaPageTwo = async (page) => {
+  await searchSpace(page);
+  await page.getByRole('button', { name: 'Drama', exact: true }).click();
+  await expect(card(page, 'Space Tour')).toBeVisible();
+  await arrow(page, 'Next page').click();
+  await expect(page.getByText('Page 2 of 2')).toBeVisible();
+};
+
+// The HomePage state the recorded session must restore: input text, the
+// pressed genre chip, the active page and that page's cards.
+const expectRestoredSearch = async (page) => {
+  await expect(page).toHaveURL(/\/$/);
+  await expect(searchInput(page)).toHaveValue('space');
+  await expect(
+    page.getByRole('button', { name: 'Drama', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByText('Page 2 of 2')).toBeVisible();
+  await expect(card(page, 'Space News')).toBeVisible();
+  await expect(card(page, 'Space Tour')).toHaveCount(0);
+};
+
+// The count-button round trip: leave for the Favorites page, return through
+// the back button and assert the restored search state.
+const backToRestoredSearch = async (page) => {
+  await countButton(page, 0).click();
+  await page.getByRole('button', { name: 'Back to Home' }).click();
+  await expectRestoredSearch(page);
+};
+
+// The same in-session round trip through the global navigation links.
+const navToRestoredSearch = async (page) => {
+  await page.getByRole('link', { name: 'Favorites' }).click();
+  await page.getByRole('link', { name: 'Home' }).click();
+  await expectRestoredSearch(page);
+};
+
+// The whole restoration flow: prepare the search state, then leave for the
+// Favorites page and return — through the count/back buttons first, then
+// through the global nav links — asserting the restored state each time.
+export const roundTripRestoresSearch = async (page) => {
+  await searchSpaceDramaPageTwo(page);
+  await backToRestoredSearch(page);
+  await navToRestoredSearch(page);
+};
+
 // Sonner renders every toast as a [data-sonner-toast] list item inside
 // the single global toaster mounted in App (no role="status" — Sonner
 // exposes the toaster outlet itself as the aria-live region). Toasts
@@ -62,7 +109,6 @@ export const shownToast = async (page, text) => {
 
 export const hiddenToast = (page, text) =>
   expect(toast(page, text)).toBeHidden({ timeout: 6000 });
-
 export const addFourSpaceShows = async (page) => {
   for (const name of ['Space Tour', 'Space Series', 'Space Chef']) {
     await heart(page, name, false).click();

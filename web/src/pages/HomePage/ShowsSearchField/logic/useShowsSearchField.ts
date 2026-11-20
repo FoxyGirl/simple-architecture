@@ -13,6 +13,7 @@ type UseShowsSearchFieldParams = {
   submitSearch: (query: string) => void;
   isCurrentQuery: (query: string) => boolean;
   abortSearch: () => void;
+  initialQuery: string;
 };
 
 export const useShowsSearchField = ({
@@ -21,8 +22,11 @@ export const useShowsSearchField = ({
   submitSearch,
   isCurrentQuery,
   abortSearch,
+  initialQuery,
 }: UseShowsSearchFieldParams) => {
-  const [query, setQuery] = useState('');
+  // The restored query is only the initial text: seeding the state never
+  // schedules a submission, and the dedup below recognises it as current.
+  const [query, setQuery] = useState(initialQuery);
 
   const inputRef = useRef<HTMLInputElement>(null);
 

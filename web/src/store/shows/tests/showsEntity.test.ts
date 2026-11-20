@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import type { SearchPage, Show } from '@api/types';
 
 import { favoritesReducer } from '../../favorites';
+import { searchSessionReducer } from '../../searchSession';
 import {
   replaceSearchResult,
   selectGenres,
@@ -31,7 +32,11 @@ const result: SearchPage = {
 // store shape.
 const createTestStore = () =>
   configureStore({
-    reducer: { shows: showsReducer, favorites: favoritesReducer },
+    reducer: {
+      shows: showsReducer,
+      favorites: favoritesReducer,
+      searchSession: searchSessionReducer,
+    },
   });
 
 describe('shows entity', () => {

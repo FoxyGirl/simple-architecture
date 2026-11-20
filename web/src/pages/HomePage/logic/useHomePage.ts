@@ -3,44 +3,41 @@ import { useCallback, useRef, useState } from 'react';
 import type {
   SearchChange,
   SearchControls,
-  SearchRequest,
   SearchSnapshot,
   Selection,
 } from '../types';
 
 import { STATUS } from '../constants';
-import { ALL_GENRES } from '../ShowSearchResults/constants';
+import { INITIAL_SELECTION, toRequest } from './searchSession';
+import { useRestoredRequest } from './useRestoredRequest';
+import { useRestoredSession } from './useRestoredSession';
 import { useShowFavorites } from './useShowFavorites';
 import { useShowsRequest } from './useShowsRequest';
 import { useStoredSearchPage } from './useStoredSearchPage';
 
-const INITIAL_SELECTION: Selection = { genre: ALL_GENRES, page: 1 };
-
-const toRequest = (query: string, selection: Selection): SearchRequest => ({
-  query,
-  genre: selection.genre === ALL_GENRES ? undefined : selection.genre,
-  page: selection.page,
-});
-
 export const useHomePage = () => {
-  const [snapshot, setSnapshot] = useState<SearchSnapshot>({
-    status: STATUS.IDLE,
-    queryEcho: '',
-    selection: INITIAL_SELECTION,
-  });
+  // A session persisted by an earlier successful search seeds the page on
+  // mount — including the request coordination, so the restored query is
+  // not submitted again; a fresh app start seeds the initial state instead.
+  const { initialSnapshot, initialRequest, initialQuery } =
+    useRestoredSession();
+  const [snapshot, setSnapshot] = useState<SearchSnapshot>(initialSnapshot);
 
   const handleSearchChange = useCallback((change: SearchChange) => {
     setSnapshot((prevSnapshot) => ({ ...prevSnapshot, ...change }));
   }, []);
 
   const { runRequest, retry, isCurrentQuery, abortSearch, requestRef } =
-    useShowsRequest(handleSearchChange);
+    useShowsRequest(handleSearchChange, initialRequest);
 
   // The shows themselves are Entity data read through its selectors — only
   // a successful status echoes them to the View, so a loading or failed
   // request never renders a stale page.
   const storedResult = useStoredSearchPage();
   const data = snapshot.status === STATUS.SUCCESS ? storedResult : null;
+
+  // A restored session whose stored result is gone re-fetches once on mount.
+  useRestoredRequest(initialRequest, storedResult.page, runRequest);
 
   // A submitted search starts fresh: first page, no genre filter.
   const submitSearch = useCallback(
@@ -99,6 +96,7 @@ export const useHomePage = () => {
     queryEcho: snapshot.queryEcho,
     status: snapshot.status,
     selection: snapshot.selection,
+    initialQuery,
     isFavorite,
     count,
     onSearchChange: handleSearchChange,

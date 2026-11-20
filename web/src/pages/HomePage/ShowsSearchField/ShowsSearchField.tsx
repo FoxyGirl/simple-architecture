@@ -12,6 +12,7 @@ type ShowsSearchFieldProps = {
   submitSearch: (query: string) => void;
   isCurrentQuery: (query: string) => boolean;
   abortSearch: () => void;
+  initialQuery: string;
 };
 
 export const ShowsSearchField = (props: ShowsSearchFieldProps) => {

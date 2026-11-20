@@ -14,6 +14,7 @@ export const HomePage = () => {
     queryEcho,
     status,
     selection,
+    initialQuery,
     retry,
     clearSearch,
     isFavorite,
@@ -53,6 +54,7 @@ export const HomePage = () => {
           submitSearch={submitSearch}
           isCurrentQuery={isCurrentQuery}
           abortSearch={abortSearch}
+          initialQuery={initialQuery}
         />
 
         <FavoritesCountButton count={count} onClick={goToFavorites} />

@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import type { FavoritesListPage, Show } from '@api/types';
 
 import { showsReducer } from '../../shows';
+import { searchSessionReducer } from '../../searchSession';
 import {
   favoritesReducer,
   replaceFavoritesList,
@@ -22,7 +23,11 @@ const show = (id: number, name: string): Show =>
 // store shape.
 const createTestStore = () =>
   configureStore({
-    reducer: { favorites: favoritesReducer, shows: showsReducer },
+    reducer: {
+      favorites: favoritesReducer,
+      shows: showsReducer,
+      searchSession: searchSessionReducer,
+    },
   });
 
 describe('favorites entity', () => {

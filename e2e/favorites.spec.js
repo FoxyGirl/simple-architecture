@@ -9,20 +9,16 @@ import {
   heart,
   hiddenToast,
   pressed,
+  roundTripRestoresSearch,
   searchInput,
   searchSpace,
   shownToast,
   summaryIds,
 } from './favorites-helpers';
 
-// All favorites E2E lives in this single spec: Playwright parallelizes
-// spec files against the one shared backend, so the favorites mutations
-// stay sequential here. Locators/probes live in ./favorites-helpers.js.
-
 test.beforeEach(async ({ request }) => {
   await clearFavorites(request);
 });
-
 test('hearts are backend-driven and survive genre, page and search changes', async ({
   page,
   request,
@@ -117,4 +113,8 @@ test('favorites toasts appear and dismiss themselves', async ({ page }) => {
   await heart(page, 'Space Chef', true).click();
   await shownToast(page, '"Space Chef" was removed from favorites');
   await hiddenToast(page, '"Space Chef" was removed from favorites');
+});
+
+test('search state survives the session round trip', async ({ page }) => {
+  await roundTripRestoresSearch(page);
 });

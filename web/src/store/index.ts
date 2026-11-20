@@ -17,3 +17,5 @@ export {
   selectFavoritesList,
 } from './favorites';
 export type { FavoritesState } from './favorites';
+export { replaceSearchSession, selectSearchSession } from './searchSession';
+export type { SearchSession } from './searchSession';

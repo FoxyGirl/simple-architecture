@@ -29,9 +29,13 @@ $ARGUMENTS
 
 - Translate the feature name into English.
 - Convert it to kebab-case.
+- Scan the `features` directory (if it exists) for existing files matching the pattern `^\d{3}-prd-.*\.md$`.
+- Determine the next sequential 3-digit number:
+  - If no matching files exist, start with `001`.
+  - Otherwise, find the highest existing number and increment it by 1, padding with leading zeros to 3 digits (e.g., `001` -> `002`).
 - Use the following naming convention:
 
-`features/prd-{feature-name}.md`
+`features/{NNN}-prd-{feature-name}.md`
 
 - Check whether the target file already exists.
 - Never overwrite an existing PRD without explicit permission.

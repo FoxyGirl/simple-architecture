@@ -33,14 +33,12 @@ The plan must cover every requirement and acceptance criterion from the PRD.
 
 ### 4. Generate the output filename
 
-- Derive the feature name from the PRD filename.
-- Remove the `prd-` prefix and `.md` extension to extract the feature name.
+- Extract the 3-digit prefix `{NNN}` and `{feature-name}` from the input PRD filename (`{NNN}-prd-{feature-name}.md`).
 - Keep the feature name in English and kebab-case.
 - Save the plan using the following naming convention:
 
-`features/plan-{feature-name}.md`
+`features/{NNN}-plan-{feature-name}.md`
 
-- Create the `features` directory if it does not exist.
 - Check whether the target file already exists.
 - Never overwrite an existing plan without explicit permission.
 

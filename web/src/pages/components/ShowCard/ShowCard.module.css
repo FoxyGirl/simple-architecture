@@ -41,9 +41,54 @@
   );
 }
 
-.buttonSlot {
+.posterFade {
   position: absolute;
-  inset: 14px 14px auto auto;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, var(--surface) 100%);
+}
+
+.badges {
+  position: absolute;
+  inset: 14px 14px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+
+.badgesRight {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.statusBadge,
+.ratingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--scrim);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: var(--weight-semibold);
+}
+
+.ratingBadge {
+  gap: 5px;
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+}
+
+/* The badge is shared with the row card; the grid card draws a larger dot. */
+.statusBadge {
+  --status-dot-size: 7px;
+  --status-gap: var(--space-xs);
+}
+
+.star {
+  color: var(--star);
 }
 
 .info {

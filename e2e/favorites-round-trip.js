@@ -28,13 +28,6 @@ const expectRestoredSearch = async (page) => {
   await expect(card(page, 'Space Tour')).toHaveCount(0);
 };
 
-// The Home nav link is a fresh start, not a restoration.
-const expectFreshHome = async (page) => {
-  await expect(page).toHaveURL(/\/$/);
-  await expect(searchInput(page)).toHaveValue('');
-  await expect(page.getByText('Search Results')).toHaveCount(0);
-};
-
 const backToRestoredSearch = async (page) => {
   await countButton(page, 0).click();
   await page.getByRole('button', { name: 'Back to Home' }).click();
@@ -49,23 +42,9 @@ const browserBackRestoresSearch = async (page) => {
   await expectRestoredSearch(page);
 };
 
-const navToFreshHome = async (page) => {
-  await page.getByRole('link', { name: 'Favorites' }).click();
-  await page.getByRole('link', { name: 'Home' }).click();
-  await expectFreshHome(page);
-};
-
-// A Favorites-link arrival still remembers the parameterized Home URL.
-const navBackToRestoredSearch = async (page) => {
-  await page.getByRole('link', { name: 'Favorites' }).click();
-  await page.getByRole('button', { name: 'Back to Home' }).click();
-  await expectRestoredSearch(page);
-};
-
+// A count-button arrival still remembers the parameterized Home URL.
 export const roundTripRestoresSearch = async (page) => {
   await searchSpaceDramaPageTwo(page);
   await backToRestoredSearch(page);
   await browserBackRestoresSearch(page);
-  await navBackToRestoredSearch(page);
-  await navToFreshHome(page);
 };

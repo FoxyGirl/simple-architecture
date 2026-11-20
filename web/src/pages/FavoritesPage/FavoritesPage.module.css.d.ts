@@ -9,7 +9,6 @@ declare const classes: {
   readonly eyebrowIcon: 'eyebrowIcon';
   readonly head: 'head';
   readonly headline: 'headline';
-  readonly list: 'list';
   readonly page: 'page';
   readonly subhead: 'subhead';
 };

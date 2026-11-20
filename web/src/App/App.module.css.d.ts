@@ -2,8 +2,6 @@
 declare const classes: {
   readonly app: 'app';
   readonly content: 'content';
-  readonly nav: 'nav';
-  readonly navLink: 'navLink';
 };
 
 export default classes;

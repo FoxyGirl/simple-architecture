@@ -31,7 +31,6 @@ export const useFavoritesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parsePageParam(searchParams.get('page'));
   const fromHome = (location.state as FavoritesLocationState | null)?.fromHome;
-  console.log('\n\n fromHome:', fromHome);
   useEffect(() => {
     void fetchFavoritesPage(page);
   }, [page]);

@@ -1,17 +1,16 @@
 import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
 import type { SearchPage, Show } from '@api/types';
-import { useMediaQuery } from '@hooks/useMediaQuery';
 
 import type { Selection } from '../types';
 
 import { STATUS, type SearchStatus } from '../constants';
 
 import { Pagination } from '../../components/Pagination';
+import { ShowList } from '../../components/ShowList';
 
 import { GenreFilter } from './GenreFilter';
 import { ResultsHead } from './ResultsHead';
-import { ShowList } from './ShowList';
 import { Skeleton } from './Skeleton';
 import { StatusPanel } from './StatusPanel';
 
@@ -42,8 +41,6 @@ export const ShowSearchResults = ({
   onRetry,
   onClear,
 }: ShowSearchResultsProps) => {
-  const { isDesktop } = useMediaQuery();
-
   const isLoading = status === STATUS.LOADING;
   const isSuccess = status === STATUS.SUCCESS && data !== null;
 
@@ -100,7 +97,6 @@ export const ShowSearchResults = ({
 
           <ShowList
             shows={data.shows}
-            isDesktop={isDesktop}
             isFavorite={isFavorite}
             onToggleFavorite={onToggleFavorite}
           />

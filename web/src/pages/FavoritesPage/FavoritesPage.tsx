@@ -3,9 +3,12 @@ import { ArrowLeft, Heart, HeartOff } from 'lucide-react';
 import { useFavoritesPage } from './logic/useFavoritesPage';
 
 import { Pagination } from '../components/Pagination';
-import { FavoriteShowCard } from './FavoriteShowCard';
+import { ShowList } from '../components/ShowList';
 
 import styles from './FavoritesPage.module.css';
+
+// Everything listed here is a favorite, so every heart removes its show.
+const isFavorite = () => true;
 
 export const FavoritesPage = () => {
   const { list, subHeadText, removeFromFavorites, selectPage, goToHome } =
@@ -49,14 +52,12 @@ export const FavoritesPage = () => {
 
       {list !== null && list.shows.length > 0 && (
         <>
-          <div className={styles.list} aria-live="polite">
-            {list.shows.map((show) => (
-              <FavoriteShowCard
-                key={show.id}
-                show={show}
-                onRemove={() => removeFromFavorites(show)}
-              />
-            ))}
+          <div aria-live="polite">
+            <ShowList
+              shows={list.shows}
+              isFavorite={isFavorite}
+              onToggleFavorite={removeFromFavorites}
+            />
           </div>
 
           <Pagination

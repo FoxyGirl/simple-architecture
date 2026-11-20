@@ -2,6 +2,7 @@ import { expect } from '@playwright/test';
 
 import {
   card,
+  countButton,
   heart,
   hiddenToast,
   pressed,
@@ -24,7 +25,7 @@ export const favoritesToastFlow = async (page) => {
   await hiddenToast(page, '"Space Tour" was removed from favorites');
   await heart(page, 'Space Chef', false).click();
   await pressed(page, 'Space Chef');
-  await page.getByRole('link', { name: 'Favorites' }).click();
+  await countButton(page, 1).click();
   await expect(card(page, 'Space Chef')).toBeVisible();
   await heart(page, 'Space Chef', true).click();
   await shownToast(page, '"Space Chef" was removed from favorites');

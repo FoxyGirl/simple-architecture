@@ -4,12 +4,17 @@ import { useFavoritesPage } from './logic/useFavoritesPage';
 
 import { Pagination } from '../components/Pagination';
 import { ShowList } from '../components/ShowList';
+import { SkeletonCards } from '../components/SkeletonCards';
+
+import { RESULTS_PER_PAGE } from './constants';
 
 import styles from './FavoritesPage.module.css';
 
 export const FavoritesPage = () => {
   const {
     list,
+    page,
+    isLoading,
     subHeadText,
     isFavorite,
     isRemoved,
@@ -36,7 +41,7 @@ export const FavoritesPage = () => {
         <p className={styles.subhead}>{subHeadText}</p>
       </header>
 
-      {list !== null && list.shows.length === 0 && (
+      {!isLoading && list !== null && list.shows.length === 0 && (
         <div className={styles.empty} aria-live="polite">
           <HeartOff className={styles.emptyIcon} size={40} aria-hidden="true" />
           <p className={styles.emptyText}>
@@ -54,22 +59,30 @@ export const FavoritesPage = () => {
         </div>
       )}
 
-      {list !== null && list.shows.length > 0 && (
+      {(isLoading || (list !== null && list.shows.length > 0)) && (
         <>
           <div aria-live="polite">
-            <ShowList
-              shows={list.shows}
-              isFavorite={isFavorite}
-              isRemoved={isRemoved}
-              onToggleFavorite={toggleFavorite}
-            />
+            {isLoading ? (
+              <SkeletonCards count={RESULTS_PER_PAGE} />
+            ) : (
+              list !== null && (
+                <ShowList
+                  shows={list.shows}
+                  isFavorite={isFavorite}
+                  isRemoved={isRemoved}
+                  onToggleFavorite={toggleFavorite}
+                />
+              )
+            )}
           </div>
 
-          <Pagination
-            page={list.page}
-            pageCount={list.pageCount}
-            onSelectPage={selectPage}
-          />
+          {list !== null && (
+            <Pagination
+              page={isLoading ? page : list.page}
+              pageCount={list.pageCount}
+              onSelectPage={selectPage}
+            />
+          )}
         </>
       )}
     </section>

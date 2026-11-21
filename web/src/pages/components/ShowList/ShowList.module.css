@@ -1,6 +1,6 @@
 /*
- * Kept in step with the skeleton grid in Skeleton/Skeleton.module.css, so the
- * cards keep the same columns while the results are loading.
+ * Kept in step with the skeleton grid in SkeletonCards/SkeletonCards.module.css,
+ * so the cards keep the same columns while the list is loading.
  */
 .list {
   display: flex;

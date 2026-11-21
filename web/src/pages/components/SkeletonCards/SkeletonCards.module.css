@@ -1,7 +1,6 @@
 /*
- * Mirrors the results grid of ShowSearchResults.module.css. Both grids have to
- * stay in step, otherwise the skeleton cards do not line up with the real
- * ones.
+ * Mirrors the list grid of ShowList.module.css. Both grids have to stay in
+ * step, otherwise the skeleton cards do not line up with the real ones.
  */
 
 .list {

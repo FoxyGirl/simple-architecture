@@ -31,6 +31,13 @@ export type SearchRequest = {
 };
 
 /**
+ * Which part of the results a loading state replaces. `'full'` covers a load
+ * that invalidates the whole block (the query changed), `'cards'` a selection
+ * load (genre/page) that only replaces the show cards.
+ */
+export type LoadingScope = 'full' | 'cards';
+
+/**
  * The outcome of a shows-fetch Task run, returned to the caller. `'aborted'`
  * means the request was superseded or cancelled and stored nothing;
  * `'error'` carries the message the request layer reported.

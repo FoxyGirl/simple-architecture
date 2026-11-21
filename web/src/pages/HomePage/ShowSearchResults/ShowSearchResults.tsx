@@ -2,15 +2,11 @@ import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
 import type { SearchPage, Show } from '~/types';
 
-import type { Selection } from '../types';
+import type { LoadingScope, Selection } from '../types';
 
 import { STATUS, type SearchStatus } from '../constants';
 
-import { Pagination } from '../../components/Pagination';
-import { ShowList } from '../../components/ShowList';
-
-import { GenreFilter } from './GenreFilter';
-import { ResultsHead } from './ResultsHead';
+import { ResultsFrame } from './ResultsFrame';
 import { Skeleton } from './Skeleton';
 import { StatusPanel } from './StatusPanel';
 
@@ -19,6 +15,7 @@ import styles from './ShowSearchResults.module.css';
 type ShowSearchResultsProps = {
   data: SearchPage | null;
   status: SearchStatus;
+  loadingScope: LoadingScope | null;
   errorMessage: string | null;
   queryEcho: string;
   selection: Selection;
@@ -33,6 +30,7 @@ type ShowSearchResultsProps = {
 export const ShowSearchResults = ({
   data,
   status,
+  loadingScope,
   errorMessage,
   queryEcho,
   selection,
@@ -46,6 +44,16 @@ export const ShowSearchResults = ({
   const isLoading = status === STATUS.LOADING;
   const isSuccess = status === STATUS.SUCCESS && data !== null;
 
+  // A selection load keeps the frame of the stored page on screen and only
+  // the cards are skeletonized; anything else invalidates the whole block.
+  const isSelectionLoad =
+    isLoading && loadingScope === 'cards' && data !== null;
+
+  // The frame renders the stored page on success with results, or while a
+  // selection load swaps the cards of that stored page.
+  const hasFrame =
+    data !== null && (isSelectionLoad || (isSuccess && data.shows.length > 0));
+
   if (status === STATUS.IDLE) return null;
 
   return (
@@ -54,7 +62,7 @@ export const ShowSearchResults = ({
       aria-live="polite"
       aria-busy={isLoading}
     >
-      {isLoading && <Skeleton />}
+      {isLoading && !isSelectionLoad && <Skeleton />}
 
       {status === STATUS.ERROR && (
         <StatusPanel
@@ -75,7 +83,7 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {isSuccess && data.shows.length === 0 && (
+      {!isLoading && isSuccess && data.shows.length === 0 && (
         <StatusPanel
           overline="STATE · EMPTY"
           icon={SearchX}
@@ -86,32 +94,17 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {isSuccess && data.shows.length > 0 && (
-        <>
-          <ResultsHead
-            totalCount={data.totalCount}
-            genre={selection.genre}
-            queryEcho={queryEcho}
-          />
-
-          <GenreFilter
-            genres={data.genres}
-            activeGenre={selection.genre}
-            onSelectGenre={onGenreSelect}
-          />
-
-          <ShowList
-            shows={data.shows}
-            isFavorite={isFavorite}
-            onToggleFavorite={onToggleFavorite}
-          />
-
-          <Pagination
-            page={data.page}
-            pageCount={data.pageCount}
-            onSelectPage={onPageSelect}
-          />
-        </>
+      {hasFrame && data !== null && (
+        <ResultsFrame
+          data={data}
+          selection={selection}
+          queryEcho={queryEcho}
+          isSelectionLoad={isSelectionLoad}
+          isFavorite={isFavorite}
+          onGenreSelect={onGenreSelect}
+          onPageSelect={onPageSelect}
+          onToggleFavorite={onToggleFavorite}
+        />
       )}
     </section>
   );

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import { STATUS, type SearchStatus } from '../constants';
+import type { LoadingScope } from '../types';
+
 import { isSameRequest, toRequest } from './urlState';
 import { useShowFavorites } from './useShowFavorites';
 import { useShowsRequest } from './useShowsRequest';
@@ -18,6 +20,7 @@ export const useHomePage = () => {
     retry,
     abortSearch,
     requestRef,
+    lastSuccessQuery,
     status: requestStatus,
     errorMessage,
   } = useShowsRequest(search ? STATUS.LOADING : STATUS.IDLE);
@@ -33,6 +36,19 @@ export const useHomePage = () => {
   let status: SearchStatus = search ? requestStatus : STATUS.IDLE;
   if (draft !== null) {
     status = draft ? STATUS.LOADING : STATUS.IDLE;
+  }
+
+  // Which part of the screen the loading replaces: the same query as the
+  // stored page means only the selection (genre/page) changed, so the head,
+  // filters and pagination stay and only the cards are swapped. A different
+  // query invalidates the whole results block.
+  let loadingScope: LoadingScope | null = null;
+  if (status === STATUS.LOADING) {
+    // The URL search is the query of every request the page issues; a
+    // pending draft is the query the next one is about to carry.
+    const pendingQuery = draft ?? search;
+
+    loadingScope = pendingQuery === lastSuccessQuery ? 'cards' : 'full';
   }
 
   // The URL state is the only request trigger: identical values are deduped
@@ -52,11 +68,14 @@ export const useHomePage = () => {
     });
   }, [search, genre, page, resetGenre, runRequest, requestRef]);
 
-  // The shows themselves are Entity data read through its selectors — only
-  // a successful status echoes them to the View, so a loading or failed
-  // request never renders a stale page.
+  // The shows themselves are Entity data read through its selectors — the
+  // Entity keeps the last successful page while a new selection loads, so a
+  // cards-scoped load can keep the results frame and skeletonize the cards.
+  // Anything else only echoes the data of a successful status, so a new
+  // query or a failed request never renders a stale page.
   const storedResult = useStoredSearchPage();
-  const data = status === STATUS.SUCCESS ? storedResult : null;
+  const data =
+    status === STATUS.SUCCESS || loadingScope === 'cards' ? storedResult : null;
 
   // The favorites Entity data the cards' heart buttons reflect; the toggle
   // itself is the shared Task's business rule, its success the toast the
@@ -75,6 +94,7 @@ export const useHomePage = () => {
   return {
     data,
     status,
+    loadingScope,
     errorMessage,
     selection: { genre, page },
     search,

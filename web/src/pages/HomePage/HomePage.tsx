@@ -12,6 +12,7 @@ export const HomePage = () => {
   const {
     data,
     status,
+    loadingScope,
     errorMessage,
     selection,
     search,
@@ -59,6 +60,7 @@ export const HomePage = () => {
       <ShowSearchResults
         data={data}
         status={status}
+        loadingScope={loadingScope}
         errorMessage={errorMessage}
         queryEcho={search}
         selection={selection}

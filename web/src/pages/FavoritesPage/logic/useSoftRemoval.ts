@@ -1,12 +1,9 @@
 import { useState } from 'react';
 
-import type { FavoritesListPage, Show } from '~/types';
-import { notify } from '~/notification';
-
+import type { FavoritesListPage } from '~/types';
 import type { RemovedMarking } from '../types';
 
-import { TOAST_MESSAGES } from '../../constants';
-import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
+import { useFavoriteToggle } from '~/pages/hooks/useFavoriteToggle';
 
 /**
  * The soft-removal aspect of the Favorites page presenter: the backend stays
@@ -14,9 +11,9 @@ import { toggleShowFavorite } from '../../tasks/toggleShowFavorite';
  * removed ids are view state of the current fetched list. The marking
  * carries the envelope it was made against, so every fresh fetch (a page
  * change, a re-visit or a reload) invalidates it automatically. The shared
- * toggle Task receives the card's current state; a success flips the marking
- * and toasts, a failure leaves the card as it was and shows the reported
- * error message.
+ * toggle aspect runs the Task and owns the toasts; on success it reports the
+ * card's previous state through the callback so the marking flips here, at
+ * Presenter level, while a failure leaves the card as it was.
  */
 export const useSoftRemoval = (list: FavoritesListPage | null) => {
   const [marking, setMarking] = useState<RemovedMarking>({ list, ids: [] });
@@ -25,31 +22,14 @@ export const useSoftRemoval = (list: FavoritesListPage | null) => {
   const isRemoved = (showId: number) => removedIds.includes(showId);
   const isFavorite = (showId: number) => !removedIds.includes(showId);
 
-  const toggleFavorite = (show: Show) => {
-    const wasFavorite = !removedIds.includes(show.id);
-
-    void (async () => {
-      const result = await toggleShowFavorite(show, wasFavorite);
-
-      if (result.status !== 'success') {
-        notify.error(result.message);
-        return;
-      }
-
-      setMarking({
-        list,
-        ids: wasFavorite
-          ? [...removedIds, show.id]
-          : removedIds.filter((id) => id !== show.id),
-      });
-
-      if (wasFavorite) {
-        notify.info(`"${show.name}" ${TOAST_MESSAGES.REMOVED}`);
-      } else {
-        notify.success(`"${show.name}" ${TOAST_MESSAGES.ADDED}`);
-      }
-    })();
-  };
+  const toggleFavorite = useFavoriteToggle(isFavorite, (show, wasFavorite) => {
+    setMarking({
+      list,
+      ids: wasFavorite
+        ? [...removedIds, show.id]
+        : removedIds.filter((id) => id !== show.id),
+    });
+  });
 
   return { isFavorite, isRemoved, toggleFavorite };
 };

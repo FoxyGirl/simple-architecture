@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -24,6 +24,7 @@ export const useFavoritesPage = () => {
   const list = useSelector(selectFavoritesList);
   const navigate = useNavigate();
   const location = useLocation();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parsePageParam(searchParams.get('page'));
   const fromHome = (location.state as FavoritesLocationState | null)?.fromHome;
@@ -36,24 +37,21 @@ export const useFavoritesPage = () => {
 
   // A page change is a URL write that pushes a history entry; page 1 omits
   // the parameter.
-  const selectPage = useCallback(
-    (nextPage: number) => {
-      const params = new URLSearchParams(searchParams);
+  const selectPage = (nextPage: number) => {
+    const params = new URLSearchParams(searchParams);
 
-      if (nextPage > 1) {
-        params.set('page', String(nextPage));
-      } else {
-        params.delete('page');
-      }
+    if (nextPage > 1) {
+      params.set('page', String(nextPage));
+    } else {
+      params.delete('page');
+    }
 
-      setSearchParams(params, { state: location.state });
-    },
-    [searchParams, setSearchParams, location.state],
-  );
+    setSearchParams(params, { state: location.state });
+  };
 
-  const goToHome = useCallback(() => {
+  const goToHome = () => {
     navigate(fromHome ?? '/');
-  }, [fromHome, navigate]);
+  };
 
   const subHeadText =
     list === null || list.totalCount === 0

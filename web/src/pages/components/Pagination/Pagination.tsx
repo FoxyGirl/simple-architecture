@@ -15,13 +15,9 @@ type PaginationProps = {
   onSelectPage: (page: number) => void;
 };
 
-export const Pagination = ({
-  page,
-  pageCount,
-  onSelectPage,
-}: PaginationProps) => {
+export const Pagination = (props: PaginationProps) => {
   const { pages, isFirstPage, isLastPage, selectPage, goToPrev, goToNext } =
-    usePagination({ page, pageCount, onSelectPage });
+    usePagination(props);
 
   const { isDesktop } = useMediaQuery();
 
@@ -45,7 +41,7 @@ export const Pagination = ({
 
   const pageInfo = (
     <span className={styles.pageInfo}>
-      Page {page} of {pageCount}
+      Page {props.page} of {props.pageCount}
     </span>
   );
 
@@ -59,11 +55,11 @@ export const Pagination = ({
             <button
               key={pageNumber}
               className={clsx(styles.pageButton, {
-                [styles.pageButtonActive]: pageNumber === page,
+                [styles.pageButtonActive]: pageNumber === props.page,
               })}
               type="button"
               onClick={() => selectPage(pageNumber)}
-              aria-current={pageNumber === page ? 'page' : undefined}
+              aria-current={pageNumber === props.page ? 'page' : undefined}
             >
               {pageNumber}
             </button>

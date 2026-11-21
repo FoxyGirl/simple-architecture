@@ -47,19 +47,24 @@ Presenter is responsible for presentation logic, application state coordination,
 
 ### Interactor / Task
 
-Task is an implementation of a business operation or user-system interaction scenario. It encapsulates business logic and executes operations independently of React and the View layer.
+Task is an implementation of a business operation or user-system interaction scenario. It encapsulates business logic and executes operations independently of React and the View layer. A Task is the only place where a business operation meets the shared request layer and the Entity: the Presenter decides when an operation runs, the Task decides how it completes.
 
 - We use the term `Task` to refer to an Interactor in the current architecture.
 - MUST be implemented as an ordinary JavaScript/TypeScript function, not a React component or hook.
 - MUST have a descriptive name reflecting the business operation or interaction scenario it implements.
+- MUST start with a verb that names the operation — `fetchShowsPage`, `syncFavoritesSummary`, `toggleShowFavorite`. Noun and gerund phrases name Entities or Presenters, never Tasks.
+- MUST live in a file named after the exported Task (`fetchShowsPage.ts`). A Task file MAY also export a tightly coupled control for the same operation (for example `abortShowsFetch`), but MUST NOT collect unrelated operations.
 - MUST be placed inside a `tasks` folder within the `logic` folder. E.g. `/<Component>/logic/tasks`.
 - Reusable Tasks shared across multiple components MUST be placed in a `tasks` directory at the nearest common ancestor level of those components.
 - MUST encapsulate a single high-level business operation or user-system interaction scenario.
 - MUST represent an operation at a high level of abstraction, hiding low-level implementation details from the Presenter.
 - MUST contain all business logic required to execute its operation.
 - MUST handle data fetching when it is part of the operation.
-- MUST delegate HTTP requests and low-level network communication to API modules.
+- MUST delegate HTTP requests and low-level network communication to the shared API request layer (`api/request.ts`).
+- MUST compose the endpoint-specific request — path, query parameters, method and JSON body — inside the Task.
+- MUST NOT add per-endpoint API modules: `api/` contains only the common request plumbing (`config.ts`, `errors.ts`, `request.ts`).
 - MUST use `store.dispatch` directly when application state needs to be updated.
+- MUST store the payload the backend returned when the backend owns the data, instead of merging or recomputing it from client-side state.
 - MUST NOT depend on Redux Hooks.
 - MUST NOT use React Hooks or depend on React components, component lifecycle, or React Context.
 - MUST receive all required application data through explicit function arguments.
@@ -67,11 +72,18 @@ Task is an implementation of a business operation or user-system interaction sce
 - MUST NOT use `store.getState()` or Redux selectors to retrieve application data.
 - MUST NOT depend on Views or Presenters.
 - MUST NOT contain presentation logic, UI state, navigation, or UI-related side effects.
-- MUST NOT implement HTTP requests directly when an API module is responsible for that operation.
-- MAY contain private helper functions (subtasks) to decompose its implementation.
-- MAY be asynchronous and handle errors when required by the operation.
+- MUST NOT call `fetch` directly; the shared request layer owns the transport, so a Task composes the request and delegates the call.
+- MAY contain private helper functions (subtasks) to decompose its implementation; endpoint helpers MUST stay private to the Task file.
+- MAY own non-application coordination state in module scope — for example the `AbortController` of the newest in-flight request. Such coordination state MUST NOT be stored in Redux.
+- MUST treat a superseded or cancelled run as a distinct outcome (`status: 'aborted'`) and MUST NOT dispatch a stale response into the Entity.
+- MAY be asynchronous.
+- MUST catch expected failures and return them as part of the result instead of throwing across the Task boundary.
 - MUST expose a clear function interface, accepting only the input data required to execute the operation.
 - SHOULD return the result of the operation when it is needed by the Presenter.
+- MUST return a discriminated outcome — `{ status: 'success', ... } | { status: 'error', message }` — when the Presenter reacts to the result, normalizing the caught error into `message` (`toErrorMessage`).
+- MUST NOT translate an outcome into user feedback: the Task reports the message, the Presenter decides whether it becomes a toast, an error panel or a log.
+- SHOULD declare the outcome type in the `types.ts` of the folder that owns the Task and reuse a shared type instead of redeclaring an identical shape.
+- SHOULD be covered by a colocated suite that stubs the shared request boundary (`requestJson`), proving the Task runs without React and without a live server.
 
 ### Entity
 

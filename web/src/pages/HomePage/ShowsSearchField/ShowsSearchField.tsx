@@ -1,15 +1,12 @@
 import { Search, X } from 'lucide-react';
 
-import type { SearchChange, SearchControls } from '../types';
-
 import { useShowsSearchField } from './logic/useShowsSearchField';
 
 import styles from './ShowsSearchField.module.css';
 
 type ShowsSearchFieldProps = {
   search: string;
-  onSearchChange: (change: SearchChange) => void;
-  registerControls: (controls: SearchControls | null) => void;
+  onDraftChange: (draft: string | null) => void;
   applySearch: (query: string) => void;
   abortSearch: () => void;
 };

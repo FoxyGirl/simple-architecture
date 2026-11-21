@@ -1,9 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-
-import type { SearchChange, SearchControls } from '../types';
+import { useEffect, useState } from 'react';
 
 import { STATUS, type SearchStatus } from '../constants';
-import { isSameRequest, toRequest, toSelection } from './urlState';
+import { isSameRequest, toRequest } from './urlState';
 import { useShowFavorites } from './useShowFavorites';
 import { useShowsRequest } from './useShowsRequest';
 import { useStoredSearchPage } from './useStoredSearchPage';
@@ -13,29 +11,36 @@ export const useHomePage = () => {
   const url = useUrlSearchState();
   const { search, genre, page, resetGenre } = url;
 
-  const [status, setStatus] = useState<SearchStatus>(() =>
-    search ? STATUS.LOADING : STATUS.IDLE,
-  );
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // The request status is written by the Task coordination alone; a mount
+  // whose URL already carries a search starts out loading its restoration.
+  const {
+    runRequest,
+    retry,
+    abortSearch,
+    requestRef,
+    status: requestStatus,
+    errorMessage,
+  } = useShowsRequest(search ? STATUS.LOADING : STATUS.IDLE);
 
-  const handleSearchChange = useCallback((change: SearchChange) => {
-    if (change.status !== undefined) {
-      setStatus(change.status);
-      setErrorMessage(
-        change.status === STATUS.ERROR ? (change.errorMessage ?? null) : null,
-      );
-    }
-  }, []);
+  // The uncommitted draft of the search field, `null` while the field shows
+  // the applied URL search. A pending draft owns the screen: a non-empty
+  // draft is inevitably going to be requested (loading), an empty one is
+  // the idle state. Otherwise the applied search decides — no search is
+  // idle, a search shows the outcome of its request, so a restoration
+  // racing an in-flight fetch keeps showing that fetch's loading state.
+  const [draft, setDraft] = useState<string | null>(null);
 
-  const { runRequest, retry, abortSearch, requestRef } =
-    useShowsRequest(handleSearchChange);
+  let status: SearchStatus = search ? requestStatus : STATUS.IDLE;
+  if (draft !== null) {
+    status = draft ? STATUS.LOADING : STATUS.IDLE;
+  }
 
   // The URL state is the only request trigger: identical values are deduped
   // against the last request, superseded runs are aborted by the Task.
   useEffect(() => {
     if (!search) return;
 
-    const request = toRequest(search, toSelection({ search, genre, page }));
+    const request = toRequest(search, { genre, page });
     if (isSameRequest(requestRef.current, request)) return;
 
     void runRequest(request).then((result) => {
@@ -53,33 +58,29 @@ export const useHomePage = () => {
   const storedResult = useStoredSearchPage();
   const data = status === STATUS.SUCCESS ? storedResult : null;
 
-  const controlsRef = useRef<SearchControls | null>(null);
-
-  const registerControls = useCallback((controls: SearchControls | null) => {
-    controlsRef.current = controls;
-  }, []);
-
   // The favorites Entity data the cards' heart buttons reflect; the toggle
   // itself is the shared Task's business rule, its success the toast the
   // global notify API renders.
   const { isFavorite, toggleFavorite, count, goToFavorites } =
     useShowFavorites();
 
+  // The results' empty-state action: clearing writes the idle URL, and the
+  // search field re-syncs its draft (and focus) from it — no imperative
+  // channel into the field is needed.
   const clearSearch = () => {
-    controlsRef.current?.clearSearch();
+    abortSearch();
+    url.applySearch('');
   };
 
   return {
     data,
-    queryEcho: search,
     status,
     errorMessage,
     selection: { genre, page },
     search,
     isFavorite,
     count,
-    onSearchChange: handleSearchChange,
-    registerControls,
+    onDraftChange: setDraft,
     applySearch: url.applySearch,
     selectGenre: url.selectGenre,
     selectPage: url.selectPage,

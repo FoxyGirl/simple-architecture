@@ -11,7 +11,6 @@ import styles from './HomePage.module.css';
 export const HomePage = () => {
   const {
     data,
-    queryEcho,
     status,
     errorMessage,
     selection,
@@ -20,8 +19,7 @@ export const HomePage = () => {
     clearSearch,
     isFavorite,
     count,
-    onSearchChange,
-    registerControls,
+    onDraftChange,
     applySearch,
     abortSearch,
     selectGenre,
@@ -50,8 +48,7 @@ export const HomePage = () => {
 
         <ShowsSearchField
           search={search}
-          onSearchChange={onSearchChange}
-          registerControls={registerControls}
+          onDraftChange={onDraftChange}
           applySearch={applySearch}
           abortSearch={abortSearch}
         />
@@ -63,7 +60,7 @@ export const HomePage = () => {
         data={data}
         status={status}
         errorMessage={errorMessage}
-        queryEcho={queryEcho}
+        queryEcho={search}
         selection={selection}
         isFavorite={isFavorite}
         onGenreSelect={selectGenre}

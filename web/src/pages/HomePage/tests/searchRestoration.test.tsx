@@ -12,6 +12,7 @@ import {
   renderHomePage,
   settle,
   storedPage,
+  typeQuery,
 } from '../../../test/home-flow';
 
 // The presenter runs over the mocked request boundary (vi.mock never hoists
@@ -83,6 +84,25 @@ describe('HomePage URL restoration', () => {
     });
     expect(searchCalls(api)[0]?.params.get('q')).toBe('office');
     expectRestoredView();
+  });
+
+  it('typing and deleting a character restores the applied page without a refetch', async () => {
+    renderHomePage([URL]);
+    await settle();
+
+    const callsBefore = searchCalls(api).length;
+
+    // The provisional loading state replaces the results with skeletons.
+    typeQuery('officex');
+    expect(screen.queryByText('Page 2 of 2')).toBeNull();
+
+    // The draft is back to the applied search: the fetched page and its
+    // filters/pagination return, and no new request is issued.
+    typeQuery('office');
+    await settle();
+
+    expectRestoredView();
+    expect(searchCalls(api)).toHaveLength(callsBefore);
   });
 
   it('remounting with the same URL restores the view and fetches again', async () => {

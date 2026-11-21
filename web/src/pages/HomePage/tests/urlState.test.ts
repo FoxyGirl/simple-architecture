@@ -5,7 +5,6 @@ import {
   isSameRequest,
   parseSearchState,
   serializeSearchState,
-  toSelection,
 } from '../logic/urlState';
 
 const params = (query: string) => new URLSearchParams(query);
@@ -68,12 +67,7 @@ describe('url state helpers', () => {
     expect(hasSearchParams(params('page=2'))).toBe(true);
   });
 
-  it('maps a state onto a selection and compares requests', () => {
-    expect(toSelection({ search: 'a', genre: 'Drama', page: 2 })).toEqual({
-      genre: 'Drama',
-      page: 2,
-    });
-
+  it('compares requests field by field', () => {
     const request = { query: 'a', genre: 'Drama', page: 2 };
     expect(isSameRequest(request, { ...request })).toBe(true);
     expect(isSameRequest(request, { ...request, page: 3 })).toBe(false);

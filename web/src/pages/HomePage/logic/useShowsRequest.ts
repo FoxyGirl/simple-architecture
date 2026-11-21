@@ -1,39 +1,45 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
-import type { SearchChange, SearchRequest, ShowsFetchResult } from '../types';
+import type { SearchRequest, ShowsFetchResult } from '../types';
 
-import { STATUS } from '../constants';
+import { STATUS, type SearchStatus } from '../constants';
 import { abortShowsFetch, fetchShowsPage } from './tasks/fetchShowsPage';
 
 /**
  * The Task-invocation coordination owned by the page presenter: every run
  * remembers its request — genre/page selections and retries build on it —
- * and reports the Task's outcome as presentation status. A superseded
- * (aborted) run reports nothing; the newer request owns the screen.
+ * and owns the request status plus error message the page derives its
+ * presentation from. The hook is the only writer of that status; a
+ * superseded (aborted) run reports nothing, the newer run owns the screen.
  */
-export const useShowsRequest = (
-  onSearchChange: (change: SearchChange) => void,
-) => {
+export const useShowsRequest = (initialStatus: SearchStatus) => {
   const requestRef = useRef<SearchRequest | null>(null);
+  const [status, setStatus] = useState<SearchStatus>(initialStatus);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const runRequest = useCallback(
     async (request: SearchRequest): Promise<ShowsFetchResult> => {
       requestRef.current = request;
-      onSearchChange({ status: STATUS.LOADING, queryEcho: request.query });
+      setStatus(STATUS.LOADING);
+      setErrorMessage(null);
 
       const result = await fetchShowsPage(request);
+
+      // A superseded run leaves the status to the newer one in flight.
       if (result.status === 'aborted') return result;
 
       if (result.status === 'error') {
-        onSearchChange({ status: STATUS.ERROR, errorMessage: result.message });
+        setStatus(STATUS.ERROR);
+        setErrorMessage(result.message);
+
         return result;
       }
 
-      onSearchChange({ status: STATUS.SUCCESS });
+      setStatus(STATUS.SUCCESS);
 
       return result;
     },
-    [onSearchChange],
+    [],
   );
 
   // Retry re-issues the current q/genre/page request as it stands.
@@ -42,8 +48,12 @@ export const useShowsRequest = (
     if (current) void runRequest(current);
   };
 
-  // Discarding a search aborts through the Task layer, never directly.
-  const abortSearch = useCallback(() => abortShowsFetch(), []);
+  // Discarding a search aborts through the Task layer, never directly. The
+  // aborted request never completed, so it must not dedupe its re-issue.
+  const abortSearch = useCallback(() => {
+    abortShowsFetch();
+    requestRef.current = null;
+  }, []);
 
-  return { runRequest, retry, abortSearch, requestRef };
+  return { runRequest, retry, abortSearch, requestRef, status, errorMessage };
 };

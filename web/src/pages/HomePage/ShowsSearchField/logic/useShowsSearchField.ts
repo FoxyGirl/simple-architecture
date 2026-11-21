@@ -1,24 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
-
-import type { SearchChange, SearchControls } from '../../types';
-
-import { STATUS } from '../../constants';
 
 const DEBOUNCE_MS = 800;
 
 type UseShowsSearchFieldParams = {
   search: string;
-  onSearchChange: (change: SearchChange) => void;
-  registerControls: (controls: SearchControls | null) => void;
+  onDraftChange: (draft: string | null) => void;
   applySearch: (query: string) => void;
   abortSearch: () => void;
 };
 
 export const useShowsSearchField = ({
   search,
-  onSearchChange,
-  registerControls,
+  onDraftChange,
   applySearch,
   abortSearch,
 }: UseShowsSearchFieldParams) => {
@@ -29,53 +23,66 @@ export const useShowsSearchField = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // The page derives its presentation status from the pending draft, so the
+  // field only reports whether the input still matches the applied search:
+  // `null` means no pending draft, any other value is the trimmed text whose
+  // debounced URL write is inevitable.
   useEffect(() => {
     // An external change (back/forward, programmatic clear) discards the
-    // draft; an empty URL search is the idle state.
+    // draft; the applied URL search wins.
     if (draft.applied !== search) {
-      if (!search) onSearchChange({ status: STATUS.IDLE, queryEcho: '' });
+      onDraftChange(null);
       return;
     }
 
     const trimmed = draft.value.trim();
-    if (trimmed === search) return;
 
-    // The request is already inevitable, so report it right away: the view
-    // shows skeletons while the debounce is still pending.
-    onSearchChange({
-      status: trimmed ? STATUS.LOADING : STATUS.IDLE,
-      queryEcho: trimmed,
-    });
+    // The draft is back to the applied search, so the debounced write is not
+    // going to run and the page shows the results the URL already describes
+    // — its filters and pagination included.
+    if (trimmed === search) {
+      onDraftChange(null);
+      return;
+    }
+
+    // The request is already inevitable, so report the draft right away:
+    // the view shows skeletons while the debounce is still pending.
+    onDraftChange(trimmed);
 
     const timer = setTimeout(() => applySearch(trimmed), DEBOUNCE_MS);
 
     return () => {
       clearTimeout(timer);
-      abortSearch();
     };
-  }, [draft, search, onSearchChange, applySearch, abortSearch]);
+  }, [draft, search, onDraftChange, applySearch]);
+
+  // An externally emptied search (the results' empty-state action, a back
+  // navigation to the idle URL) returns focus to the input, matching the
+  // field's own clear button.
+  useEffect(() => {
+    if (!search) inputRef.current?.focus();
+  }, [search]);
+
+  // Leaving the page discards the fetch the draft left in flight; a draft
+  // change must not — the applied search's run is still the truth the
+  // restoration returns to, and a committed draft aborts it by superseding
+  // it through the Task.
+  useEffect(() => () => abortSearch(), [abortSearch]);
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     setDraft({ applied: search, value: event.target.value });
   };
 
-  const clearSearch = useCallback(() => {
+  const clearQuery = () => {
     abortSearch();
     setDraft({ applied: search, value: '' });
     inputRef.current?.focus();
-  }, [abortSearch, search]);
-
-  // Expose the input reset so the page can clear the field from the results.
-  useEffect(() => {
-    registerControls({ clearSearch });
-
-    return () => registerControls(null);
-  }, [registerControls, clearSearch]);
+  };
 
   return {
     query,
     handleSearch,
-    clearQuery: clearSearch,
+    clearQuery,
     inputRef,
   };
 };

@@ -36,12 +36,6 @@ export const serializeSearchState = (
   return params;
 };
 
-/** Map a URL state onto the selection the request helper expects. */
-export const toSelection = (state: UrlSearchState): Selection => ({
-  genre: state.genre,
-  page: state.page,
-});
-
 /**
  * The genre/page selection mapped onto the request parameters the API
  * speaks: an undefined genre means "All genres".

@@ -1,10 +1,13 @@
 # PRD: Email Authentication and User-Specific Favorites
 
 **Date**: 2026-11-22
-**Status**: Draft
+**Status**: Implemented
 **Revision**: 2026-11-22 — the dedicated login page became a sign-in modal at
 user request: there is no login route, and a signed-out navigation to the
 Favorites page redirects to the HomePage without opening the modal.
+2026-11-23 — implemented in four phases (backend email sessions, frontend
+authentication core, frontend gating, per-user favorites and enforcement); all
+acceptance criteria verified against the automated suites.
 
 ## Purpose
 
@@ -160,47 +163,47 @@ login with the same email.
 
 ## Acceptance Criteria
 
-- [ ] The app has a sign-in modal an unauthenticated user can open from the
+- [x] The app has a sign-in modal an unauthenticated user can open from the
       sign-in entry point, containing exactly one input (email), a submit action
       and a dismiss affordance; no password field is rendered and no login route
       exists.
-- [ ] Submitting a valid email starts a session through the backend, after which
+- [x] Submitting a valid email starts a session through the backend, after which
       the modal closes and the app displays that email as the current user
       together with a Logout action.
-- [ ] Submitting an empty value or a value that is not an email starts no
+- [x] Submitting an empty value or a value that is not an email starts no
       session, shows an error message in the modal and keeps the modal open.
-- [ ] Dismissing the modal without submitting closes it and leaves the app
+- [x] Dismissing the modal without submitting closes it and leaves the app
       signed out.
-- [ ] Clicking Logout ends the session on the backend; the app then shows no
+- [x] Clicking Logout ends the session on the backend; the app then shows no
       email, no Logout action and no favorite controls.
-- [ ] Reloading the browser while signed in keeps the same email displayed and
+- [x] Reloading the browser while signed in keeps the same email displayed and
       the same favorites visible, without requiring another login.
-- [ ] An unauthenticated user can search, filter by genre and paginate results
+- [x] An unauthenticated user can search, filter by genre and paginate results
       exactly as today, and `GET /api/search` requires no authentication.
-- [ ] While unauthenticated, no heart buttons are rendered on show cards in
+- [x] While unauthenticated, no heart buttons are rendered on show cards in
       either the desktop or the mobile layout, and the HomePage favorites-count
       button is not rendered.
-- [ ] While unauthenticated, navigating to the Favorites page renders no
+- [x] While unauthenticated, navigating to the Favorites page renders no
       favorites list and lands on the HomePage, without opening the sign-in
       modal.
-- [ ] While signed in, clicking a heart adds or removes the show in that user's
+- [x] While signed in, clicking a heart adds or removes the show in that user's
       favorites only: the backend stores it under that email, and the heart
       state, the favorites count and the Favorites page reflect it.
-- [ ] Favorites added by one email are absent from another email's count, heart
+- [x] Favorites added by one email are absent from another email's count, heart
       states and Favorites page list after the second email logs in.
-- [ ] After logging out and logging in again with the same email, the count, the
+- [x] After logging out and logging in again with the same email, the count, the
       heart states and the Favorites page list match what that email had before
       logout, while the backend process keeps running.
-- [ ] After logout, no favorites data of the previous user is displayed anywhere
+- [x] After logout, no favorites data of the previous user is displayed anywhere
       in the app (no stale ids, count or list).
-- [ ] An add or remove request that does not identify a signed-in session is
+- [x] An add or remove request that does not identify a signed-in session is
       rejected by the backend with an error response (not a success) and changes
       no favorites list.
-- [ ] Users, sessions and favorites are stored in plain in-memory objects on the
+- [x] Users, sessions and favorites are stored in plain in-memory objects on the
       backend; no database or file persistence is introduced.
-- [ ] Restarting the backend clears all sessions and favorites: a previously
+- [x] Restarting the backend clears all sessions and favorites: a previously
       signed-in user must log in again, and their earlier favorites are gone.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test` and
+- [x] `npm run typecheck`, `npm run lint`, `npm run test` and
       `npm run test:e2e` pass, with the previously shared-list tests revised and
       new tests covering login, logout, session persistence across reload, and
       per-user favorites separation.

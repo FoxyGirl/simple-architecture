@@ -652,9 +652,9 @@ every PRD acceptance criterion.
 > `prepareFavorites`, so the single-writer spec never shares a list.
 >
 > **PRD record (2026-11-23).** Every PRD acceptance criterion was re-checked
-> against the finished feature. The PRD file itself stays unmodified because
-> the implementation run forbids editing the original PRD; the checked
-> acceptance criteria below carry the verified result.
+> against the finished feature and, at the user's explicit request, the PRD was
+> marked `Implemented` with all acceptance boxes ticked. The checked criteria
+> below carry the same verified result.
 
 **When ready:**
 

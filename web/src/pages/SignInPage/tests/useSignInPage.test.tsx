@@ -6,7 +6,14 @@ import { ApiError } from '~/api/errors';
 import { requestJson } from '~/api/request';
 import { stubApi } from '~/test/api-mock';
 
-import { useAuthModal } from '../logic/useAuthModal';
+import { useSignInPage } from '../logic/useSignInPage';
+
+const navigate = vi.fn();
+
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-router-dom')>();
+  return { ...actual, useNavigate: () => navigate };
+});
 
 vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
@@ -21,12 +28,12 @@ const change = (value: string) =>
 const submit = () =>
   ({ preventDefault: vi.fn() }) as unknown as FormEvent<HTMLFormElement>;
 
-const renderModal = (onSignedIn = vi.fn(), onClose = vi.fn()) =>
-  renderHook(() => useAuthModal({ onSignedIn, onClose }));
+const renderPage = () => renderHook(() => useSignInPage());
 
-describe('useAuthModal', () => {
+describe('useSignInPage', () => {
   beforeEach(() => {
     api.mockReset();
+    navigate.mockReset();
   });
 
   afterEach(() => {
@@ -34,17 +41,15 @@ describe('useAuthModal', () => {
   });
 
   it('starts with an empty draft, not submitting and no error', () => {
-    const { result } = renderModal();
+    const { result } = renderPage();
 
     expect(result.current.email).toBe('');
     expect(result.current.isSubmitting).toBe(false);
     expect(result.current.errorMessage).toBeNull();
   });
 
-  it('rejects an empty or non-email value without a request', async () => {
-    const onSignedIn = vi.fn();
-    const onClose = vi.fn();
-    const { result } = renderModal(onSignedIn, onClose);
+  it('rejects an empty or non-email value without a request or navigation', async () => {
+    const { result } = renderPage();
 
     await act(async () => {
       await result.current.onSubmit(submit());
@@ -52,20 +57,19 @@ describe('useAuthModal', () => {
 
     expect(result.current.errorMessage).toBe('Enter a valid email address.');
     expect(api).not.toHaveBeenCalled();
+    expect(navigate).not.toHaveBeenCalled();
 
     act(() => result.current.onEmailChange(change('not-an-email')));
-
     await act(async () => {
       await result.current.onSubmit(submit());
     });
 
     expect(result.current.errorMessage).toBe('Enter a valid email address.');
     expect(api).not.toHaveBeenCalled();
-    expect(onSignedIn).not.toHaveBeenCalled();
-    expect(onClose).not.toHaveBeenCalled();
+    expect(navigate).not.toHaveBeenCalled();
   });
 
-  it('exposes the submitting flag while the sign-in is in flight', async () => {
+  it('exposes the submitting flag and navigates home on success', async () => {
     let resolveLogin: (session: { email: string }) => void = () => {};
     stubApi(api, {
       login: () =>
@@ -73,8 +77,7 @@ describe('useAuthModal', () => {
           resolveLogin = resolve;
         }),
     });
-    const onSignedIn = vi.fn();
-    const { result } = renderModal(onSignedIn);
+    const { result } = renderPage();
 
     act(() => result.current.onEmailChange(change('ada@example.com')));
 
@@ -82,7 +85,6 @@ describe('useAuthModal', () => {
     act(() => {
       pending = result.current.onSubmit(submit());
     });
-
     expect(result.current.isSubmitting).toBe(true);
 
     await act(async () => {
@@ -92,20 +94,18 @@ describe('useAuthModal', () => {
 
     expect(result.current.isSubmitting).toBe(false);
     expect(result.current.errorMessage).toBeNull();
-    expect(onSignedIn).toHaveBeenCalledOnce();
+    expect(navigate).toHaveBeenCalledWith('/');
   });
 
-  it('renders the backend message and stays open after a rejected login', async () => {
+  it('keeps the page and shows the backend message after a rejected login', async () => {
     stubApi(api, {
       login: () => {
         throw new ApiError('Request body must carry a valid "email"', 400);
       },
     });
-    const onSignedIn = vi.fn();
-    const { result } = renderModal(onSignedIn);
+    const { result } = renderPage();
 
     act(() => result.current.onEmailChange(change('ada@example.com')));
-
     await act(async () => {
       await result.current.onSubmit(submit());
     });
@@ -114,6 +114,6 @@ describe('useAuthModal', () => {
       'Request body must carry a valid "email"',
     );
     expect(result.current.isSubmitting).toBe(false);
-    expect(onSignedIn).not.toHaveBeenCalled();
+    expect(navigate).not.toHaveBeenCalled();
   });
 });

@@ -17,7 +17,7 @@ const login = (email: string): Promise<AuthSession> =>
  * session and issues the HttpOnly cookie the browser attaches itself. A
  * success clears the favorites mirror of any previous user and stores the
  * returned session verbatim; a rejected login leaves both Entities unchanged
- * so the modal can report the backend message. It only mutates the store
+ * so the page can report the backend message. It only mutates the store
  * through `store.dispatch` and returns the discriminated outcome.
  */
 export const signIn = async (email: string): Promise<SignInResult> => {

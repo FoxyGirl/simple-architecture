@@ -1,16 +1,19 @@
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
+import { act, cleanup, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ApiError } from '~/api/errors';
 import { requestJson } from '~/api/request';
 import { clearFavorites, clearSession, store } from '~/store';
 import { stubApi } from '~/test/api-mock';
-import { LocationProbe } from '~/test/location-probe';
 import type { AuthSession } from '~/types';
 
-import { App } from '../App';
+import {
+  favoritesHeading,
+  homeHeading,
+  location,
+  renderAt,
+  signInHeading,
+} from './routesHarness';
 
 vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
@@ -20,23 +23,6 @@ vi.mock('~/api/request', async (importOriginal) => {
 const api = vi.mocked(requestJson);
 
 const emptyPage = { shows: [], page: 1, pageCount: 1, totalCount: 0 };
-
-const renderAt = (entry: string) =>
-  render(
-    <Provider store={store}>
-      <MemoryRouter initialEntries={[entry]}>
-        <LocationProbe />
-        <App />
-      </MemoryRouter>
-    </Provider>,
-  );
-
-const location = () => screen.getByTestId('location').textContent ?? '';
-const homeHeading = () =>
-  screen.queryByRole('heading', { name: 'Discover your next obsession.' });
-const favoritesHeading = () =>
-  screen.queryByRole('heading', { name: 'Favorites' });
-const signInModal = () => screen.queryByRole('dialog', { name: 'Sign in' });
 
 describe('App favorites route guard', () => {
   beforeEach(() => {
@@ -59,7 +45,7 @@ describe('App favorites route guard', () => {
     await waitFor(() => expect(location()).toBe('/'));
     expect(homeHeading()).toBeVisible();
     expect(favoritesHeading()).not.toBeInTheDocument();
-    expect(signInModal()).not.toBeInTheDocument();
+    expect(signInHeading()).not.toBeInTheDocument();
   });
 
   it('renders the favorites page for a signed-in deep link', async () => {

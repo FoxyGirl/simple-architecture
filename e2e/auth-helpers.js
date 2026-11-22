@@ -9,18 +9,17 @@ export const accountBar = (page) => page.getByRole('banner');
 export const signInButton = (page) =>
   accountBar(page).getByRole('button', { name: 'Sign in' });
 
-export const modal = (page) => page.getByRole('dialog', { name: 'Sign in' });
+export const signInHeading = (page) =>
+  page.getByRole('heading', { name: 'Sign in', exact: true });
 
 export const emailInput = (page) =>
-  modal(page).getByRole('textbox', { name: 'Email' });
+  page.getByRole('textbox', { name: 'Email' });
 
 export const submitButton = (page) =>
-  modal(page).getByRole('button', { name: 'Continue' });
+  page.getByRole('button', { name: 'Continue' });
 
-export const closeButton = (page) =>
-  modal(page).getByRole('button', { name: 'Close sign-in dialog' });
-
-export const backdrop = (page) => page.getByTestId('auth-modal-backdrop');
+export const backButton = (page) =>
+  page.getByRole('button', { name: 'Back to Home' });
 
 export const accountEmail = (page, email) => accountBar(page).getByText(email);
 
@@ -29,7 +28,8 @@ export const logoutButton = (page) =>
 
 export const openSignIn = async (page) => {
   await signInButton(page).click();
-  await expect(modal(page)).toBeVisible();
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(signInHeading(page)).toBeVisible();
 };
 
 export const signIn = async (page, email) => {
@@ -39,7 +39,7 @@ export const signIn = async (page, email) => {
 };
 
 export const signedInAs = async (page, email) => {
-  await expect(modal(page)).toBeHidden();
+  await expect(page).toHaveURL(/\/$/);
   await expect(accountEmail(page, email)).toBeVisible();
   await expect(signInButton(page)).toBeHidden();
 };

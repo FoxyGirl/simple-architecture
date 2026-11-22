@@ -8,6 +8,10 @@ Favorites page redirects to the HomePage without opening the modal.
 2026-11-23 — implemented in four phases (backend email sessions, frontend
 authentication core, frontend gating, per-user favorites and enforcement); all
 acceptance criteria verified against the automated suites.
+2026-11-23 — superseded in part by feature 008: the sign-in modal is replaced
+by a dedicated Sign In page on the `/login` route, so the "no login route or
+page" and modal-only decisions and the related criteria are superseded.
+Everything else in this PRD remains in force.
 
 ## Purpose
 

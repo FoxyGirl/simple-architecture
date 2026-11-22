@@ -6,7 +6,7 @@ import { expect } from '@playwright/test';
 
 import {
   logoutButton,
-  signIn as signInThroughModal,
+  signIn as signInThroughPage,
   signedInAs,
   signedOut,
 } from './auth-helpers';
@@ -14,11 +14,11 @@ import { clearFavorites } from './favorites-backend';
 
 export { clearFavorites, summaryIds } from './favorites-backend';
 
-// Favorites are a signed-in feature: every flow enters through the modal as
-// its own email, then clears that email's backend list through the scoped
-// probes, so parallel workers never interleave writes on one list.
+// Favorites are a signed-in feature: every flow enters through the sign-in
+// page as its own email, then clears that email's backend list through the
+// scoped probes, so parallel workers never interleave writes on one list.
 export const signIn = async (page, email) => {
-  await signInThroughModal(page, email);
+  await signInThroughPage(page, email);
   await signedInAs(page, email);
 };
 

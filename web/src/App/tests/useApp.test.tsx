@@ -1,4 +1,4 @@
-import { act, cleanup, renderHook, waitFor } from '@testing-library/react';
+import { cleanup, renderHook, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -57,22 +57,5 @@ describe('useApp', () => {
     await waitFor(() => expect(result.current.isSessionReady).toBe(true));
 
     expect(result.current.isAuthenticated).toBe(false);
-    expect(result.current.isAuthModalOpen).toBe(false);
-  });
-
-  it('opens and closes the sign-in modal', async () => {
-    stubApi(api, { authMe: () => ({ email: null }) });
-
-    const { result } = renderHook(() => useApp(), { wrapper });
-
-    expect(result.current.isAuthModalOpen).toBe(false);
-
-    act(() => result.current.openAuthModal());
-    expect(result.current.isAuthModalOpen).toBe(true);
-
-    act(() => result.current.closeAuthModal());
-    expect(result.current.isAuthModalOpen).toBe(false);
-
-    await waitFor(() => expect(result.current.isSessionReady).toBe(true));
   });
 });

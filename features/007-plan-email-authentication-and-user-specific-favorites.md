@@ -8,6 +8,10 @@
 user request (see the PRD revision): no login route is added, the modal is an
 App-level component opened from the account bar, and a signed-out navigation to
 `/favorites` redirects to the HomePage without opening it. Phases 2-4 updated.
+2026-11-23 — superseded in part by feature 008
+(`features/008-plan-sign-in-page-and-ui-kit-buttons.md`): the sign-in modal is
+replaced by a dedicated Sign In page on `/login`; the modal-specific decisions
+here no longer describe the app.
 
 > **Approach.** Four phases, ordered so that no phase leaves the app degraded.
 > Phase 1 is the tracer bullet: the backend alone learns to start, resolve and

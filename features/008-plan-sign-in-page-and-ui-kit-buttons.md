@@ -4,6 +4,15 @@
 
 **Date:** 2026-11-23
 
+**Revision:** 2026-11-23 — Phase 1 executed without design changes (pen.dev
+plan usage limit reached; user decision): the canvas task and its criterion are
+deferred, everything else shipped. The `/login` guard tests were split into
+`web/src/App/tests/App.loginRoute.test.tsx` (with a shared
+`routesHarness.tsx` helper) to respect the 120-line lint limit.
+2026-11-23 — the sign-in copy is written as plain text in the View and
+presenter; the `SIGN_IN_PAGE_MESSAGES` constants file was removed at user
+request. The account bar's `ACCOUNT_BAR_LABELS` copy was inlined the same way.
+
 > **Approach.** Two frontend-only phases (the PRD excludes backend changes),
 > ordered so each phase leaves the app fully working. Phase 1 is the tracer
 > bullet: the sign-in modal becomes a dedicated `SignInPage` on a new `/login`
@@ -87,7 +96,7 @@ post-sign-in navigation work end to end.
 
 **Tasks:**
 
-- [ ] Rewrite `e2e/auth-helpers.js` to page-based locators and update
+- [x] Rewrite `e2e/auth-helpers.js` to page-based locators and update
       `e2e/auth.spec.js` (sign-in through `/login`, invalid submits stay on the
       page with the inline error, Cancel/Back returns to `/` signed out,
       signed-in visit to `/login` redirects to `/`, no `role="dialog"`
@@ -95,7 +104,7 @@ post-sign-in navigation work end to end.
       `e2e/favorites-helpers.js` and `e2e/favorites-users.js` still work
       through the unchanged `signIn` helper signature — all red against the
       current app.
-- [ ] Replace the modal-era unit suites: delete
+- [x] Replace the modal-era unit suites: delete
       `web/src/App/AuthModal/tests/` coverage of dialog behavior; add
       `web/src/pages/SignInPage/tests/` (View render: heading, single email
       input, submit, explanatory text mentioning favorites, Cancel/Back;
@@ -108,47 +117,50 @@ post-sign-in navigation work end to end.
       (modal state removed) and
       `web/src/App/AccountBar/tests/useAccountBar.test.tsx` (`goToSignIn`
       navigates to `/login`) — all red.
-- [ ] Add the Sign In screen to `design/ScreenScout-design.pen` via the pen.dev
-      MCP tools (read `pen-schema.md`/`code-website.md` skills first): heading,
-      explanatory favorites text, email input, submit, Cancel/Back; reuse
-      existing tokens; save the canvas.
-- [ ] Create `web/src/pages/SignInPage/` per the recorded layout: move
+- [ ] **DEFERRED** — Add the Sign In screen to `design/ScreenScout-design.pen`
+      via the pen.dev MCP tools (read `pen-schema.md`/`code-website.md` skills
+      first): heading, explanatory favorites text, email input, submit,
+      Cancel/Back; reuse existing tokens; save the canvas. _(Blocked
+      2026-11-23: pen.dev plan usage limit reached; per user decision the page
+      ships without design changes and the canvas update is deferred.)_
+- [x] Create `web/src/pages/SignInPage/` per the recorded layout: move
       `signIn.ts` (Task), `isEmail.ts` (util) and the copy constants out of
       `App/AuthModal/`; build the View (no dialog/backdrop markup, error keeps
       `role="alert"`), the `useSignInPage` presenter (draft, submitting,
       error, focus on mount, `useNavigate`) and the CSS Module; run
       `npm run css-types`.
-- [ ] Wire the `/login` route + guard in `web/src/App/App.tsx` (mirroring the
+- [x] Wire the `/login` route + guard in `web/src/App/App.tsx` (mirroring the
       `/favorites` pattern) and remove the `AuthModal` import and rendering;
       strip `isAuthModalOpen`/`openAuthModal`/`closeAuthModal` from
       `web/src/App/logic/useApp.ts`.
-- [ ] Update `web/src/App/AccountBar/`: presenter exposes `goToSignIn` via
+- [x] Update `web/src/App/AccountBar/`: presenter exposes `goToSignIn` via
       `useNavigate('/login')`; remove `AccountBarProps.onSignIn` and App's
       handler wiring; update `types.ts` comments.
-- [ ] Delete `web/src/App/AuthModal/` entirely, grep `web/src` and `e2e/` for
+- [x] Delete `web/src/App/AuthModal/` entirely, grep `web/src` and `e2e/` for
       leftover `AuthModal`/`auth-modal` references, and append the revision
       note to `features/007-prd-email-authentication-and-user-specific-favorites.md`
       (and its plan) recording the reversal.
 
 **Tests:**
 
-- [ ] `web/src/pages/SignInPage/tests/SignInPage.test.tsx` — renders heading,
+- [x] `web/src/pages/SignInPage/tests/SignInPage.test.tsx` — renders heading,
       exactly one email input, submit, explanatory favorites text and
       Cancel/Back; no `role="dialog"` or backdrop.
-- [ ] `web/src/pages/SignInPage/tests/useSignInPage.test.tsx` — invalid/empty
+- [x] `web/src/pages/SignInPage/tests/useSignInPage.test.tsx` — invalid/empty
       submit sets the error and sends no request; valid submit sets the
       in-flight flag, and success navigates to `/`; a backend error keeps the
-      page with the backend message; cancel navigates to `/` signed out.
-- [ ] `web/src/pages/SignInPage/logic/tasks/tests/signIn.test.ts` — relocated
+      page with the backend message; cancel navigates to `/` signed out
+      (`useSignInPageCancel.test.tsx`).
+- [x] `web/src/pages/SignInPage/logic/tasks/tests/signIn.test.ts` — relocated
       suite passes unchanged (stubbed `requestJson`, `clearFavorites` +
       `replaceSession` dispatches, discriminated outcome).
-- [ ] `web/src/App/tests/App.routes.test.tsx` — `/login` guard: signed-in ->
+- [x] `web/src/App/tests/App.routes.test.tsx` — `/login` guard: signed-in ->
       `/`, signed-out renders the page, pending restore renders neither page
-      nor redirect; `/favorites` guard unchanged.
-- [ ] `web/src/App/AccountBar/tests/useAccountBar.test.tsx` and
+      nor redirect (`App.loginRoute.test.tsx`); `/favorites` guard unchanged.
+- [x] `web/src/App/AccountBar/tests/useAccountBar.test.tsx` and
       `web/src/App/tests/useApp.test.tsx` — updated interfaces, no modal
       state.
-- [ ] `e2e/auth.spec.js` + `e2e/auth-guest.spec.js` — page-based flows green,
+- [x] `e2e/auth.spec.js` + `e2e/auth-guest.spec.js` — page-based flows green,
       including reload persistence and the signed-out browsing UI (regression
       for feature 007 behavior).
 
@@ -161,25 +173,27 @@ mentions `auth-modal`; `/login` is reachable only through the account bar's
 
 **Acceptance Criteria:**
 
-- [ ] Navigating to `/login` renders the Sign In page with heading, one email
+- [x] Navigating to `/login` renders the Sign In page with heading, one email
       input, submit, explanatory text stating signing in is required to save
       favorites, and a Cancel/Back action; no modal, backdrop or
       `role="dialog"` is rendered anywhere.
-- [ ] Clicking "Sign In" in the account bar while signed out navigates to
+- [x] Clicking "Sign In" in the account bar while signed out navigates to
       `/login`.
-- [ ] Submitting a valid email starts the backend session, navigates to `/`,
+- [x] Submitting a valid email starts the backend session, navigates to `/`,
       and the email, Logout and favorite controls are visible; submitting an
       empty/non-email value shows the inline error with no session and no
       navigation, and the submit is disabled while the request is in flight.
-- [ ] Cancel/Back navigates to `/` and leaves the app signed out.
-- [ ] A signed-in user opening `/login` is redirected to `/`; a signed-out user
+- [x] Cancel/Back navigates to `/` and leaves the app signed out.
+- [x] A signed-in user opening `/login` is redirected to `/`; a signed-out user
       opening `/favorites` is still redirected to `/`, and nothing opens the
       Sign In page automatically.
-- [ ] Logout, reload session persistence, per-user favorites separation and
+- [x] Logout, reload session persistence, per-user favorites separation and
       unauthenticated browsing behave exactly as in feature 007 (existing
       suites and specs pass).
 - [ ] The canvas shows the Sign In screen and every token it uses exists with
-      identical names/values in `web/src/styles/tokens.css`.
+      identical names/values in `web/src/styles/tokens.css`. _(Deferred with
+      the pen.dev canvas update — user decision 2026-11-23: ship without design
+      changes.)_
 
 ### Phase 2: UI-kit Button and icon buttons
 

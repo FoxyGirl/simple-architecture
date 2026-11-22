@@ -26,17 +26,23 @@ vi.mock('~/notification', () => ({
 }));
 
 const api = vi.mocked(requestJson);
+const navigate = vi.fn();
+
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-router-dom')>();
+  return { ...actual, useNavigate: () => navigate };
+});
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <Provider store={store}>{children}</Provider>
 );
 
-const renderBar = (onSignIn = vi.fn()) =>
-  renderHook(() => useAccountBar({ onSignIn }), { wrapper });
+const renderBar = () => renderHook(() => useAccountBar(), { wrapper });
 
 describe('useAccountBar', () => {
   beforeEach(() => {
     api.mockReset();
+    navigate.mockReset();
     vi.mocked(notify.error).mockClear();
     store.dispatch(clearSession());
     store.dispatch(replaceFavoritesSummary({ count: 0, ids: [] }));
@@ -52,13 +58,12 @@ describe('useAccountBar', () => {
     expect(result.current.account).toEqual({ kind: 'guest' });
   });
 
-  it('forwards the Sign in handler owned by App', () => {
-    const onSignIn = vi.fn();
-    const { result } = renderBar(onSignIn);
+  it('navigates to the sign-in page from the guest entry point', () => {
+    const { result } = renderBar();
 
-    result.current.onSignIn();
+    result.current.goToSignIn();
 
-    expect(onSignIn).toHaveBeenCalledOnce();
+    expect(navigate).toHaveBeenCalledWith('/login');
   });
 
   it('exposes the signed-in email and logs out through the Task', async () => {

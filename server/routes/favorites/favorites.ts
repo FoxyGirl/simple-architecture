@@ -1,5 +1,6 @@
-import { Router } from 'express';
+import { Router, type Request, type Response } from 'express';
 
+import { parseSessionCookie, resolveSessionEmail } from '@server/auth';
 import type { Show } from '@server/types';
 
 import {
@@ -12,12 +13,29 @@ import {
 /**
  * Favorites routes. Mounted under `/api` by `app.ts`, so they answer
  * `POST /api/favorites`, `DELETE /api/favorites/:id`,
- * `GET /api/favorites/count` and `GET /api/favorites?page=`. Every read
- * and write goes to the in-memory storage only — serving favorites
- * never calls TVmaze. Add and remove answer with the updated
- * `{ count, ids }` summary so clients sync without refetching.
+ * `GET /api/favorites/count` and `GET /api/favorites?page=`. Every endpoint
+ * requires the session cookie and operates only on that email's own
+ * in-memory list — reads included; serving favorites never calls TVmaze.
+ * Add and remove answer with the email's updated `{ count, ids }` summary so
+ * clients sync without refetching.
  */
 export const favoritesRouter = Router();
+
+/**
+ * The route guard: resolves the session email or answers 401 `{ error }` and
+ * short-circuits with `null`. Runs before body/query validation, so an
+ * unauthenticated request can never touch a list.
+ */
+const requireEmail = (req: Request, res: Response): string | null => {
+  const email = resolveSessionEmail(parseSessionCookie(req.headers.cookie));
+
+  if (email === null) {
+    res.status(401).json({ error: 'Authentication required' });
+    return null;
+  }
+
+  return email;
+};
 
 // Page is advisory: an absent or unparseable value falls back to page 1,
 // and the storage helper clamps it into [1, pageCount] — the search
@@ -45,6 +63,9 @@ const isShowSnapshot = (value: unknown): value is Show => {
 };
 
 favoritesRouter.post('/favorites', (req, res) => {
+  const email = requireEmail(req, res);
+  if (email === null) return;
+
   const { show } = (req.body ?? {}) as { show?: unknown };
 
   if (!isShowSnapshot(show)) {
@@ -52,19 +73,28 @@ favoritesRouter.post('/favorites', (req, res) => {
     return;
   }
 
-  addFavorite(show);
-  res.json(getFavoritesSummary());
+  addFavorite(email, show);
+  res.json(getFavoritesSummary(email));
 });
 
-favoritesRouter.get('/favorites/count', (_req, res) => {
-  res.json(getFavoritesSummary());
+favoritesRouter.get('/favorites/count', (req, res) => {
+  const email = requireEmail(req, res);
+  if (email === null) return;
+
+  res.json(getFavoritesSummary(email));
 });
 
 favoritesRouter.get('/favorites', (req, res) => {
-  res.json(getFavoritesListPage(parsePage(req.query.page)));
+  const email = requireEmail(req, res);
+  if (email === null) return;
+
+  res.json(getFavoritesListPage(email, parsePage(req.query.page)));
 });
 
 favoritesRouter.delete('/favorites/:id', (req, res) => {
+  const email = requireEmail(req, res);
+  if (email === null) return;
+
   const raw = req.params.id;
 
   // Only canonical integer ids parse — anything else (also '1.5', hex or
@@ -76,6 +106,6 @@ favoritesRouter.delete('/favorites/:id', (req, res) => {
 
   // Recorded decision: an unknown id removes nothing — a 200 with the
   // unchanged summary, because the desired end state already holds.
-  removeFavorite(Number(raw));
-  res.json(getFavoritesSummary());
+  removeFavorite(email, Number(raw));
+  res.json(getFavoritesSummary(email));
 });

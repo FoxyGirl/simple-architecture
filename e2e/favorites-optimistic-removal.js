@@ -22,7 +22,7 @@ import {
 // The Favorites page applies the soft-removal marking optimistically: the
 // card flips at click time, the list never refetches and a failure rolls the
 // flip back with the existing error toast.
-export const favoritesOptimisticRemovalFlow = async (page, request) => {
+export const favoritesOptimisticRemovalFlow = async (page, request, email) => {
   await searchSpace(page);
   await addFourSpaceShows(page);
 
@@ -53,7 +53,7 @@ export const favoritesOptimisticRemovalFlow = async (page, request) => {
   writes.release();
   await shownToast(page, '"Space Tour" was removed from favorites');
   await expect(heart(page, 'Space Tour', false)).toBeEnabled();
-  await expect.poll(() => summaryIds(request)).toHaveLength(3);
+  await expect.poll(() => summaryIds(request, email)).toHaveLength(3);
   expect(listFetches()).toBe(mountFetches);
 
   // A held POST restores the grayed card at click time; the confirmation only
@@ -69,7 +69,7 @@ export const favoritesOptimisticRemovalFlow = async (page, request) => {
   writes.release();
   await shownToast(page, '"Space Tour" was added to favorites');
   await expect(heart(page, 'Space Tour', true)).toBeEnabled();
-  await expect.poll(() => summaryIds(request)).toHaveLength(4);
+  await expect.poll(() => summaryIds(request, email)).toHaveLength(4);
 
   // An aborted DELETE reverts the gray-out with the error toast, no success
   // toast and still no refetch.

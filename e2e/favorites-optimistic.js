@@ -14,7 +14,7 @@ import { holdWrites } from './favorites-intercept';
 const errorToast = (page) =>
   page.locator('[data-sonner-toast][data-type="error"]');
 
-export const favoritesOptimisticFlow = async (page, request) => {
+export const favoritesOptimisticFlow = async (page, request, email) => {
   await searchSpace(page);
   await expect(countButton(page, 0)).toBeVisible();
 
@@ -30,13 +30,13 @@ export const favoritesOptimisticFlow = async (page, request) => {
   await expect(toast(page, '"Space Tour" was added to favorites')).toHaveCount(
     0,
   );
-  await expect.poll(() => summaryIds(request)).toEqual([]);
+  await expect.poll(() => summaryIds(request, email)).toEqual([]);
 
   writes.release();
   await shownToast(page, '"Space Tour" was added to favorites');
   await expect(heart(page, 'Space Tour', true)).toBeEnabled();
   expect(writes.hits()).toBe(1);
-  await expect.poll(() => summaryIds(request)).toEqual([600]);
+  await expect.poll(() => summaryIds(request, email)).toEqual([600]);
 
   // Optimistic removal: the same window for the DELETE direction.
   await heart(page, 'Space Tour', true).click();
@@ -50,7 +50,7 @@ export const favoritesOptimisticFlow = async (page, request) => {
   await shownToast(page, '"Space Tour" was removed from favorites');
   await expect(heart(page, 'Space Tour', false)).toBeEnabled();
   expect(writes.hits()).toBe(2);
-  await expect.poll(() => summaryIds(request)).toEqual([]);
+  await expect.poll(() => summaryIds(request, email)).toEqual([]);
 
   // A failed write rolls the optimistic state back: the heart and the count
   // return to their pre-click values, the error toast shows, no success toast
@@ -70,5 +70,5 @@ export const favoritesOptimisticFlow = async (page, request) => {
     0,
   );
   expect(writes.hits()).toBe(3);
-  await expect.poll(() => summaryIds(request)).toEqual([]);
+  await expect.poll(() => summaryIds(request, email)).toEqual([]);
 };

@@ -24,7 +24,7 @@ const FAVORITE_PINK = 'rgb(241, 73, 129)';
 // visual state, the flipped heart restores it, and only a fresh fetch shows
 // backend state. It also proves the mobile row card, the hover heart outline
 // and the HomePage regression.
-export const favoritesSoftRemovalFlow = async (page, request) => {
+export const favoritesSoftRemovalFlow = async (page, request, email) => {
   await searchSpace(page);
   await addFourSpaceShows(page);
   await countButton(page, 4).click();
@@ -48,7 +48,7 @@ export const favoritesSoftRemovalFlow = async (page, request) => {
   await expect(heart(page, 'Space Tour', false)).toBeVisible();
   await expect(pageInfo(page, 'Page 1 of 2')).toBeVisible();
   await expect(subhead(page, '3 shows saved to your list.')).toBeVisible();
-  await expect.poll(() => summaryIds(request)).toHaveLength(3);
+  await expect.poll(() => summaryIds(request, email)).toHaveLength(3);
 
   // The heart keeps its pink hover outline outside the grayscale and the
   // button ring stays off on hover.
@@ -65,12 +65,12 @@ export const favoritesSoftRemovalFlow = async (page, request) => {
   await expect(cardContent(page, 'Space Tour')).toHaveCSS('opacity', '1');
   await expect(pageInfo(page, 'Page 1 of 2')).toBeVisible();
   await expect(subhead(page, '4 shows saved to your list.')).toBeVisible();
-  await expect.poll(() => summaryIds(request)).toHaveLength(4);
+  await expect.poll(() => summaryIds(request, email)).toHaveLength(4);
 
   // Remove a second show: the removal this flow leaves behind.
   await heart(page, 'Space Series', true).click();
   await expect(heart(page, 'Space Series', false)).toBeVisible();
-  await expect.poll(() => summaryIds(request)).toHaveLength(3);
+  await expect.poll(() => summaryIds(request, email)).toHaveLength(3);
 
   // The same removed state renders on the mobile row card below 1024px.
   await page.setViewportSize({ width: 900, height: 1000 });

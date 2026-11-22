@@ -4,23 +4,33 @@
 
 import { expect } from '@playwright/test';
 
-import { signIn } from './auth-helpers';
+import {
+  logoutButton,
+  signIn as signInThroughModal,
+  signedInAs,
+  signedOut,
+} from './auth-helpers';
+import { clearFavorites } from './favorites-backend';
 
-const BACKEND = 'http://localhost:3001';
+export { clearFavorites, summaryIds } from './favorites-backend';
 
-// Favorites are a signed-in feature: every flow enters through the modal.
-// In this phase the backend still serves one shared list, so one email is
-// enough to unlock the controls.
-const FAVORITES_EMAIL = 'favorites@example.com';
+// Favorites are a signed-in feature: every flow enters through the modal as
+// its own email, then clears that email's backend list through the scoped
+// probes, so parallel workers never interleave writes on one list.
+export const signIn = async (page, email) => {
+  await signInThroughModal(page, email);
+  await signedInAs(page, email);
+};
 
-export const summaryIds = async (request) =>
-  (await (await request.get(`${BACKEND}/api/favorites/count`)).json()).ids;
+export const signOut = async (page) => {
+  await logoutButton(page).click();
+  await signedOut(page);
+};
 
-// The backend may be warm from earlier runs, so every test starts by
-// clearing the favorites through its API.
-export const clearFavorites = async (request) => {
-  for (const id of await summaryIds(request))
-    await request.delete(`${BACKEND}/api/favorites/${id}`);
+export const prepareFavorites = async (page, request, email) => {
+  await page.goto('/');
+  await signIn(page, email);
+  await clearFavorites(request, email);
 };
 
 export const searchInput = (page) =>
@@ -57,7 +67,6 @@ export const pressed = (page, name) =>
 
 export const searchSpace = async (page) => {
   await page.goto('/');
-  await signIn(page, FAVORITES_EMAIL);
   await searchInput(page).fill('space');
   await expect(card(page, 'Space Tour')).toBeVisible();
 };

@@ -12,14 +12,14 @@ import {
 } from './favorites-helpers';
 
 // Hearts stay backend-driven through genre, page and search changes.
-export const heartsFlow = async (page, request) => {
+export const heartsFlow = async (page, request, email) => {
   await searchSpace(page);
   await expect(countButton(page, 0)).toBeVisible();
 
   // Adding through the heart writes to the backend, not just to the page.
   await heart(page, 'Space Tour', false).click();
   await pressed(page, 'Space Tour');
-  await expect.poll(() => summaryIds(request)).toEqual([600]);
+  await expect.poll(() => summaryIds(request, email)).toEqual([600]);
   await expect(countButton(page, 1)).toBeVisible();
 
   // The pressed state survives a genre change, a page change…
@@ -41,6 +41,6 @@ export const heartsFlow = async (page, request) => {
   // Removing through the heart clears it on the backend and the count.
   await heart(page, 'Space Tour', true).click();
   await expect(heart(page, 'Space Tour', false)).toBeVisible();
-  await expect.poll(() => summaryIds(request)).toEqual([]);
+  await expect.poll(() => summaryIds(request, email)).toEqual([]);
   await expect(countButton(page, 0)).toBeVisible();
 };

@@ -16,10 +16,10 @@ import {
 
 // The Favorites list flow: pagination, deferred removal refresh and the home
 // round trip.
-export const favoritesPaginationFlow = async (page, request) => {
+export const favoritesPaginationFlow = async (page, request, email) => {
   await searchSpace(page);
   await addFourSpaceShows(page);
-  await expect.poll(() => summaryIds(request)).toHaveLength(4);
+  await expect.poll(() => summaryIds(request, email)).toHaveLength(4);
 
   // The count button reaches the Favorites page: three per page, two pages.
   await expect(countButton(page, 4)).toBeVisible();
@@ -46,7 +46,7 @@ export const favoritesPaginationFlow = async (page, request) => {
   await expect(heart(page, 'Space Tour', false)).toBeVisible();
   await expect(pageInfo(page, 'Page 1 of 2')).toBeVisible();
   await expect(subhead(page, '3 shows saved to your list.')).toBeVisible();
-  await expect.poll(() => summaryIds(request)).toHaveLength(3);
+  await expect.poll(() => summaryIds(request, email)).toHaveLength(3);
 
   // The deferred refresh shows on the next fresh fetch: the reload drops the
   // removed card and the backend clamps the list to one page.

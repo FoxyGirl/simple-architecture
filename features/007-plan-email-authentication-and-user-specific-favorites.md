@@ -570,7 +570,7 @@ every PRD acceptance criterion.
 
 **Tasks:**
 
-- [ ] Revise the backend suites first (red): `server/routes/favorites/tests/storage.test.ts`
+- [x] Revise the backend suites first (red): `server/routes/favorites/tests/storage.test.ts`
       for the email-first signatures — every email owns a separate
       `Record<number, Show>`, an unknown email yields the empty summary and one
       empty page, adding or removing for one email never touches another, the
@@ -583,10 +583,10 @@ every PRD acceptance criterion.
       the pre-logout list, a login with a different email returns an empty one,
       clearing the `favoritesByEmail` seam (the restart stand-in) empties every
       list, and favorites still never call TVmaze.
-- [ ] Add the search-isolation case first (red): `server/tests/app.search.test.ts`
+- [x] Add the search-isolation case first (red): `server/tests/app.search.test.ts`
       asserts `GET /api/search` answers 200 with no session cookie, so the PRD's
       "unauthenticated browsing stays fully available" is pinned by a test.
-- [ ] Write the E2E separation flow first (red): `e2e/favorites-users.js`,
+- [x] Write the E2E separation flow first (red): `e2e/favorites-users.js`,
       registered as one extra test in the single-writer `favorites.spec.js` —
       sign in as user A, add two shows, assert `View favorites (2)` and the
       Favorites page list; log out, sign in as user B, assert
@@ -600,24 +600,24 @@ every PRD acceptance criterion.
       each spec its own email so parallel workers never share a list, replace
       the shared `beforeEach` clear with a per-flow sign-in plus scoped clear,
       and keep every touched file <= 120 lines (split the helpers if needed).
-- [ ] Rework `server/routes/favorites/storage.ts` to
+- [x] Rework `server/routes/favorites/storage.ts` to
       `favoritesByEmail: Record<string, Record<number, Show>>` — a plain object,
       no database — with email-first `addFavorite`, `removeFavorite`,
       `getFavoritesSummary` and `getFavoritesListPage`, an unknown email mapping
       to the empty summary and one empty page, the exported reset seam updated
       for the new shape, and both consumers of that seam adjusted; the recorded
       integer-key iteration-order comment stays and is re-worded per email.
-- [ ] Rework `server/routes/favorites/favorites.ts`: resolve the session email
+- [x] Rework `server/routes/favorites/favorites.ts`: resolve the session email
       through `@server/auth` in a private `requireEmail(req, res)` guard that
       answers 401 `{ error }` and short-circuits when no session resolves, run it
       at the start of all four handlers, pass the email to the storage helpers,
       and keep the endpoint paths and the `{ count, ids }` / list-page envelopes
       byte-identical so no frontend Task changes.
-- [ ] Update the doc comments that still describe one shared list
+- [x] Update the doc comments that still describe one shared list
       (`storage.ts`, `favorites.ts`, `server/routes/favorites/index.ts`) to
       describe the per-email storage, the session requirement and the new reset
       seam.
-- [ ] Final verification: all gates green (`typecheck`, `lint`, `test`,
+- [x] Final verification: all gates green (`typecheck`, `lint`, `test`,
       `test:e2e`, `build`); `web/src/api/`, `toggleShowFavorite`,
       `syncFavoritesSummary` and `fetchFavoritesPage` have no diff (proof the
       cookie needed no client change); an automated E2E round through every PRD
@@ -626,19 +626,35 @@ every PRD acceptance criterion.
 
 **Tests:**
 
-- [ ] Revised per-email storage suite: isolation between emails, empty defaults,
+- [x] Revised per-email storage suite: isolation between emails, empty defaults,
       pagination per email, seam reset (red -> green).
-- [ ] Revised app-level favorites suite: authenticated happy paths, 401
+- [x] Revised app-level favorites suite: authenticated happy paths, 401
       enforcement on all four endpoints, cross-user invisibility, persistence
       across logout/login, restart-equivalent clearing, no TVmaze call (red ->
       green).
-- [ ] New search-isolation assertion: `GET /api/search` needs no session (red ->
+- [x] New search-isolation assertion: `GET /api/search` needs no session (red ->
       green).
-- [ ] New E2E `favorites-users.js`: per-user separation and persistence across
+- [x] New E2E `favorites-users.js`: per-user separation and persistence across
       logout/login, plus the email-scoped helpers every existing favorites flow
       now signs in with (red -> green).
-- [ ] All pre-existing suites stay green, including every Phase 1-3 auth,
+- [x] All pre-existing suites stay green, including every Phase 1-3 auth,
       Entity, Task, presenter and guest-UI test and all Playwright flows.
+
+> **Test-placement record (2026-11-23).** The 120-line rule split the named
+> suites along their seams: storage is covered by `storage.test.ts` plus
+> `storagePerEmail.test.ts` (shared `fixtures.ts`); app-level favorites by
+> `app.favorites.test.ts`, `app.favoritesValidation.test.ts`,
+> `app.favoritesAuth.test.ts` and `app.favoritesUsers.test.ts` (shared
+> `favorites-probe.ts`); and the search-isolation assertion lives in
+> `app.searchOpen.test.ts` so `app.search.test.ts` stays within budget. The
+> E2E backend probes live in `e2e/favorites-backend.js`; every favorites flow
+> signs in as its own `favorites-<name>@example.com` through
+> `prepareFavorites`, so the single-writer spec never shares a list.
+>
+> **PRD record (2026-11-23).** Every PRD acceptance criterion was re-checked
+> against the finished feature. The PRD file itself stays unmodified because
+> the implementation run forbids editing the original PRD; the checked
+> acceptance criteria below carry the verified result.
 
 **When ready:**
 
@@ -651,26 +667,26 @@ acceptance criterion is re-verified.
 
 **Acceptance Criteria:**
 
-- [ ] While signed in, an add stores the show under that email only: another
+- [x] While signed in, an add stores the show under that email only: another
       email's summary, count and Favorites page list are unchanged (backend
       suite + E2E).
-- [ ] All four favorites endpoints answer 401 `{ error }` without a valid
+- [x] All four favorites endpoints answer 401 `{ error }` without a valid
       session and change no favorites list (backend suite).
-- [ ] `GET /api/search` answers 200 with no session cookie (backend suite + the
+- [x] `GET /api/search` answers 200 with no session cookie (backend suite + the
       unchanged search/browse E2E specs).
-- [ ] After a logout and a new login with the same email, the count, the ids and
+- [x] After a logout and a new login with the same email, the count, the ids and
       the Favorites page list match the pre-logout values; a different email
       starts with an empty list (backend suite + E2E).
-- [ ] Clearing the in-memory stores — the automated stand-in for a backend
+- [x] Clearing the in-memory stores — the automated stand-in for a backend
       restart — invalidates issued session tokens (`me` answers 401) and empties
       every favorites list; the frontend's failed restore then shows the signed-out
       UI (backend suites + the Phase 2 restore suite).
-- [ ] Users' favorites and sessions are plain in-memory objects: `server/package.json`
+- [x] Users' favorites and sessions are plain in-memory objects: `server/package.json`
       still lists `express` as its only runtime dependency, `web/package.json`
       gains none, and no file or database persistence exists.
-- [ ] The frontend needed no change for per-user favorites: `web/src/api/`,
+- [x] The frontend needed no change for per-user favorites: `web/src/api/`,
       `toggleShowFavorite`, `syncFavoritesSummary` and `fetchFavoritesPage` have
       no diff.
-- [ ] Every PRD acceptance criterion is re-checked against the finished feature,
+- [x] Every PRD acceptance criterion is re-checked against the finished feature,
       and `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass.

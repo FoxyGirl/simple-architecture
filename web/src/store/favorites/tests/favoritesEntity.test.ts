@@ -5,6 +5,7 @@ import type { Show } from '~/types';
 
 import { showsReducer } from '../../shows';
 import {
+  beginFavoriteToggle,
   favoritesReducer,
   replaceFavoritesListSnapshot,
   replaceFavoritesSummary,
@@ -13,6 +14,8 @@ import {
   selectFavoriteShows,
   selectFavoritesHasLoaded,
   selectFavoritesTotalCount,
+  selectPendingFavoriteIds,
+  settleFavoriteToggle,
 } from '..';
 
 const show = (id: number, name: string): Show =>
@@ -40,6 +43,7 @@ describe('favorites entity', () => {
   it('starts with no favorites and no fetched page', () => {
     expect(store.getState().favorites).toEqual({
       ids: [],
+      pendingToggles: {},
       shows: null,
       totalCount: 0,
     });
@@ -61,5 +65,39 @@ describe('favorites entity', () => {
     expect(selectFavoriteShows(store.getState())).toEqual(shows);
     expect(selectFavoritesTotalCount(store.getState())).toBe(5);
     expect(selectFavoritesHasLoaded(store.getState())).toBe(true);
+  });
+
+  it('a pending toggle overlays the backend ids until it settles', () => {
+    store.dispatch(replaceFavoritesSummary({ count: 2, ids: [7, 3] }));
+
+    store.dispatch(beginFavoriteToggle({ id: 5, target: true }));
+    expect(selectFavoriteIds(store.getState())).toEqual([7, 3, 5]);
+    expect(selectFavoritesCount(store.getState())).toBe(3);
+    expect(selectPendingFavoriteIds(store.getState())).toEqual([5]);
+
+    store.dispatch(beginFavoriteToggle({ id: 7, target: false }));
+    expect(selectFavoriteIds(store.getState())).toEqual([3, 5]);
+
+    // A failed removal settles without a summary: the verbatim ids resurface.
+    store.dispatch(settleFavoriteToggle(7));
+    expect(selectFavoriteIds(store.getState())).toEqual([7, 3, 5]);
+
+    store.dispatch(settleFavoriteToggle(5));
+    expect(selectFavoriteIds(store.getState())).toEqual([7, 3]);
+    expect(selectFavoritesCount(store.getState())).toBe(2);
+    expect(selectPendingFavoriteIds(store.getState())).toEqual([]);
+  });
+
+  it('the overlay forces its target across a concurrently replaced summary', () => {
+    store.dispatch(replaceFavoritesSummary({ count: 1, ids: [7] }));
+    store.dispatch(beginFavoriteToggle({ id: 5, target: true }));
+
+    // A summary that predates the pending write on the backend must not
+    // drop the optimistic add; the overlay is cleared only by its settle.
+    store.dispatch(replaceFavoritesSummary({ count: 0, ids: [] }));
+    expect(selectFavoriteIds(store.getState())).toEqual([5]);
+
+    store.dispatch(settleFavoriteToggle(5));
+    expect(selectFavoriteIds(store.getState())).toEqual([]);
   });
 });

@@ -1,7 +1,9 @@
 export {
+  beginFavoriteToggle,
   favoritesReducer,
   replaceFavoritesListSnapshot,
   replaceFavoritesSummary,
+  settleFavoriteToggle,
 } from './favoritesSlice';
 export {
   selectFavoriteIds,
@@ -9,5 +11,6 @@ export {
   selectFavoriteShows,
   selectFavoritesHasLoaded,
   selectFavoritesTotalCount,
+  selectPendingFavoriteIds,
 } from './selectors';
-export type { FavoritesState } from './types';
+export type { FavoritesState, PendingToggle } from './types';

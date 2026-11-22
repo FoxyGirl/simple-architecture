@@ -1,14 +1,20 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
-import { replaceFavoritesSummary, selectFavoriteIds, store } from '~/store';
+import {
+  replaceFavoritesSummary,
+  selectFavoriteIds,
+  selectPendingFavoriteIds,
+  store,
+} from '~/store';
 import { favoriteWrites, stubApi } from '~/test/api-mock';
 import type { FavoritesSummary, Show } from '~/types';
 
 import { toggleShowFavorite } from '../toggleShowFavorite';
 
 // The Task under test is a plain async function, so the suite needs no React
-// and no fetch stubbing: only the shared request boundary is replaced.
+// and no fetch stubbing: only the shared request boundary is replaced. The
+// in-flight optimistic overlay lives in the sibling pending suite.
 vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
 
@@ -65,19 +71,20 @@ describe('toggleShowFavorite task', () => {
     await toggleShowFavorite(show(1, 'Show One'), false);
 
     expect(selectFavoriteIds(store.getState())).toEqual([1]);
+    expect(selectPendingFavoriteIds(store.getState())).toEqual([]);
   });
 
-  it('dispatches nothing and reports the failure when the request fails', async () => {
+  it('clears the pending overlay and reports an immediate failure', async () => {
     stubApi(api, {
       addFavorite: () => {
         throw new Error('offline');
       },
     });
 
-    const before = store.getState().favorites;
     const result = await toggleShowFavorite(show(1, 'Show One'), false);
 
     expect(result).toEqual({ status: 'error', message: 'offline' });
-    expect(store.getState().favorites).toBe(before);
+    expect(selectPendingFavoriteIds(store.getState())).toEqual([]);
+    expect(selectFavoriteIds(store.getState())).toEqual([]);
   });
 });

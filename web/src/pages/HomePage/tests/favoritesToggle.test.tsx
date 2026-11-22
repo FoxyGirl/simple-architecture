@@ -3,7 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
 import { notify } from '~/notification';
-import { replaceFavoritesSummary, selectFavoriteIds, store } from '~/store';
+import {
+  replaceFavoritesSummary,
+  selectFavoriteIds,
+  selectPendingFavoriteIds,
+  store,
+} from '~/store';
 import { favoriteWrites, stubApi } from '~/test/api-mock';
 
 import {
@@ -88,7 +93,7 @@ describe('HomePage favorites toggle', () => {
     expect(favoriteButton('Add Show One to favorites')).toBeInTheDocument();
   });
 
-  it('a failed toggle dispatches nothing and leaves the heart unpressed', async () => {
+  it('a failed toggle rolls back the overlay and leaves the heart unpressed', async () => {
     await searchAsGuest();
     stubApi(api, {
       search: () => page1,
@@ -97,10 +102,10 @@ describe('HomePage favorites toggle', () => {
       },
     });
 
-    const before = store.getState().favorites;
     await click(favoriteButton('Add Show One to favorites'));
 
-    expect(store.getState().favorites).toBe(before);
+    expect(favoriteIds()).toEqual([]);
+    expect(selectPendingFavoriteIds(store.getState())).toEqual([]);
     expect(notify.error).toHaveBeenCalledWith('offline');
     expect(favoriteButton('Add Show One to favorites')).toBeInTheDocument();
   });

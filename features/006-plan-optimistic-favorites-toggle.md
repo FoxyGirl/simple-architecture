@@ -119,18 +119,18 @@ pending-overlay mechanism every later phase builds on.
 
 **Tasks:**
 
-- [ ] Write the new E2E flow first (red): `e2e/favorites-optimistic.js`,
+- [x] Write the new E2E flow first (red): `e2e/favorites-optimistic.js`,
       registered in `favorites.spec.js` — HomePage scenarios using
       `page.route('**/api/favorites**')` interception: with a delayed
       `route.fulfill` of the real (`route.fetch()`) POST response, the heart
       label reads `Remove Space Tour from favorites` and `countButton(page,
-    1)` is visible before the fulfill resolves, and the add toast appears
+1)` is visible before the fulfill resolves, and the add toast appears
       after; the same for DELETE (heart flips to `Add …`, count decrements
       before the response); with `route.abort()`, heart and count revert to
       their pre-click values, the error toast shows and no success toast
       appears. Extend `e2e/favorites-helpers.js` with a delayed-fulfillment
       route helper if needed; every touched file stays <= 120 lines.
-- [ ] Write the Entity and Task unit suites first (red):
+- [x] Write the Entity and Task unit suites first (red):
       `favoritesEntity.test.ts` gains the pending-overlay cases —
       `beginFavoriteToggle` + effective `selectFavoriteIds`/
       `selectFavoritesCount` (add appears, remove disappears), force
@@ -140,7 +140,7 @@ pending-overlay mechanism every later phase builds on.
       dispatch sequence — pending begins before the request resolves,
       success dispatches summary + settle, failure dispatches settle only and
       still returns `{ status: 'error' }`.
-- [ ] Revise the HomePage unit suites first (red) at the mocked request
+- [x] Revise the HomePage unit suites first (red) at the mocked request
       boundary (`~/test/api-mock`, deferred promises):
       `favoritesToggle.test.tsx` and `favoritesToastFlow.test.tsx` — heart
       label and count button flip before the deferred POST/DELETE settles;
@@ -148,38 +148,38 @@ pending-overlay mechanism every later phase builds on.
       revert and the error toast shows; `favoritesFlow.test.tsx` and
       `favoritesCountButton.test.tsx` are updated where they assert the
       update-after-response timing.
-- [ ] Implement the Entity overlay: `store/favorites/types.ts` gains the
+- [x] Implement the Entity overlay: `store/favorites/types.ts` gains the
       pending-toggles field (record of show id -> target favorite state) in
       `FavoritesState`; `favoritesSlice` gains `beginFavoriteToggle` and
       `settleFavoriteToggle` reducers (initial state: empty record);
       `replaceFavoritesSummary` keeps storing `ids` verbatim; the slice,
       `types.ts` and barrel doc comments are updated to describe the
       transient overlay beside the backend-synced mirror.
-- [ ] Implement the selectors: `selectFavoriteIds` returns the effective ids
+- [x] Implement the selectors: `selectFavoriteIds` returns the effective ids
       ((ids ∪ pending-adds) − pending-removes), `selectFavoritesCount` stays
       the length of the effective ids, new `selectPendingFavoriteIds`
       returns the in-flight ids; exported through the store barrels.
-- [ ] Implement the Task change in `toggleShowFavorite`: dispatch
+- [x] Implement the Task change in `toggleShowFavorite`: dispatch
       `beginFavoriteToggle(show.id, !isFavorite)` before the request; on
       success dispatch `replaceFavoritesSummary(summary)` then settle; on
       error settle before returning the error result. Update the JSDoc (the
       Task still never reads the store).
-- [ ] Verify: `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] Verify: `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` green; `server/` has no diff;
       the FavoritesPage suites pass with at most timing-neutral updates
       (their success-driven marking behavior is Phase 3).
 
 **Tests:**
 
-- [ ] New E2E flow `favorites-optimistic.js` HomePage scenarios (red ->
+- [x] New E2E flow `favorites-optimistic.js` HomePage scenarios (red ->
       green): optimistic flip before the delayed response, reconciliation +
       toast after it, rollback + error toast on abort.
-- [ ] Entity suite: pending actions, effective ids/count, force semantics,
+- [x] Entity suite: pending actions, effective ids/count, force semantics,
       settle-restores-verbatim, pending-ids selector (red -> green).
-- [ ] Task suite: dispatch order for success and failure (red -> green).
-- [ ] Revised HomePage suites: hearts and count flip with deferred requests,
+- [x] Task suite: dispatch order for success and failure (red -> green).
+- [x] Revised HomePage suites: hearts and count flip with deferred requests,
       toast timing unchanged, failure rollback (red -> green).
-- [ ] All pre-existing suites stay green: `useShowList.test.tsx`,
+- [x] All pre-existing suites stay green: `useShowList.test.tsx`,
       `syncFavoritesSummary.test.ts`, the FavoritesPage suites, every search
       and store suite, all server suites.
 
@@ -193,22 +193,49 @@ suite — new, revised and pre-existing — is green with `server/` untouched.
 
 **Acceptance Criteria:**
 
-- [ ] With a delayed POST, the HomePage heart renders the favorite state and
+- [x] With a delayed POST, the HomePage heart renders the favorite state and
       the count button increments by 1 before the response arrives (unit +
       E2E).
-- [ ] With a delayed DELETE, the heart renders the non-favorite state and the
+- [x] With a delayed DELETE, the heart renders the non-favorite state and the
       count decrements by 1 before the response arrives (unit + E2E).
-- [ ] After a successful toggle the hearts and count match the returned
+- [x] After a successful toggle the hearts and count match the returned
       `{ count, ids }` summary and the existing success toast appears with
       its current message (unit + E2E).
-- [ ] After a failed toggle the heart and count are identical to their
+- [x] After a failed toggle the heart and count are identical to their
       pre-click values, the error toast is shown and no success toast appears
       (unit + E2E).
-- [ ] `replaceFavoritesSummary` still stores the backend `ids` verbatim; the
+- [x] `replaceFavoritesSummary` still stores the backend `ids` verbatim; the
       pending overlay is a separate transient field cleared on every settle
       (Entity suite).
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass; `server/` is untouched.
+
+**Phase 1 execution notes (recorded decisions and deviations):**
+
+- E2E interception deviation: instead of `route.fetch()`-then-delayed-fulfill
+  (which would commit the write to the backend while the response is held),
+  the handler in `e2e/favorites-optimistic.js` gates the write **before**
+  fetching — `release()` then performs the real request and fulfills,
+  `fail()` aborts without ever touching the backend. The optimistic window is
+  deterministic, and the flow additionally asserts `summaryIds` is unchanged
+  while the write is held. No helper changes to `favorites-helpers.js` were
+  needed; the interception lives in the flow module (the helpers file is for
+  pure locators and backend probes only).
+- Suite-split deviation (120-line budget, sibling-split precedent): the
+  deferred-timing HomePage coverage lives in two new suites —
+  `favoritesOptimistic.test.tsx` (optimistic add/remove windows, toast only
+  after confirmation) and `favoritesOptimisticRollback.test.tsx` (failure
+  rollback) — sharing `optimisticHarness.ts` (gate factory, locators), so
+  `favoritesToastFlow.test.tsx` needed no changes; its immediate-mock
+  assertions stay valid and the toast-timing proof moved into the optimistic
+  suite. The Task's in-flight cases live in the sibling
+  `toggleShowFavoritePending.test.ts`.
+- `favoritesFlow.test.tsx` and `favoritesCountButton.test.tsx` assert no
+  update-after-response timing and passed untouched, as anticipated.
+- `favoritesToggle.test.tsx` failure test revised from reference-equality
+  (`toBe(before)`) to content assertions: with begin/settle dispatched the
+  state object changes identity, while the effective ids and the cleared
+  pending overlay prove the rollback.
 
 ### Phase 2: Disabled-while-pending heart button
 
@@ -276,7 +303,7 @@ handling are recorded; every suite is green.
 - [ ] The button is re-enabled once the request resolves, on success and on
       failure (E2E).
 - [ ] Each non-rejected heart click results in exactly one `POST
-    /api/favorites` or `DELETE /api/favorites/:id` request (E2E).
+/api/favorites` or `DELETE /api/favorites/:id` request (E2E).
 - [ ] The disabled state renders in the desktop `ShowCard` and the mobile
       `ShowRowCard`, on the HomePage and on the Favorites page (E2E viewport
       probes + component suites).
@@ -318,7 +345,7 @@ re-check of every PRD acceptance criterion.
       changed because nothing had flipped); `favoritesRemoval.test.tsx` and
       the harness updated where they encode success-time flips.
 - [ ] Extend the shared `useFavoriteToggle` hook: `onToggled(show,
-    wasFavorite)` fires optimistically at click time with the pre-click
+wasFavorite)` fires optimistically at click time with the pre-click
       state (the Task direction is decided before the flip), a new
       `onToggleFailed(show, wasFavorite)` fires on the error result for the
       caller's rollback; the success/error toasts keep their exact messages

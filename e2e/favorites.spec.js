@@ -3,6 +3,7 @@ import { test } from '@playwright/test';
 import { clearFavorites } from './favorites-helpers';
 import { heartsFlow } from './favorites-hearts';
 import { favoritesPaginationFlow } from './favorites-list';
+import { favoritesOptimisticFlow } from './favorites-optimistic';
 import { favoritesReloadReturnFlow } from './favorites-reload';
 import { roundTripRestoresSearch } from './favorites-round-trip';
 import { favoritesSoftRemovalFlow } from './favorites-soft-removal';
@@ -39,6 +40,13 @@ test('a removed favorite stays listed until the next fresh fetch', async ({
   request,
 }) => {
   await favoritesSoftRemovalFlow(page, request);
+});
+
+test('hearts and count flip before the backend responds and roll back on failure', async ({
+  page,
+  request,
+}) => {
+  await favoritesOptimisticFlow(page, request);
 });
 
 test('search state survives the URL round trip', async ({ page }) => {

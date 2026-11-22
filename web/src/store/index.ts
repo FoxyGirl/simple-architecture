@@ -10,6 +10,7 @@ export {
 } from './shows';
 export type { ShowsState } from './shows';
 export {
+  beginFavoriteToggle,
   replaceFavoritesListSnapshot,
   replaceFavoritesSummary,
   selectFavoriteIds,
@@ -17,5 +18,7 @@ export {
   selectFavoriteShows,
   selectFavoritesHasLoaded,
   selectFavoritesTotalCount,
+  selectPendingFavoriteIds,
+  settleFavoriteToggle,
 } from './favorites';
 export type { FavoritesState } from './favorites';

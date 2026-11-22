@@ -41,3 +41,22 @@ describe('ShowRowCard removed state', () => {
     expect(screen.getByRole('article')).toHaveClass(styles.row);
   });
 });
+
+describe('ShowRowCard pending toggle', () => {
+  afterEach(cleanup);
+
+  it('passes the pending flag through to the disabled heart', () => {
+    render(
+      <ShowRowCard
+        show={show()}
+        isFavorite
+        onToggleFavorite={() => {}}
+        isPending
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Remove Show One from favorites' }),
+    ).toBeDisabled();
+  });
+});

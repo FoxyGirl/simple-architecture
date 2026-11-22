@@ -7,20 +7,26 @@ type FavoriteButtonProps = {
   showName: string;
   isFavorite: boolean;
   onToggle: () => void;
+  isPending?: boolean;
 };
 
 export const FavoriteButton = ({
   showName,
   isFavorite,
   onToggle,
+  isPending = false,
 }: FavoriteButtonProps) => (
   <button
     type="button"
-    className={clsx(styles.button, { [styles.active]: isFavorite })}
+    className={clsx(styles.button, {
+      [styles.active]: isFavorite,
+      [styles.disabled]: isPending,
+    })}
     aria-label={`${isFavorite ? 'Remove' : 'Add'} ${showName} ${
       isFavorite ? 'from' : 'to'
     } favorites`}
     onClick={onToggle}
+    disabled={isPending}
   >
     <Heart
       className={styles.icon}

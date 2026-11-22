@@ -36,6 +36,26 @@
   color: var(--favorite);
 }
 
+/* The in-flight toggle state: the native disabled attribute plus a dimmed
+   heart, a not-allowed cursor and no hover accent or scale. */
+.disabled,
+.disabled:hover {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.disabled:hover {
+  border-width: 1px;
+  border-color: var(--border);
+  color: var(--text-secondary);
+}
+
+.active.disabled:hover {
+  border-color: var(--accent-border);
+  color: var(--favorite);
+}
+
 .icon {
   display: block;
 }

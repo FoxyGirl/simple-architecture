@@ -41,3 +41,22 @@ describe('ShowCard removed state', () => {
     expect(screen.getByRole('article')).toHaveClass(styles.card);
   });
 });
+
+describe('ShowCard pending toggle', () => {
+  afterEach(cleanup);
+
+  it('passes the pending flag through to the disabled heart', () => {
+    render(
+      <ShowCard
+        show={show()}
+        isFavorite
+        onToggleFavorite={() => {}}
+        isPending
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Remove Show One from favorites' }),
+    ).toBeDisabled();
+  });
+});

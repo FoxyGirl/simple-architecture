@@ -63,6 +63,7 @@ describe('HomePage optimistic toggle rollback', () => {
     });
 
     expect(favoriteButton('Add Show One to favorites')).toBeInTheDocument();
+    expect(favoriteButton('Add Show One to favorites')).toBeEnabled();
     expect(countButton(0)).toBeInTheDocument();
     expect(notify.error).toHaveBeenCalledWith('offline');
     expect(notify.success).not.toHaveBeenCalled();

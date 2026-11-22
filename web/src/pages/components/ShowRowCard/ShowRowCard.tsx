@@ -14,6 +14,7 @@ type ShowRowCardProps = {
   isFavorite: boolean;
   onToggleFavorite: () => void;
   isRemoved?: boolean;
+  isPending?: boolean;
 };
 
 export const ShowRowCard = ({
@@ -21,6 +22,7 @@ export const ShowRowCard = ({
   isFavorite,
   onToggleFavorite,
   isRemoved = false,
+  isPending = false,
 }: ShowRowCardProps) => (
   <article className={clsx(styles.row, { [styles.removed]: isRemoved })}>
     <div className={styles.poster}>
@@ -61,6 +63,7 @@ export const ShowRowCard = ({
       showName={show.name}
       isFavorite={isFavorite}
       onToggle={onToggleFavorite}
+      isPending={isPending}
     />
 
     <ChevronRight className={styles.chevron} size={16} aria-hidden="true" />

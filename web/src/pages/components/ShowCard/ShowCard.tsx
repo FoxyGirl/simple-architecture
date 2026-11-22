@@ -14,6 +14,7 @@ type ShowCardProps = {
   isFavorite: boolean;
   onToggleFavorite: () => void;
   isRemoved?: boolean;
+  isPending?: boolean;
 };
 
 export const ShowCard = ({
@@ -21,6 +22,7 @@ export const ShowCard = ({
   isFavorite,
   onToggleFavorite,
   isRemoved = false,
+  isPending = false,
 }: ShowCardProps) => (
   <article className={clsx(styles.card, { [styles.removed]: isRemoved })}>
     <div className={styles.poster}>
@@ -52,6 +54,7 @@ export const ShowCard = ({
             showName={show.name}
             isFavorite={isFavorite}
             onToggle={onToggleFavorite}
+            isPending={isPending}
           />
         </span>
       </div>

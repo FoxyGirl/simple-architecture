@@ -2,6 +2,7 @@
 declare const classes: {
   readonly active: 'active';
   readonly button: 'button';
+  readonly disabled: 'disabled';
   readonly icon: 'icon';
 };
 

@@ -248,44 +248,44 @@ with token-based disabled styling and a recorded design decision.
 
 **Tasks:**
 
-- [ ] Extend the E2E flow first (red), in `favorites-optimistic.js`: while a
+- [x] Extend the E2E flow first (red), in `favorites-optimistic.js`: while a
       delayed toggle is in flight the heart button `toBeDisabled()`; a second
       click issues no additional request (route-hit count stays 1); after the
       delayed fulfill — and after an abort — the button is enabled again; a
       mid-flow `page.setViewportSize` below the breakpoint proves the
       disabled state on the mobile row card; the same disabled probe runs
       once on a Favorites page card (shared pending registry).
-- [ ] Write the component unit suites first (red): a new
+- [x] Write the component unit suites first (red): a new
       `FavoriteButton/tests/` suite — the button renders `disabled` exactly
       when the prop is set and the disabled modifier class applies;
       `ShowCard` and `ShowRowCard` suites gain the pending pass-through case
       (presenter-set pending flag reaches the button).
-- [ ] Extend `FavoriteButton` with an optional `isPending` prop mapped to the
+- [x] Extend `FavoriteButton` with an optional `isPending` prop mapped to the
       native `disabled` attribute, and add the disabled modifier to
       `FavoriteButton.module.css` (reduced opacity, `cursor: not-allowed`,
       hover accent suppressed — exact values recorded as the design
       decision); run `npm run css-types`; mirror the state on the pen.dev
       canvas through the MCP tools or record the deferral per the 003/005
       precedent.
-- [ ] Extend the card contracts: `ShowCard` and `ShowRowCard` gain an
+- [x] Extend the card contracts: `ShowCard` and `ShowRowCard` gain an
       `isPending` boolean passed through to `FavoriteButton`; `ShowList`'s
       View passes the presenter's per-show value; `ShowListProps` stays
       unchanged (no new injected props).
-- [ ] Extend `useShowList`: read `selectPendingFavoriteIds` from the Entity
+- [x] Extend `useShowList`: read `selectPendingFavoriteIds` from the Entity
       and expose `isPending(showId)` for both the stored and the injected
       favorites paths, so the HomePage and the Favorites page get the
       disabled state from the same registry; update the JSDoc.
-- [ ] Verify: all gates green (`typecheck`, `lint`, `test`, `test:e2e`,
+- [x] Verify: all gates green (`typecheck`, `lint`, `test`, `test:e2e`,
       `build`); the HomePage and FavoritesPage flows otherwise behave exactly
       as after Phase 1.
 
 **Tests:**
 
-- [ ] E2E disabled/no-second-request/re-enable probes, both layouts, both
+- [x] E2E disabled/no-second-request/re-enable probes, both layouts, both
       pages (red -> green).
-- [ ] `FavoriteButton` suite: disabled attribute + modifier class (red ->
+- [x] `FavoriteButton` suite: disabled attribute + modifier class (red ->
       green); card pass-through suites (red -> green).
-- [ ] All pre-existing suites stay green, including the Phase 1 optimistic
+- [x] All pre-existing suites stay green, including the Phase 1 optimistic
       flows.
 
 **When ready:**
@@ -297,22 +297,59 @@ handling are recorded; every suite is green.
 
 **Acceptance Criteria:**
 
-- [ ] While a show's toggle request is in flight, its heart button is
+- [x] While a show's toggle request is in flight, its heart button is
       disabled; clicking it sends no further request (E2E route-hit count +
       unit).
-- [ ] The button is re-enabled once the request resolves, on success and on
+- [x] The button is re-enabled once the request resolves, on success and on
       failure (E2E).
-- [ ] Each non-rejected heart click results in exactly one `POST
-/api/favorites` or `DELETE /api/favorites/:id` request (E2E).
-- [ ] The disabled state renders in the desktop `ShowCard` and the mobile
+- [x] Each non-rejected heart click results in exactly one
+      `POST /api/favorites` or `DELETE /api/favorites/:id` request (E2E).
+- [x] The disabled state renders in the desktop `ShowCard` and the mobile
       `ShowRowCard`, on the HomePage and on the Favorites page (E2E viewport
       probes + component suites).
-- [ ] The disabled styling uses existing tokens where available, the exact
+- [x] The disabled styling uses existing tokens where available, the exact
       values are recorded as the design decision, the CSS Module
       declarations are regenerated, and the canvas mirroring is done or
       recorded as a deferred follow-up.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass; `server/` is untouched.
+
+**Phase 2 execution notes (recorded decisions and deviations):**
+
+- E2E split (120-line budget, sibling-flow precedent): the interception gate
+  factory moved out of the flow into `e2e/favorites-intercept.js` — it still
+  holds the write **before** fetching (Phase 1 decision retained: `release()`
+  performs the real request and fulfills, `fail()` aborts without touching
+  the backend) and now also counts intercepted writes through `hits()`. The
+  desktop HomePage pending probes live in the existing
+  `favoritesOptimisticFlow`; the mobile `ShowRowCard` and Favorites page card
+  probes live in the new sibling `e2e/favorites-pending.js`, registered as one
+  extra test in `favorites.spec.js`. Every touched file stays <= 120 lines.
+- No-second-request proof: the E2E second click uses Playwright's
+  `click({ force: true })` to bypass the disabled actionability check, then
+  asserts `writes.hits()` stays at the expected count after settlement; the
+  unit counterpart clicks the disabled heart with `fireEvent.click` and
+  asserts `favoriteWrites` stays at one request.
+- Design decision (recorded; canvas mirroring deferred): the disabled heart is
+  the native `disabled` attribute plus a `.disabled` modifier — an `opacity`
+  of `0.5` (matches the feature-005 removed-card opacity; no opacity token
+  exists), `cursor: not-allowed`, `transform: none`, and the hover accent
+  suppressed (border restored to `1px var(--border)`, colour
+  `var(--text-secondary)`); an active/favorite heart keeps `var(--favorite)`
+  and `var(--accent-border)` on hover. All colours and radii use existing
+  tokens. The pen.dev MCP tools report the plan-usage limit reached for this
+  billing period (re-confirmed during this phase), so canvas mirroring stays
+  a deferred follow-up per the 003/005 precedent; the `.pen` file was not
+  touched.
+- `useShowList` reads `selectPendingFavoriteIds` unconditionally, so the
+  Favorites page's injected favorites aspect gets the disabled state from the
+  same registry without new props; `ShowListProps` and the existing card
+  contracts' other fields are unchanged (`isPending` is optional, defaults to
+  `false`).
+- Suite placement: the presenter-level pending cases live in the sibling
+  `ShowList/tests/useShowListPending.test.tsx` (the existing
+  `useShowList.test.tsx` is already near the line budget); the HomePage
+  optimistic suites gained the disabled/re-enable assertions in place.
 
 ### Phase 3: Optimistic soft removal on the Favorites page
 

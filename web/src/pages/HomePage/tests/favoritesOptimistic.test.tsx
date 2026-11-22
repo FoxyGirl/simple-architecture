@@ -1,4 +1,4 @@
-import { act, cleanup } from '@testing-library/react';
+import { act, cleanup, fireEvent } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
@@ -62,6 +62,12 @@ describe('HomePage optimistic favorites toggle', () => {
     expect(selectPendingFavoriteIds(store.getState())).toEqual([1]);
     expect(notify.success).not.toHaveBeenCalled();
 
+    const heart = favoriteButton('Remove Show One from favorites');
+
+    expect(heart).toBeDisabled();
+    fireEvent.click(heart);
+    expect(favoriteWrites(api)).toHaveLength(1);
+
     await act(async () => {
       gate.resolve({ count: 1, ids: [1] });
     });
@@ -69,6 +75,7 @@ describe('HomePage optimistic favorites toggle', () => {
     expect(notify.success).toHaveBeenCalledWith(
       '"Show One" was added to favorites',
     );
+    expect(favoriteButton('Remove Show One from favorites')).toBeEnabled();
     expect(selectFavoriteIds(store.getState())).toEqual([1]);
     expect(selectPendingFavoriteIds(store.getState())).toEqual([]);
     expect(favoriteWrites(api)).toEqual([
@@ -89,6 +96,7 @@ describe('HomePage optimistic favorites toggle', () => {
 
     expect(favoriteButton('Add Show One to favorites')).toBeInTheDocument();
     expect(countButton(0)).toBeInTheDocument();
+    expect(favoriteButton('Add Show One to favorites')).toBeDisabled();
     expect(notify.info).not.toHaveBeenCalled();
 
     await act(async () => {
@@ -98,6 +106,7 @@ describe('HomePage optimistic favorites toggle', () => {
     expect(notify.info).toHaveBeenCalledWith(
       '"Show One" was removed from favorites',
     );
+    expect(favoriteButton('Add Show One to favorites')).toBeEnabled();
     expect(selectFavoriteIds(store.getState())).toEqual([]);
     expect(selectPendingFavoriteIds(store.getState())).toEqual([]);
   });

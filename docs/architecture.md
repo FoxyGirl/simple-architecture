@@ -139,3 +139,60 @@ Presentation logic MUST be handled by the Presenter, while UI rendering decision
 
 - The Presenter prepares data, computes derived values, and provides event handlers.
 - The View determines how to render the prepared data, including conditional rendering, component composition, and UI states.
+
+### Minimal Interface Contract
+
+The rules below govern two contracts: the View ↔ its Presenter
+(`use<Component>.ts`), and the Presenter ↔ the internal hooks it composes.
+
+#### View ↔ Presenter
+
+1. The Presenter exposes ONE explicit object; the View destructures from it
+   only the fields it renders or wires to the DOM. A field no consumer reads
+   MUST NOT be part of the interface.
+2. The Presenter accepts the values it needs from the View's props as ONE
+   typed parameter object; the View forwards its props verbatim and never
+   pre-processes them for the Presenter.
+3. Every value the View branches on MUST arrive prepared:
+   - a named flag per UI state (`isIdle`, `isLoading`, `isError`,
+     `isEmptyResponse`, …);
+   - payloads narrowed to what actually renders (`frameData: SearchPage | null`), so the View never writes null guards, status comparisons or `.length` checks of its own.
+4. The View MUST NOT derive presentation values: no comparisons against
+   domain constants (`STATUS`), no membership or arithmetic checks on
+   Presenter data, no re-combining of raw inputs. Derivation lives in the
+   Presenter; the View only composes already prepared flags when one branch
+   needs several of them (`isLoading && !isSelectionLoad`).
+5. The View MUST NOT import domain constants or Redux selectors to interpret
+   its inputs. Raw inputs such as `status` cross the View boundary only to
+   be handed to the View's own Presenter untouched.
+6. Handlers arrive named and ready (`onRetry`, `clearQuery`); the View wires
+   them to DOM events and MUST NOT add behavior — no debouncing, aborting,
+   navigation or state writes inside the View.
+7. Rendering decisions stay in the View: conditional rendering, early
+   returns, component composition and a11y attributes — built from the
+   prepared interface and nothing else.
+
+#### Presenter ↔ internal hooks
+
+1. An internal (specialized) hook exposes ONLY the values and handlers its
+   consuming Presenter needs. Coordination internals — mutable refs, timers,
+   raw state setters, request bookkeeping — stay private to the hook.
+2. A hook receives its inputs as ONE explicit typed parameter object and
+   MUST NOT reach into any other state of the consuming Presenter.
+3. Behavior owned by a hook is triggered through the hook's own API, never by
+   the Presenter inspecting hook internals: rules fire via callbacks
+   (`onGenreUnavailable`), skipped work reports through a documented result
+   (`null` = no run started), focus and abort effects run inside the hook.
+4. The Presenter destructures only the fields it consumes from each hook;
+   forwarding a hook's whole return object is a leak of its internals.
+5. Hooks expose named handlers (`onQueryChange`, `clearQuery`), never raw
+   setters (`setDraft`). A DOM handle (`inputRef`) is exposed only when the
+   hook owns an effect that cannot attach it itself.
+6. A Presenter-level hook MUST NOT import another component's Presenter.
+   Behavior shared by several Presenters lives in a shared hook or Task at
+   their nearest common ancestor.
+
+#### Tests
+
+A Presenter's unit suite asserts its public interface — the prepared flags
+and narrowed payloads — not its internals: the interface IS the contract.

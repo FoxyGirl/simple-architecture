@@ -44,16 +44,14 @@ describe('useShowSearchResults', () => {
     const { result } = render(storedPage, STATUS.SUCCESS, null);
 
     expect(result.current.frameData).toEqual(storedPage);
-    expect(result.current.isSuccess).toBe(true);
-    expect(result.current.isDataEmpty).toBe(false);
+    expect(result.current.isEmptyResponse).toBe(false);
   });
 
   it('reports an empty success without frame data', () => {
     const { result } = render(emptyPage, STATUS.SUCCESS, null);
 
     expect(result.current.frameData).toBeNull();
-    expect(result.current.isSuccess).toBe(true);
-    expect(result.current.isDataEmpty).toBe(true);
+    expect(result.current.isEmptyResponse).toBe(true);
   });
 
   it('keeps the frame during a cards-scoped selection load', () => {

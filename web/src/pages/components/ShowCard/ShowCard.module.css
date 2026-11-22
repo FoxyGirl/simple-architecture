@@ -18,7 +18,7 @@
 
 .card.removed .posterImage,
 .card.removed .posterFallback,
-.card.removed .posterFade,
+/* .card.removed .posterFade, */
 .card.removed .statusBadge,
 .card.removed .ratingBadge,
 .card.removed .info {

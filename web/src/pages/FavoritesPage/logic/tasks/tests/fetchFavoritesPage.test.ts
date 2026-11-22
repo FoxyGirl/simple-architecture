@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
-import { selectFavoritesList, store } from '~/store';
+import { selectFavoriteShows, selectFavoritesTotalCount, store } from '~/store';
 import { favoritesPageRequests, stubApi } from '~/test/api-mock';
 import type { FavoritesListPage, Show } from '~/types';
 
@@ -27,14 +27,17 @@ describe('fetchFavoritesPage task', () => {
     api.mockReset();
   });
 
-  it('fetches the requested page and stores the envelope in the Entity', async () => {
+  it('fetches the requested page and stores its shows and total count in the Entity', async () => {
     stubApi(api, { favoritesPage: () => listPage });
 
     const result = await fetchFavoritesPage(2);
 
     expect(favoritesPageRequests(api)).toEqual([2]);
     expect(result).toEqual({ status: 'success', list: listPage });
-    expect(selectFavoritesList(store.getState())).toEqual(listPage);
+    expect(selectFavoriteShows(store.getState())).toEqual(listPage.shows);
+    expect(selectFavoritesTotalCount(store.getState())).toBe(
+      listPage.totalCount,
+    );
   });
 
   it('dispatches nothing and reports the failure when the request fails', async () => {

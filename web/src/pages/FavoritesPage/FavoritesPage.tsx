@@ -12,8 +12,9 @@ import styles from './FavoritesPage.module.css';
 
 export const FavoritesPage = () => {
   const {
-    list,
+    shows,
     page,
+    pageCount,
     isLoading,
     subHeadText,
     isFavorite,
@@ -41,7 +42,7 @@ export const FavoritesPage = () => {
         <p className={styles.subhead}>{subHeadText}</p>
       </header>
 
-      {!isLoading && list !== null && list.shows.length === 0 && (
+      {!isLoading && shows?.length === 0 && (
         <div className={styles.empty} aria-live="polite">
           <HeartOff className={styles.emptyIcon} size={40} aria-hidden="true" />
           <p className={styles.emptyText}>
@@ -59,27 +60,25 @@ export const FavoritesPage = () => {
         </div>
       )}
 
-      {(isLoading || (list !== null && list.shows.length > 0)) && (
+      {(isLoading || shows !== null) && (
         <>
           <div aria-live="polite">
             {isLoading ? (
               <SkeletonCards count={RESULTS_PER_PAGE} />
             ) : (
-              list !== null && (
-                <ShowList
-                  shows={list.shows}
-                  isFavorite={isFavorite}
-                  isRemoved={isRemoved}
-                  onToggleFavorite={toggleFavorite}
-                />
-              )
+              <ShowList
+                shows={shows || []}
+                isFavorite={isFavorite}
+                isRemoved={isRemoved}
+                onToggleFavorite={toggleFavorite}
+              />
             )}
           </div>
 
-          {list !== null && (
+          {shows !== null && shows.length > 0 && (
             <Pagination
-              page={isLoading ? page : list.page}
-              pageCount={list.pageCount}
+              page={page}
+              pageCount={pageCount}
               onSelectPage={selectPage}
             />
           )}

@@ -1,16 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import type { FavoritesListPage, Show } from '~/types';
+import type { Show } from '~/types';
 
 import { showsReducer } from '../../shows';
 import {
   favoritesReducer,
-  replaceFavoritesList,
+  replaceFavoritesListSnapshot,
   replaceFavoritesSummary,
   selectFavoriteIds,
   selectFavoritesCount,
-  selectFavoritesList,
+  selectFavoriteShows,
+  selectFavoritesHasLoaded,
+  selectFavoritesTotalCount,
 } from '..';
 
 const show = (id: number, name: string): Show =>
@@ -35,31 +37,29 @@ describe('favorites entity', () => {
     store = createTestStore();
   });
 
-  it('starts with an empty favorites list', () => {
+  it('starts with no favorites and no fetched page', () => {
     expect(store.getState().favorites).toEqual({
       ids: [],
-      count: 0,
-      list: null,
+      shows: null,
+      totalCount: 0,
     });
+    expect(selectFavoritesHasLoaded(store.getState())).toBe(false);
   });
 
-  it('replaceFavoritesSummary stores the backend ids and count verbatim', () => {
+  it('replaceFavoritesSummary stores the backend ids and derives the count', () => {
     store.dispatch(replaceFavoritesSummary({ count: 2, ids: [7, 3] }));
 
     expect(selectFavoriteIds(store.getState())).toEqual([7, 3]);
     expect(selectFavoritesCount(store.getState())).toBe(2);
   });
 
-  it('replaceFavoritesList stores the page envelope verbatim', () => {
-    const listPage: FavoritesListPage = {
-      shows: [show(1, 'Show One')],
-      page: 2,
-      pageCount: 2,
-      totalCount: 4,
-    };
+  it('replaceFavoritesListSnapshot stores the fetched shows and total count verbatim', () => {
+    const shows = [show(1, 'Show One'), show(2, 'Show Two')];
 
-    store.dispatch(replaceFavoritesList(listPage));
+    store.dispatch(replaceFavoritesListSnapshot({ shows, totalCount: 5 }));
 
-    expect(selectFavoritesList(store.getState())).toEqual(listPage);
+    expect(selectFavoriteShows(store.getState())).toEqual(shows);
+    expect(selectFavoritesTotalCount(store.getState())).toBe(5);
+    expect(selectFavoritesHasLoaded(store.getState())).toBe(true);
   });
 });

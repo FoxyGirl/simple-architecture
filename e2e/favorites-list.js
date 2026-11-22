@@ -39,13 +39,13 @@ export const favoritesPaginationFlow = async (page, request) => {
   await expect(card(page, 'Space Tour')).toBeVisible();
   await expect(pageInfo(page, 'Page 1 of 2')).toBeVisible();
 
-  // A removal keeps the card listed and the fetched metadata untouched;
-  // only the backend summary shrinks.
+  // A removal keeps the card listed and the fetched pagination untouched while
+  // the subhead follows the live backend summary; only a fresh fetch drops it.
   await heart(page, 'Space Tour', true).click();
   await expect(cardArticle(page, 'Space Tour')).toBeVisible();
   await expect(heart(page, 'Space Tour', false)).toBeVisible();
   await expect(pageInfo(page, 'Page 1 of 2')).toBeVisible();
-  await expect(subhead(page, '4 shows saved to your list.')).toBeVisible();
+  await expect(subhead(page, '3 shows saved to your list.')).toBeVisible();
   await expect.poll(() => summaryIds(request)).toHaveLength(3);
 
   // The deferred refresh shows on the next fresh fetch: the reload drops the

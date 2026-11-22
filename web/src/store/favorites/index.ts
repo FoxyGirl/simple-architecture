@@ -1,11 +1,13 @@
 export {
   favoritesReducer,
-  replaceFavoritesList,
+  replaceFavoritesListSnapshot,
   replaceFavoritesSummary,
 } from './favoritesSlice';
 export {
   selectFavoriteIds,
   selectFavoritesCount,
-  selectFavoritesList,
+  selectFavoriteShows,
+  selectFavoritesHasLoaded,
+  selectFavoritesTotalCount,
 } from './selectors';
 export type { FavoritesState } from './types';

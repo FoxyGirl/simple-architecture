@@ -30,6 +30,8 @@ Presenter is responsible for presentation logic, application state coordination,
 - MUST encapsulate all presentation logic required by its associated View.
 - MUST prepare and expose all data, derived values, event handlers, and actions needed by the View.
 - MUST manage component-level state required for presentation purposes, such as loading, submitting, and UI interaction states.
+- MUST hold the request-scoped metadata of a fetched page — for example its
+  page and page count for pagination — as component-level state.
 - MUST coordinate application state by consuming data from the Redux Store through selectors.
 - MUST orchestrate business operations and data fetching by invoking Tasks.
 - MUST determine when and under which conditions Tasks should be executed, based on component lifecycle and user interactions.
@@ -93,6 +95,10 @@ It is responsible for storing, managing, and providing access to application dat
 
 - MUST use Redux Toolkit for application state management.
 - MUST own and maintain the application data stored in the Redux Store.
+- MUST store backend-owned payloads verbatim (for example the favorite ids,
+  and the shows and total count of the fetched favorites page), and MUST NOT
+  store request-scoped pagination metadata (the page and page count) — the
+  Presenter owns that.
 - MUST expose data to Presenters through Redux selectors.
 - MUST provide actions and reducers for updating application state.
 - MUST define and maintain the types of its state and data models.

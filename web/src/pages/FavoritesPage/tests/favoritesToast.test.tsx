@@ -3,13 +3,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
 import { notify } from '~/notification';
-import { favoritesPageRequests, stubApi } from '~/test/api-mock';
+import { favoritesPageRequests } from '~/test/api-mock';
 
 import {
   createFavoritesBackend,
   mountFavorites,
   resetFavorites,
 } from './favoritesHarness';
+import { stubFavoritesApi } from './stubFavoritesApi';
 
 vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
@@ -27,8 +28,7 @@ const api = vi.mocked(requestJson);
 const backend = createFavoritesBackend();
 
 const stubBackend = () =>
-  stubApi(api, {
-    favoritesPage: backend.fetchPage,
+  stubFavoritesApi(api, backend, {
     addFavorite: backend.add,
     removeFavorite: backend.remove,
   });
@@ -56,8 +56,7 @@ describe('FavoritesPage toasts', () => {
 
   it('a failed removal shows the error notification and refetches nothing', async () => {
     await mountFavorites();
-    stubApi(api, {
-      favoritesPage: backend.fetchPage,
+    stubFavoritesApi(api, backend, {
       removeFavorite: () => {
         throw new Error('offline');
       },
@@ -103,8 +102,7 @@ describe('FavoritesPage toasts', () => {
     const addHeart = await screen.findByRole('button', {
       name: 'Add Show One to favorites',
     });
-    stubApi(api, {
-      favoritesPage: backend.fetchPage,
+    stubFavoritesApi(api, backend, {
       addFavorite: () => {
         throw new Error('offline');
       },

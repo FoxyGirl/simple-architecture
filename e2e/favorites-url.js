@@ -52,22 +52,23 @@ export const favoritesPageUrlFlow = async (page) => {
   await expect(pageInfo(page, 'Page 1 of 2')).toBeVisible();
 
   // Removing the only show on page 2 leaves it listed and the URL untouched;
-  // the clamping only shows on the next fresh fetch (the reload below).
+  // the subhead already counts the live summary (3), while the clamping only
+  // shows on the next fresh fetch (the reload below).
   await page.goto('/favorites?page=2');
   await expect(card(page, 'Space Wars')).toBeVisible();
   await heart(page, 'Space Wars', true).click();
   await expect(cardArticle(page, 'Space Wars')).toBeVisible();
   await expect(heart(page, 'Space Wars', false)).toBeVisible();
   await expect(pageInfo(page, 'Page 2 of 2')).toBeVisible();
-  await expect(subhead(page, '4 shows saved to your list.')).toBeVisible();
+  await expect(subhead(page, '3 shows saved to your list.')).toBeVisible();
   await expect(page).toHaveURL(/\/favorites\?page=2$/);
 
-  // The reload asks for page 2 again: the backend clamps it to page 1 and
-  // the URL itself is left untouched.
+  // The reload asks for page 2 again: the backend clamps it to page 1 and the
+  // fetched total corrects the URL in place.
   await page.reload();
   await expect(card(page, 'Space Wars')).toHaveCount(0);
   await expect(card(page, 'Space Tour')).toBeVisible();
   await expect(pageInfo(page, 'Page 1 of 1')).toBeVisible();
   await expect(subhead(page, '3 shows saved to your list.')).toBeVisible();
-  await expect(page).toHaveURL(/\/favorites\?page=2$/);
+  await expect(page).toHaveURL(/\/favorites$/);
 };

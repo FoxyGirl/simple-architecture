@@ -1,6 +1,6 @@
 import { toErrorMessage } from '~/api/errors';
 import { buildApiUrl, requestJson } from '~/api/request';
-import { replaceFavoritesList, store } from '~/store';
+import { replaceFavoritesListSnapshot, store } from '~/store';
 import type { FavoritesListPage } from '~/types';
 
 import type { FavoritesListResult } from '../../types';
@@ -16,10 +16,11 @@ const fetchFavoritesListPage = (page: number): Promise<FavoritesListPage> =>
 
 /**
  * The favorites-page Task: fetches one page of the backend favorites list
- * through the request layer and stores the envelope in the favorites Entity.
+ * through the request layer, stores the envelope's backend-owned part (the
+ * shows and the total count) in the favorites Entity and returns the
+ * envelope to the caller — the Presenter derives the page metadata from it.
  * The requested page arrives as an explicit argument, the store is only
- * mutated through `store.dispatch`, and the outcome is returned to the
- * caller — the clamped page comes back inside the stored envelope.
+ * mutated through `store.dispatch`.
  */
 export const fetchFavoritesPage = async (
   page: number,
@@ -27,7 +28,12 @@ export const fetchFavoritesPage = async (
   try {
     const list = await fetchFavoritesListPage(page);
 
-    store.dispatch(replaceFavoritesList(list));
+    store.dispatch(
+      replaceFavoritesListSnapshot({
+        shows: list.shows,
+        totalCount: list.totalCount,
+      }),
+    );
 
     return { status: 'success', list };
   } catch (error) {

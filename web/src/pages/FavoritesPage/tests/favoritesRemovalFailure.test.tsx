@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
 import { notify } from '~/notification';
-import { favoritesPageRequests, stubApi } from '~/test/api-mock';
+import { favoritesPageRequests } from '~/test/api-mock';
 
 import cardStyles from '../../components/ShowRowCard/ShowRowCard.module.css';
 import {
@@ -11,6 +11,7 @@ import {
   mountFavorites,
   resetFavorites,
 } from './favoritesHarness';
+import { stubFavoritesApi } from './stubFavoritesApi';
 
 vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
@@ -35,8 +36,7 @@ const article = (name: string) =>
   screen.getByRole('heading', { name }).closest('article');
 
 const stubPage = () =>
-  stubApi(api, {
-    favoritesPage: backend.fetchPage,
+  stubFavoritesApi(api, backend, {
     addFavorite: backend.add,
     removeFavorite: backend.remove,
   });
@@ -50,8 +50,7 @@ describe('FavoritesPage failed soft removal', () => {
 
   it('keeps the card pressed when the removal fails', async () => {
     await mountFavorites();
-    stubApi(api, {
-      favoritesPage: backend.fetchPage,
+    stubFavoritesApi(api, backend, {
       removeFavorite: () => {
         throw new Error('offline');
       },
@@ -70,8 +69,7 @@ describe('FavoritesPage failed soft removal', () => {
     await mountFavorites();
     fireEvent.click(heart('Remove', 'Show One'));
     await findHeart('Add', 'Show One');
-    stubApi(api, {
-      favoritesPage: backend.fetchPage,
+    stubFavoritesApi(api, backend, {
       addFavorite: () => {
         throw new Error('offline');
       },

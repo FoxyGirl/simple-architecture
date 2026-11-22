@@ -33,8 +33,8 @@ export const favoritesSoftRemovalFlow = async (page, request) => {
   await expect(pageInfo(page, 'Page 1 of 2')).toBeVisible();
   await expect(subhead(page, '4 shows saved to your list.')).toBeVisible();
 
-  // A removal keeps the card and the fetched metadata, flags the heart and
-  // applies the removed visual state; only the summary changes.
+  // A removal keeps the card and the fetched pagination, flags the heart and
+  // applies the removed visual state; the subhead counts the live summary.
   await heart(page, 'Space Tour', true).click();
   await expect(cardArticle(page, 'Space Tour')).toBeVisible();
   await expect(cardContent(page, 'Space Tour')).toHaveCSS(
@@ -47,7 +47,7 @@ export const favoritesSoftRemovalFlow = async (page, request) => {
   );
   await expect(heart(page, 'Space Tour', false)).toBeVisible();
   await expect(pageInfo(page, 'Page 1 of 2')).toBeVisible();
-  await expect(subhead(page, '4 shows saved to your list.')).toBeVisible();
+  await expect(subhead(page, '3 shows saved to your list.')).toBeVisible();
   await expect.poll(() => summaryIds(request)).toHaveLength(3);
 
   // The heart keeps its pink hover outline outside the grayscale and the

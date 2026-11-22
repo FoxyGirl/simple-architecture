@@ -2,7 +2,7 @@ import { cleanup, fireEvent, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
-import { favoritesPageRequests, stubApi } from '~/test/api-mock';
+import { favoritesPageRequests } from '~/test/api-mock';
 
 import {
   button,
@@ -12,6 +12,7 @@ import {
   navigationType,
   resetFavorites,
 } from './favoritesHarness';
+import { stubFavoritesApi } from './stubFavoritesApi';
 
 vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
@@ -29,7 +30,7 @@ describe('FavoritesPage URL pagination', () => {
   beforeEach(() => {
     resetFavorites(backend);
     api.mockReset();
-    stubApi(api, { favoritesPage: backend.fetchPage });
+    stubFavoritesApi(api, backend);
   });
 
   it('reads the list page from the URL on mount', async () => {
@@ -38,6 +39,18 @@ describe('FavoritesPage URL pagination', () => {
     expect(lastPageRequest()).toBe(2);
     expect(location()).toBe('/favorites?page=2');
     expect(screen.getByText('Page 2 of 2')).toBeInTheDocument();
+  });
+
+  it('corrects a page beyond the fetched total to the last page', async () => {
+    // The deep-linked page goes out first: the total is unknown until the
+    // answer lands, and only then does the fetched total repair the URL.
+    await mountFavorites('Show Four', ['/favorites?page=9']);
+
+    expect(favoritesPageRequests(api)[0]).toBe(9);
+    await screen.findByText('Page 2 of 2');
+    await vi.waitFor(() => expect(location()).toBe('/favorites?page=2'));
+    expect(navigationType()).toBe('REPLACE');
+    await vi.waitFor(() => expect(lastPageRequest()).toBe(2));
   });
 
   it('invalid page values fetch page 1', async () => {

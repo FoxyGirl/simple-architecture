@@ -1,19 +1,19 @@
-import type { FavoritesListPage } from '~/types';
+import type { FavoritesListPage, Show } from '~/types';
 
 /**
- * The soft-removal view state: the removed show ids plus the list envelope
+ * The soft-removal view state: the removed show ids plus the shows array
  * they were marked against, so any fresh fetch invalidates the marking
  * without the Presenter tracking pages by hand.
  */
 export type RemovedMarking = {
-  list: FavoritesListPage | null;
+  shows: Show[];
   ids: number[];
 };
 
 /**
  * The outcome of the fetchFavoritesPage Task; `'success'` carries the
- * page envelope that was dispatched into the Entity, `'error'` the message
- * the request layer reported.
+ * page envelope whose shows were dispatched into the Entity, `'error'` the
+ * message the request layer reported.
  */
 export type FavoritesListResult =
   | { status: 'success'; list: FavoritesListPage }

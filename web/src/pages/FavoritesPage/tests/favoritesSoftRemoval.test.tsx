@@ -2,7 +2,7 @@ import { cleanup, fireEvent, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
-import { favoritesPageRequests, stubApi } from '~/test/api-mock';
+import { favoritesPageRequests } from '~/test/api-mock';
 import type { Show } from '~/types';
 
 import {
@@ -12,6 +12,7 @@ import {
   renderFavoritesPage,
   resetFavorites,
 } from './favoritesHarness';
+import { stubFavoritesApi } from './stubFavoritesApi';
 
 vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
@@ -36,8 +37,7 @@ describe('FavoritesPage soft removal fresh fetches', () => {
   beforeEach(() => {
     resetFavorites(backend);
     api.mockReset();
-    stubApi(api, {
-      favoritesPage: backend.fetchPage,
+    stubFavoritesApi(api, backend, {
       addFavorite: backend.add,
       removeFavorite: backend.remove,
     });

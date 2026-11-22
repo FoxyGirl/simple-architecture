@@ -10,10 +10,12 @@ export {
 } from './shows';
 export type { ShowsState } from './shows';
 export {
-  replaceFavoritesList,
+  replaceFavoritesListSnapshot,
   replaceFavoritesSummary,
   selectFavoriteIds,
   selectFavoritesCount,
-  selectFavoritesList,
+  selectFavoriteShows,
+  selectFavoritesHasLoaded,
+  selectFavoritesTotalCount,
 } from './favorites';
 export type { FavoritesState } from './favorites';

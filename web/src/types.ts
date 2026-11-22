@@ -89,6 +89,12 @@ export type FavoritesListPage = {
   totalCount: number;
 };
 
+/** The shows and total count of the list envelope, stored verbatim. */
+export type FavoritesListSnapshot = Pick<
+  FavoritesListPage,
+  'shows' | 'totalCount'
+>;
+
 /** The HTTP methods the request layer speaks. */
 export type HttpMethod = 'GET' | 'POST' | 'DELETE';
 

@@ -2,7 +2,6 @@ import { act, fireEvent, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
-import { stubApi } from '~/test/api-mock';
 import type { FavoritesListPage } from '~/types';
 
 import skeletonStyles from '../../components/SkeletonCards/SkeletonCards.module.css';
@@ -12,6 +11,7 @@ import {
   renderFavoritesPage,
   resetFavorites,
 } from './favoritesHarness';
+import { stubFavoritesApi } from './stubFavoritesApi';
 
 vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
@@ -28,7 +28,7 @@ const backend = createFavoritesBackend();
 const pending: Array<() => void> = [];
 
 const stubDeferredPages = () => {
-  stubApi(api, {
+  stubFavoritesApi(api, backend, {
     favoritesPage: (page) =>
       new Promise<FavoritesListPage>((resolve) => {
         pending.push(() => resolve(backend.fetchPage(page)));

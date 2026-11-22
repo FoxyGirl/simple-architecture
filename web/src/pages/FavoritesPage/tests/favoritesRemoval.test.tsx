@@ -2,11 +2,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
-import {
-  favoriteWrites,
-  favoritesPageRequests,
-  stubApi,
-} from '~/test/api-mock';
+import { favoriteWrites, favoritesPageRequests } from '~/test/api-mock';
 
 import cardStyles from '../../components/ShowRowCard/ShowRowCard.module.css';
 import {
@@ -15,6 +11,7 @@ import {
   mountFavorites,
   resetFavorites,
 } from './favoritesHarness';
+import { stubFavoritesApi } from './stubFavoritesApi';
 
 vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
@@ -38,8 +35,7 @@ describe('FavoritesPage soft removal', () => {
   beforeEach(() => {
     resetFavorites(backend);
     api.mockReset();
-    stubApi(api, {
-      favoritesPage: backend.fetchPage,
+    stubFavoritesApi(api, backend, {
       addFavorite: backend.add,
       removeFavorite: backend.remove,
     });
@@ -53,7 +49,7 @@ describe('FavoritesPage soft removal', () => {
     expect(await findHeart('Add', 'Show One')).toBeVisible();
     await heading('Show One');
     expect(article('Show One')).toHaveClass(cardStyles.removed);
-    expect(screen.getByText('4 shows saved to your list.')).toBeVisible();
+    expect(screen.getByText('3 shows saved to your list.')).toBeVisible();
     expect(screen.getByText('Page 1 of 2')).toBeVisible();
     expect(favoriteWrites(api)).toContainEqual(
       expect.objectContaining({ path: '/api/favorites/1', method: 'DELETE' }),

@@ -11,9 +11,9 @@ import { useFavoriteToggle } from '~/pages/hooks/useFavoriteToggle';
  * removed ids are view state of the current fetched shows. The marking
  * carries the shows array it was made against, so every fresh fetch (a page
  * change, a re-visit or a reload) invalidates it automatically. The shared
- * toggle aspect runs the Task and owns the toasts; on success it reports the
- * card's previous state through the callback so the marking flips here, at
- * Presenter level, while a failure leaves the card as it was.
+ * toggle aspect runs the Task and owns the toasts; it reports the card's
+ * previous state at click time, so the marking flips optimistically and
+ * reverts through the failure callback, at Presenter level.
  */
 export const useSoftRemoval = (shows: Show[]) => {
   const [marking, setMarking] = useState<RemovedMarking>({ shows, ids: [] });
@@ -22,14 +22,22 @@ export const useSoftRemoval = (shows: Show[]) => {
   const isRemoved = (showId: number) => removedIds.includes(showId);
   const isFavorite = (showId: number) => !removedIds.includes(showId);
 
-  const toggleFavorite = useFavoriteToggle(isFavorite, (show, wasFavorite) => {
-    setMarking({
-      shows,
-      ids: wasFavorite
-        ? [...removedIds, show.id]
-        : removedIds.filter((id) => id !== show.id),
-    });
-  });
+  const updateRemovedIds = (update: (ids: number[]) => number[]) =>
+    setMarking((current) => ({ shows, ids: update(current.ids) }));
+
+  const toggleFavorite = useFavoriteToggle(
+    isFavorite,
+    (show, wasFavorite) => {
+      updateRemovedIds((ids) =>
+        wasFavorite ? [...ids, show.id] : ids.filter((id) => id !== show.id),
+      );
+    },
+    (show, wasFavorite) => {
+      updateRemovedIds((ids) =>
+        wasFavorite ? ids.filter((id) => id !== show.id) : [...ids, show.id],
+      );
+    },
+  );
 
   return { isFavorite, isRemoved, toggleFavorite };
 };

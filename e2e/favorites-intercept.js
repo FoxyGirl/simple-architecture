@@ -30,3 +30,19 @@ export const holdWrites = async (page) => {
     hits: () => hits,
   };
 };
+
+// The favorites list fetch (`GET /api/favorites?page=N`) is the refetch the
+// soft removal must never trigger; the summary sync (`/api/favorites/count`)
+// and the writes are matched by other routes.
+const LIST_URL = /\/api\/favorites\?page=\d+$/;
+
+export const trackListFetches = async (page) => {
+  let fetches = 0;
+
+  await page.route(LIST_URL, async (route) => {
+    fetches += 1;
+    return route.continue();
+  });
+
+  return () => fetches;
+};

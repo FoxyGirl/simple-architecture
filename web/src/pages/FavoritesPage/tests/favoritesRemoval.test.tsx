@@ -46,6 +46,9 @@ describe('FavoritesPage soft removal', () => {
 
     fireEvent.click(heart('Remove', 'Show One'));
 
+    expect(heart('Add', 'Show One')).toBeVisible();
+    expect(article('Show One')).toHaveClass(cardStyles.removed);
+
     expect(await findHeart('Add', 'Show One')).toBeVisible();
     await heading('Show One');
     expect(article('Show One')).toHaveClass(cardStyles.removed);
@@ -63,6 +66,9 @@ describe('FavoritesPage soft removal', () => {
     await findHeart('Add', 'Show One');
 
     fireEvent.click(heart('Add', 'Show One'));
+
+    expect(heart('Remove', 'Show One')).toBeVisible();
+    expect(article('Show One')).not.toHaveClass(cardStyles.removed);
 
     expect(await findHeart('Remove', 'Show One')).toBeVisible();
     expect(article('Show One')).not.toHaveClass(cardStyles.removed);

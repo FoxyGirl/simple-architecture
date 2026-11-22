@@ -57,6 +57,10 @@ describe('FavoritesPage failed soft removal', () => {
     });
 
     fireEvent.click(heart('Remove', 'Show One'));
+
+    expect(heart('Add', 'Show One')).toBeVisible();
+    expect(article('Show One')).toHaveClass(cardStyles.removed);
+
     await settle();
 
     expect(heart('Remove', 'Show One')).toBeVisible();
@@ -76,6 +80,10 @@ describe('FavoritesPage failed soft removal', () => {
     });
 
     fireEvent.click(heart('Add', 'Show One'));
+
+    expect(heart('Remove', 'Show One')).toBeVisible();
+    expect(article('Show One')).not.toHaveClass(cardStyles.removed);
+
     await settle();
 
     expect(heart('Add', 'Show One')).toBeVisible();

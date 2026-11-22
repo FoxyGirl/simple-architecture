@@ -35,15 +35,16 @@ export const favoritesPendingFlow = async (page) => {
   await pressed(page, 'Space Chef');
   await expect(heart(page, 'Space Chef', true)).toBeEnabled();
 
-  // The Favorites page reads the shared registry too: the card's heart is
-  // disabled while its DELETE is held and re-enabled after confirmation.
+  // The Favorites page reads the shared registry too: the card flips
+  // optimistically at click time, its heart is disabled while the DELETE is
+  // held and re-enabled after confirmation.
   await page.setViewportSize({ width: 1280, height: 900 });
   await expect(countButton(page, 2)).toBeVisible();
   await countButton(page, 2).click();
   await expect(card(page, 'Space Tour')).toBeVisible();
   await heart(page, 'Space Tour', true).click();
-  await expect(heart(page, 'Space Tour', true)).toBeDisabled();
-  await heart(page, 'Space Tour', true).click({ force: true });
+  await expect(heart(page, 'Space Tour', false)).toBeDisabled();
+  await heart(page, 'Space Tour', false).click({ force: true });
   writes.release();
   await shownToast(page, '"Space Tour" was removed from favorites');
   await expect(heart(page, 'Space Tour', false)).toBeEnabled();

@@ -4,6 +4,7 @@ import { clearFavorites } from './favorites-helpers';
 import { heartsFlow } from './favorites-hearts';
 import { favoritesPaginationFlow } from './favorites-list';
 import { favoritesOptimisticFlow } from './favorites-optimistic';
+import { favoritesOptimisticRemovalFlow } from './favorites-optimistic-removal';
 import { favoritesPendingFlow } from './favorites-pending';
 import { favoritesReloadReturnFlow } from './favorites-reload';
 import { roundTripRestoresSearch } from './favorites-round-trip';
@@ -54,6 +55,13 @@ test('a heart is disabled while its toggle is in flight on both layouts and page
   page,
 }) => {
   await favoritesPendingFlow(page);
+});
+
+test('favorites page cards flip their removal marking before the backend responds', async ({
+  page,
+  request,
+}) => {
+  await favoritesOptimisticRemovalFlow(page, request);
 });
 
 test('search state survives the URL round trip', async ({ page }) => {

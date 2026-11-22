@@ -16,8 +16,9 @@ import { useUrlFavoriteState } from './useUrlFavoriteState';
  * The Favorites page Presenter: fetches the URL page on mount and on every
  * page change, keeping only `isLoading` locally while the Entity stores the
  * page's shows and backend total count. The subhead reads the live favorite
- * count; soft removal keeps removed cards listed until the next fetch. Back
- * to Home restores the remembered Home URL.
+ * count; soft removal flips its marking optimistically and keeps removed
+ * cards listed until the next fetch. Back to Home restores the remembered
+ * Home URL.
  */
 export const useFavoritesPage = () => {
   const shows = useSelector(selectFavoriteShows);

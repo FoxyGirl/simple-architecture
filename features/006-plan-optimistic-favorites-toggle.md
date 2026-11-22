@@ -364,7 +364,7 @@ re-check of every PRD acceptance criterion.
 
 **Tasks:**
 
-- [ ] Extend the E2E flow first (red), in `favorites-optimistic.js`:
+- [x] Extend the E2E flow first (red), in `favorites-optimistic.js`:
       FavoritesPage scenarios with delayed interception — a delayed DELETE
       grays the card out immediately (reuse the `cardArticle` computed-style
       probes with the recorded 005 values), flips its heart label, and issues
@@ -373,7 +373,7 @@ re-check of every PRD acceptance criterion.
       DELETE restores the full-color favorite card with the error toast and
       no success toast; a delayed POST on a grayed-out card restores it in
       place immediately, and an abort re-grays it.
-- [ ] Revise the FavoritesPage unit suites first (red) at the deferred mock
+- [x] Revise the FavoritesPage unit suites first (red) at the deferred mock
       boundary: `favoritesSoftRemoval.test.tsx` — the marking flips before
       the request settles and reverts on failure, with no refetch in either
       case; `favoritesToast.test.tsx` — success toasts still appear only
@@ -381,20 +381,20 @@ re-check of every PRD acceptance criterion.
       removal/re-add now rolls the optimistic flip back (previously: nothing
       changed because nothing had flipped); `favoritesRemoval.test.tsx` and
       the harness updated where they encode success-time flips.
-- [ ] Extend the shared `useFavoriteToggle` hook: `onToggled(show,
+- [x] Extend the shared `useFavoriteToggle` hook: `onToggled(show,
 wasFavorite)` fires optimistically at click time with the pre-click
       state (the Task direction is decided before the flip), a new
       `onToggleFailed(show, wasFavorite)` fires on the error result for the
       caller's rollback; the success/error toasts keep their exact messages
       and timing; the returned `boolean | null` contract and the
       `toggleShowFavorite` Task stay unchanged; update the JSDoc.
-- [ ] Rework `useSoftRemoval`: the marking flips through the optimistic
+- [x] Rework `useSoftRemoval`: the marking flips through the optimistic
       callback and reverts through the failure callback; the fresh-fetch
       invalidation (`marking.shows === shows`) and the derived
       `isFavorite`/`isRemoved` predicates stay as they are.
-- [ ] Update the stale doc comments describing the success-only flow
+- [x] Update the stale doc comments describing the success-only flow
       (`useSoftRemoval`, `useFavoriteToggle`, `useFavoritesPage` JSDoc).
-- [ ] Final verification: all gates green (`css-types` if any CSS changed,
+- [x] Final verification: all gates green (`css-types` if any CSS changed,
       `typecheck`, `lint`, `test`, `test:e2e`, `build`); an automated E2E
       round through every PRD user scenario in both viewports; re-check
       every PRD acceptance criterion against the finished feature; `server/`
@@ -402,11 +402,11 @@ wasFavorite)` fires optimistically at click time with the pre-click
 
 **Tests:**
 
-- [ ] E2E FavoritesPage optimistic gray-out/restore, no-refetch, rollback and
+- [x] E2E FavoritesPage optimistic gray-out/restore, no-refetch, rollback and
       toast-timing probes (red -> green).
-- [ ] Revised soft-removal, toast and removal-failure unit suites with
+- [x] Revised soft-removal, toast and removal-failure unit suites with
       deferred requests (red -> green).
-- [ ] All pre-existing suites stay green, including the Phase 1–2 optimistic
+- [x] All pre-existing suites stay green, including the Phase 1–2 optimistic
       and disabled flows and every HomePage suite.
 
 **When ready:**
@@ -419,22 +419,61 @@ re-verified.
 
 **Acceptance Criteria:**
 
-- [ ] On the Favorites page, clicking the heart on a favorite card renders it
+- [x] On the Favorites page, clicking the heart on a favorite card renders it
       grayed out and semi-transparent before the DELETE response arrives,
       with no `GET /api/favorites` refetch (unit + E2E).
-- [ ] Clicking the heart on a grayed-out card restores its full-color
+- [x] Clicking the heart on a grayed-out card restores its full-color
       favorite state before the POST response arrives (unit + E2E).
-- [ ] If the toggle fails, the marking reverts to its pre-click state (a
+- [x] If the toggle fails, the marking reverts to its pre-click state (a
       failed removal leaves the card normal, a failed re-add leaves it
       grayed out), the error toast is shown and no success toast appears
       (unit + E2E).
-- [ ] Success toasts still appear only after the backend confirms, with the
+- [x] Success toasts still appear only after the backend confirms, with the
       unchanged messages; the deferred-refresh behavior of feature 005
       (subhead/pagination metadata, fresh fetch on page change/leave/reload)
       is intact.
-- [ ] The heart button of the toggled Favorites page card is disabled while
+- [x] The heart button of the toggled Favorites page card is disabled while
       its request is in flight (Phase 2 registry, re-verified here).
-- [ ] Every PRD acceptance criterion is re-checked against the finished
+- [x] Every PRD acceptance criterion is re-checked against the finished
       feature, `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass, and `server/` is
       untouched.
+
+**Phase 3 execution notes (recorded decisions and deviations):**
+
+- E2E split (120-line budget, sibling-flow precedent): the Favorites page
+  scenarios live in the new `e2e/favorites-optimistic-removal.js` flow,
+  registered as one extra test in `favorites.spec.js`. The recorded 005
+  computed-style probes and the error-toast locator moved to the shared
+  `e2e/favorites-removal-probes.js`, and `favorites-intercept.js` gained
+  `trackListFetches` (a route counter for `GET /api/favorites?page=N`).
+- No-refetch probe: React StrictMode double-runs the Favorites page mount
+  effect in dev, so the flow captures the list-fetch count after the page
+  settles and asserts it never changes across the toggle scenarios (the PRD
+  intent: no refetch caused by a toggle), instead of hardcoding the mount
+  count.
+- Phase 2 flow update: the Favorites page pending probe now expects the
+  optimistically flipped `Add …` label while the DELETE is held (previously
+  the label flipped only on success), still proving `disabled`, the rejected
+  second click and a single request.
+- Unit suite placement (120-line budget): the deferred-window coverage lives
+  in the new sibling suites `favoritesOptimisticRemoval.test.tsx` (flip before
+  settle, rollback, no refetch) and `favoritesOptimisticToast.test.tsx`
+  (success toasts only after confirmation); `favoritesRemoval.test.tsx` and
+  `favoritesRemovalFailure.test.tsx` gained the immediate pre-settle flip
+  assertions in place, and `favoritesSoftRemoval.test.tsx` / the harness
+  needed no changes (their final-state assertions still hold).
+- `useSoftRemoval` flips and reverts through functional `setMarking` updates
+  keyed to the click-time `shows` array: concurrent toggles on different shows
+  cannot overwrite each other's optimistic edits, while a response arriving
+  after a fresh fetch still lands on the old array and is invalidated by the
+  unchanged `marking.shows === shows` check.
+- `useFavoriteToggle` captures the pre-click favorite state before invoking
+  `onToggled`, so the optimistic flip can never invert the Task direction;
+  success/error toast messages and timing, the returned `boolean | null`
+  contract and `toggleShowFavorite` are unchanged.
+- No CSS or design-token change in this phase; the pen.dev MCP plan-usage
+  block recorded in Phase 2 still applies and the `.pen` file was not
+  touched.
+- Verification: `typecheck`, `lint`, `test` (48 files / 154 tests, all
+  workspaces), `test:e2e` (21 tests) and `build` pass; `server/` has no diff.

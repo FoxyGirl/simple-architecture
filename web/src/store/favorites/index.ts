@@ -1,5 +1,6 @@
 export {
   beginFavoriteToggle,
+  clearFavorites,
   favoritesReducer,
   replaceFavoritesListSnapshot,
   replaceFavoritesSummary,

@@ -1,8 +1,5 @@
-/**
- * Shapes shared across the app: the TVmaze show model, the backend response
- * envelopes and the primitives of the API request layer. Types owned by a
- * single page, component or Entity stay in that owner's `types.ts`.
- */
+/** App-wide shapes: the TVmaze model, backend envelopes and request-layer
+ * primitives. Owner-specific types stay in that owner's `types.ts`. */
 
 export type ShowStatus =
   'Running' | 'Ended' | 'In Development' | 'To Be Determined' | 'Scheduled';
@@ -94,6 +91,11 @@ export type FavoritesListSnapshot = Pick<
   FavoritesListPage,
   'shows' | 'totalCount'
 >;
+
+/** The auth endpoints' session envelope: the signed-in email or `null`. */
+export type AuthSession = {
+  email: string | null;
+};
 
 /** The HTTP methods the request layer speaks. */
 export type HttpMethod = 'GET' | 'POST' | 'DELETE';

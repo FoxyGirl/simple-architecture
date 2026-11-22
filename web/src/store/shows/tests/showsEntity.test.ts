@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import type { SearchPage, Show } from '~/types';
 
 import { favoritesReducer } from '../../favorites';
+import { sessionReducer } from '../../session';
 import {
   replaceSearchResult,
   selectGenres,
@@ -26,14 +27,15 @@ const result: SearchPage = {
 };
 
 // A store owning the shows entity: the Entity is independent of any other
-// module, so its suite exercises it in isolation. The favorites reducer is
-// mounted only because the RootState selectors are typed against the whole
-// store shape.
+// module, so its suite exercises it in isolation. The favorites and session
+// reducers are mounted only because the RootState selectors are typed against
+// the whole store shape.
 const createTestStore = () =>
   configureStore({
     reducer: {
       shows: showsReducer,
       favorites: favoritesReducer,
+      session: sessionReducer,
     },
   });
 

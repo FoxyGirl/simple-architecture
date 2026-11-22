@@ -2,19 +2,32 @@ import { Route, Routes } from 'react-router-dom';
 
 import { FavoritesPage } from '../pages/FavoritesPage';
 import { HomePage } from '../pages/HomePage';
+import { AccountBar } from './AccountBar';
+import { AuthModal } from './AuthModal';
+import { useApp } from './logic/useApp';
 import { Toaster } from './Toaster';
 
 import styles from './App.module.css';
 
-export const App = () => (
-  <div className={styles.app}>
-    <main className={styles.content}>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/favorites" element={<FavoritesPage />} />
-      </Routes>
-    </main>
+export const App = () => {
+  const { isAuthModalOpen, openAuthModal, closeAuthModal } = useApp();
 
-    <Toaster />
-  </div>
-);
+  return (
+    <div className={styles.app}>
+      <AccountBar onSignIn={openAuthModal} />
+
+      <main className={styles.content}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+        </Routes>
+      </main>
+
+      {isAuthModalOpen && (
+        <AuthModal onSignedIn={closeAuthModal} onClose={closeAuthModal} />
+      )}
+
+      <Toaster />
+    </div>
+  );
+};

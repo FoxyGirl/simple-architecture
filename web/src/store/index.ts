@@ -11,6 +11,7 @@ export {
 export type { ShowsState } from './shows';
 export {
   beginFavoriteToggle,
+  clearFavorites,
   replaceFavoritesListSnapshot,
   replaceFavoritesSummary,
   selectFavoriteIds,
@@ -22,3 +23,10 @@ export {
   settleFavoriteToggle,
 } from './favorites';
 export type { FavoritesState } from './favorites';
+export {
+  clearSession,
+  replaceSession,
+  selectIsAuthenticated,
+  selectSessionEmail,
+} from './session';
+export type { SessionState } from './session';

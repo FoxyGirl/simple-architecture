@@ -14,9 +14,10 @@ const result: SearchPage = {
 
 // Plain store smoke — no React involved.
 describe('store', () => {
-  it('is created with the shows and favorites entities only', () => {
+  it('is created with the shows, favorites and session entities only', () => {
     expect(Object.keys(store.getState()).sort()).toEqual([
       'favorites',
+      'session',
       'shows',
     ]);
     expect(store.getState().shows).toEqual({
@@ -26,6 +27,7 @@ describe('store', () => {
       totalCount: 0,
       genres: [],
     });
+    expect(store.getState().session).toEqual({ email: null });
   });
 
   it('round-trips a search result through dispatch and the selectors', () => {

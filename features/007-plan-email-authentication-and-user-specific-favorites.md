@@ -301,7 +301,7 @@ render for everyone and the backend still serves one shared list.
 
 **Tasks:**
 
-- [ ] Write the E2E auth flows first (red): new `e2e/auth.spec.js` with
+- [x] Write the E2E auth flows first (red): new `e2e/auth.spec.js` with
       `e2e/auth-helpers.js` locators (Sign in entry point, modal, email input,
       submit action, dismiss control, account-bar email, Logout) — opening the
       modal from Sign in and submitting a valid email closes it, shows the email
@@ -313,7 +313,7 @@ render for everyone and the backend still serves one shared list.
       closes it and leaves the app signed out. The spec writes no favorites, so
       it runs in parallel with the other specs (the single-writer rule of
       `favorites.spec.js` is unaffected).
-- [ ] Write the Entity, Task and presenter suites first (red):
+- [x] Write the Entity, Task and presenter suites first (red):
       `store/session/tests/sessionEntity.test.ts` (`replaceSession`,
       `clearSession`, `selectSessionEmail`, `selectIsAuthenticated`, and the new
       `clearFavorites` resetting ids, pendingToggles, shows and totalCount);
@@ -329,17 +329,17 @@ render for everyone and the backend still serves one shared list.
       modal's open/close transitions and the submitting and error flags; and an
       `AuthModal/tests/` View suite for the dialog semantics, the single email
       input with no password field, the inline error and each dismiss path.
-- [ ] Implement the session Entity: `store/session/{types,sessionSlice,selectors,index}.ts`
+- [x] Implement the session Entity: `store/session/{types,sessionSlice,selectors,index}.ts`
       storing `{ email: string | null }` verbatim, registered in
       `store/store.ts` and exported through `store/index.ts`; add
       `clearFavorites()` to `store/favorites/favoritesSlice.ts` restoring the
       existing `EMPTY_STATE`, exported through the favorites and store barrels,
       with the slice and `types.ts` doc comments updated to describe the reset.
-- [ ] Add the shared auth shape `AuthSession = { email: string | null }` to
+- [x] Add the shared auth shape `AuthSession = { email: string | null }` to
       `web/src/types.ts` (app-wide backend response shapes live there) and the
       auth Task result types to the `types.ts` of the folder owning each Task,
       reusing `FavoritesSummaryResult`'s discriminated-union style.
-- [ ] Implement the three auth Tasks, each in its single consumer's
+- [x] Implement the three auth Tasks, each in its single consumer's
       `logic/tasks/`: `restoreSession` (`GET /api/auth/me`; any failure
       dispatches the signed-out state), `logout` (`POST /api/auth/logout`;
       dispatches `clearSession` + `clearFavorites` only on success) and
@@ -348,7 +348,7 @@ render for everyone and the backend still serves one shared list.
       `buildApiUrl`/`requestJson`, all mutating the store only via
       `store.dispatch`, all returning the discriminated outcome. No
       request-layer change: the browser attaches the session cookie itself.
-- [ ] Implement `App/AuthModal/` (dialog View with a single email input, a
+- [x] Implement `App/AuthModal/` (dialog View with a single email input, a
       submit action, an inline error paragraph and a dismiss control — no
       password field; CSS Module built on `--scrim`, `--radius-modal` and the
       existing tokens; `logic/useAuthModal.ts` owning the draft, the submitting
@@ -361,7 +361,7 @@ render for everyone and the backend still serves one shared list.
       while signed in; `logic/useAccountBar.ts` reading `selectSessionEmail`,
       forwarding the `onSignIn` prop and running the logout Task). Run
       `npm run css-types` after every CSS module.
-- [ ] Wire App and the design system: `App/logic/useApp.ts` runs
+- [x] Wire App and the design system: `App/logic/useApp.ts` runs
       `restoreSession()` once on mount, owns the modal's open state and exposes
       the prepared `isSessionReady`/`isAuthenticated` flags together with
       `isAuthModalOpen`, `openAuthModal` and `closeAuthModal`; `App.tsx` renders
@@ -372,22 +372,31 @@ render for everyone and the backend still serves one shared list.
       canvas through the MCP tools, or record the deferral if the plan-usage
       limit noted in plans 003/005/006 still applies.
 
+> **Design-canvas record (2026-11-22).** The pen.dev MCP `get_app_state`
+> still answers "A document needs to be open in the editor", so mirroring the
+> modal and the account bar on the canvas is deferred. Their styling uses
+> existing tokens only (`--surface`, `--surface-2`, `--border`, `--accent`,
+> `--accent-hover`, `--text-*`, `--radius-input`, `--radius-btn`,
+> `--radius-modal`, `--scrim`, `--space-*`, `--focus-ring`, `--font-display`,
+> `--font-body`). No token was added, so `tokens.css` and the canvas variables
+> stay in sync.
+
 **Tests:**
 
-- [ ] New E2E `e2e/auth.spec.js`: modal open and dismiss, sign-in, logout,
+- [x] New E2E `e2e/auth.spec.js`: modal open and dismiss, sign-in, logout,
       reload persistence, invalid and empty submits (red -> green).
-- [ ] New session Entity suite, including the `clearFavorites` reset (red ->
+- [x] New session Entity suite, including the `clearFavorites` reset (red ->
       green).
-- [ ] New Task suites for `restoreSession`, `logout` and `signIn` at the mocked
+- [x] New Task suites for `restoreSession`, `logout` and `signIn` at the mocked
       request boundary (`~/test/api-mock` extended with the auth routes) (red ->
       green).
-- [ ] New presenter suites for `useAuthModal`, `useAccountBar` and `useApp`
+- [x] New presenter suites for `useAuthModal`, `useAccountBar` and `useApp`
       asserting their prepared interface, including the modal's open state (red
       -> green).
-- [ ] New `AuthModal` View suite: dialog semantics, one email input and no
+- [x] New `AuthModal` View suite: dialog semantics, one email input and no
       password field, the inline error, and the close/Escape/backdrop dismiss
       paths (red -> green).
-- [ ] All pre-existing suites stay green: every HomePage and FavoritesPage
+- [x] All pre-existing suites stay green: every HomePage and FavoritesPage
       suite (they render pages directly and the favorites sync is still
       unconditional in this phase), the store, api and notification suites, all
       server suites and all existing Playwright flows.
@@ -404,29 +413,29 @@ Phase 1.
 
 **Acceptance Criteria:**
 
-- [ ] The account bar's Sign in action opens a sign-in modal rendering exactly
+- [x] The account bar's Sign in action opens a sign-in modal rendering exactly
       one input (email), a submit action and a dismiss control; no password
       field exists in the DOM and no login route is added (E2E + unit).
-- [ ] Submitting a valid email sends `POST /api/auth/login`, stores the returned
+- [x] Submitting a valid email sends `POST /api/auth/login`, stores the returned
       email in the session Entity, closes the modal and displays the email in
       the account bar with a Logout action, with no navigation away from the
       current route (E2E + unit).
-- [ ] Submitting an empty or non-email value sends no request, starts no
+- [x] Submitting an empty or non-email value sends no request, starts no
       session, shows an error message inside the modal and keeps the modal open
       (unit + E2E).
-- [ ] Dismissing the modal — close control, Escape key or backdrop click —
+- [x] Dismissing the modal — close control, Escape key or backdrop click —
       closes it and leaves the app signed out (unit + E2E).
-- [ ] Clicking Logout sends `POST /api/auth/logout`, clears the session and the
+- [x] Clicking Logout sends `POST /api/auth/logout`, clears the session and the
       favorites Entity, and the account bar returns to its Sign in state (unit +
       E2E).
-- [ ] Reloading the browser while signed in shows the same email without
+- [x] Reloading the browser while signed in shows the same email without
       another login: the boot restore reads `GET /api/auth/me` (E2E).
-- [ ] A 401 or failed restore leaves the app signed out with an empty favorites
+- [x] A 401 or failed restore leaves the app signed out with an empty favorites
       Entity and shows no error toast at boot (unit).
-- [ ] No favorite control is hidden yet: every pre-existing frontend suite and
+- [x] No favorite control is hidden yet: every pre-existing frontend suite and
       Playwright flow passes unchanged, and `server/` has no diff beyond
       Phase 1.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass.
 
 ### Phase 3: Frontend gating — favorites become a signed-in feature

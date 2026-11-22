@@ -2,18 +2,9 @@ import type { Mock } from 'vitest';
 
 import type { FavoritesSummary, Show } from '~/types';
 
-/**
- * One call the Task made through `requestJson`, parsed back into the parts
- * the suites assert on. The request layer itself is covered by its own
- * suite, so Task and component suites stub it at this boundary.
- */
-export type ApiCall = {
-  path: string;
-  method: string;
-  params: URLSearchParams;
-  body: unknown;
-  signal: AbortSignal | undefined;
-};
+import { toCall, type ApiCall } from './api-call';
+
+export type { ApiCall } from './api-call';
 
 export type ApiRoutes = {
   search?: (call: ApiCall) => unknown;
@@ -21,35 +12,9 @@ export type ApiRoutes = {
   favoritesPage?: (page: number) => unknown;
   addFavorite?: (show: Show) => unknown;
   removeFavorite?: (id: number) => unknown;
-};
-
-// The Task calls the mocked `requestJson` before the real layer serializes
-// the body, so a body is either the raw value or an already encoded string.
-const decodeBody = (body: unknown): unknown => {
-  if (typeof body !== 'string') return body;
-  try {
-    return JSON.parse(body);
-  } catch {
-    return body;
-  }
-};
-
-const toCall = (url: string, init: unknown): ApiCall => {
-  const target = new URL(url, 'http://api.test');
-  const options =
-    init instanceof AbortSignal
-      ? { signal: init }
-      : (init as
-          | { method?: string; body?: unknown; signal?: AbortSignal }
-          | undefined);
-
-  return {
-    path: target.pathname,
-    method: options?.method ?? 'GET',
-    params: target.searchParams,
-    body: decodeBody(options?.body),
-    signal: options?.signal,
-  };
+  authMe?: () => unknown;
+  login?: (email: string) => unknown;
+  logout?: () => unknown;
 };
 
 /**
@@ -62,6 +27,18 @@ export const stubApi = (mock: Mock, routes: ApiRoutes = {}): void => {
   mock.mockImplementation(async (url: string, init?: unknown) => {
     const call = toCall(url, init);
     const emptySummary: FavoritesSummary = { count: 0, ids: [] };
+
+    if (call.path === '/api/auth/me' && call.method === 'GET') {
+      return routes.authMe?.();
+    }
+
+    if (call.path === '/api/auth/login' && call.method === 'POST') {
+      return routes.login?.((call.body as { email: string }).email);
+    }
+
+    if (call.path === '/api/auth/logout' && call.method === 'POST') {
+      return routes.logout?.();
+    }
 
     if (call.path === '/api/search') {
       return routes.search?.(call);

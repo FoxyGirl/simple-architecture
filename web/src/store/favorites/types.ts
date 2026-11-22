@@ -21,7 +21,9 @@ export type PendingToggle = {
  * cleared on every settle. The backend owns the favorites storage; the
  * client mirrors it and holds no authoritative data. The page metadata of
  * the list fetch (page and page count) lives in the Favorites page
- * Presenter, not here. No presentation state.
+ * Presenter, not here. No presentation state. `clearFavorites` restores this
+ * empty state on sign-in, logout and a failed boot restore, so the Entity
+ * never carries another user's data.
  */
 export type FavoritesState = {
   ids: number[];

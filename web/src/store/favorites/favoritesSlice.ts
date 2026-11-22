@@ -40,11 +40,16 @@ const favoritesSlice = createSlice({
     settleFavoriteToggle(state, action: PayloadAction<number>) {
       delete state.pendingToggles[action.payload];
     },
+    // The auth Tasks reset the Entity on sign-in, logout and a failed boot
+    // restore, so no ids, pending overlay or list snapshot of a previous
+    // user survives a user switch.
+    clearFavorites: () => ({ ...EMPTY_STATE }),
   },
 });
 
 export const {
   beginFavoriteToggle,
+  clearFavorites,
   replaceFavoritesListSnapshot,
   replaceFavoritesSummary,
   settleFavoriteToggle,

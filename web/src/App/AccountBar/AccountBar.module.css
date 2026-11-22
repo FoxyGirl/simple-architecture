@@ -1,0 +1,75 @@
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.2px;
+}
+
+.brandIcon {
+  flex: none;
+  color: var(--accent);
+}
+
+.account {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+.email {
+  overflow: hidden;
+  max-width: 240px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action {
+  flex: none;
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.action:hover {
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+.action:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}

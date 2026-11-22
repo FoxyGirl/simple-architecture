@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { FavoritesPage } from '../pages/FavoritesPage';
 import { HomePage } from '../pages/HomePage';
@@ -10,7 +10,13 @@ import { Toaster } from './Toaster';
 import styles from './App.module.css';
 
 export const App = () => {
-  const { isAuthModalOpen, openAuthModal, closeAuthModal } = useApp();
+  const {
+    isSessionReady,
+    isAuthenticated,
+    isAuthModalOpen,
+    openAuthModal,
+    closeAuthModal,
+  } = useApp();
 
   return (
     <div className={styles.app}>
@@ -19,7 +25,16 @@ export const App = () => {
       <main className={styles.content}>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route
+            path="/favorites"
+            element={
+              isAuthenticated ? (
+                <FavoritesPage />
+              ) : isSessionReady ? (
+                <Navigate to="/" replace />
+              ) : null
+            }
+          />
         </Routes>
       </main>
 

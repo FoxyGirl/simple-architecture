@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
-import { replaceFavoritesSummary, store } from '~/store';
+import { replaceFavoritesSummary, replaceSession, store } from '~/store';
 import { stubApi } from '~/test/api-mock';
 
 import { HomePage } from '../HomePage';
@@ -41,6 +41,7 @@ describe('HomePage favorites count button', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     store.dispatch(replaceFavoritesSummary({ count: 0, ids: [] }));
+    store.dispatch(replaceSession({ email: 'ada@example.com' }));
     api.mockReset();
     stubApi(api, { favoritesCount: () => ({ count: 2, ids: [1, 2] }) });
   });

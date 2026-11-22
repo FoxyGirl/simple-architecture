@@ -4,7 +4,14 @@
 
 import { expect } from '@playwright/test';
 
+import { signIn } from './auth-helpers';
+
 const BACKEND = 'http://localhost:3001';
+
+// Favorites are a signed-in feature: every flow enters through the modal.
+// In this phase the backend still serves one shared list, so one email is
+// enough to unlock the controls.
+const FAVORITES_EMAIL = 'favorites@example.com';
 
 export const summaryIds = async (request) =>
   (await (await request.get(`${BACKEND}/api/favorites/count`)).json()).ids;
@@ -50,6 +57,7 @@ export const pressed = (page, name) =>
 
 export const searchSpace = async (page) => {
   await page.goto('/');
+  await signIn(page, FAVORITES_EMAIL);
   await searchInput(page).fill('space');
   await expect(card(page, 'Space Tour')).toBeVisible();
 };

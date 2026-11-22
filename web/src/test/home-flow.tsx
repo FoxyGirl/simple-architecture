@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 
-import { replaceSearchResult, store } from '~/store';
+import { replaceSearchResult, replaceSession, store } from '~/store';
 
 import type { SearchPage, Show } from '~/types';
 
@@ -91,6 +91,9 @@ export const click = async (element: HTMLElement) => {
 // MemoryRouter (the count suite adds route stubs of its own).
 export const renderHomePage = (entries: string[] = ['/']) => {
   store.dispatch(replaceSearchResult(envelope()));
+  // The favorites aspect is a signed-in feature; the suites that drive it
+  // render the signed-in user the auth Task would have restored.
+  store.dispatch(replaceSession({ email: 'ada@example.com' }));
 
   return remountHomePage(entries);
 };

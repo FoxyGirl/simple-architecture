@@ -1,6 +1,10 @@
 import { useSelector } from 'react-redux';
 
-import { selectFavoriteIds, selectPendingFavoriteIds } from '~/store';
+import {
+  selectFavoriteIds,
+  selectIsAuthenticated,
+  selectPendingFavoriteIds,
+} from '~/store';
 import { useFavoriteToggle } from '~/pages/hooks/useFavoriteToggle';
 
 import type { ShowListProps } from '../types';
@@ -17,6 +21,10 @@ import type { ShowListProps } from '../types';
  * The pending registry is not overridable: it comes from the same Entity
  * overlay the shared Task writes, so the heart of the show whose toggle is
  * in flight is disabled on both pages and both card layouts.
+ *
+ * Favorites are a signed-in feature: `canFavorite` comes from the session
+ * Entity for both pages and both layouts, so the cards hide the heart while
+ * signed out even when a consumer injects its own favorites aspect.
  */
 export const useShowList = ({
   isFavorite,
@@ -24,12 +32,14 @@ export const useShowList = ({
 }: ShowListProps) => {
   const favoriteIds = useSelector(selectFavoriteIds);
   const pendingFavoriteIds = useSelector(selectPendingFavoriteIds);
+  const canFavorite = useSelector(selectIsAuthenticated);
 
   const storedIsFavorite = (showId: number) => favoriteIds.includes(showId);
   const storedToggleFavorite = useFavoriteToggle(storedIsFavorite);
   const isPending = (showId: number) => pendingFavoriteIds.includes(showId);
 
   return {
+    canFavorite,
     isFavorite: isFavorite ?? storedIsFavorite,
     isPending,
     toggleFavorite: onToggleFavorite ?? storedToggleFavorite,

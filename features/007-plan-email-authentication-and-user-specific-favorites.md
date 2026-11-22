@@ -452,7 +452,7 @@ of the previous user is displayed anywhere.
 
 **Tasks:**
 
-- [ ] Write the E2E guest flows first (red), extending `e2e/auth.spec.js` (or a
+- [x] Write the E2E guest flows first (red), extending `e2e/auth.spec.js` (or a
       sibling `e2e/auth-guest.js` if the file nears the 120-line budget): after
       a search as a signed-out user no favorites heart exists — neither
       `Add … to favorites` nor `Remove … from favorites` — at the default
@@ -464,7 +464,7 @@ of the previous user is displayed anywhere.
       through the modal the hearts and the count button reappear, and after
       logout they disappear again; searching, genre filtering and pagination
       still work while signed out.
-- [ ] Write the unit suites first (red): `ShowList/tests/` — `canFavorite` is
+- [x] Write the unit suites first (red): `ShowList/tests/` — `canFavorite` is
       false when the session Entity is signed out and true when signed in, for
       both the stored and the injected favorites paths; `ShowCard` and
       `ShowRowCard` suites — no `FavoriteButton` in the document when
@@ -475,27 +475,27 @@ of the previous user is displayed anywhere.
       email changes; an App route suite — `/favorites` redirects to `/` while
       signed out, renders the Favorites page while signed in, and does not
       redirect while the boot restore is still in flight.
-- [ ] Extend the card contract: `ShowCard` and `ShowRowCard` gain an optional
+- [x] Extend the card contract: `ShowCard` and `ShowRowCard` gain an optional
       `canFavorite` boolean (default `true`) that decides whether
       `FavoriteButton` renders; `ShowList`'s View passes the presenter's value
       through; `ShowListProps` stays unchanged, so no consumer injects a new
       prop (the `isPending` precedent from feature 006).
-- [ ] Extend `useShowList`: read `selectIsAuthenticated` and expose
+- [x] Extend `useShowList`: read `selectIsAuthenticated` and expose
       `canFavorite` beside `isFavorite`, `isPending` and `toggleFavorite`, so
       the HomePage and the Favorites page gate from the same Entity in both
       layouts; update the JSDoc to describe the gate.
-- [ ] Gate the HomePage: `useShowFavorites` reads `selectSessionEmail`, returns
+- [x] Gate the HomePage: `useShowFavorites` reads `selectSessionEmail`, returns
       `favoritesButton: { count, onClick } | null` (null while signed out) and
       runs `syncFavoritesSummary` only for a signed-in email with that email in
       the effect dependencies, so login and logout re-sync; `HomePage.tsx`
       renders the count button only when the prepared payload is not null — no
       derivation in the View.
-- [ ] Guard the Favorites route: `useApp` keeps exposing the prepared
+- [x] Guard the Favorites route: `useApp` keeps exposing the prepared
       `isSessionReady`/`isAuthenticated` flags and `App.tsx` renders
       `<FavoritesPage />` for `/favorites` only when authenticated,
       `<Navigate to="/" replace />` when signed out — no modal is opened by the
       redirect — and nothing for that route until the boot restore settles.
-- [ ] Verify: all gates green (`npm run css-types` if any CSS changed,
+- [x] Verify: all gates green (`npm run css-types` if any CSS changed,
       `typecheck`, `lint`, `test`, `test:e2e`, `build`); `server/` has no diff
       beyond Phase 1; the existing favorites E2E flows pass **unchanged** (the
       backend still accepts unauthenticated writes in this phase); an
@@ -504,16 +504,25 @@ of the previous user is displayed anywhere.
 
 **Tests:**
 
-- [ ] New E2E guest probes: no hearts in either layout, no count button, the
+- [x] New E2E guest probes: no hearts in either layout, no count button, the
       sign-in entry point, the `/favorites` redirect, signed-out search intact,
       controls returning on login and disappearing on logout (red -> green).
-- [ ] New and revised unit suites for `useShowList`, `ShowCard`, `ShowRowCard`,
+- [x] New and revised unit suites for `useShowList`, `ShowCard`, `ShowRowCard`,
       `useShowFavorites`/`HomePage` and the App route guard (red -> green).
-- [ ] All pre-existing suites stay green, including the Phase 2 auth suites and
+- [x] All pre-existing suites stay green, including the Phase 2 auth suites and
       every favorites suite (they render signed-in states; the harnesses gain a
       signed-in session where a suite mounts the App tree).
-- [ ] All 21 existing Playwright flows stay green, the favorites ones
+- [x] All 21 existing Playwright flows stay green, the favorites ones
       unchanged.
+
+> **E2E record (2026-11-23).** The favorites scenario modules stay unchanged,
+> but the shared `searchSpace` helper in `e2e/favorites-helpers.js` now signs
+> in through the modal before searching: the hearts those flows exercise no
+> longer render for a signed-out browser. In this phase the backend still
+> serves one shared list, so one email unlocks every flow and the
+> unauthenticated `beforeEach` clear keeps working; Phase 4 makes the helpers
+> email-scoped. New guest flows live in `e2e/auth-guest.spec.js` and write no
+> favorites, so they run in parallel with the single-writer spec.
 
 **When ready:**
 
@@ -526,25 +535,25 @@ no trace of the previous user's favorites in the UI; every gate is green with
 
 **Acceptance Criteria:**
 
-- [ ] While signed out, no heart button is rendered on show cards in the desktop
+- [x] While signed out, no heart button is rendered on show cards in the desktop
       `ShowCard` or the mobile `ShowRowCard` layout, and the HomePage
       favorites-count button is not rendered (unit + E2E, both viewports).
-- [ ] While signed out, navigating to `/favorites` renders no favorites list and
+- [x] While signed out, navigating to `/favorites` renders no favorites list and
       the app lands on the HomePage, without opening the sign-in modal (unit +
       E2E).
-- [ ] While signed out, a sign-in entry point is visible and opens the sign-in
+- [x] While signed out, a sign-in entry point is visible and opens the sign-in
       modal (E2E).
-- [ ] While signed out, search, genre filtering and pagination work exactly as
+- [x] While signed out, search, genre filtering and pagination work exactly as
       before, and the existing search/browse/cache/url-sync Playwright specs
       pass unchanged (E2E).
-- [ ] While signed in, hearts, the count button, the optimistic toggle, the
+- [x] While signed in, hearts, the count button, the optimistic toggle, the
       disabled-while-pending heart, soft removal and the deferred refresh behave
       exactly as after features 005/006 (existing suites and flows green).
-- [ ] A signed-in hard reload of `/favorites` renders the Favorites page and does
+- [x] A signed-in hard reload of `/favorites` renders the Favorites page and does
       not redirect to the HomePage (unit + E2E).
-- [ ] After logout, no favorites data of the previous user is displayed anywhere
+- [x] After logout, no favorites data of the previous user is displayed anywhere
       in the app — no hearts, no count, no list (unit + E2E).
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass; `server/` has no diff beyond
       Phase 1.
 

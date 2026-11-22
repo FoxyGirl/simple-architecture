@@ -66,10 +66,10 @@ export const useHomePage = () => {
     });
   }, [search, genre, page, resetGenre, runRequest]);
 
-  // The favorites summary the count button reflects; the mount syncs it
-  // through the read Task. The cards' hearts and their toggle live in the
-  // ShowList presenter, which reads the same Entity.
-  const { count, goToFavorites } = useShowFavorites();
+  // The favorites-count button payload the signed-in user sees; a signed-out
+  // visitor gets `null`, and the cards' hearts stay hidden in the ShowList
+  // presenter, which reads the same session Entity.
+  const { favoritesButton } = useShowFavorites();
 
   // The results' empty-state action: clearing writes the idle URL, and the
   // draft hook re-syncs the field (and its focus) from that URL.
@@ -86,12 +86,11 @@ export const useHomePage = () => {
     search,
     query,
     inputRef,
-    count,
+    favoritesButton,
     onQueryChange,
     clearQuery,
     selectGenre: url.selectGenre,
     selectPage: url.selectPage,
-    goToFavorites,
     retry,
     clearSearch,
   };

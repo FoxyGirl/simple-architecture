@@ -13,7 +13,8 @@ const neverRemoved = () => false;
 
 export const ShowList = (props: ShowListProps) => {
   const { shows, isRemoved = neverRemoved } = props;
-  const { isFavorite, isPending, toggleFavorite } = useShowList(props);
+  const { canFavorite, isFavorite, isPending, toggleFavorite } =
+    useShowList(props);
   const { isDesktop } = useMediaQuery();
 
   return (
@@ -23,6 +24,7 @@ export const ShowList = (props: ShowListProps) => {
           <ShowCard
             key={show.id}
             show={show}
+            canFavorite={canFavorite}
             isFavorite={isFavorite(show.id)}
             isRemoved={isRemoved(show.id)}
             isPending={isPending(show.id)}
@@ -32,6 +34,7 @@ export const ShowList = (props: ShowListProps) => {
           <ShowRowCard
             key={show.id}
             show={show}
+            canFavorite={canFavorite}
             isFavorite={isFavorite(show.id)}
             isRemoved={isRemoved(show.id)}
             isPending={isPending(show.id)}

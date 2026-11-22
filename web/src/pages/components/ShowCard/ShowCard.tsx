@@ -15,6 +15,7 @@ type ShowCardProps = {
   onToggleFavorite: () => void;
   isRemoved?: boolean;
   isPending?: boolean;
+  canFavorite?: boolean;
 };
 
 export const ShowCard = ({
@@ -23,6 +24,7 @@ export const ShowCard = ({
   onToggleFavorite,
   isRemoved = false,
   isPending = false,
+  canFavorite = true,
 }: ShowCardProps) => (
   <article className={clsx(styles.card, { [styles.removed]: isRemoved })}>
     <div className={styles.poster}>
@@ -50,12 +52,14 @@ export const ShowCard = ({
             {formatRating(show.rating?.average)}
           </span>
 
-          <FavoriteButton
-            showName={show.name}
-            isFavorite={isFavorite}
-            onToggle={onToggleFavorite}
-            isPending={isPending}
-          />
+          {canFavorite && (
+            <FavoriteButton
+              showName={show.name}
+              isFavorite={isFavorite}
+              onToggle={onToggleFavorite}
+              isPending={isPending}
+            />
+          )}
         </span>
       </div>
     </div>

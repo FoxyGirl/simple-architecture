@@ -19,12 +19,11 @@ export const HomePage = () => {
     inputRef,
     retry,
     clearSearch,
-    count,
+    favoritesButton,
     onQueryChange,
     clearQuery,
     selectGenre,
     selectPage,
-    goToFavorites,
   } = useHomePage();
 
   return (
@@ -52,7 +51,12 @@ export const HomePage = () => {
           onClear={clearQuery}
         />
 
-        <FavoritesCountButton count={count} onClick={goToFavorites} />
+        {favoritesButton && (
+          <FavoritesCountButton
+            count={favoritesButton.count}
+            onClick={favoritesButton.onClick}
+          />
+        )}
       </section>
 
       <ShowSearchResults

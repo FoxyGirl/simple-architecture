@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 
 import type { Show } from '~/types';
-import { replaceFavoritesSummary, store } from '~/store';
+import { replaceFavoritesSummary, replaceSession, store } from '~/store';
 
 import type { FavoritesLocationState } from '../../types';
 
@@ -81,8 +81,12 @@ export const resetFavorites = (backend: FavoritesBackend) => {
 
 export const renderFavoritesPage = (
   entries: FavoritesEntry[] = ['/favorites'],
-) =>
-  render(
+) => {
+  // The Favorites route is signed-in only (guarded in App), so its suites
+  // render the session the boot restore would have produced.
+  store.dispatch(replaceSession({ email: 'ada@example.com' }));
+
+  return render(
     <Provider store={store}>
       <MemoryRouter initialEntries={entries}>
         <LocationProbe />
@@ -93,6 +97,7 @@ export const renderFavoritesPage = (
       </MemoryRouter>
     </Provider>,
   );
+};
 
 export const heading = (name: string) => screen.findByRole('heading', { name });
 export const button = (name: string) => screen.getByRole('button', { name });

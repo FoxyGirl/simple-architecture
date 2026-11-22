@@ -60,3 +60,44 @@ describe('ShowCard pending toggle', () => {
     ).toBeDisabled();
   });
 });
+
+describe('ShowCard favorite gate', () => {
+  afterEach(cleanup);
+
+  it('renders the heart when the gate is omitted', () => {
+    renderCard();
+
+    expect(
+      screen.getByRole('button', { name: 'Remove Show One from favorites' }),
+    ).toBeVisible();
+  });
+
+  it('renders the heart when favorites are allowed', () => {
+    render(
+      <ShowCard
+        show={show()}
+        isFavorite
+        onToggleFavorite={() => {}}
+        canFavorite
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: 'Remove Show One from favorites' }),
+    ).toBeVisible();
+  });
+
+  it('renders no heart when favorites are not allowed', () => {
+    render(
+      <ShowCard
+        show={show()}
+        isFavorite
+        onToggleFavorite={() => {}}
+        canFavorite={false}
+      />,
+    );
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Show One' })).toBeVisible();
+  });
+});

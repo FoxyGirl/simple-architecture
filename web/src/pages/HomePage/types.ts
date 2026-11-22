@@ -38,6 +38,16 @@ export type SearchRequest = {
 export type LoadingScope = 'full' | 'cards';
 
 /**
+ * The prepared favorites-count button: the backend-synced count and the
+ * navigation action. It is `null` while signed out, when the favorite
+ * controls are not rendered at all.
+ */
+export type FavoritesButton = {
+  count: number;
+  onClick: () => void;
+};
+
+/**
  * The outcome of a shows-fetch Task run, returned to the caller. `'aborted'`
  * means the request was superseded or cancelled and stored nothing;
  * `'error'` carries the message the request layer reported.

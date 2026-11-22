@@ -77,11 +77,10 @@ export const useHomePage = () => {
   const data =
     status === STATUS.SUCCESS || loadingScope === 'cards' ? storedResult : null;
 
-  // The favorites Entity data the cards' heart buttons reflect; the toggle
-  // itself is the shared Task's business rule, its success the toast the
-  // global notify API renders.
-  const { isFavorite, toggleFavorite, count, goToFavorites } =
-    useShowFavorites();
+  // The favorites summary the count button reflects; the mount syncs it
+  // through the read Task. The cards' hearts and their toggle live in the
+  // ShowList presenter, which reads the same Entity.
+  const { count, goToFavorites } = useShowFavorites();
 
   // The results' empty-state action: clearing writes the idle URL, and the
   // search field re-syncs its draft (and focus) from it — no imperative
@@ -98,13 +97,11 @@ export const useHomePage = () => {
     errorMessage,
     selection: { genre, page },
     search,
-    isFavorite,
     count,
     onDraftChange: setDraft,
     applySearch: url.applySearch,
     selectGenre: url.selectGenre,
     selectPage: url.selectPage,
-    toggleFavorite,
     goToFavorites,
     abortSearch,
     retry,

@@ -1,26 +1,19 @@
-import type { Show } from '~/types';
 import { useMediaQuery } from '~/hooks/useMediaQuery';
 
 import { ShowCard } from '../ShowCard';
 import { ShowRowCard } from '../ShowRowCard';
 
-import styles from './ShowList.module.css';
+import type { ShowListProps } from './types';
 
-type ShowListProps = {
-  shows: Show[];
-  isFavorite: (showId: number) => boolean;
-  onToggleFavorite: (show: Show) => void;
-  isRemoved?: (showId: number) => boolean;
-};
+import { useShowList } from './logic/useShowList';
+
+import styles from './ShowList.module.css';
 
 const neverRemoved = () => false;
 
-export const ShowList = ({
-  shows,
-  isFavorite,
-  onToggleFavorite,
-  isRemoved = neverRemoved,
-}: ShowListProps) => {
+export const ShowList = (props: ShowListProps) => {
+  const { shows, isRemoved = neverRemoved } = props;
+  const { isFavorite, toggleFavorite } = useShowList(props);
   const { isDesktop } = useMediaQuery();
 
   return (
@@ -32,7 +25,7 @@ export const ShowList = ({
             show={show}
             isFavorite={isFavorite(show.id)}
             isRemoved={isRemoved(show.id)}
-            onToggleFavorite={() => onToggleFavorite(show)}
+            onToggleFavorite={() => toggleFavorite(show)}
           />
         ) : (
           <ShowRowCard
@@ -40,7 +33,7 @@ export const ShowList = ({
             show={show}
             isFavorite={isFavorite(show.id)}
             isRemoved={isRemoved(show.id)}
-            onToggleFavorite={() => onToggleFavorite(show)}
+            onToggleFavorite={() => toggleFavorite(show)}
           />
         ),
       )}

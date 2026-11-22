@@ -1,4 +1,4 @@
-import type { SearchPage, Show } from '~/types';
+import type { SearchPage } from '~/types';
 
 import type { Selection } from '../../types';
 
@@ -15,10 +15,8 @@ type ResultsFrameProps = {
   selection: Selection;
   queryEcho: string;
   isSelectionLoad: boolean;
-  isFavorite: (showId: number) => boolean;
   onGenreSelect: (genre: string) => void;
   onPageSelect: (page: number) => void;
-  onToggleFavorite: (show: Show) => void;
 };
 
 /**
@@ -32,10 +30,8 @@ export const ResultsFrame = ({
   selection,
   queryEcho,
   isSelectionLoad,
-  isFavorite,
   onGenreSelect,
   onPageSelect,
-  onToggleFavorite,
 }: ResultsFrameProps) => (
   <>
     <ResultsHead
@@ -53,11 +49,7 @@ export const ResultsFrame = ({
     {isSelectionLoad ? (
       <SkeletonCards count={RESULTS_PER_PAGE} />
     ) : (
-      <ShowList
-        shows={data.shows}
-        isFavorite={isFavorite}
-        onToggleFavorite={onToggleFavorite}
-      />
+      <ShowList shows={data.shows} />
     )}
 
     <Pagination

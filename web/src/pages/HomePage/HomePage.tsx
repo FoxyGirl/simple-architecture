@@ -18,14 +18,12 @@ export const HomePage = () => {
     search,
     retry,
     clearSearch,
-    isFavorite,
     count,
     onDraftChange,
     applySearch,
     abortSearch,
     selectGenre,
     selectPage,
-    toggleFavorite,
     goToFavorites,
   } = useHomePage();
 
@@ -64,10 +62,8 @@ export const HomePage = () => {
         errorMessage={errorMessage}
         queryEcho={search}
         selection={selection}
-        isFavorite={isFavorite}
         onGenreSelect={selectGenre}
         onPageSelect={selectPage}
-        onToggleFavorite={toggleFavorite}
         onRetry={retry}
         onClear={clearSearch}
       />

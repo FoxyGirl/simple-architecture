@@ -1,6 +1,6 @@
 import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
-import type { SearchPage, Show } from '~/types';
+import type { SearchPage } from '~/types';
 
 import type { LoadingScope, Selection } from '../types';
 
@@ -19,10 +19,8 @@ type ShowSearchResultsProps = {
   errorMessage: string | null;
   queryEcho: string;
   selection: Selection;
-  isFavorite: (showId: number) => boolean;
   onGenreSelect: (genre: string) => void;
   onPageSelect: (page: number) => void;
-  onToggleFavorite: (show: Show) => void;
   onRetry: () => void;
   onClear: () => void;
 };
@@ -34,10 +32,8 @@ export const ShowSearchResults = ({
   errorMessage,
   queryEcho,
   selection,
-  isFavorite,
   onGenreSelect,
   onPageSelect,
-  onToggleFavorite,
   onRetry,
   onClear,
 }: ShowSearchResultsProps) => {
@@ -100,10 +96,8 @@ export const ShowSearchResults = ({
           selection={selection}
           queryEcho={queryEcho}
           isSelectionLoad={isSelectionLoad}
-          isFavorite={isFavorite}
           onGenreSelect={onGenreSelect}
           onPageSelect={onPageSelect}
-          onToggleFavorite={onToggleFavorite}
         />
       )}
     </section>

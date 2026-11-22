@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { STATUS, type SearchStatus } from '../constants';
 import type { LoadingScope } from '../types';
 
-import { isSameRequest, toRequest } from './urlState';
+import { toRequest } from './urlState';
 import { useSearchDraft } from './useSearchDraft';
 import { useShowFavorites } from './useShowFavorites';
 import { useShowsRequest } from './useShowsRequest';
@@ -20,7 +20,6 @@ export const useHomePage = () => {
     runRequest,
     retry,
     abortSearch,
-    requestRef,
     lastSuccessQuery,
     status: requestStatus,
     errorMessage,
@@ -58,22 +57,15 @@ export const useHomePage = () => {
     loadingScope = pendingQuery === lastSuccessQuery ? 'cards' : 'full';
   }
 
-  // The URL state is the only request trigger: identical values are deduped
-  // against the last request, superseded runs are aborted by the Task.
+  // The URL state is the only request trigger: dedupe, abort and the
+  // unavailable-genre reset all live in the request hook and the Task.
   useEffect(() => {
     if (!search) return;
 
-    const request = toRequest(search, { genre, page });
-    if (isSameRequest(requestRef.current, request)) return;
-
-    void runRequest(request).then((result) => {
-      if (result.status !== 'success' || !request.genre) return;
-      if (requestRef.current !== request) return;
-      if (result.page.genres.includes(request.genre)) return;
-
-      resetGenre();
+    void runRequest(toRequest(search, { genre, page }), {
+      onGenreUnavailable: resetGenre,
     });
-  }, [search, genre, page, resetGenre, runRequest, requestRef]);
+  }, [search, genre, page, resetGenre, runRequest]);
 
   // The shows themselves are Entity data read through its selectors — the
   // Entity keeps the last successful page while a new selection loads, so a

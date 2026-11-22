@@ -1,7 +1,7 @@
 # PRD: Optimistic Favorites Toggle
 
 **Date**: 2026-11-22
-**Status**: Draft
+**Status**: Implemented
 
 ## Purpose
 
@@ -107,34 +107,34 @@ UI back to its previous state.
 
 ## Acceptance Criteria
 
-- [ ] With a delayed backend response, clicking the heart on a non-favorite
+- [x] With a delayed backend response, clicking the heart on a non-favorite
       show on the HomePage renders the favorite heart state and increments the
       favorites-count button by 1 before the `POST /api/favorites` response
       arrives.
-- [ ] With a delayed backend response, clicking the heart on a favorited show
+- [x] With a delayed backend response, clicking the heart on a favorited show
       on the HomePage renders the non-favorite heart state and decrements the
       count by 1 before the `DELETE /api/favorites/:id` response arrives.
-- [ ] After a successful toggle, the UI state (hearts, count) matches the
+- [x] After a successful toggle, the UI state (hearts, count) matches the
       backend `{ count, ids }` summary returned by the response, and the
       existing success toast appears with its current message.
-- [ ] After a failed toggle, the heart state, the count, and the Favorites
+- [x] After a failed toggle, the heart state, the count, and the Favorites
       page grayed-out marking are identical to their pre-click values, the
       error toast is shown, and no success toast is shown.
-- [ ] On the Favorites page, clicking the heart on a favorite card renders it
+- [x] On the Favorites page, clicking the heart on a favorite card renders it
       grayed out and semi-transparent before the response arrives, without
       triggering a `GET /api/favorites` list refetch; clicking the heart on a
       grayed-out card restores its full-color favorite state before the
       response arrives.
-- [ ] While a show's toggle request is in flight, its heart button is disabled
+- [x] While a show's toggle request is in flight, its heart button is disabled
       and additional clicks send no further requests; the button is re-enabled
       once the request resolves (success or failure).
-- [ ] Each heart click that is not rejected by the disabled state results in
+- [x] Each heart click that is not rejected by the disabled state results in
       exactly one backend request (`POST /api/favorites` or
       `DELETE /api/favorites/:id`).
-- [ ] No backend code or API contract is changed by this feature.
-- [ ] The optimistic behavior works in both the desktop and mobile card
+- [x] No backend code or API contract is changed by this feature.
+- [x] The optimistic behavior works in both the desktop and mobile card
       layouts on both pages.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`, and
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`, and
       `npm run test:e2e` pass, with the previously update-after-response
       tests revised and new tests covering the optimistic update, rollback,
       and disabled-while-pending behavior.

@@ -7,7 +7,6 @@ import { toRequest } from './urlState';
 import { useSearchDraft } from './useSearchDraft';
 import { useShowFavorites } from './useShowFavorites';
 import { useShowsRequest } from './useShowsRequest';
-import { useStoredSearchPage } from './useStoredSearchPage';
 import { useUrlSearchState } from './useUrlSearchState';
 
 export const useHomePage = () => {
@@ -67,15 +66,6 @@ export const useHomePage = () => {
     });
   }, [search, genre, page, resetGenre, runRequest]);
 
-  // The shows themselves are Entity data read through its selectors — the
-  // Entity keeps the last successful page while a new selection loads, so a
-  // cards-scoped load can keep the results frame and skeletonize the cards.
-  // Anything else only echoes the data of a successful status, so a new
-  // query or a failed request never renders a stale page.
-  const storedResult = useStoredSearchPage();
-  const data =
-    status === STATUS.SUCCESS || loadingScope === 'cards' ? storedResult : null;
-
   // The favorites summary the count button reflects; the mount syncs it
   // through the read Task. The cards' hearts and their toggle live in the
   // ShowList presenter, which reads the same Entity.
@@ -89,7 +79,6 @@ export const useHomePage = () => {
   };
 
   return {
-    data,
     status,
     loadingScope,
     errorMessage,

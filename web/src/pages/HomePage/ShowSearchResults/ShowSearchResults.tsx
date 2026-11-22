@@ -1,11 +1,10 @@
 import { Eraser, RotateCcw, SearchX, TriangleAlert } from 'lucide-react';
 
-import type { SearchPage } from '~/types';
-
 import type { LoadingScope, Selection } from '../types';
 
-import { STATUS, type SearchStatus } from '../constants';
+import type { SearchStatus } from '../constants';
 
+import { useShowSearchResults } from './logic/useShowSearchResults';
 import { ResultsFrame } from './ResultsFrame';
 import { Skeleton } from './Skeleton';
 import { StatusPanel } from './StatusPanel';
@@ -13,7 +12,6 @@ import { StatusPanel } from './StatusPanel';
 import styles from './ShowSearchResults.module.css';
 
 type ShowSearchResultsProps = {
-  data: SearchPage | null;
   status: SearchStatus;
   loadingScope: LoadingScope | null;
   errorMessage: string | null;
@@ -26,7 +24,6 @@ type ShowSearchResultsProps = {
 };
 
 export const ShowSearchResults = ({
-  data,
   status,
   loadingScope,
   errorMessage,
@@ -37,20 +34,16 @@ export const ShowSearchResults = ({
   onRetry,
   onClear,
 }: ShowSearchResultsProps) => {
-  const isLoading = status === STATUS.LOADING;
-  const isSuccess = status === STATUS.SUCCESS && data !== null;
+  const {
+    frameData,
+    isLoading,
+    isError,
+    isSelectionLoad,
+    isEmptyResponse,
+    isIdle,
+  } = useShowSearchResults({ status, loadingScope });
 
-  // A selection load keeps the frame of the stored page on screen and only
-  // the cards are skeletonized; anything else invalidates the whole block.
-  const isSelectionLoad =
-    isLoading && loadingScope === 'cards' && data !== null;
-
-  // The frame renders the stored page on success with results, or while a
-  // selection load swaps the cards of that stored page.
-  const hasFrame =
-    data !== null && (isSelectionLoad || (isSuccess && data.shows.length > 0));
-
-  if (status === STATUS.IDLE) return null;
+  if (isIdle) return null;
 
   return (
     <section
@@ -60,7 +53,7 @@ export const ShowSearchResults = ({
     >
       {isLoading && !isSelectionLoad && <Skeleton />}
 
-      {status === STATUS.ERROR && (
+      {isError && (
         <StatusPanel
           overline="STATE · ERROR"
           icon={TriangleAlert}
@@ -79,7 +72,7 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {!isLoading && isSuccess && data.shows.length === 0 && (
+      {isEmptyResponse && (
         <StatusPanel
           overline="STATE · EMPTY"
           icon={SearchX}
@@ -90,9 +83,9 @@ export const ShowSearchResults = ({
         />
       )}
 
-      {hasFrame && data !== null && (
+      {frameData && (
         <ResultsFrame
-          data={data}
+          data={frameData}
           selection={selection}
           queryEcho={queryEcho}
           isSelectionLoad={isSelectionLoad}

@@ -10,7 +10,6 @@ import styles from './HomePage.module.css';
 
 export const HomePage = () => {
   const {
-    data,
     status,
     loadingScope,
     errorMessage,
@@ -57,7 +56,6 @@ export const HomePage = () => {
       </section>
 
       <ShowSearchResults
-        data={data}
         status={status}
         loadingScope={loadingScope}
         errorMessage={errorMessage}

@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { favoritesRouter, searchRouter } from './routes';
+import { authRouter, favoritesRouter, searchRouter } from './routes';
 
 export const createApp = () => {
   const app = express();
@@ -11,6 +11,7 @@ export const createApp = () => {
 
   // Every route lives in its own folder under routes/ and is mounted here;
   // app.ts stays the single composition point of the backend.
+  app.use('/api', authRouter);
   app.use('/api', searchRouter);
   app.use('/api', favoritesRouter);
 

@@ -199,7 +199,7 @@ phase builds on.
 
 **Tasks:**
 
-- [ ] Write the session-module suite first (red),
+- [x] Write the session-module suite first (red),
       `server/auth/tests/session.test.ts`: `createSession(email)` returns a
       non-empty token and records it; `resolveSessionEmail` maps a known token
       back to the email and returns `null` for an unknown or empty one;
@@ -209,7 +209,7 @@ phase builds on.
       `'a@b'`, `'a b@c.co'`; `parseSessionCookie` and `sessionCookieHeader`
       round-trip the token, including a header carrying other cookies and a
       missing header.
-- [ ] Write the app-level auth suite first (red), `server/tests/app.auth.test.ts`
+- [x] Write the app-level auth suite first (red), `server/tests/app.auth.test.ts`
       (supertest, with the mocked-`fetch` pattern of `app.favorites.test.ts`
       proving authentication never calls TVmaze): `POST /api/auth/login` with
       `{ email }` answers 200 `{ email }` normalized, with a `Set-Cookie`
@@ -220,7 +220,7 @@ phase builds on.
       answers 200 `{ email: null }`, clears the cookie and invalidates the
       token (`me` then 401); logout is idempotent; a login after a logout
       issues a working token again.
-- [ ] Implement `server/auth/` as a shared backend module with its own barrel:
+- [x] Implement `server/auth/` as a shared backend module with its own barrel:
       `session.ts` (`sessions: Record<string, string>` keyed by a
       `node:crypto` `randomUUID` token, `createSession`, `resolveSessionEmail`,
       `destroySession`), `cookie.ts` (the cookie-name constant,
@@ -228,7 +228,7 @@ phase builds on.
       `email.ts` (`normalizeEmail`, `isEmail`), `index.ts` re-exporting the
       public API — each file <= 120 lines, split along these seams rather than
       compressed.
-- [ ] Implement `server/routes/auth/`: `types.ts` declaring the `AuthSession`
+- [x] Implement `server/routes/auth/`: `types.ts` declaring the `AuthSession`
       type (`{ email: string | null }`), `auth.ts` (the three handlers; login
       normalizes and validates the address and answers 400 `{ error }`
       otherwise, logout destroys the resolved session and always answers
@@ -236,12 +236,12 @@ phase builds on.
       resolves), `index.ts` publishing the router; re-export from
       `server/routes/index.ts` and mount with `app.use('/api', authRouter)` in
       `server/app.ts` — the single composition point, no handler defined there.
-- [ ] Add the restart-equivalence cases (red -> green): clearing the exported
+- [x] Add the restart-equivalence cases (red -> green): clearing the exported
       `sessions` seam makes a previously issued token resolve to `null`, makes
       `GET /api/auth/me` answer 401, and a fresh login works again — the
       automated stand-in for the PRD's "restarting the backend clears all
       sessions".
-- [ ] Verify: `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] Verify: `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` green; `web/` has no diff;
       `server/package.json` still lists `express` as its only runtime
       dependency; every `/api/favorites` endpoint still answers without a
@@ -249,14 +249,14 @@ phase builds on.
 
 **Tests:**
 
-- [ ] New `server/auth/tests/session.test.ts`: token lifecycle, cookie
+- [x] New `server/auth/tests/session.test.ts`: token lifecycle, cookie
       round-trip, email normalization and validation (red -> green).
-- [ ] New `server/tests/app.auth.test.ts`: the three endpoints, cookie
+- [x] New `server/tests/app.auth.test.ts`: the three endpoints, cookie
       attributes, 400/401 error envelopes, logout idempotence, no TVmaze call
       (red -> green).
-- [ ] Restart-equivalence cases built on the exported session seam (red ->
+- [x] Restart-equivalence cases built on the exported session seam (red ->
       green).
-- [ ] All pre-existing suites stay green untouched: `app.favorites.test.ts`,
+- [x] All pre-existing suites stay green untouched: `app.favorites.test.ts`,
       `app.search.test.ts`, `app.test.ts`, `routes/favorites/tests/storage.test.ts`,
       `routes/search/tests/shows.test.ts`, `cache/tests/`, `pagination/tests/`,
       every web suite, and all 21 Playwright tests. No E2E is added in this
@@ -272,19 +272,19 @@ every existing suite behave exactly as before, with `web/` untouched.
 
 **Acceptance Criteria:**
 
-- [ ] `POST /api/auth/login` with a valid email creates a session in a plain
+- [x] `POST /api/auth/login` with a valid email creates a session in a plain
       in-memory object and answers `{ email }` with an HttpOnly, `Path=/`,
       `SameSite=Lax` session cookie; an empty or non-email value answers 400
       `{ error }` and creates no session.
-- [ ] `GET /api/auth/me` answers `{ email }` for a valid session cookie and 401
+- [x] `GET /api/auth/me` answers `{ email }` for a valid session cookie and 401
       `{ error }` without one — including after the session store is cleared.
-- [ ] `POST /api/auth/logout` ends the session on the backend (the token no
+- [x] `POST /api/auth/logout` ends the session on the backend (the token no
       longer resolves), clears the cookie and is idempotent.
-- [ ] Sessions live in a plain object; `server/package.json` gains no
+- [x] Sessions live in a plain object; `server/package.json` gains no
       dependency and no database or file persistence is introduced.
-- [ ] `GET /api/search` and all four `/api/favorites` endpoints behave exactly
+- [x] `GET /api/search` and all four `/api/favorites` endpoints behave exactly
       as before this phase; `web/` has no diff.
-- [ ] `npm run typecheck`, `npm run lint`, `npm run test`,
+- [x] `npm run typecheck`, `npm run lint`, `npm run test`,
       `npm run test:e2e` and `npm run build` pass.
 
 ### Phase 2: Frontend authentication core

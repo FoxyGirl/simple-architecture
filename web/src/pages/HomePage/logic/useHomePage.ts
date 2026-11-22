@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { STATUS, type SearchStatus } from '../constants';
 import type { LoadingScope } from '../types';
 
 import { isSameRequest, toRequest } from './urlState';
+import { useSearchDraft } from './useSearchDraft';
 import { useShowFavorites } from './useShowFavorites';
 import { useShowsRequest } from './useShowsRequest';
 import { useStoredSearchPage } from './useStoredSearchPage';
@@ -25,13 +26,19 @@ export const useHomePage = () => {
     errorMessage,
   } = useShowsRequest(search ? STATUS.LOADING : STATUS.IDLE);
 
-  // The uncommitted draft of the search field, `null` while the field shows
-  // the applied URL search. A pending draft owns the screen: a non-empty
-  // draft is inevitably going to be requested (loading), an empty one is
-  // the idle state. Otherwise the applied search decides — no search is
-  // idle, a search shows the outcome of its request, so a restoration
-  // racing an in-flight fetch keeps showing that fetch's loading state.
-  const [draft, setDraft] = useState<string | null>(null);
+  // The search field is a controlled presentational component: the draft,
+  // its debounce, the focus handling and the unmount abort all live here, at
+  // Presenter level. The pending draft is `null` while the field shows the
+  // applied URL search; otherwise it owns the screen — a non-empty draft is
+  // inevitably going to be requested (loading), an empty one is the idle
+  // state. With no draft the applied search decides: no search is idle, a
+  // search shows the outcome of its request, so a restoration racing an
+  // in-flight fetch keeps showing that fetch's loading state.
+  const { query, draft, inputRef, onQueryChange, clearQuery } = useSearchDraft({
+    search,
+    applySearch: url.applySearch,
+    abortSearch,
+  });
 
   let status: SearchStatus = search ? requestStatus : STATUS.IDLE;
   if (draft !== null) {
@@ -83,8 +90,7 @@ export const useHomePage = () => {
   const { count, goToFavorites } = useShowFavorites();
 
   // The results' empty-state action: clearing writes the idle URL, and the
-  // search field re-syncs its draft (and focus) from it — no imperative
-  // channel into the field is needed.
+  // draft hook re-syncs the field (and its focus) from that URL.
   const clearSearch = () => {
     abortSearch();
     url.applySearch('');
@@ -97,13 +103,14 @@ export const useHomePage = () => {
     errorMessage,
     selection: { genre, page },
     search,
+    query,
+    inputRef,
     count,
-    onDraftChange: setDraft,
-    applySearch: url.applySearch,
+    onQueryChange,
+    clearQuery,
     selectGenre: url.selectGenre,
     selectPage: url.selectPage,
     goToFavorites,
-    abortSearch,
     retry,
     clearSearch,
   };

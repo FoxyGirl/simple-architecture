@@ -1,46 +1,45 @@
+import type { ChangeEvent, RefObject } from 'react';
 import { Search, X } from 'lucide-react';
-
-import { useShowsSearchField } from './logic/useShowsSearchField';
 
 import styles from './ShowsSearchField.module.css';
 
 type ShowsSearchFieldProps = {
-  search: string;
-  onDraftChange: (draft: string | null) => void;
-  applySearch: (query: string) => void;
-  abortSearch: () => void;
+  value: string;
+  inputRef: RefObject<HTMLInputElement | null>;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onClear: () => void;
 };
 
-export const ShowsSearchField = (props: ShowsSearchFieldProps) => {
-  const { query, handleSearch, clearQuery, inputRef } =
-    useShowsSearchField(props);
+export const ShowsSearchField = ({
+  value,
+  inputRef,
+  onChange,
+  onClear,
+}: ShowsSearchFieldProps) => (
+  <div className={styles.searchBar} role="search">
+    <Search className={styles.searchIcon} size={20} aria-hidden="true" />
 
-  return (
-    <div className={styles.searchBar} role="search">
-      <Search className={styles.searchIcon} size={20} aria-hidden="true" />
+    <input
+      ref={inputRef}
+      className={styles.query}
+      type="text"
+      value={value}
+      onChange={onChange}
+      placeholder="Search for TV shows..."
+      aria-label="Search for TV shows"
+      autoComplete="off"
+      autoFocus
+    />
 
-      <input
-        ref={inputRef}
-        className={styles.query}
-        type="text"
-        value={query}
-        onChange={handleSearch}
-        placeholder="Search for TV shows..."
-        aria-label="Search for TV shows"
-        autoComplete="off"
-        autoFocus
-      />
-
-      {query && (
-        <button
-          className={styles.clearButton}
-          type="button"
-          onClick={clearQuery}
-          aria-label="Clear search"
-        >
-          <X size={16} aria-hidden="true" />
-        </button>
-      )}
-    </div>
-  );
-};
+    {value && (
+      <button
+        className={styles.clearButton}
+        type="button"
+        onClick={onClear}
+        aria-label="Clear search"
+      >
+        <X size={16} aria-hidden="true" />
+      </button>
+    )}
+  </div>
+);

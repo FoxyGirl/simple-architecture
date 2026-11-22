@@ -16,12 +16,13 @@ export const HomePage = () => {
     errorMessage,
     selection,
     search,
+    query,
+    inputRef,
     retry,
     clearSearch,
     count,
-    onDraftChange,
-    applySearch,
-    abortSearch,
+    onQueryChange,
+    clearQuery,
     selectGenre,
     selectPage,
     goToFavorites,
@@ -46,10 +47,10 @@ export const HomePage = () => {
         </p>
 
         <ShowsSearchField
-          search={search}
-          onDraftChange={onDraftChange}
-          applySearch={applySearch}
-          abortSearch={abortSearch}
+          value={query}
+          inputRef={inputRef}
+          onChange={onQueryChange}
+          onClear={clearQuery}
         />
 
         <FavoritesCountButton count={count} onClick={goToFavorites} />

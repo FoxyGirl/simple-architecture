@@ -15,6 +15,7 @@
     "css-types": "npm run css-types -w web",
     "server": "npm run server -w server",
     "build:server": "npm run build -w server",
+    "start:server": "npm run start -w server",
     "test": "npm run test --workspaces --if-present",
     "test:e2e": "playwright test",
     "lint": "eslint .",

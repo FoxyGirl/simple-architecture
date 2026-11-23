@@ -17,46 +17,53 @@ tracer bullet for the feature: after it, the back exit works end to end.
 
 **Tasks:**
 
-- [ ] Add the sign-in navigation-state type beside `FavoritesLocationState` in
+- [x] Add the sign-in navigation-state type beside `FavoritesLocationState` in
       `web/src/pages/types.ts` (same `fromHome: string` shape, documented as the
       URL the `/login` entry was opened from); leave `FavoritesLocationState`
       and its consumer untouched.
-- [ ] In `web/src/App/AccountBar/logic/useAccountBar.ts`, take `search` from
+- [x] In `web/src/App/AccountBar/logic/useAccountBar.ts`, take `search` from
       `useLocation()` alongside `pathname` and pass
       `{ fromHome: `${pathname}${search}` }` as router state from `goToSignIn`
       only while on the HomePage route (`pathname === '/'`), so no other route
       can be carried.
-- [ ] In the same presenter, make `goToHome` navigate to the `fromHome` read
+- [x] In the same presenter, make `goToHome` navigate to the `fromHome` read
       from `location.state` (typed with the new state type) and to `/` when
       that state is absent or malformed.
-- [ ] Extend the account-bar test harnesses so the mocked `useLocation` route
+- [x] Extend the account-bar test harnesses so the mocked `useLocation` route
       object carries `pathname`, `search` and `state`, and the `MemoryRouter`
       entries can carry state.
-- [ ] Add an E2E flow module for the Back to Home exit under `e2e/` (reusing the
+- [x] Add an E2E flow module for the Back to Home exit under `e2e/` (reusing the
       existing locators in `e2e/auth-helpers.js` and `e2e/favorites-helpers.js`)
-      and wire it into `e2e/auth.spec.js`, using the `world` fixture with genre
-      Drama and page 2 and writing no favorites so the spec stays parallel-safe.
-- [ ] Run `npm run typecheck`, `npm run lint`, `npm run test` and
+      and wire it into the auth spec suite as `e2e/auth-home.spec.js` (keeping
+      `e2e/auth.spec.js` under the 120-line limit), using the `space` fixture
+      with genre Drama and page 2 (same six-show/two-page layout as `world`,
+      without touching the cache-hit counters asserted by the browse and
+      URL-sync specs) and writing no favorites so the spec stays
+      parallel-safe.
+- [x] Run `npm run typecheck`, `npm run lint`, `npm run test` and
       `npm run test:e2e`.
 
 **Tests (written before the implementation, red -> green):**
 
-- [ ] `web/src/App/AccountBar/tests/useAccountBar.test.tsx`: `goToSignIn` on
+- [x] `web/src/App/AccountBar/tests/useAccountBar.navigation.test.tsx`
+      (`useAccountBar.test.tsx` split to stay under 120 lines): `goToSignIn` on
       `/?search=world&genre=Drama&page=2` calls
       `navigate('/login', { state: { fromHome: '/?search=world&genre=Drama&page=2' } })`;
       on a non-Home route it navigates to `/login` with no `fromHome`.
-- [ ] `web/src/App/AccountBar/tests/useAccountBar.test.tsx`: `goToHome`
-      navigates to the carried `fromHome`, and to `/` when `location.state` is
-      null or holds no `fromHome`.
-- [ ] `web/src/App/AccountBar/tests/AccountBar.test.tsx`: clicking Sign in from a
-      parameterized entry and then Back to Home lands on that parameterized URL;
-      entering `/login` directly and clicking Back to Home lands on `/`.
-- [ ] E2E: parameterized Home -> Sign in -> Back to Home restores the URL, the
+- [x] `web/src/App/AccountBar/tests/useAccountBar.navigation.test.tsx`:
+      `goToHome` navigates to the carried `fromHome`, and to `/` when
+      `location.state` is null or holds no usable `fromHome`.
+- [x] `web/src/App/AccountBar/tests/AccountBar.navigation.test.tsx`
+      (`AccountBar.test.tsx` split and its harness extracted to
+      `accountBarHarness.tsx`): clicking Sign in from a parameterized entry and
+      then Back to Home lands on that parameterized URL; entering `/login`
+      directly and clicking Back to Home lands on `/`.
+- [x] E2E: parameterized Home -> Sign in -> Back to Home restores the URL, the
       search input value, the genre chip's `aria-pressed`, the "Page 2 of 2"
       label and the matching results.
-- [ ] E2E: direct `/login` -> Back to Home -> `/`, signed out, with the default
+- [x] E2E: direct `/login` -> Back to Home -> `/`, signed out, with the default
       Home state and no errors.
-- [ ] E2E: reload of `/login` after arriving from a parameterized Home URL ->
+- [x] E2E: reload of `/login` after arriving from a parameterized Home URL ->
       Back to Home still returns to that parameterized URL.
 
 **When ready:**
@@ -69,17 +76,17 @@ FavoritesPage, HomePage and URL-sync suites still pass unchanged.
 
 **Acceptance Criteria:**
 
-- [ ] A signed-out user with an active search, genre and page on the HomePage
+- [x] A signed-out user with an active search, genre and page on the HomePage
       who opens `/login` and clicks "Back to Home" lands on the HomePage URL
       carrying that search, genre and page.
-- [ ] The restored HomePage shows the same search text in the field, the same
+- [x] The restored HomePage shows the same search text in the field, the same
       selected genre, the same active page and the results for those values,
       without the user re-entering anything.
-- [ ] Opening `/login` directly and clicking "Back to Home" navigates to `/`
+- [x] Opening `/login` directly and clicking "Back to Home" navigates to `/`
       with the default Home state, signed out, and without errors or warnings.
-- [ ] Reloading `/login` after arriving from a parameterized Home URL keeps the
+- [x] Reloading `/login` after arriving from a parameterized Home URL keeps the
       carried URL for the Back to Home exit.
-- [ ] The FavoritesPage "Back to Home" behavior, the HomePage URL
+- [x] The FavoritesPage "Back to Home" behavior, the HomePage URL
       synchronization and the search, genre and pagination behavior remain
       unchanged (`npm run typecheck`, `npm run lint`, `npm run test` pass).
 

@@ -1,12 +1,4 @@
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
@@ -17,10 +9,9 @@ import {
   store,
 } from '~/store';
 import { stubApi } from '~/test/api-mock';
-import { LocationProbe } from '~/test/location-probe';
 import buttonStyles from '~/ui-kit/Button/Button.module.css';
 
-import { AccountBar } from '../AccountBar';
+import { decorativeIcon, location, renderBar } from './accountBarHarness';
 
 vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
@@ -28,21 +19,6 @@ vi.mock('~/api/request', async (importOriginal) => {
 });
 
 const api = vi.mocked(requestJson);
-
-const renderBar = (entry = '/') =>
-  render(
-    <Provider store={store}>
-      <MemoryRouter initialEntries={[entry]}>
-        <LocationProbe />
-        <AccountBar />
-      </MemoryRouter>
-    </Provider>,
-  );
-
-const location = () => screen.getByTestId('location').textContent ?? '';
-
-const decorativeIcon = (button: HTMLElement) =>
-  button.querySelector('svg')?.closest('[aria-hidden="true"]');
 
 describe('AccountBar', () => {
   beforeEach(() => {

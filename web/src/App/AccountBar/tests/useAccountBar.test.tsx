@@ -27,7 +27,7 @@ vi.mock('~/notification', () => ({
 
 const api = vi.mocked(requestJson);
 const navigate = vi.fn();
-const route = { pathname: '/' };
+const route = { pathname: '/', search: '', state: null as unknown };
 
 vi.mock('react-router-dom', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react-router-dom')>();
@@ -49,6 +49,8 @@ describe('useAccountBar', () => {
     api.mockReset();
     navigate.mockReset();
     route.pathname = '/';
+    route.search = '';
+    route.state = null;
     vi.mocked(notify.error).mockClear();
     store.dispatch(clearSession());
     store.dispatch(replaceFavoritesSummary({ count: 0, ids: [] }));

@@ -53,6 +53,14 @@
   line-height: 1.55;
 }
 
+.favoritesPrompt {
+  max-width: 460px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
 @media (min-width: 1024px) {
   .hero {
     gap: 10px;
@@ -67,5 +75,9 @@
 
   .subhead {
     font-size: 13px;
+  }
+
+  .favoritesPrompt {
+    font-size: 12px;
   }
 }

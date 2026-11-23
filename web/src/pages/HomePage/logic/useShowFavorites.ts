@@ -16,7 +16,7 @@ import { syncFavoritesSummary } from './tasks/syncFavoritesSummary';
  * switching user re-syncs and signing out stops at once. The hearts of the
  * result cards read the mirrored ids and run the toggle through the ShowList
  * presenter, so only the count button is left here: its prepared payload is
- * `null` while signed out, when no favorite control renders at all.
+ * `null` while signed out, when the HomePage shows the guest sign-in prompt.
  */
 export const useShowFavorites = () => {
   const email = useSelector(selectSessionEmail);

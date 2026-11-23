@@ -51,7 +51,12 @@ export const HomePage = () => {
           onClear={clearQuery}
         />
 
-        {favoritesButton && (
+        {favoritesButton === null ? (
+          <p className={styles.favoritesPrompt}>
+            Please sign in to add your favorite shows to your Favorites list and
+            keep track of the ones you love!
+          </p>
+        ) : (
           <FavoritesCountButton
             count={favoritesButton.count}
             onClick={favoritesButton.onClick}

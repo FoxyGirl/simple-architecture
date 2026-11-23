@@ -39,8 +39,8 @@ export type LoadingScope = 'full' | 'cards';
 
 /**
  * The prepared favorites-count button: the backend-synced count and the
- * navigation action. It is `null` while signed out, when the favorite
- * controls are not rendered at all.
+ * navigation action. It is `null` while signed out, when the guest sign-in
+ * prompt renders in its place.
  */
 export type FavoritesButton = {
   count: number;

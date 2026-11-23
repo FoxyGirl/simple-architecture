@@ -66,9 +66,6 @@ export const useHomePage = () => {
     });
   }, [search, genre, page, resetGenre, runRequest]);
 
-  // The favorites-count button payload the signed-in user sees; a signed-out
-  // visitor gets `null`, and the cards' hearts stay hidden in the ShowList
-  // presenter, which reads the same session Entity.
   const { favoritesButton } = useShowFavorites();
 
   // The results' empty-state action: clearing writes the idle URL, and the

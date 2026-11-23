@@ -31,6 +31,11 @@ const countButton = (count: number) =>
 const anyCountButton = () =>
   screen.queryByRole('button', { name: /^View favorites \(\d+\)$/ });
 
+const signInPrompt = () =>
+  screen.getByText(
+    'Please sign in to add your favorite shows to your Favorites list and keep track of the ones you love!',
+  );
+
 const countSyncs = () =>
   apiCalls(api).filter((call) => call.path === '/api/favorites/count');
 
@@ -48,19 +53,21 @@ describe('HomePage favorites visibility', () => {
     vi.useRealTimers();
   });
 
-  it('renders no count button and syncs nothing while signed out', async () => {
+  it('renders the sign-in prompt and no count button while signed out', async () => {
     remountHomePage();
     await settle();
 
     expect(anyCountButton()).not.toBeInTheDocument();
+    expect(signInPrompt()).toBeVisible();
     expect(countSyncs()).toHaveLength(0);
   });
 
-  it('syncs the summary and shows the button once a session starts', async () => {
+  it('replaces the prompt with the button once a session starts', async () => {
     remountHomePage();
     await settle();
 
     expect(anyCountButton()).not.toBeInTheDocument();
+    expect(signInPrompt()).toBeVisible();
 
     await act(async () => {
       store.dispatch(replaceSession({ email: 'ada@example.com' }));
@@ -68,6 +75,7 @@ describe('HomePage favorites visibility', () => {
     await settle();
 
     expect(countButton(2)).toBeVisible();
+    expect(signInPrompt()).not.toBeInTheDocument();
     expect(countSyncs()).toHaveLength(1);
   });
 

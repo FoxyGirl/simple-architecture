@@ -2,6 +2,7 @@
 declare const classes: {
   readonly eyebrow: 'eyebrow';
   readonly eyebrowIcon: 'eyebrowIcon';
+  readonly favoritesPrompt: 'favoritesPrompt';
   readonly headline: 'headline';
   readonly hero: 'hero';
   readonly subhead: 'subhead';

@@ -21,11 +21,17 @@ const anyHeart = (page) =>
     name: /^(?:Add|Remove) .+ (?:to|from) favorites$/,
   });
 
+const signInPrompt = (page) =>
+  page.getByText(
+    'Please sign in to add your favorite shows to your Favorites list and keep track of the ones you love!',
+  );
+
 test('a signed-out search has no favorite controls until sign in', async ({
   page,
 }) => {
   await page.goto('/');
   await signedOut(page);
+  await expect(signInPrompt(page)).toBeVisible();
   await searchInput(page).fill('space');
   await expect(card(page, 'Space Tour')).toBeVisible();
 
@@ -45,11 +51,13 @@ test('a signed-out search has no favorite controls until sign in', async ({
   await expect(card(page, 'Space Tour')).toBeVisible();
   await expect(anyHeart(page).first()).toBeVisible();
   await expect(favoritesCountButton(page)).toBeVisible();
+  await expect(signInPrompt(page)).toHaveCount(0);
 
   await logoutButton(page).click();
   await signedOut(page);
   await expect(anyHeart(page)).toHaveCount(0);
   await expect(favoritesCountButton(page)).toHaveCount(0);
+  await expect(signInPrompt(page)).toBeVisible();
 });
 
 test('a signed-out favorites deep link lands on the home page', async ({

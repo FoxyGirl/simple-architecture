@@ -1,7 +1,12 @@
 # PRD: Sign In Page and UI-Kit Buttons
 
 **Date**: 2026-11-23
-**Status**: Draft
+**Status**: Implemented
+**Revision**: 2026-11-23 — implemented in two phases (the Sign In page replacing
+the modal, then the ui-kit Button and the icon buttons). Every functional
+criterion was verified against the unit and E2E suites. The design-canvas work
+remains deferred by the 2026-11-23 user decision (pen.dev plan usage limit), so
+the canvas criterion below stays open and no `.pen` change was made.
 
 ## Purpose
 
@@ -125,44 +130,46 @@ the ui-kit used for the sign-in form submit and for the icon-accompanied
 
 ## Acceptance Criteria
 
-- [ ] Navigating to `/login` renders a dedicated Sign In page with a heading,
+- [x] Navigating to `/login` renders a dedicated Sign In page with a heading,
       exactly one input (email), a submit action, explanatory text stating that
       signing in is required to save favorites, and a Cancel/Back action; no
       modal, backdrop or `role="dialog"` element is rendered anywhere in the
       app.
-- [ ] Clicking "Sign In" in the account bar while signed out navigates to
+- [x] Clicking "Sign In" in the account bar while signed out navigates to
       `/login`.
-- [ ] Submitting a valid email on `/login` starts a backend session, navigates
+- [x] Submitting a valid email on `/login` starts a backend session, navigates
       to `/`, and the app then displays the email, the Logout action and the
       favorite controls.
-- [ ] Submitting an empty value or a value that is not an email on `/login`
+- [x] Submitting an empty value or a value that is not an email on `/login`
       starts no session, shows an error message on the page and performs no
       navigation; while the sign-in request is in flight the submit action is
       disabled.
-- [ ] Clicking the Cancel/Back action on `/login` navigates to `/` and leaves
+- [x] Clicking the Cancel/Back action on `/login` navigates to `/` and leaves
       the app signed out.
-- [ ] A signed-in user who opens `/login` is redirected to `/`.
-- [ ] A signed-out user who opens `/favorites` is redirected to `/`, and the
+- [x] A signed-in user who opens `/login` is redirected to `/`.
+- [x] A signed-out user who opens `/favorites` is redirected to `/`, and the
       Sign In page is never opened automatically by the app.
-- [ ] The account bar's "Sign In" button renders an icon plus its text label,
+- [x] The account bar's "Sign In" button renders an icon plus its text label,
       and the "Logout" button renders an icon plus its text label; the icons are
       `aria-hidden` and the buttons' accessible names remain the text labels.
-- [ ] A shared presentational Button component exists in `web/src/ui-kit/` in
+- [x] A shared presentational Button component exists in `web/src/ui-kit/` in
       its own directory with an `index.ts` barrel and a CSS Module, receives
       content, state and handlers through props, and contains no business rules
       or page/feature knowledge.
-- [ ] The Sign In page's submit button and the account bar's "Sign In" and
+- [x] The Sign In page's submit button and the account bar's "Sign In" and
       "Logout" buttons are rendered through the ui-kit Button; no other button
       in the app is migrated to it.
-- [ ] Clicking "Logout" ends the session on the backend and returns the app to
+- [x] Clicking "Logout" ends the session on the backend and returns the app to
       the unauthenticated state exactly as before this feature.
-- [ ] Session persistence across a browser reload, per-user favorites
+- [x] Session persistence across a browser reload, per-user favorites
       separation and unauthenticated browsing (search, genre filtering,
       pagination with no favorite controls) behave exactly as in feature 007.
 - [ ] `design/ScreenScout-design.pen` shows the Sign In screen and the Button
       component, and every token used by the new UI exists with identical names
       and values in both the canvas and `web/src/styles/tokens.css`.
-- [ ] The modal-era tests are replaced and `npm run typecheck`, `npm run lint`,
+      _(Deferred: pen.dev plan usage limit reached; user decision 2026-11-23 to
+      ship without design changes.)_
+- [x] The modal-era tests are replaced and `npm run typecheck`, `npm run lint`,
       `npm run test` and `npm run test:e2e` pass, with new automated tests
       covering the `/login` route, the post-sign-in navigation, both redirects
       (signed-in on `/login`, signed-out on `/favorites`), the Cancel/Back

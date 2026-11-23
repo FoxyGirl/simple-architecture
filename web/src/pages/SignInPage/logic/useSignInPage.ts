@@ -11,8 +11,8 @@ import { signIn } from './tasks/signIn';
  * and the inline error, validating the address locally before invoking the
  * sign-in Task so an invalid submit sends no request. A success navigates to
  * the HomePage; a rejected login keeps the page with the backend message.
- * Cancel/Back leaves for the HomePage without touching the session. The email
- * field receives focus on mount, following the `useSearchDraft` ref precedent.
+ * The email field receives focus on mount, following the `useSearchDraft` ref
+ * precedent.
  */
 export const useSignInPage = () => {
   const navigate = useNavigate();
@@ -56,8 +56,6 @@ export const useSignInPage = () => {
     setErrorMessage(result.message);
   };
 
-  const onCancel = () => navigate('/');
-
   return {
     email,
     isSubmitting,
@@ -65,6 +63,5 @@ export const useSignInPage = () => {
     inputRef,
     onEmailChange,
     onSubmit,
-    onCancel,
   };
 };

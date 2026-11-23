@@ -64,7 +64,7 @@ test('the page explains favorites and an invalid submit stays with an inline err
   );
 
   await expect(page).toHaveURL(/\/login$/);
-  await expect(signInButton(page)).toBeVisible();
+  await expect(backButton(page)).toBeVisible();
   await expect(logoutButton(page)).toBeHidden();
   await expect(accountEmail(page, 'not-an-email')).toBeHidden();
 });
@@ -76,6 +76,8 @@ test('the sign-in page is not a dialog and Cancel/Back returns home signed out',
 
   await openSignIn(page);
   await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(signInButton(page)).toHaveCount(0);
+  await expect(backButton(page)).toBeVisible();
 
   await backButton(page).click();
   await expect(page).toHaveURL(/\/$/);

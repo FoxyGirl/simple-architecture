@@ -1,4 +1,4 @@
-import { LogIn, LogOut, Tv } from 'lucide-react';
+import { ArrowLeft, LogIn, LogOut, Tv } from 'lucide-react';
 
 import { Button } from '~/ui-kit/Button';
 
@@ -7,7 +7,8 @@ import { useAccountBar } from './logic/useAccountBar';
 import styles from './AccountBar.module.css';
 
 export const AccountBar = () => {
-  const { account, goToSignIn, onLogout } = useAccountBar();
+  const { account, isSignInPage, goToSignIn, goToHome, onLogout } =
+    useAccountBar();
 
   return (
     <header className={styles.bar}>
@@ -28,6 +29,13 @@ export const AccountBar = () => {
               onClick={onLogout}
             />
           </div>
+        ) : isSignInPage ? (
+          <Button
+            type="button"
+            label="Back to Home"
+            icon={<ArrowLeft size={13} />}
+            onClick={goToHome}
+          />
         ) : (
           <Button
             type="button"

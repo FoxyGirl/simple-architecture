@@ -1,5 +1,3 @@
-import { ArrowLeft } from 'lucide-react';
-
 import { Button } from '~/ui-kit/Button';
 
 import { useSignInPage } from './logic/useSignInPage';
@@ -18,17 +16,11 @@ export const SignInPage = () => {
     inputRef,
     onEmailChange,
     onSubmit,
-    onCancel,
   } = useSignInPage();
 
   return (
     <section className={styles.page} aria-labelledby={TITLE_ID}>
       <header className={styles.head}>
-        <button type="button" className={styles.back} onClick={onCancel}>
-          <ArrowLeft size={15} aria-hidden="true" />
-          Back to Home
-        </button>
-
         <h1 id={TITLE_ID} className={styles.title}>
           Sign in
         </h1>

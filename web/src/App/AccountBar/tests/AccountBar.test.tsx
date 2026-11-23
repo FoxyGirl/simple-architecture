@@ -29,10 +29,10 @@ vi.mock('~/api/request', async (importOriginal) => {
 
 const api = vi.mocked(requestJson);
 
-const renderBar = () =>
+const renderBar = (entry = '/') =>
   render(
     <Provider store={store}>
-      <MemoryRouter initialEntries={['/']}>
+      <MemoryRouter initialEntries={[entry]}>
         <LocationProbe />
         <AccountBar />
       </MemoryRouter>
@@ -67,6 +67,23 @@ describe('AccountBar', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
 
     expect(location()).toBe('/login');
+  });
+
+  it('swaps Sign in for a Back to Home action on the sign-in page', () => {
+    renderBar('/login');
+
+    expect(
+      screen.queryByRole('button', { name: 'Sign in' }),
+    ).not.toBeInTheDocument();
+
+    const button = screen.getByRole('button', { name: 'Back to Home' });
+
+    expect(button).toHaveClass(buttonStyles.button);
+    expect(decorativeIcon(button)).not.toBeNull();
+
+    fireEvent.click(button);
+
+    expect(location()).toBe('/');
   });
 
   it('renders the email and a Logout ui-kit Button with an icon', async () => {

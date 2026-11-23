@@ -19,6 +19,10 @@ optional `variant: 'primary' | 'secondary'` prop (secondary = account-bar
 pill, primary = form submit), recorded here as a deliberate extension of the
 planned API. A new `AccountBar.test.tsx` View suite exercises the icon
 buttons.
+2026-11-23 — post-phase UI request: on `/login` the account bar swaps "Sign in"
+for "Back to Home" (the header is now the page's Cancel/Back action and the
+in-page link was removed); the Sign In panel gained more spacing between its
+elements and above/before the form. Unit and E2E suites updated.
 
 > **Approach.** Two frontend-only phases (the PRD excludes backend changes),
 > ordered so each phase leaves the app fully working. Phase 1 is the tracer

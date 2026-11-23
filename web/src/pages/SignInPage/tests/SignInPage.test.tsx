@@ -39,7 +39,7 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('SignInPage', () => {
-  it('is a page with a heading, one email field, the favorites explanation and a way back', () => {
+  it('is a page with a heading, one email field and the favorites explanation', () => {
     renderPage();
 
     expect(screen.getByRole('heading', { name: 'Sign in' })).toBeVisible();
@@ -48,7 +48,6 @@ describe('SignInPage', () => {
     expect(document.querySelector('input[type="password"]')).toBeNull();
     expect(screen.getByText(/required to save favorites/i)).toBeVisible();
     expect(screen.getByRole('button', { name: 'Continue' })).toBeEnabled();
-    expect(screen.getByRole('button', { name: 'Back to Home' })).toBeEnabled();
   });
 
   it('is not rendered as a modal dialog', () => {

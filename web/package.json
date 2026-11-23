@@ -11,7 +11,9 @@
     "pretypecheck": "npm run css-types",
     "typecheck": "tsc -b --noEmit",
     "css-types": "node scripts/generate-css-types.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:server": "npm run build -w server",
+    "start:server": "npm run start -w server"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.14.0",

@@ -5,7 +5,12 @@
 // in-memory store it points at.
 export const SESSION_COOKIE_NAME = 'screenscout_session';
 
-const SESSION_COOKIE_ATTRIBUTES = 'Path=/; HttpOnly; SameSite=Lax';
+const SESSION_COOKIE_ATTRIBUTES = [
+  'Path=/',
+  'HttpOnly',
+  'SameSite=Lax',
+  ...(process.env.NODE_ENV === 'production' ? ['Secure'] : []),
+].join('; ');
 
 /** The `Set-Cookie` value that issues a session token. */
 export const sessionCookieHeader = (token: string): string =>

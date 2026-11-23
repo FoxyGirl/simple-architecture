@@ -100,42 +100,47 @@ genre and page.
 
 **Tasks:**
 
-- [ ] Add the E2E tests for the sign-in exit first (helper flow wired into
-      `e2e/auth.spec.js`), asserting the restored URL, search text, genre, page
-      and results, the signed-in account bar and visible favorite controls —
-      without toggling any favorite, so the auth spec keeps writing none.
-- [ ] In `web/src/pages/SignInPage/logic/useSignInPage.ts`, read the carried
+- [x] Add the E2E tests for the sign-in exit first (helper flow in
+      `e2e/auth-home-signin.js`, wired into the auth suite as
+      `e2e/auth-home.spec.js` alongside the Phase 1 flows), asserting the
+      restored URL, search text, genre, page and results, the signed-in
+      account bar and visible favorite controls — without toggling any
+      favorite, so the auth spec keeps writing none.
+- [x] In `web/src/pages/SignInPage/logic/useSignInPage.ts`, read the carried
       `fromHome` from `useLocation().state` (typed with the Phase 1 state type)
       and navigate to it on a successful sign-in, falling back to `/` when no
       state was carried.
-- [ ] Extend the `useSignInPage` test harness to mock `useLocation` with a
+- [x] Extend the `useSignInPage` test harness to mock `useLocation` with a
       `state` field next to the existing `useNavigate` mock.
-- [ ] Update `e2e/auth-guest.spec.js`, whose flow and comment assume signing in
+- [x] Update `e2e/auth-guest.spec.js`, whose flow and comment assume signing in
       lands on a bare Home (it re-fills the search after sign-in), to match the
-      restored URL behavior.
-- [ ] Confirm the unchanged guards still hold: a signed-in user opening `/login`
+      restored URL behavior. The favorites helper now asserts only the
+      signed-in account bar, because flows such as `favorites-users` sign in
+      from a parameterized Home and now correctly stay on it.
+- [x] Confirm the unchanged guards still hold: a signed-in user opening `/login`
       is redirected to `/` (`web/src/App/tests/App.loginRoute.test.tsx`,
       `e2e/auth.spec.js`), and a signed-out `/favorites` visit still lands on `/`.
-- [ ] Run the full verification: `npm run typecheck`, `npm run lint`,
+- [x] Run the full verification: `npm run typecheck`, `npm run lint`,
       `npm run test` and `npm run test:e2e`.
 
 **Tests (written before the implementation, red -> green):**
 
-- [ ] `web/src/pages/SignInPage/tests/useSignInPage.test.tsx`: a successful
-      sign-in with carried state navigates to that URL; with no carried state it
-      navigates to `/`.
-- [ ] `web/src/pages/SignInPage/tests/useSignInPage.test.tsx`: an invalid email
-      submit performs no request and no navigation and leaves the carried state
-      intact for a later exit; a rejected login keeps the page with the backend
-      message.
-- [ ] E2E: parameterized Home -> Sign in -> valid email -> the restored URL,
+- [x] `web/src/pages/SignInPage/tests/useSignInPage.navigation.test.tsx`
+      (`useSignInPage.test.tsx` split and the shared router harness extracted
+      to `signInHarness.ts`): a successful sign-in with carried state navigates
+      to that URL; with no carried state it navigates to `/`.
+- [x] `web/src/pages/SignInPage/tests/useSignInPage.navigation.test.tsx`: an
+      invalid email submit performs no request and no navigation and leaves the
+      carried state intact for a later exit; `useSignInPage.test.tsx` keeps the
+      page with the backend message after a rejected login.
+- [x] E2E: parameterized Home -> Sign in -> valid email -> the restored URL,
       search text, genre, page and results, signed in (email in the account bar,
       favorite controls visible).
-- [ ] E2E: direct `/login` -> valid email -> `/` with the default Home state,
+- [x] E2E: direct `/login` -> valid email -> `/` with the default Home state,
       signed in.
-- [ ] E2E: reload of `/login` after arriving from a parameterized Home URL ->
+- [x] E2E: reload of `/login` after arriving from a parameterized Home URL ->
       valid email -> the parameterized Home URL.
-- [ ] E2E: an invalid-email submit keeps the user on `/login` with the inline
+- [x] E2E: an invalid-email submit keeps the user on `/login` with the inline
       error, and a following Back to Home still restores the parameterized URL.
 
 **When ready:**
@@ -149,18 +154,18 @@ unchanged, and every suite passes.
 
 **Acceptance Criteria:**
 
-- [ ] A user who signs in successfully from `/login` entered from a
+- [x] A user who signs in successfully from `/login` entered from a
       parameterized Home URL lands on that same HomePage URL, with the search,
       genre, page and results restored.
-- [ ] Opening `/login` directly and signing in successfully navigates to `/`
+- [x] Opening `/login` directly and signing in successfully navigates to `/`
       with the default Home state, signed in.
-- [ ] Reloading `/login` after arriving from a parameterized Home URL keeps the
+- [x] Reloading `/login` after arriving from a parameterized Home URL keeps the
       carried URL for a successful sign-in as well.
-- [ ] Submitting an invalid email on `/login` keeps the user on `/login` with
+- [x] Submitting an invalid email on `/login` keeps the user on `/login` with
       the inline error and does not discard the carried Home URL.
-- [ ] When no Home URL was carried, every SignInPage exit falls back to `/`
+- [x] When no Home URL was carried, every SignInPage exit falls back to `/`
       without errors or warnings.
-- [ ] A signed-in user who opens `/login` is still redirected to `/`.
-- [ ] The new behavior is covered by presenter-level Vitest tests and Playwright
+- [x] A signed-in user who opens `/login` is still redirected to `/`.
+- [x] The new behavior is covered by presenter-level Vitest tests and Playwright
       E2E tests, and `npm run typecheck`, `npm run lint`, `npm run test` and
       `npm run test:e2e` pass.

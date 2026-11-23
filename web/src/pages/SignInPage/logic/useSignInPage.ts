@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import type { SignInLocationState } from '~/pages/types';
+import { readFromHome } from '~/pages/utils';
 
 import { isEmail } from '../utils';
 
@@ -10,12 +13,15 @@ import { signIn } from './tasks/signIn';
  * The Sign In page presenter: it owns the email draft, the submitting flag
  * and the inline error, validating the address locally before invoking the
  * sign-in Task so an invalid submit sends no request. A success navigates to
- * the HomePage; a rejected login keeps the page with the backend message.
+ * the HomePage URL carried from the entry point, or to the bare Home when
+ * none was carried; a rejected login keeps the page with the backend message.
  * The email field receives focus on mount, following the `useSearchDraft` ref
  * precedent.
  */
 export const useSignInPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const fromHome = readFromHome(location.state as SignInLocationState | null);
 
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,7 +55,7 @@ export const useSignInPage = () => {
     setIsSubmitting(false);
 
     if (result.status === 'success') {
-      navigate('/');
+      navigate(fromHome ?? '/');
       return;
     }
 

@@ -38,10 +38,14 @@ export const signIn = async (page, email) => {
   await submitButton(page).click();
 };
 
-export const signedInAs = async (page, email) => {
-  await expect(page).toHaveURL(/\/$/);
+export const signedIn = async (page, email) => {
   await expect(accountEmail(page, email)).toBeVisible();
   await expect(signInButton(page)).toBeHidden();
+};
+
+export const signedInAs = async (page, email) => {
+  await expect(page).toHaveURL(/\/$/);
+  await signedIn(page, email);
 };
 
 export const signedOut = async (page) => {

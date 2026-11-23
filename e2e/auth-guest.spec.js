@@ -1,6 +1,12 @@
 import { expect, test } from '@playwright/test';
 
-import { logoutButton, signIn, signedInAs, signedOut } from './auth-helpers';
+import {
+  logoutButton,
+  signIn,
+  signedIn,
+  signedInAs,
+  signedOut,
+} from './auth-helpers';
 import { arrow, card, searchInput } from './favorites-helpers';
 
 // The favorite controls are a signed-in feature; every flow here writes no
@@ -31,11 +37,11 @@ test('a signed-out search has no favorite controls until sign in', async ({
   await expect(anyHeart(page)).toHaveCount(0);
 
   await signIn(page, 'guest-controls@example.com');
-  await signedInAs(page, 'guest-controls@example.com');
+  await expect(page).toHaveURL(/\/\?search=space$/);
+  await signedIn(page, 'guest-controls@example.com');
 
-  // Signing in lands on the HomePage, so the search is re-run to expose the
-  // now-available favorite controls.
-  await searchInput(page).fill('space');
+  // Signing in restores the parameterized Home view, so the same results and
+  // the now-available favorite controls are already on screen.
   await expect(card(page, 'Space Tour')).toBeVisible();
   await expect(anyHeart(page).first()).toBeVisible();
   await expect(favoritesCountButton(page)).toBeVisible();

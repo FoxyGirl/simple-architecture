@@ -21,13 +21,10 @@
 
     "types": ["node"],
 
-    // `@server` is the backend root, so routes never climb with deep relative
-    // paths. Kept in sync with the alias in server/vitest.config.ts and
-    // eslint.config.js, and honoured at runtime by tsx (reads this tsconfig
-    // for path mapping).
     "paths": {
       "@server/*": ["./*"]
     }
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
+  "exclude": ["dist", "node_modules"]
 }

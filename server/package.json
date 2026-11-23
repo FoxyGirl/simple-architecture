@@ -6,7 +6,7 @@
   "scripts": {
     "server": "tsx index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "tsx index.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },

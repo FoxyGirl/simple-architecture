@@ -1,5 +1,7 @@
 import { ArrowLeft } from 'lucide-react';
 
+import { Button } from '~/ui-kit/Button';
+
 import { useSignInPage } from './logic/useSignInPage';
 
 import styles from './SignInPage.module.css';
@@ -61,9 +63,12 @@ export const SignInPage = () => {
           </p>
         ) : null}
 
-        <button type="submit" className={styles.submit} disabled={isSubmitting}>
-          {isSubmitting ? 'Signing in…' : 'Continue'}
-        </button>
+        <Button
+          type="submit"
+          variant="primary"
+          label={isSubmitting ? 'Signing in…' : 'Continue'}
+          disabled={isSubmitting}
+        />
       </form>
     </section>
   );

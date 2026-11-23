@@ -1,10 +1,18 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requestJson } from '~/api/request';
 import { store } from '~/store';
+import { stubApi } from '~/test/api-mock';
+import buttonStyles from '~/ui-kit/Button/Button.module.css';
 
 import { SignInPage } from '../SignInPage';
 
@@ -12,6 +20,8 @@ vi.mock('~/api/request', async (importOriginal) => {
   const actual = await importOriginal<typeof import('~/api/request')>();
   return { ...actual, requestJson: vi.fn() };
 });
+
+const api = vi.mocked(requestJson);
 
 const renderPage = () =>
   render(
@@ -21,6 +31,10 @@ const renderPage = () =>
       </MemoryRouter>
     </Provider>,
   );
+
+beforeEach(() => {
+  api.mockReset();
+});
 
 afterEach(cleanup);
 
@@ -54,6 +68,36 @@ describe('SignInPage', () => {
     expect(
       screen.getByRole('heading', { name: 'Sign in' }),
     ).toBeInTheDocument();
-    expect(vi.mocked(requestJson)).not.toHaveBeenCalled();
+    expect(api).not.toHaveBeenCalled();
+  });
+
+  it('renders the submit through the ui-kit Button', () => {
+    renderPage();
+
+    expect(screen.getByRole('button', { name: 'Continue' })).toHaveClass(
+      buttonStyles.button,
+    );
+  });
+
+  it('disables the submit while the sign-in request is in flight', async () => {
+    let resolveLogin: (session: { email: string }) => void = () => {};
+    stubApi(api, {
+      login: () =>
+        new Promise((resolve) => {
+          resolveLogin = resolve;
+        }),
+    });
+    renderPage();
+
+    fireEvent.change(screen.getByRole('textbox', { name: 'Email' }), {
+      target: { value: 'ada@example.com' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
+
+    expect(screen.getByRole('button', { name: 'Signing in…' })).toBeDisabled();
+
+    await act(async () => {
+      resolveLogin({ email: 'ada@example.com' });
+    });
   });
 });

@@ -1,4 +1,6 @@
-import { Tv } from 'lucide-react';
+import { LogIn, LogOut, Tv } from 'lucide-react';
+
+import { Button } from '~/ui-kit/Button';
 
 import { useAccountBar } from './logic/useAccountBar';
 
@@ -19,14 +21,20 @@ export const AccountBar = () => {
           <div className={styles.account}>
             <span className={styles.email}>{account.email}</span>
 
-            <button type="button" className={styles.action} onClick={onLogout}>
-              Logout
-            </button>
+            <Button
+              type="button"
+              label="Logout"
+              icon={<LogOut size={13} />}
+              onClick={onLogout}
+            />
           </div>
         ) : (
-          <button type="button" className={styles.action} onClick={goToSignIn}>
-            Sign in
-          </button>
+          <Button
+            type="button"
+            label="Sign in"
+            icon={<LogIn size={13} />}
+            onClick={goToSignIn}
+          />
         )}
       </div>
     </header>

@@ -103,31 +103,3 @@
   color: var(--favorite);
   font-size: 12px;
 }
-
-.submit {
-  margin-top: var(--space-xs);
-  padding: 11px 14px;
-  border: 1px solid var(--accent-border);
-  border-radius: var(--radius-btn);
-  background: var(--accent);
-  color: var(--text-on-accent);
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: var(--weight-semibold);
-  cursor: pointer;
-  transition: background-color var(--duration-fast) var(--ease-out);
-}
-
-.submit:hover:not(:disabled) {
-  background: var(--accent-hover);
-}
-
-.submit:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
-.submit:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}

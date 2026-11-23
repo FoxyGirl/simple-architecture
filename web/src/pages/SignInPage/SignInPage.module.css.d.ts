@@ -8,7 +8,6 @@ declare const classes: {
   readonly input: 'input';
   readonly label: 'label';
   readonly page: 'page';
-  readonly submit: 'submit';
   readonly title: 'title';
 };
 

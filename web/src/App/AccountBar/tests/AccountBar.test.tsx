@@ -1,0 +1,90 @@
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { requestJson } from '~/api/request';
+import {
+  clearSession,
+  replaceSession,
+  selectSessionEmail,
+  store,
+} from '~/store';
+import { stubApi } from '~/test/api-mock';
+import { LocationProbe } from '~/test/location-probe';
+import buttonStyles from '~/ui-kit/Button/Button.module.css';
+
+import { AccountBar } from '../AccountBar';
+
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
+  return { ...actual, requestJson: vi.fn() };
+});
+
+const api = vi.mocked(requestJson);
+
+const renderBar = () =>
+  render(
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/']}>
+        <LocationProbe />
+        <AccountBar />
+      </MemoryRouter>
+    </Provider>,
+  );
+
+const location = () => screen.getByTestId('location').textContent ?? '';
+
+const decorativeIcon = (button: HTMLElement) =>
+  button.querySelector('svg')?.closest('[aria-hidden="true"]');
+
+describe('AccountBar', () => {
+  beforeEach(() => {
+    api.mockReset();
+    store.dispatch(clearSession());
+  });
+
+  afterEach(cleanup);
+
+  it('renders the guest Sign in through the ui-kit Button with an icon', () => {
+    renderBar();
+
+    const button = screen.getByRole('button', { name: 'Sign in' });
+
+    expect(button).toHaveClass(buttonStyles.button);
+    expect(decorativeIcon(button)).not.toBeNull();
+  });
+
+  it('navigates to the sign-in page from the guest entry point', () => {
+    renderBar();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+
+    expect(location()).toBe('/login');
+  });
+
+  it('renders the email and a Logout ui-kit Button with an icon', async () => {
+    store.dispatch(replaceSession({ email: 'ada@example.com' }));
+    stubApi(api, { logout: () => ({ email: null }) });
+    renderBar();
+
+    expect(screen.getByText('ada@example.com')).toBeVisible();
+
+    const button = screen.getByRole('button', { name: 'Logout' });
+
+    expect(button).toHaveClass(buttonStyles.button);
+    expect(decorativeIcon(button)).not.toBeNull();
+
+    fireEvent.click(button);
+
+    await waitFor(() =>
+      expect(selectSessionEmail(store.getState())).toBeNull(),
+    );
+  });
+});

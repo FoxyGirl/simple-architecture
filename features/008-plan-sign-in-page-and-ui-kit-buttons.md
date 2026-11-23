@@ -12,6 +12,13 @@ deferred, everything else shipped. The `/login` guard tests were split into
 2026-11-23 — the sign-in copy is written as plain text in the View and
 presenter; the `SIGN_IN_PAGE_MESSAGES` constants file was removed at user
 request. The account bar's `ACCOUNT_BAR_LABELS` copy was inlined the same way.
+2026-11-23 — Phase 2 executed without the design-canvas task (pen.dev still
+blocked): the Button component frame remains deferred. To keep the two
+existing button treatments without a design change, the Button gained an
+optional `variant: 'primary' | 'secondary'` prop (secondary = account-bar
+pill, primary = form submit), recorded here as a deliberate extension of the
+planned API. A new `AccountBar.test.tsx` View suite exercises the icon
+buttons.
 
 > **Approach.** Two frontend-only phases (the PRD excludes backend changes),
 > ordered so each phase leaves the app fully working. Phase 1 is the tracer
@@ -206,52 +213,55 @@ migrated.
 
 **Tasks:**
 
-- [ ] Add the Button component frame to `design/ScreenScout-design.pen` via
-      the pen.dev MCP tools (default / with-icon / disabled states as used by
-      the three consumers), place it in the components area per the canvas
-      layout rule (components on top, screens below), reflect it on the Sign
-      In screen and the account bar, add any new token to both the canvas and
-      `web/src/styles/tokens.css` with identical names/values, and save.
-- [ ] Write the failing unit suite `web/src/ui-kit/Button/tests/Button.test.tsx`
+- [ ] **DEFERRED** — Add the Button component frame to
+      `design/ScreenScout-design.pen` via the pen.dev MCP tools (default /
+      with-icon / disabled states as used by the three consumers), place it in
+      the components area per the canvas layout rule (components on top,
+      screens below), reflect it on the Sign In screen and the account bar, add
+      any new token to both the canvas and `web/src/styles/tokens.css` with
+      identical names/values, and save. _(Blocked 2026-11-23: pen.dev plan
+      usage limit still reached; per user decision the phase ships without
+      design changes and the canvas update is deferred.)_
+- [x] Write the failing unit suite `web/src/ui-kit/Button/tests/Button.test.tsx`
       (renders the label as the accessible name; optional icon renders with
       `aria-hidden` and does not change the accessible name; `type` defaults
       and `type="submit"`; `disabled` propagates; `onClick` fires) plus the
       updated AccountBar expectations (each action contains an `aria-hidden`
       icon and keeps its text label).
-- [ ] Create `web/src/ui-kit/Button/`: `Button.tsx`, `Button.module.css`
+- [x] Create `web/src/ui-kit/Button/`: `Button.tsx`, `Button.module.css`
       (port the shared visual treatment from AccountBar `.action` / the sign-in
       submit styles, token-based), `types.ts`, `index.ts` barrel exporting the
       View only; strictly presentational, no presenter, no lucide or app
       imports; run `npm run css-types`.
-- [ ] Migrate the AccountBar "Sign In" and "Logout" buttons to `Button` with
+- [x] Migrate the AccountBar "Sign In" and "Logout" buttons to `Button` with
       lucide `LogIn`/`LogOut` icons passed as the `icon` prop (icons
       `aria-hidden`, accessible names remain "Sign in"/"Logout"); remove the
       superseded `.action` styles.
-- [ ] Migrate the SignInPage submit to `Button` (`type="submit"`, disabled
+- [x] Migrate the SignInPage submit to `Button` (`type="submit"`, disabled
       while submitting, "Continue"/"Signing in…" labels unchanged); remove the
       superseded submit styles.
-- [ ] Verify no other button was migrated (grep for `ui-kit` imports outside
+- [x] Verify no other button was migrated (grep for `ui-kit` imports outside
       the three consumers; pagination, search submit, genre chips, favorite
       heart, favorites-count, StatusPanel and FavoritesPage back buttons
       untouched) and adjust `e2e/auth-helpers.js` locators only if the
       rendered accessible names changed.
-- [ ] Close with the full PRD sweep: re-check every acceptance criterion of
+- [x] Close with the full PRD sweep: re-check every acceptance criterion of
       `features/008-prd-sign-in-page-and-ui-kit-buttons.md` against the app and
       the suites.
 
 **Tests:**
 
-- [ ] `web/src/ui-kit/Button/tests/Button.test.tsx` — label, icon
+- [x] `web/src/ui-kit/Button/tests/Button.test.tsx` — label, icon
       `aria-hidden`, type, disabled, click-through.
-- [ ] `web/src/App/AccountBar/tests/` — "Sign In" and "Logout" render through
+- [x] `web/src/App/AccountBar/tests/` — "Sign In" and "Logout" render through
       the ui-kit Button, each with an `aria-hidden` icon and its unchanged
       accessible name; `goToSignIn`/logout behavior unchanged.
-- [ ] `web/src/pages/SignInPage/tests/` — submit renders through the ui-kit
+- [x] `web/src/pages/SignInPage/tests/` — submit renders through the ui-kit
       Button and keeps the disabled-while-submitting behavior.
-- [ ] Existing suites prove non-migration: pagination, search, genre filter,
+- [x] Existing suites prove non-migration: pagination, search, genre filter,
       favorite and favorites-count component tests pass without ui-kit
       references.
-- [ ] `e2e/auth.spec.js` — icon buttons still pass the role/name locators;
+- [x] `e2e/auth.spec.js` — icon buttons still pass the role/name locators;
       logout flow green.
 
 **When ready:**
@@ -264,20 +274,21 @@ off against the running app and the suites.
 
 **Acceptance Criteria:**
 
-- [ ] A shared presentational Button exists in `web/src/ui-kit/` in its own
+- [x] A shared presentational Button exists in `web/src/ui-kit/` in its own
       directory with an `index.ts` barrel and a CSS Module, takes content,
       state and handlers through props, and contains no business rules or
       page/feature knowledge.
-- [ ] The account bar's "Sign In" and "Logout" buttons each render an
+- [x] The account bar's "Sign In" and "Logout" buttons each render an
       `aria-hidden` icon plus their unchanged text label through the ui-kit
       Button, and the Sign In page's submit renders through it as well.
-- [ ] No other button in the app is rendered through the ui-kit Button.
-- [ ] Logout still ends the backend session and returns the app to the
+- [x] No other button in the app is rendered through the ui-kit Button.
+- [x] Logout still ends the backend session and returns the app to the
       unauthenticated state; all Phase 1 criteria still hold.
 - [ ] `design/ScreenScout-design.pen` shows the Button component and the
       updated screens, with canvas and `tokens.css` token names/values
-      identical.
-- [ ] All modal-era tests are replaced and `npm run typecheck`,
+      identical. _(Deferred with the pen.dev canvas update — user decision
+      2026-11-23: ship without design changes.)_
+- [x] All modal-era tests are replaced and `npm run typecheck`,
       `npm run lint`, `npm run test` and `npm run test:e2e` pass, covering the
       `/login` route, post-sign-in navigation, both redirects, Cancel/Back,
       the explanatory text and the icon buttons.

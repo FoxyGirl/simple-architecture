@@ -10,7 +10,7 @@ import { Toaster } from './Toaster';
 import styles from './App.module.css';
 
 export const App = () => {
-  const { isSessionReady, isAuthenticated } = useApp();
+  const { isSessionReady, isAuthenticated, favoritesExit } = useApp();
 
   return (
     <div className={styles.app}>
@@ -35,7 +35,7 @@ export const App = () => {
               isAuthenticated ? (
                 <FavoritesPage />
               ) : isSessionReady ? (
-                <Navigate to="/" replace />
+                <Navigate to={favoritesExit} replace />
               ) : null
             }
           />

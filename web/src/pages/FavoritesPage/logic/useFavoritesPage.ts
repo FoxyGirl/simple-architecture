@@ -4,11 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { selectFavoriteShows, selectFavoritesCount } from '~/store';
 
-import type { FavoritesLocationState } from '../../types';
-
-import { pluralize } from '../../utils';
-import { fetchFavoritesPage } from './tasks/fetchFavoritesPage';
+import { pluralize, readFromHome } from '~/pages/utils';
 import { syncFavoritesSummary } from '~/pages/tasks/syncFavoritesSummary';
+import { fetchFavoritesPage } from './tasks/fetchFavoritesPage';
 import { useSoftRemoval } from './useSoftRemoval';
 import { useUrlFavoriteState } from './useUrlFavoriteState';
 
@@ -25,7 +23,7 @@ export const useFavoritesPage = () => {
   const favoritesCount = useSelector(selectFavoritesCount);
   const navigate = useNavigate();
   const location = useLocation();
-  const fromHome = (location.state as FavoritesLocationState | null)?.fromHome;
+  const fromHome = readFromHome(location.state);
 
   const { page, selectPage, pageCount } = useUrlFavoriteState();
   const { isFavorite, isRemoved, toggleFavorite } = useSoftRemoval(shows || []);

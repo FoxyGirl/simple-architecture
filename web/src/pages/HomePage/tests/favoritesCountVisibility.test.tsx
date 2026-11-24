@@ -32,7 +32,7 @@ const anyCountButton = () =>
   screen.queryByRole('button', { name: /^View favorites \(\d+\)$/ });
 
 const signInPrompt = () =>
-  screen.getByText(
+  screen.queryByText(
     'Please sign in to add your favorite shows to your Favorites list and keep track of the ones you love!',
   );
 

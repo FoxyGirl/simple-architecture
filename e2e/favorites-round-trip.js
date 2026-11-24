@@ -6,6 +6,7 @@ import {
   countButton,
   searchInput,
   searchSpace,
+  signOut,
 } from './favorites-helpers';
 
 // The parameterized URL the restoration flows must return to.
@@ -47,4 +48,13 @@ export const roundTripRestoresSearch = async (page) => {
   await searchSpaceDramaPageTwo(page);
   await backToRestoredSearch(page);
   await browserBackRestoresSearch(page);
+};
+
+// A logout on Favorites returns to the same parameterized Home view.
+export const logoutRestoresSearch = async (page) => {
+  await searchSpaceDramaPageTwo(page);
+  await countButton(page, 0).click();
+  await expect(page).toHaveURL(/\/favorites$/);
+  await signOut(page);
+  await expectRestoredSearch(page);
 };

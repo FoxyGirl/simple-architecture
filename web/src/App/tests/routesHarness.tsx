@@ -7,11 +7,16 @@ import { LocationProbe } from '~/test/location-probe';
 
 import { App } from '../App';
 
-// Shared render helpers for the App route-guard suites.
-export const renderAt = (entry: string) =>
+// Shared render helpers for the App route-guard suites. `state` seeds the
+// initial history entry when a route's navigation state is under test.
+export const renderAt = (entry: string, state?: unknown) =>
   render(
     <Provider store={store}>
-      <MemoryRouter initialEntries={[entry]}>
+      <MemoryRouter
+        initialEntries={[
+          state === undefined ? entry : { pathname: entry, state },
+        ]}
+      >
         <LocationProbe />
         <App />
       </MemoryRouter>

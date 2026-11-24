@@ -7,7 +7,10 @@ import { favoritesOptimisticFlow } from './favorites-optimistic';
 import { favoritesOptimisticRemovalFlow } from './favorites-optimistic-removal';
 import { favoritesPendingFlow } from './favorites-pending';
 import { favoritesReloadReturnFlow } from './favorites-reload';
-import { roundTripRestoresSearch } from './favorites-round-trip';
+import {
+  logoutRestoresSearch,
+  roundTripRestoresSearch,
+} from './favorites-round-trip';
 import { favoritesSoftRemovalFlow } from './favorites-soft-removal';
 import { favoritesToastFlow } from './favorites-toasts';
 import { favoritesPageUrlFlow } from './favorites-url';
@@ -83,6 +86,14 @@ test('favorites page cards flip their removal marking before the backend respond
 test('search state survives the URL round trip', async ({ page, request }) => {
   await prepareFavorites(page, request, emailFor('round-trip'));
   await roundTripRestoresSearch(page);
+});
+
+test('a logout on the favorites page restores the parameterized Home view', async ({
+  page,
+  request,
+}) => {
+  await prepareFavorites(page, request, emailFor('logout'));
+  await logoutRestoresSearch(page);
 });
 
 test('the favorites list page lives in the URL', async ({ page, request }) => {

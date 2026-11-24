@@ -28,7 +28,7 @@ describe('api buildApiUrl', () => {
   });
 
   it('prefixes the configured base URL', () => {
-    vi.stubEnv('VITE_API_BASE_URL', 'https://backend.example.test');
+    vi.stubEnv('VITE_API_URL', 'https://backend.example.test');
 
     expect(buildApiUrl('/api/search', [['q', 'office']])).toBe(
       'https://backend.example.test/api/search?q=office',

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import type { SignInLocationState } from '~/pages/types';
 import { readFromHome } from '~/pages/utils';
 
 import { isEmail } from '../utils';
@@ -21,7 +20,7 @@ import { signIn } from './tasks/signIn';
 export const useSignInPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const fromHome = readFromHome(location.state as SignInLocationState | null);
+  const fromHome = readFromHome(location.state);
 
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);

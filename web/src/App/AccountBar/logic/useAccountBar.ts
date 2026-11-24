@@ -25,7 +25,7 @@ export const useAccountBar = () => {
   const navigate = useNavigate();
 
   const isSignInPage = location.pathname === '/login';
-  const fromHome = readFromHome(location.state as SignInLocationState | null);
+  const fromHome = readFromHome(location.state);
 
   // Only the HomePage carries its URL: the Sign in entry point lives nowhere
   // else for a guest. Any other route still opens the login page without it.
@@ -35,9 +35,11 @@ export const useAccountBar = () => {
       return;
     }
 
-    navigate('/login', {
-      state: { fromHome: `${location.pathname}${location.search}` },
-    });
+    const state: SignInLocationState = {
+      fromHome: `${location.pathname}${location.search}`,
+    };
+
+    navigate('/login', { state });
   };
 
   const goToHome = () => navigate(fromHome ?? '/');

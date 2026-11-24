@@ -1,5 +1,6 @@
 import { cleanup, renderHook, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ApiError } from '~/api/errors';
@@ -16,9 +17,19 @@ vi.mock('~/api/request', async (importOriginal) => {
 
 const api = vi.mocked(requestJson);
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <Provider store={store}>{children}</Provider>
-);
+type AppEntry = string | { pathname: string; state?: unknown };
+
+// The App presenter reads the route state, so the wrapper mounts a router.
+const wrapperFor = (entry: AppEntry) =>
+  function Wrapper({ children }: { children: React.ReactNode }) {
+    return (
+      <Provider store={store}>
+        <MemoryRouter initialEntries={[entry]}>{children}</MemoryRouter>
+      </Provider>
+    );
+  };
+
+const wrapper = wrapperFor('/');
 
 describe('useApp', () => {
   beforeEach(() => {
@@ -57,5 +68,34 @@ describe('useApp', () => {
     await waitFor(() => expect(result.current.isSessionReady).toBe(true));
 
     expect(result.current.isAuthenticated).toBe(false);
+  });
+
+  it('prepares the favorites exit from the carried home URL', () => {
+    stubApi(api, { authMe: () => ({ email: 'ada@example.com' }) });
+
+    const { result } = renderHook(() => useApp(), {
+      wrapper: wrapperFor({
+        pathname: '/favorites',
+        state: { fromHome: '/?search=ban&genre=Comedy&page=2' },
+      }),
+    });
+
+    expect(result.current.favoritesExit).toBe(
+      '/?search=ban&genre=Comedy&page=2',
+    );
+  });
+
+  it('exits to the bare home without a carried URL', () => {
+    stubApi(api, {
+      authMe: () => {
+        throw new ApiError('Authentication required', 401);
+      },
+    });
+
+    const { result } = renderHook(() => useApp(), {
+      wrapper: wrapperFor('/favorites'),
+    });
+
+    expect(result.current.favoritesExit).toBe('/');
   });
 });

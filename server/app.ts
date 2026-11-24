@@ -26,6 +26,38 @@ export const createApp = () => {
     }),
   );
 
+  // Temporary logging of CORS decisions to help debug
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        console.log('[CORS]', {
+          origin,
+          allowedOrigins,
+          allowed: !origin || allowedOrigins.includes(origin),
+        });
+
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+          return;
+        }
+
+        callback(new Error('Not allowed by CORS'));
+      },
+      credentials: true,
+    }),
+  );
+
+  // Temporary logging of HTTP properties
+  app.use((req, _res, next) => {
+    console.log('[HTTP]', {
+      method: req.method,
+      url: req.originalUrl,
+      origin: req.headers.origin,
+    });
+
+    next();
+  });
+
   // The favorites route is the app's first POST: it carries the show
   // snapshot as a JSON body, so parse it for every mounted route.
   app.use(express.json());

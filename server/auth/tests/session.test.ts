@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   clearedSessionCookie,
@@ -65,6 +65,21 @@ describe('email sessions', () => {
     expect(sessionCookieHeader('token-1')).toBe(
       'screenscout_session=token-1; Path=/; HttpOnly; SameSite=Lax',
     );
+  });
+
+  it('sessionCookieHeader is cross-site ready in production', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.resetModules();
+
+    const { sessionCookieHeader: productionCookieHeader } =
+      await import('../cookie');
+
+    expect(productionCookieHeader('token-1')).toBe(
+      'screenscout_session=token-1; Path=/; HttpOnly; SameSite=None; Secure',
+    );
+
+    vi.unstubAllEnvs();
+    vi.resetModules();
   });
 
   it('parseSessionCookie reads the token among other cookies', () => {

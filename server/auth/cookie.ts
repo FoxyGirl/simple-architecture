@@ -5,11 +5,20 @@
 // in-memory store it points at.
 export const SESSION_COOKIE_NAME = 'screenscout_session';
 
+// The deployed frontend and backend live on different registrable domains
+// (Vercel and Railway), so every browser API call is a cross-site request:
+// a `SameSite=Lax` cookie is never attached to those fetches and the session
+// routes would answer 401. Cross-site delivery requires `SameSite=None`,
+// which browsers accept only together with `Secure` — production serves
+// HTTPS. Local dev reaches the backend through the Vite proxy (same-origin)
+// and keeps the stricter `Lax`.
+const isProduction = process.env.NODE_ENV === 'production';
+
 const SESSION_COOKIE_ATTRIBUTES = [
   'Path=/',
   'HttpOnly',
-  'SameSite=Lax',
-  ...(process.env.NODE_ENV === 'production' ? ['Secure'] : []),
+  isProduction ? 'SameSite=None' : 'SameSite=Lax',
+  ...(isProduction ? ['Secure'] : []),
 ].join('; ');
 
 /** The `Set-Cookie` value that issues a session token. */

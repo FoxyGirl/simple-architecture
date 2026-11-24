@@ -29,7 +29,11 @@ const buildRequestInit = ({
   body,
   signal,
 }: RequestJsonOptions): RequestInit => {
-  const init: RequestInit = { method, signal };
+  const init: RequestInit = {
+    method,
+    signal,
+    credentials: 'include',
+  };
 
   if (body !== undefined) {
     init.body = JSON.stringify(body);

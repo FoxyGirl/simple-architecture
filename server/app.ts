@@ -1,9 +1,30 @@
 import express from 'express';
+import cors from 'cors';
 
 import { authRouter, favoritesRouter, searchRouter } from './routes';
 
 export const createApp = () => {
   const app = express();
+
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        // Requests without Origin (e.g. server-to-server or curl).
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+          return;
+        }
+
+        callback(new Error('Not allowed by CORS'));
+      },
+      credentials: true,
+    }),
+  );
 
   // The favorites route is the app's first POST: it carries the show
   // snapshot as a JSON body, so parse it for every mounted route.

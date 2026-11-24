@@ -5,5 +5,4 @@
  * `VITE_API_BASE_URL` environment variable to point the app at a different
  * backend server; no caller code changes are needed.
  */
-export const getApiBaseUrl = (): string =>
-  import.meta.env.VITE_API_BASE_URL ?? '';
+export const getApiBaseUrl = (): string => import.meta.env.VITE_API_URL ?? '';

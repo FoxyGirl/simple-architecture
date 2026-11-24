@@ -171,6 +171,26 @@ barrel file. The barrel is the public surface of the directory.
 - A component's `index.ts` MUST export its View only. Internal implementation details MUST remain private.
 - Shared pure utility functions MUST be placed in the nearest appropriate `utils/` folder and exported through its `index.ts`.
 
+### Grouping levels (non-component directories)
+
+A directory that only groups components — for example `src/pages/` — is not a
+component itself: it has no View, no Presenter and no barrel, so it MUST NOT
+contain a `logic/` folder. The code shared below such a level is published
+through flat, kind-named folders directly in that directory:
+
+- `components/` — application components reused by several descendants;
+- `hooks/` — Presenter-level hooks reused by several descendants;
+- `tasks/` — Tasks reused by several descendants;
+- `utils/` — pure helpers, exported through their own `index.ts`.
+
+`logic/` exists only inside a component directory, where it holds that
+component's Presenter and Tasks. Exclusive code stays with its owner (in the
+owner's `logic/`), shared code moves to the kind-named folder of the nearest
+common ancestor level: a component ancestor keeps it in
+`<Component>/logic/tasks/`, a grouping ancestor in `<Group>/tasks/`. A Task
+MUST exist in exactly one place — a copy left behind in an owning component is
+a duplicate and MUST be removed.
+
 ## Backend (`server/`) organization
 
 The Express workspace mirrors the same ownership rules: every folder publishes

@@ -2,12 +2,11 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { syncFavoritesSummary } from '~/pages/tasks/syncFavoritesSummary';
 import { selectFavoritesCount, selectSessionEmail } from '~/store';
 
 import type { FavoritesLocationState } from '../../types';
 import type { FavoritesButton } from '../types';
-
-import { syncFavoritesSummary } from './tasks/syncFavoritesSummary';
 
 /**
  * The favorites aspect of the home page presenter: the backend owns the

@@ -41,7 +41,7 @@
 .disabled,
 .disabled:hover {
   opacity: 0.5;
-  cursor: not-allowed;
+  cursor: none;
   transform: none;
 }
 

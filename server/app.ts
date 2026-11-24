@@ -14,6 +14,11 @@ const DEV_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173'];
 export const createApp = () => {
   const app = express();
 
+  // Temporary logging of the `ALLOWED_ORIGINS` environment variable to debug
+  console.log('[ENV]', {
+    allowedOrigins: process.env.ALLOWED_ORIGINS,
+  });
+
   const allowedOrigins = [
     ...DEV_ORIGINS,
     ...(process.env.ALLOWED_ORIGINS ?? '')
@@ -21,6 +26,9 @@ export const createApp = () => {
       .map((origin) => origin.trim())
       .filter(Boolean),
   ];
+  // Temporary logging of the `ALLOWED_ORIGINS` environment variable to debug
+
+  console.log(`RESULT allowedOrigins = ${allowedOrigins}`);
 
   const isOriginAllowed = (origin: string | undefined): boolean =>
     origin === undefined || allowedOrigins.includes(origin);

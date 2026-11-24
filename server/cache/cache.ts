@@ -1,20 +1,21 @@
 import type { Show } from '@server/types';
 import { searchShows } from '@server/tvmaze';
 
-// The in-memory TVmaze response cache required by the PRD: a plain object
-// keyed by the search query, each entry holding the mapped shows and the
-// timestamp of the fetch that produced them. Because TVMAZE_BASE_URL is
-// constant for a running process, the query uniquely identifies its TVmaze
-// request. The cache lives in the server process memory — lost on restart,
-// not shared between instances. Exported so the test suites can reset
-// between cases; the application itself only reads and writes entries
-// through getCachedShows.
+/**
+ * Caches `searchShows` results for 5 minutes. Failed requests are not cached.
+ */
 export const cache: Record<string, { data: Show[]; fetchedAt: number }> = {};
 
-// A cached response stays fresh for five minutes; older entries are refetched.
 export const CACHE_TTL_MS = 5 * 60 * 1000;
 
-const logCache = (outcome: 'HIT' | 'MISS', query: string, now: number) => {
+// Reuse an in-flight request for the same query.
+const pendingRequests = new Map<string, Promise<Show[]>>();
+
+const logCache = (
+  outcome: 'HIT' | 'MISS' | 'WAIT',
+  query: string,
+  now: number,
+) => {
   console.log(
     `[${new Date(now).toISOString()}] TVmaze cache ${outcome}: ${query}`,
   );
@@ -27,16 +28,34 @@ const logCache = (outcome: 'HIT' | 'MISS', query: string, now: number) => {
  * nor refreshes an entry.
  */
 export const getCachedShows = async (query: string): Promise<Show[]> => {
+  const normalizedQuery = query.trim().toLowerCase();
   const now = Date.now();
-  const entry = cache[query];
+  const entry = cache[normalizedQuery];
 
   if (entry && now - entry.fetchedAt < CACHE_TTL_MS) {
-    logCache('HIT', query, now);
+    logCache('HIT', normalizedQuery, now);
     return entry.data;
   }
 
-  logCache('MISS', query, now);
-  const data = await searchShows(query);
-  cache[query] = { data, fetchedAt: now };
-  return data;
+  const pendingRequest = pendingRequests.get(normalizedQuery);
+
+  if (pendingRequest) {
+    logCache('WAIT', normalizedQuery, now);
+    return pendingRequest;
+  }
+
+  logCache('MISS', normalizedQuery, now);
+
+  const request = searchShows(query)
+    .then((data) => {
+      cache[normalizedQuery] = { data, fetchedAt: Date.now() };
+      return data;
+    })
+    .finally(() => {
+      pendingRequests.delete(normalizedQuery);
+    });
+
+  pendingRequests.set(normalizedQuery, request);
+
+  return request;
 };

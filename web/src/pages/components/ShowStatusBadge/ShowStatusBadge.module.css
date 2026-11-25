@@ -1,0 +1,38 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--status-gap, 5px);
+  font-weight: var(--weight-semibold);
+}
+
+.dot {
+  flex: none;
+  width: var(--status-dot-size, 6px);
+  height: var(--status-dot-size, 6px);
+  border-radius: var(--radius-pill);
+  background: var(--status-color, var(--text-muted));
+}
+
+/*
+ * A status class carries both tones of the badge: --status-color fills the
+ * dot, while the class colour paints the status label text.
+ */
+.running {
+  --status-color: var(--running);
+  color: var(--running-light);
+}
+
+.ended {
+  --status-color: var(--ended);
+  color: var(--ended-light);
+}
+
+.inDev {
+  --status-color: var(--in-dev);
+  color: var(--in-dev-light);
+}
+
+.tbd {
+  --status-color: var(--tbd);
+  color: var(--tbd-light);
+}

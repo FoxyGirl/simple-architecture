@@ -91,5 +91,6 @@
       "resource": "del *",
       "effect": "ask"
     }
-  ]
+  ],
+  "instructions": ["rules/*.md"]
 }

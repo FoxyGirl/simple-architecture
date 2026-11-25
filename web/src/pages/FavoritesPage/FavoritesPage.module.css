@@ -1,0 +1,143 @@
+.page {
+  width: 100%;
+  max-width: 1248px;
+  margin: 0 auto;
+  padding: 30px var(--space-lg) var(--space-xl);
+}
+
+@media (min-width: 1024px) {
+  .page {
+    padding-inline: var(--gutter);
+  }
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.backButton {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: 4px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.backButton:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.backButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 7px 14px;
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+  font-size: 9px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 1.2px;
+  line-height: 1.25;
+}
+
+.eyebrowIcon {
+  flex: none;
+  color: var(--accent);
+}
+
+.headline {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.6px;
+  line-height: 1.12;
+}
+
+.subhead {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 64px var(--space-lg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  text-align: center;
+}
+
+.emptyIcon {
+  color: var(--text-muted);
+}
+
+.emptyText {
+  max-width: 380px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: var(--leading-base);
+}
+
+.browseButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 12px 22px;
+  border: none;
+  border-radius: var(--radius-btn);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.browseButton:hover {
+  background: var(--accent-hover);
+  color: var(--bg);
+  box-shadow: var(--glow-accent);
+}
+
+.browseButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}

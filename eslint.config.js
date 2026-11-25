@@ -12,10 +12,10 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
-// Keep in sync with `resolve.alias` in vite.config.ts
+// Keep in sync with the vite/vitest/tsconfig alias and paths maps.
 const aliases = {
-  '@api': path.join(rootDir, 'src', 'api'),
-  '@hooks': path.join(rootDir, 'src', 'hooks'),
+  '~': path.join(rootDir, 'web/src'),
+  '@server': path.join(rootDir, 'server'),
 };
 
 const nodeResolver = createNodeResolver({
@@ -28,9 +28,8 @@ const aliasResolver = {
   resolve(modulePath, sourceFile) {
     const [alias, ...segments] = modulePath.split('/');
     const target = aliases[alias];
-    if (!target) {
-      return { found: false };
-    }
+    // Unknown aliases fall through to the plain Node resolver.
+    if (!target) return { found: false };
     return nodeResolver.resolve(path.join(target, ...segments), sourceFile);
   },
 };
@@ -45,9 +44,10 @@ const unusedVars = [
 ];
 
 export default defineConfig([
-  globalIgnores(['dist', 'coverage']),
+  // Minimatch (not gitignore-style): `**/` prefixes also match `web/dist`.
+  globalIgnores(['**/dist', '**/coverage']),
   {
-    // Plain JavaScript — only the ESLint config itself lives here.
+    // Plain JavaScript — this config, the backend and plain-JS tooling.
     files: ['**/*.{js,jsx,mjs,cjs}'],
     extends: [js.configs.recommended],
     languageOptions: {
@@ -57,6 +57,7 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': unusedVars,
+      'max-lines': ['warn', { max: 120 }],
     },
   },
   {
@@ -88,6 +89,7 @@ export default defineConfig([
     },
     rules: {
       '@typescript-eslint/no-unused-vars': unusedVars,
+      'max-lines': ['warn', { max: 120 }],
       'react/jsx-uses-vars': 'error',
       'react/jsx-no-undef': 'error',
       'react/jsx-key': 'warn',
@@ -106,10 +108,9 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
-    rules: {
-      'max-lines': ['warn', { max: 120 }],
-    },
+    // The backend workspace is plain Node: server globals, not browser ones.
+    files: ['server/**/*.ts'],
+    languageOptions: { globals: globals.node },
   },
   prettier,
 ]);

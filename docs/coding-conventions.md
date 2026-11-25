@@ -9,8 +9,8 @@ compiler options live in `tsconfig.app.json` (the app) and `tsconfig.node.json`
 ### Where types live
 
 - MUST declare types in a `types.ts` file next to the code that owns them.
-  `src/api/types.ts` holds the TVmaze API shapes, a page's `types.ts` holds
-  the types shared inside that page's directory.
+  `src/types.ts` holds the app-wide TVmaze and backend response shapes, a
+  page's `types.ts` holds the types shared inside that page's directory.
 - MUST NOT duplicate a type in several places — import it from its owner.
 - Component prop types are declared locally in the component file and are not
   exported; a component file exports the component only.
@@ -46,10 +46,21 @@ compiler options live in `tsconfig.app.json` (the app) and `tsconfig.node.json`
   specifier onto a `.ts` file:
 
   ```ts
-  import { searchShows } from '@api/tvmaze';
-  import { useMediaQuery } from '@hooks/useMediaQuery';
+  import type { Show } from '~/types';
+  import { useMediaQuery } from '~/hooks/useMediaQuery';
   import { STATUS } from './constants';
   ```
+
+### API layer
+
+- `src/api/` holds only the shared request plumbing — `config.ts`, `errors.ts`
+  and `request.ts` (URL building, JSON parsing, error normalization).
+- Endpoint-specific request composition — path, HTTP method, body, query
+  parameters — belongs to the Task that performs the business operation, not
+  to a per-endpoint API module. Tasks call `buildApiUrl` and `requestJson`
+  from `src/api/request.ts`.
+- The browser calls only the app's own `/api` endpoints; response and data
+  shapes shared across the app live in `src/types.ts`.
 
 ### Syntax
 
@@ -190,18 +201,28 @@ else. For production, self-host with `@fontsource/sora` and `@fontsource/inter`.
 
 Imports that cross directory boundaries MUST use an alias instead of a deep relative path.
 
-| Alias    | Target      | Example                                                 |
-| -------- | ----------- | ------------------------------------------------------- |
-| `@api`   | `src/api`   | `import { searchShows } from '@api/tvmaze';`            |
-| `@hooks` | `src/hooks` | `import { useMediaQuery } from '@hooks/useMediaQuery';` |
+| Alias     | Target         | Example                                                   |
+| --------- | -------------- | --------------------------------------------------------- |
+| `~`       | `web/src`      | `import { formatShow } from '~/pages/utils/show-format';` |
+| `@server` | `server/` root | `import { getCachedShows } from '@server/cache';`         |
 
+- `~` is the frontend source root (`web/src`), so any file can cross folders
+  with `~/...`. `@server` is the backend alias and always resolves to the
+  `server/` workspace root, so a route folder such as
+  `server/routes/search/` writes `'@server/cache'` and `'@server/types'`
+  instead of `'../../cache'` and `'../../types'`.
 - Relative imports remain the default for files in the same directory or in a
-  directly owned sibling component.
-- Aliases are declared in `vite.config.ts` (`resolve.alias`) and MUST be
-  mirrored in `eslint.config.js` (alias resolver) and `tsconfig.app.json`
-  (`compilerOptions.paths`, editor support).
-- The three configurations MUST be kept in sync when an alias is added,
-  renamed or removed.
+  directly owned sibling component — and for a colocated `tests/` folder
+  importing the private files of the folder it covers (`'../shows'`).
+- The frontend alias `~` is declared in `vite.config.ts` (`resolve.alias`) and
+  MUST be mirrored in `vitest.config.ts`, `eslint.config.js` (alias resolver)
+  and `tsconfig.app.json` (`compilerOptions.paths`, editor support).
+- The backend alias `@server` has no Vite config: it lives in
+  `eslint.config.js`, `server/tsconfig.json` (`compilerOptions.paths`) and
+  `server/vitest.config.ts` (`resolve.alias`). `tsx` reads the tsconfig
+  mapping, so the running backend resolves `@server` too.
+- Every configuration that declares an alias MUST be kept in sync when an alias
+  is added, renamed or removed.
 
 ## Code style
 

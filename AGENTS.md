@@ -7,21 +7,33 @@ Guidance for AI agents (and humans) working in this repository.
 **ScreenScout** — a React single-page app for browsing TV shows: search, filter by
 genre, paginate results, and view show details.
 
+The repository is an npm-workspaces monorepo with two packages: `web/`
+(the React frontend) and `server/` (an Express backend serving the
+`/api/search` endpoint — TVmaze proxying with a 5-minute cache, genre
+filtering and pagination — plus the favorites endpoints under
+`/api/favorites`: add, remove, count and a paginated list, served from a
+plain in-memory storage and never from TVmaze). Shared tooling (ESLint,
+Prettier, husky) lives at the root; root scripts forward to the workspaces.
+
 Stack:
 
-| Concern  | Choice                                                                |
-| -------- | --------------------------------------------------------------------- |
-| Build    | Vite 7                                                                |
-| UI       | React 19                                                              |
-| Language | TypeScript 6 (`strict`, `noUncheckedIndexedAccess`)                   |
-| Routing  | React Router 7 (`react-router-dom`)                                   |
-| Icons    | lucide-react                                                          |
-| Classes  | clsx                                                                  |
-| API      | TVmaze REST (`https://api.tvmaze.com`) via fetch                      |
-| Lint     | ESLint 9 (flat config) + typescript-eslint + `eslint-config-prettier` |
-| Format   | Prettier 3                                                            |
-| Hooks    | husky 9 + lint-staged 17 (pre-commit)                                 |
-| Design   | pen.dev canvas — `design/ScreenScout-design.pen`                      |
+| Concern  | Choice                                                                            |
+| -------- | --------------------------------------------------------------------------------- |
+| Build    | Vite 7                                                                            |
+| UI       | React 19                                                                          |
+| Language | TypeScript 6 (`strict`, `noUncheckedIndexedAccess`)                               |
+| Routing  | React Router 7 (`react-router-dom`)                                               |
+| State    | Redux Toolkit + react-redux (store and Entity in `web/src/store/`)                |
+| Icons    | lucide-react                                                                      |
+| Classes  | clsx                                                                              |
+| Toasts   | sonner — `notify` API in `web/src/notification/`, outlet in `App/Toaster`         |
+| API      | Express backend (`server/`): TVmaze search + favorites; browser calls `/api` only |
+| Backend  | Express 5 (`server/`, TypeScript ESM run with tsx, port 3001)                     |
+| Tests    | Vitest (both workspaces), supertest, Playwright (E2E)                             |
+| Lint     | ESLint 9 (flat config) + typescript-eslint + `eslint-config-prettier`             |
+| Format   | Prettier 3                                                                        |
+| Hooks    | husky 9 + lint-staged 17 (pre-commit)                                             |
+| Design   | pen.dev canvas — `design/ScreenScout-design.pen`                                  |
 
 Node 24 / npm 11. Vite 7 requires Node 20.19+ or 22.12+.
 
@@ -29,19 +41,32 @@ Node 24 / npm 11. Vite 7 requires Node 20.19+ or 22.12+.
 
 ```bash
 npm install          # installs deps and wires up husky via the "prepare" script
-npm run dev          # dev server on http://localhost:5173
-npm run build        # tsc -b && vite build -> dist/
+npm run dev          # frontend dev server on http://localhost:5173 (web workspace)
+npm run server       # backend Express process on http://localhost:3001 (server workspace)
+npm run build        # tsc -b && vite build -> web/dist/
 npm run preview      # serve the production build
-npm run typecheck    # tsc -b --noEmit    (fails on type errors)
+npm run typecheck    # tsc, no emit, in both workspaces (fails on type errors)
 npm run css-types    # regenerate the CSS Module type declarations
+npm run test         # Vitest suites of both workspaces (unit/integration)
+npm run test:e2e     # Playwright E2E (boots stub + backend + frontend servers)
 npm run lint         # eslint .            (fails on errors)
 npm run lint:fix     # eslint . --fix
 npm run format       # prettier --write .  (rewrites every file)
 npm run format:check # prettier --check .  (read-only)
 ```
 
-There is no test runner configured. If tests are needed, add Vitest — do not
-assume one exists.
+In `web/` tests live in a `tests/` folder inside the component folder they
+cover (e.g. `web/src/pages/HomePage/tests/`, jsdom + Testing Library); the
+backend follows the same rule — app-level suites live in `server/tests/`
+(supertest against the exported Express app) and each backend folder keeps the
+suite for its own code in `<folder>/tests/` (e.g.
+`server/routes/search/tests/`). E2E specs and the local TVmaze stub (fixture-backed `search/shows`
+with a per-query hit counter, `GET /__hits`) live in `e2e/`; the backend
+reads its upstream base URL from `TVMAZE_BASE_URL` (default
+`https://api.tvmaze.com`), which is how E2E points it at the stub. Playwright
+does not download browsers via npm — run `npx playwright install chromium`
+once on a fresh machine. Write tests before implementing a phase (red ->
+green); all later phases of the caching feature rely on this harness.
 
 ## Project Documentation
 
@@ -84,10 +109,11 @@ for the visual design.
   MCP tools (`execute`, `save`, `get_app_state`, `read_skill`) to change it.
 - The canvas holds design tokens as variables and documents them in the
   `Design System` frame (`CSS VARIABLES` section). It mirrors
-  `src/styles/tokens.css`.
+  `web/src/styles/tokens.css`.
 - When you add or change a token, update **both** the canvas variable and
-  `src/styles/tokens.css`, and keep the names and values identical. The canvas
-  section is the human-readable reference; the CSS file is what the app reads.
+  `web/src/styles/tokens.css`, and keep the names and values identical. The
+  canvas section is the human-readable reference; the CSS file is what the app
+  reads.
 - Read `pen.dev` skill docs (`read_skill`) before non-trivial canvas edits:
   `pen-schema.md`, `execute.md`, `design-system.md`, `code-website.md`.
 - Keep the canvas document root clean: only screens, reusable component frames
@@ -116,14 +142,16 @@ Fixable problems are repaired and the commit continues; unfixable errors
 
 ## TypeScript
 
-- The app is written in TypeScript. `tsconfig.json` is a solution file that
-  references `tsconfig.app.json` (the app) and `tsconfig.node.json`
-  (the Vite config).
+- The app is written in TypeScript. In `web/`, `tsconfig.json` is a solution
+  file that references `web/tsconfig.app.json` (the app + its tests) and
+  `web/tsconfig.node.json` (the Vite and Vitest configs). `server/` has
+  its own `server/tsconfig.json` with the same strict rules and the
+  `bundler` module resolution, so extensionless specifiers work there too.
 - The compiler runs in `strict` mode with `noUncheckedIndexedAccess`,
   `verbatimModuleSyntax` and `erasableSyntaxOnly`.
 - Types live in a `types.ts` file next to the code that owns them —
-  `src/api/types.ts` for the TVmaze shapes, a page's `types.ts` for the types
-  shared inside that page.
+  `web/src/types.ts` for the app-wide TVmaze and backend response shapes, a
+  page's `types.ts` for the types shared inside that page.
 - Object shapes are declared as `type` aliases, never as `interface`.
 - Every CSS Module has a generated `<Component>.module.css.d.ts` giving each
   class a literal type — that is what makes
@@ -133,6 +161,12 @@ Fixable problems are repaired and the commit continues; unfixable errors
   compiler runs. `npm run css-types` runs it on demand.
 - Import specifiers carry no file extension. The ESLint import resolver cannot
   map a `.js` specifier onto a `.ts` file.
+- Import aliases: `~` is the frontend `web/src/` root and `@server` is the
+  `server/` root, so code never writes `../../` climbs. They are declared
+  in `eslint.config.js` and in each workspace's config (`web/vite.config.ts`,
+  `web/vitest.config.ts`, `web/tsconfig.app.json`; `server/vitest.config.ts`,
+  `server/tsconfig.json`); `tsx` honours the server tsconfig mapping at
+  runtime.
 - Run `npm run typecheck` before committing — `npm run build` runs the same
   check as its first step.
 

@@ -1,0 +1,14 @@
+/**
+ * Token skin for the Sonner toasts. Sonner's runtime-injected stylesheet
+ * builds every toast from these custom properties, so redefining them on
+ * the toast element itself (the class lands on each toast via
+ * toastOptions.className) tints the toasts with the design tokens without
+ * fighting selector specificity.
+ */
+.toast {
+  --normal-bg: var(--surface-2);
+  --normal-text: var(--text-primary);
+  --normal-border: var(--accent-border);
+  --border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+}

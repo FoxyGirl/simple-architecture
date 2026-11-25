@@ -1,0 +1,119 @@
+import { cleanup } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { requestJson } from '~/api/request';
+import {
+  lastSearchCall,
+  searchCalls,
+  searchSelection,
+  stubApi,
+} from '~/test/api-mock';
+
+import {
+  arrow,
+  chip,
+  click,
+  comedyPage,
+  page1,
+  page2,
+  renderHomePage,
+  settle,
+  storedPage,
+  typeQuery,
+} from '../../../test/home-flow';
+
+vi.mock('~/api/request', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('~/api/request')>();
+
+  return { ...actual, requestJson: vi.fn() };
+});
+
+const api = vi.mocked(requestJson);
+
+const selectionOfLast = () => searchSelection(lastSearchCall(api));
+
+describe('HomePage server-driven request flow', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    api.mockReset();
+    stubApi(api, { search: () => page1 });
+    renderHomePage();
+    typeQuery('office');
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  it('submitting a search requests page 1 with no genre', async () => {
+    await settle();
+
+    const call = lastSearchCall(api);
+
+    expect(call?.params.get('q')).toBe('office');
+    expect(searchSelection(call)).toEqual({ genre: undefined, page: 1 });
+    expect(call?.signal).toBeInstanceOf(AbortSignal);
+    expect(storedPage()).toEqual(page1);
+  });
+
+  it('a genre change requests page 1 with that genre', async () => {
+    await settle();
+    stubApi(api, { search: () => comedyPage });
+
+    await click(chip('Comedy'));
+
+    expect(selectionOfLast()).toEqual({ genre: 'Comedy', page: 1 });
+    expect(storedPage()).toEqual(comedyPage);
+  });
+
+  it('a page change requests that page', async () => {
+    await settle();
+    stubApi(api, { search: () => page2 });
+
+    await click(arrow('Next page'));
+
+    expect(selectionOfLast()).toEqual({ genre: undefined, page: 2 });
+    expect(storedPage()).toEqual(page2);
+  });
+
+  it('a new search resets genre and page', async () => {
+    await settle();
+    await click(chip('Comedy'));
+
+    typeQuery('friends');
+    await settle();
+
+    const calls = searchCalls(api);
+    const last = calls[calls.length - 1];
+
+    expect(last?.params.get('q')).toBe('friends');
+    expect(searchSelection(last)).toEqual({ genre: undefined, page: 1 });
+    expect(chip('All genres')).toHaveAttribute('aria-pressed', 'true');
+    expect(storedPage()).toEqual(page1);
+  });
+
+  it('aborts the in-flight request when a newer one starts', async () => {
+    const signals: AbortSignal[] = [];
+
+    stubApi(api, {
+      search: (call) => {
+        if (call.signal) signals.push(call.signal);
+
+        // Pending forever, like a real in-flight fetch.
+        return new Promise(() => undefined);
+      },
+    });
+
+    await settle();
+    expect(signals).toHaveLength(1);
+    expect(signals[0]?.aborted).toBe(false);
+
+    typeQuery('friends');
+    await settle();
+
+    expect(signals).toHaveLength(2);
+    expect(signals[0]?.aborted).toBe(true);
+    expect(signals[1]?.aborted).toBe(false);
+  });
+});

@@ -1,0 +1,119 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  transition: border-color var(--duration-base) var(--ease-out);
+}
+
+.row:hover {
+  border-color: var(--accent);
+}
+
+.row.removed .poster,
+.row.removed .info,
+.row.removed .chevron {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.row.removed:hover {
+  border-color: var(--border);
+}
+
+.poster {
+  flex: none;
+  overflow: hidden;
+  width: 88px;
+  height: 124px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  transition:
+    filter var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.posterImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.posterFallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    var(--surface-2) 0%,
+    var(--border-strong) 50%,
+    var(--surface-2) 100%
+  );
+}
+
+.info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  transition:
+    filter var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+}
+
+.meta {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.genres {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: var(--weight-bold);
+}
+
+.star {
+  color: var(--star);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.chevron {
+  flex: none;
+  color: var(--text-muted);
+  transition:
+    filter var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
